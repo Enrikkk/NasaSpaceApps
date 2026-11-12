@@ -1,0 +1,5 @@
+# Append-only shared files: keep both sides' lines on concurrent edits instead of conflicting.
+coordination/LOG.md merge=union
+coordination/DECISIONS.md merge=union
+coordination/questions.md merge=union
+brainstorm/votes.md merge=union

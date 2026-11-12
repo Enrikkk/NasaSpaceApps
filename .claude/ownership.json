@@ -1,0 +1,4 @@
+{
+  "_comment": "Fill after the challenge is picked (D-002). Keys = seats from context/team.md. Paths relative to repo root; folders end with '/'. Unlisted paths are open to everyone.",
+  "shared": ["AGENTS.md", "CLAUDE.md", "README.md", "coordination/", "context/team.md", "brainstorm/", "research/"]
+}
