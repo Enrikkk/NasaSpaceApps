@@ -59,3 +59,8 @@ estructurales, ninguno de contenido). El schema es un borrador mío: **donde sea
    contrato (para que Jaime pueda leer ya tu salida sin esperar), y la API `POST /analyze` que sirve tu JSON + mis
    bloques reales.
 3. Jaime: lee el contrato v1.1 y congelamos.
+
+
+## Actualizacion (gonzalo, 2026-11-14 16:50)
+- Resuelto con enrique (#138, #142-#144): exito_pct sobre años históricos (`n_anios_historicos`, hoy 19: clima 2006-2024), 52 pasa a `n_muestras`, nuevo `n_efectivo`.
+- Índice de escenarios: hoy NO alineado (cada rotación sortea su propio año con precio). Arreglo de enrique: años comunes a todas las rotaciones; mientras tanto `escenarios_meta.alineados = false`.

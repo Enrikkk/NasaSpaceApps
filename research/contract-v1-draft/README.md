@@ -31,7 +31,7 @@ Validar (jsonschema en un venv, MIT, solo herramienta de desarrollo, no se distr
 | `parcela` | id, lat/lon, ha, pendiente, regadío, municipio, comarca, `sigpac{polígono,parcela,recinto}`, `zonas[]` | gonzalo (T-011) | jaime (T-010) |
 | `historia.cultivos_declarados[]` | lista 0..N `{campana, anio, cultivo, fuente}`; `campana` explícita ("2025" o "2024-25") | gonzalo (T-011, FEGA) | jaime, enrique |
 | `ndvi` | `meses_desnudo`, `meses_vulnerable`, `serie_mensual` opcional | enrique (T-013) | jaime |
-| `clima` | `lluvia_anual_mm`, `dias_calor_gt_38`, `dias_helada`, `escenario_2050`, **`serie_anual[]`** (20 años) | gonzalo (T-011; helada de SIAM) | enrique (motor), jaime |
+| `clima` | `lluvia_anual_mm`, `dias_calor_gt_38`, `dias_helada`, `escenario_2050`, **`serie_anual[]`** (años históricos disponibles; hoy 19, 2006-2024, según enrique #144) | gonzalo (T-011; helada de SIAM) | enrique (motor), jaime |
 | `suelo` | textura, MO, agua disponible | gonzalo (T-011) | enrique, jaime |
 | `prioridades_defecto` | pesos que suman 1 | gonzalo/jaime | jaime |
 | `escenarios_meta` | `n`, `semilla`, método, `anio_clima[]`, `beta_sobreoferta[]`, `factor_coste[]` alineados con las muestras | enrique (T-020) | jaime |
@@ -72,7 +72,7 @@ Estado de D-008 al escribir esto: **PROPOSED por enrique, sin ACCEPT en `DECISIO
 4. **Normalización de `criterios`**: escalas de referencia fijas (borrador) o min-max entre las rotaciones de la parcela (fuerza 0 y 1 aunque difieran poco). enrique y jaime.
 5. **Nombres de prioridades vs criterios** (`suelo` frente a `suelo_n`, `rentabilidad` frente a `margen`): unificar ahora o dejar el mapa del README.
 6. **`valor` del margen**: media (borrador) o P50; ¿añadimos `cvar80` desde el principio? enrique.
-7. **`exito_pct`**: ¿se muestra con la horquilla Wilson y 20 años solamente, o también Jeffreys (research da ambos)? ¿D-008 aceptado? humanos.
+7. **`exito_pct`**: ¿se muestra con la horquilla Wilson y los años históricos disponibles (19) solamente, o también Jeffreys (research da ambos)? ¿D-008 aceptado? humanos.
 8. **Zona 1/2 del Mar Menor**: gonzalo debe leer el Anexo I (o usar el campo `zona_marmenor` del SIGPAC de IMIDA que ya aparece en `research_notes/`); mientras, `mar_menor_zona_por_verificar` y las reglas solo de zona 1 salen `indeterminado`. Artículos 39/40/29/51/51.6 y BCAM 7 también `por_verificar`.
 9. **Semáforo `gris`** para cobertura básica (resto de España, D-009): ¿mismo bloque con `color: gris`? gonzalo y jaime.
 10. **Licencias**: `fuentes[].licencia_estado` es `verify` en casi todo (solo BOE y propias en `ok`); revisar antes del envío (`submission/data-citations.md`). SIGPAC: acceso desde código por confirmar con el FEGA.

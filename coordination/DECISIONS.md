@@ -62,3 +62,9 @@ Why: without CARM prices the current rotation (melon, barbecho, lechuga) is not 
 Conditions agreed: cite "CARM-ANUARIO" in the card and in submission/data-citations.md and state "permiso pendiente"; keep the open twin `torre-pacheco.abierto.json` so the team can switch back; research/precios-abiertos.md searches for open price sources.
 Known conflict: AGENTS.md section 6 (the submission form attests that every external resource is listed and no copyrighted material is used without permission); this is a team-wide attestation, not only enrique's risk.
 Open, NOT decided: before filing the submission (Sun 21:00) the team must re-review this. A fallback is available at any time (switch to the open twin or to an open price source). No permission request by email will be sent (decided by gonzalo: nobody answers on Saturday).
+
+
+## D-011 | 2026-11-14 | ACCEPTED (gonzalo proposed; enrique accepted in chat, team-bus #138): success % is computed over the HISTORICAL years (`exito_pct.n_anios_historicos`), not over plan-years x years; the 52 plan-year samples become `n_muestras` (informative, not independent); new field `n_efectivo` = n used for the interval | decided by: enrique + gonzalo (amends D-008)
+Why: Wilson assumes independent observations; plan-years x years are not independent, so the interval with n=52 was too narrow.
+Numbers: observed climate = 19 years (2006-2024, enrique #144), not the 20 written in D-008; the contract does not hardcode the number. enrique will report the real n per rotation after the change.
+Also agreed: scenario index i must be the same sample (same climate year, price and cost) in every rotation; today it is NOT (each rotation draws its own year). Fix by enrique/jaime Cursor: draw years from the list common to all evaluable rotations (est. 1-2 h). Until then `escenarios_meta.alineados = false` and the UI must not present "B wins X %" as firm. Details: research/contract-v1-draft/v1.1/CHANGELOG-v1.1.md.

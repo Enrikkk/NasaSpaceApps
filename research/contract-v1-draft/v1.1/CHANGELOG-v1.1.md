@@ -72,3 +72,9 @@ publica el dato de precios sin el nombre (o conseguir el permiso) antes de conge
 - Fuentes de bloques mock (FEGA, SoilGrids, "HLS-VI (mock)") no tienen entrada en `fuentes[]` hasta que el dato sea real.
 - SIAM/IMIDA/FAO: licencia sin verificar (`verify`); lo sigo en `submission/data-citations.md`.
 - Pendientes míos, no de enrique: Zona 1/2 (Anexo I), SIGPAC desde código con el FEGA, `legal.check` en la API.
+
+
+## Nota 2026-11-14 (gonzalo): 19 anios historicos, no 20; n del exito
+- Enrique (#138, #144): el clima observado son **19 años (2006-2024)**, no 20. El contrato no fija el número: `exito_pct.n_anios_historicos` lo da el motor (hoy 19).
+- Acordado (#138): el éxito y su horquilla se calculan sobre los años históricos (`n_anios_historicos`, `n_efectivo`); los 52 años-plan pasan a `n_muestras` (informativo, no independientes). Campos nuevos añadidos al schema (opcionales, add-only).
+- El borrador v1 antiguo (`generate_draft.py`, serie 2005-2024 simulada) conserva 20 años solo como ejemplo; v1.1 manda.

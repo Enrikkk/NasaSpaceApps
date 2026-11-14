@@ -1148,6 +1148,21 @@
             ]
           },
           "description": "Enteros (enrique) u objetos {anio, ...} (borrador)."
+        },
+        "n_anios_historicos": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Años históricos distintos (clima y precio emparejados) sobre los que se calcula valor y horquilla. Hoy 19 (2006-2024, clima observado) según enrique #144; no se fija en el contrato: lo da el motor. Wilson/Jeffreys se calcula con este n."
+        },
+        "n_muestras": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Nº de muestras remuestreadas (años del plan x años históricos). Informativo: NO son independientes, no se usa para el intervalo."
+        },
+        "n_efectivo": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "n que se usa realmente para el intervalo de confianza (normalmente = n_anios_historicos)."
         }
       },
       "if": {
