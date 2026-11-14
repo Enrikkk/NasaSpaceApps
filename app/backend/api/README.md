@@ -208,3 +208,16 @@ Citas completas y estado de licencia: `app/backend/pipeline/README.md`.
 
 ## Cobertura v4 (2026-11-14, 17:16 hora de Madrid)
 Imagen v4 (commit c281ac1): 7 municipios del ATOM del FEGA, **170 265 recintos** (Cartagena 76 231, Fuente Alamo 43 666, Torre-Pacheco 29 859, San Javier 13 254, San Pedro del Pinatar 2 925, La Union 2 515, Los Alcazares 1 815; ~30 MB comprimidos), servicio con 2 GiB de memoria (carga ~11 s al arrancar en frio). Probados puntos de Cartagena y Fuente Alamo: `parcela` precalculada y cobertura completa. Descarga hecha con el permiso explicito de gonzalo a las 17:15 (el ATOM pide descargas grandes fuera de 8:00-18:00).
+
+## Control de gasto en GCP (2026-11-14; proyecto agrockham-nasa-2026, tope de equipo 50 EUR)
+Recursos existentes (auditados con gcloud): UN servicio Cloud Run (`agrockham-api`), el repo Artifact Registry `agrockham` (imagenes v3 y v4; v1 y v2 borradas) y el bucket de Cloud Build. No hay VMs, GKE, Cloud SQL, funciones ni jobs; Compute y Cloud Functions no estan habilitados.
+Protecciones activas:
+- Cloud Run: `--max-instances 2`, `--min-instances 0` (escala a cero: sin trafico no cuesta), `--timeout 120`, concurrencia 80, CPU solo durante las peticiones, 1 vCPU / 2 GiB. Peor caso teorico con trafico continuo: ~2 instancias x 24 h.
+- Bucket `agrockham-nasa-2026_cloudbuild`: ciclo de vida que borra objetos con mas de 1 dia (las fuentes de cada build).
+- Presupuesto "Agrockham alerta 50 EUR" (50 EUR): avisos por correo al 10, 20, 50, 80 y 100 % del gasto real y al 100 % de la prevision. OJO: un presupuesto solo AVISA, no corta el servicio.
+- La cuenta es una prueba gratuita con credito (~269 EUR en la consola) y sin pasar a cuenta completa no se cobra mas alla del credito.
+Parada de emergencia (si el gasto sube sin motivo):
+- Cortar el trafico publico: `gcloud run services remove-iam-policy-binding agrockham-api --project agrockham-nasa-2026 --region europe-west1 --member=allUsers --role=roles/run.invoker`
+- Borrar el servicio: `gcloud run services delete agrockham-api --project agrockham-nasa-2026 --region europe-west1`
+- Desvincular la facturacion del proyecto: `gcloud billing projects unlink agrockham-nasa-2026`
+Antes de cualquier despliegue nuevo: mantener `--max-instances 2 --min-instances 0 --allow-unauthenticated` solo para `agrockham-api`, no crear otros servicios ni recursos de coste continuo, y borrar imagenes antiguas.
