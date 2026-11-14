@@ -22,6 +22,7 @@ This file is the contract between those agents. It is tool-agnostic on purpose. 
 | `context/team.md` | Who is on the team, skills, roles, seat names | each person their own row |
 | `brainstorm/` | Challenge analysis, idea lists, decision matrix | anyone |
 | `research/` | Side research (tools, data access, prior art) | anyone |
+| `coordination/PLAN.md` | **Agrockham development plan**: scope P0/P1/P2, architecture, contract v1, roles, timeline | anyone, log changes |
 | `coordination/tasks/` | **One file per task.** The task board. | see §3 |
 | `coordination/LOG.md` | Append-only shared log of what happened | append only |
 | `coordination/DECISIONS.md` | Append-only record of team decisions and why | append only |

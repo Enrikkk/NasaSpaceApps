@@ -37,3 +37,10 @@ Rejected alternatives: building a general multi-region system; claiming predicti
 ACCEPTED D-002 | 2026-11-14 | jaime (instructed his agent in chat; the team chose Field Shift on 13 Nov, region Murcia)
 ACCEPTED D-002 | 2026-11-14 | Challenge 06 Field Shift: Adapting Farms with NASA Data | decided by: enrique (for the team, in chat)
 Why: team choice. Data brainstorm in brainstorm/field-shift-data.md; prior-art caveats in research/prior-art-2026.md (4 Murcia teams on this challenge as of 10 Nov).
+
+## D-006 | 2026-11-14 | Product name: **Agrockham** (Agro + Ockham's razor); replaces the working name RotaSat. Roles: jaime UI+pitch, gonzalo backend, enrique ML/engine, arturo networks/IoT | decided by: jaime (in chat)
+Why: the whiteboard's "navaja de Ockham" principle is the product's rhetoric: the simplest tool that works for a non-technical farmer. Roles mapped from each person's skills; folders in .claude/ownership.json.
+
+## D-007 | 2026-11-14 | PROPOSED: architecture and plan in coordination/PLAN.md: offline Python pipeline + engine precompute one contract JSON per parcel; static React/Vite/MapLibre UI does the weighting and "B wins X %" in the browser; no server in the demo; contract v1 frozen Sat 14:30 (add-only after); P0/P1/P2 scope and cut order; Hito 1 Sat 19:00, freeze Sun 12:00, submit Sun 21:00 | proposed by: jaime (agent)
+Why: nothing depends on venue Wi-Fi, sliders respond instantly, one fewer moving part to debug at 3 a.m. FastAPI and the LLM narrator stay optional.
+Rejected alternatives: live FastAPI backend for the demo (extra failure point, needs hosting); LLM computing scores (breaks "the engine computes, AI only explains").

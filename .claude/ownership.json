@@ -1,4 +1,8 @@
 {
-  "_comment": "Fill after the challenge is picked (D-002). Keys = seats from context/team.md. Paths relative to repo root; folders end with '/'. Unlisted paths are open to everyone.",
-  "shared": ["AGENTS.md", "CLAUDE.md", "README.md", "coordination/", "context/team.md", "brainstorm/", "research/"]
+  "_comment": "Filled 2026-11-14 from coordination/PLAN.md (roles confirmed by jaime). Keys = seats from context/team.md. Paths relative to repo root; folders end with '/'. Unlisted paths are open to everyone.",
+  "shared": ["AGENTS.md", "CLAUDE.md", "README.md", "coordination/", "context/team.md", "brainstorm/", "research/", "submission/project-page.md", "submission/ai-use.md", "submission/data-citations.md", "submission/checklist.md"],
+  "jaime": ["app/frontend/", "submission/pitch.md", "submission/slides/"],
+  "gonzalo": ["app/README.md", "app/data/contract.schema.json", "app/data/torre-pacheco.mock.json", "app/backend/pipeline/", "app/backend/rules/", "app/data/cache/pipeline/"],
+  "enrique": ["app/backend/engine/", "app/backend/ndvi/", "app/data/cache/ndvi/", "app/data/torre-pacheco.json"],
+  "arturo": ["app/iot/", "app/data/tables/", "app/data/cache/siam/", "scripts/deploy.sh", "LICENSE"]
 }
