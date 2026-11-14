@@ -4,7 +4,7 @@ title: Deployment preparation and preloaded demo fallback (D-009)
 status: doing
 owner: arturo
 branch: t017-offline-deploy
-paths: scripts/deploy.sh, coordination/deploy/, coordination/tasks/T-017-offline-deploy.md
+paths: scripts/deploy.sh, scripts/t017_smoke.py, coordination/deploy/, coordination/tasks/T-017-offline-deploy.md
 depends: T-009, T-010, T-020, T-024
 ---
 D-009 ACCEPTED supersedes the original static-only implementation: live FastAPI/Cloud Run backend and SIGPAC globe; internet is required for live queries, with a preloaded demo parcel as fallback. Full offline queries are not promised.
@@ -20,3 +20,5 @@ Acceptance for this preparation increment:
 - 2026-11-14 13:20 | plan v1 (coordination/PLAN.md): Seat (plan): arturo. Sun 14:00-19:00.
 
 - 2026-11-14 | arturo: claimed local preparation after explicit authorization; base origin/main b48ebae includes API, contract/pipeline/rules. Frontend currently only design assets; API 5d49ea0 README documents sample defaults and a separate engine-JSON adapter. Docker/gcloud unavailable on this laptop. Requests sent to Gonzalo #156 and orchestrator/Jaime #157; no deploy or licence change.
+
+- 2026-11-14 17:12 | arturo: #166 smoke handoff implemented in scripts/t017_smoke.py (scripts scope agreed); API main2ec59e1 + motor473f2c2 JSON abierto passes13 checks locally with AGROCKHAM_OFFLINE=1,66recintos sample and producer contract validator. New source inspector profiles/negative checks pass. Docker-mode runner supplied (--pull=never/--network none/read-only mounts); not executed on this laptop. Gonzalo #169 reports Docker API-only checks with50368recintos; clarification #172 asks engine selection and schema evidence. Frontend/production origin/browser fallback remain absent. No deploy or global licence change; task remains doing.

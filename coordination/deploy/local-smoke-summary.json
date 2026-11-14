@@ -1,0 +1,116 @@
+{
+  "mode": "local",
+  "api_sha": "2ec59e1",
+  "engine_sha": "473f2c2",
+  "engine_sha256": "1c1dc43a257880b17af38112ba8637ab5d9338dec3fbda416b804203fd969541",
+  "python": "3.12.3",
+  "runtime_versions": {
+    "fastapi": "0.162.7",
+    "uvicorn": "0.54.0",
+    "numpy": "2.4.6",
+    "shapely": "2.2.0",
+    "jsonschema": "4.26.0"
+  },
+  "input_sha256": {
+    "app/backend/api/main.py": "5ef7b776d59d3b3325d3d489ff778a58c4f842fb6a3ca116f0ee665b0e12a762",
+    "app/backend/api/engine_adapter.py": "d31f83cae5312bbf1c6ebb509b4e6af60c285c641d7deffef67ced49d0bd2190",
+    "app/backend/api/requirements.txt": "cf7e33d7610fd3fcf05ccc275b99587da37bd3541ce8f899ee84c4648b29b685",
+    "app/data/contract.schema.json": "50356a21d3d29a0f20ece473f206c3b335466ef3f61ab0fffe022f170ef03e93",
+    "app/data/contract/validate_contract.py": "7a743336dc010fa28fd68773c93619d3b768aa22024b00236cb10d7910ab41a9"
+  },
+  "checks": [
+    {
+      "name": "health-http-200",
+      "ok": true
+    },
+    {
+      "name": "health-version",
+      "ok": true
+    },
+    {
+      "name": "atom-loaded-nonempty",
+      "ok": true,
+      "detail": {
+        "cargado": true,
+        "n": 66,
+        "municipios": [],
+        "segundos_carga": 0.0
+      }
+    },
+    {
+      "name": "analyze-http-200",
+      "ok": true
+    },
+    {
+      "name": "analyze-producer-schema-and-invariants",
+      "ok": true,
+      "detail": "Full validator output retained locally; warnings are not publication approval"
+    },
+    {
+      "name": "engine-json-selected-no-draft-fallback",
+      "ok": true,
+      "detail": "JSON de enrique"
+    },
+    {
+      "name": "engine-rotation-ids",
+      "ok": true
+    },
+    {
+      "name": "localhost-cors",
+      "ok": true
+    },
+    {
+      "name": "parcel-http-200",
+      "ok": true
+    },
+    {
+      "name": "parcel-producer-schema-and-invariants",
+      "ok": true,
+      "detail": "Full validator output retained locally; warnings are not publication approval"
+    },
+    {
+      "name": "recintos-http-200-geojson",
+      "ok": true
+    },
+    {
+      "name": "recintos-nonempty",
+      "ok": true,
+      "detail": 22
+    },
+    {
+      "name": "recintos-attribution",
+      "ok": true
+    }
+  ],
+  "failures": [],
+  "offline": "AGROCKHAM_OFFLINE=1",
+  "scope": "API with precomputed demo JSON; not a browser demo, live engine per point or deployment",
+  "publication_authorized": false,
+  "engine_licencia": {
+    "incluye_precios_carm": false,
+    "estado": "sin precios CARM",
+    "fuentes_restringidas": {}
+  },
+  "atom": {
+    "kind": "committed viewport sample",
+    "features": 66,
+    "source_sha256": "c2fda3ee7210105d896c5517ffd7e5278dfc70ab812d9211c040bcf78c50a224",
+    "attribution": "Fuente de los datos: FONDO ESPAÑOL DE GARANTÍA AGRARIA O.A. (CC BY 4.0; datos transformados: m2->ha, milesimas->%, 6 decimales). Muestra del ATOM 2026, validez 2025-12-15.",
+    "full_municipal_coverage": false
+  },
+  "network_isolation": "pipeline offline flag; no OS network namespace isolation",
+  "analyze_states": {
+    "parcela": "precalculado",
+    "historia": "simulado",
+    "ndvi": "simulado",
+    "clima": "real",
+    "suelo": "real",
+    "rotaciones": "real"
+  },
+  "recintos_count_in_bbox": 22,
+  "passed": true,
+  "demo_ready": false,
+  "recorded_at": "2026-11-14T17:12:42+01:00",
+  "raw_responses": "Kept outside git in /tmp/agrockham-t017-open-1; no engine price data published by this task",
+  "docker_run": "Not run by Arturo (Docker unavailable). Gonzalo #169 reports network-none API test; engine-JSON/schema confirmation requested #172."
+}
