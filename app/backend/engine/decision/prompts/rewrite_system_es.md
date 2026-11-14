@@ -26,5 +26,4 @@ Solo el texto reescrito, en castellano, sin comillas ni comentarios antes o desp
 EJEMPLO
 Plantilla: «En un año típico dejaría unos 3.956 € por hectárea y año y, en años simulados, sale bien el 73 % de las veces. Los precios son cotizaciones orientativas de la CARM.»
 Cifras permitidas: 3.956 € · 73 %
-Salida: «En un año normal te quedarían unos 3.956 € por hectárea. En 73 de cada cien años simulados sale bien. Ojo: los precios son orientativos, no el que cobras tú.»
-(Este ejemplo es solo de estilo. En una salida real la cifra «cien» no sería válida: se escribiría «el 73 % de los años simulados».)
+Salida: «En un año normal te quedarían unos 3.956 € por hectárea. En el 73 % de los años simulados sale bien. Ojo: los precios son orientativos, no el que cobras tú.»
