@@ -81,4 +81,8 @@ is online and which providers they have.
   CLIs in `~/.local/bin` need that PATH in `~/.bash_profile`, then a full Paseo restart.
 - `dispatch`'s `run --new-workspace worktree --worktree-mode branch-off --new-branch … --base origin/main` was
   tested locally with Haiku (worktree, branch, `wait`, `logs`, then `workspace archive` cleanup).
+- Hub live since 2026-11-14 10:45: jaime's daemon listens on 100.93.255.39:6767 with a password. A credential-less
+  client gets `Password required`, a wrong password `Incorrect password`, and `GET /api/agents` returns 401.
+  **Don't be fooled:** on the daemon's own machine, `paseo --host tcp://<own-ip>:6767 ...` works *without* a password,
+  because the CLI uses that machine's `~/.paseo/local-credential`. Test auth from another laptop, or with `PASEO_HOME=<empty dir>`.
 - Not tested yet: a second physical laptop.

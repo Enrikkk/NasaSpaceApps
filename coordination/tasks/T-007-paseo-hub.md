@@ -21,3 +21,4 @@ its Tailscale IP; D-004 recorded.
   auth (missing/wrong password rejected), host add -> online, dispatch run flags (worktree, branch, wait, logs).
   Left: jaime runs `bash scripts/paseo_join.sh` (password prompt), invites 3 teammates to the tailnet, each runs
   paseo_join.sh, hub runs `paseo_team.sh add` per seat. Cursor on jaime's Mac needs `cursor-agent login`.
+- 2026-11-14 10:45 | jaime | hub live: paseo_join.sh run on jaime's Mac, daemon on 100.93.255.39:6767 with password; auth verified from a credential-less client (Password required / 401). Left: tailnet invites + teammates join + `paseo_team.sh add` per seat.
