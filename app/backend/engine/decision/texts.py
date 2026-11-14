@@ -433,6 +433,8 @@ _REFERENCE_WORDING = (
     ("lo que haces hoy", "la rotación de referencia"),
     ("% de hoy", "% de la referencia"),
     ("lo de hoy", "la referencia"),
+    ("casi la misma agua que ahora", "casi la misma agua que la referencia"),
+    ("por hectárea y año que ahora", "por hectárea y año que la referencia"),
     ("No hay una rotación actual con la que comparar.", "No hay una rotación de referencia con la que comparar."),
 )
 

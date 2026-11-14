@@ -79,7 +79,7 @@ def test_declared_crop_outside_catalog_uses_the_area_reference_and_never_says_ho
     ref = next(r for r in o["rotaciones"] if r["es_actual"])
     assert ref["nombre"].startswith("Referencia de la zona (supuesto)")
     blob = json.dumps([r["texto"] for r in o["rotaciones"]], ensure_ascii=False)
-    assert "haces hoy" not in blob and "de hoy" not in blob and "rotación actual" not in blob
+    assert "haces hoy" not in blob and "de hoy" not in blob and "rotación actual" not in blob and "que ahora" not in blob
     assert any("BARBECHO TRADICIONAL" in f for f in o["idoneidad"]["frases"])
     assert texts.check(o) == []
 
