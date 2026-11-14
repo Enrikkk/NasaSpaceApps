@@ -49,8 +49,8 @@ const MELON = [25.84, 31.01, 34.64, 42.06, 30.09, 37.02, 25.99, 27.35, 33.54, 27
   pres.addSection({ title: 'Apertura' });
   let s = pres.addSlide({ masterName: 'Portada', sectionTitle: 'Apertura' });
   s.addImage({ path: A('globo.jpg'), x: 0, y: 0, w: 13.333, h: 7.5, objectName: 'Globo (app)' });
-  s.addImage({ path: A('agrockham-logo-on-dark.png'), x: 0.7, y: 2.55, w: 6.0, h: 6.0 * 461 / 2400, objectName: 'Logo' });
-  text(s, 'Qué sembrar, cuándo y con qué riesgo', { x: 0.7, y: 3.85, w: 7.5, h: 0.6, fontSize: 26, objectName: 'Lema' });
+  s.addImage({ path: A('agrockham-logo-on-dark.png'), x: 0.7, y: 2.55, w: 5.2, h: 5.2 * 461 / 2400, objectName: 'Logo' });
+  text(s, 'Qué sembrar, cuándo y con qué riesgo', { x: 0.7, y: 3.75, w: 6.0, h: 0.6, fontSize: 22, objectName: 'Lema' });
   text(s, 'NASA Space Apps Challenge 2026 · Murcia', { x: 0.7, y: 6.6, w: 7, h: 0.3, fontSize: 12, objectName: 'Evento' });
   credit(s, 'Imagen: Blue Marble, NASA GIBS / NASA Earth Observatory · IGN (CC BY 4.0 scne.es)', 0.7, 6.95, 9);
   s.addNotes('[0:00-0:06]\nGUION: «Esto es Agrockham: te ayuda a decidir qué sembrar, cuándo y con qué riesgo.»');
