@@ -1,0 +1,78 @@
+.card { padding: var(--space-4); display: grid; gap: var(--space-3); }
+/* The open card lifts one step (DESIGN.md rule 1): --surface-1 -> --surface-2. */
+.card.open { background: var(--surface-2); }
+.ref { border-style: dashed; }
+
+.head { font: inherit; }
+.toggle {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  border-radius: var(--radius-control);
+}
+.titleLine { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { font-size: var(--fs-lg); font-weight: 600; line-height: 1.25; }
+.chevron { display: flex; color: var(--text-muted); transition: transform 300ms var(--ease); flex: none; }
+.toggle[aria-expanded='true'] .chevron { transform: rotate(180deg); }
+.toggle:hover .chevron { color: var(--text); }
+
+.badges { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.badgeRef { color: var(--text-muted); }
+.badgeBest { color: var(--green-light); border-color: var(--green-light); }
+
+.plan { display: grid; gap: var(--space-1); font-size: var(--fs-sm); color: var(--text-muted); font-weight: 400; }
+
+.metrics { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); }
+.metric { display: grid; gap: var(--space-1); align-content: start; min-width: 0; }
+.wide { grid-column: 1 / -1; }
+.metric dt { font-size: var(--fs-xs); color: var(--text-muted); }
+.metric dd { display: grid; gap: 2px; font-size: var(--fs-sm); }
+.big { font-size: var(--fs-lg); font-weight: 600; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.big small { font-size: var(--fs-xs); font-weight: 400; color: var(--text-muted); }
+.medium { font-size: var(--fs-md); font-weight: 600; font-variant-numeric: tabular-nums; }
+.range { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.4; }
+.noData { font-size: var(--fs-sm); color: var(--text-muted); font-style: italic; }
+/* Loss: icon + word + colour (never colour alone), at 20 px as DESIGN.md asks for --danger. */
+.loss { color: var(--danger); display: inline-flex; align-items: center; gap: var(--space-1); flex-wrap: wrap; }
+.loss small { color: var(--text-muted); }
+.totals { padding-top: var(--space-3); border-top: 1px solid var(--border); }
+
+.legal { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; font-size: var(--fs-sm); }
+.legal_ok { color: var(--green-light); }
+.legal_warn { color: var(--warn); }
+.legal_stop { color: var(--danger); }
+.legal_unknown { color: var(--text-muted); }
+
+.env { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; font-size: var(--fs-sm); }
+.meter { display: inline-flex; gap: 2px; }
+.meter i { width: 8px; height: 12px; border-radius: 2px; border: 1px solid var(--text-muted); }
+.meter i.on { background: var(--green-light); border-color: var(--green-light); }
+
+.details { display: grid; gap: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.block { display: grid; gap: var(--space-1); font-size: var(--fs-sm); line-height: 1.5; }
+.block h4 { font-size: var(--fs-sm); font-weight: 600; color: var(--green-light); }
+.block ul { display: grid; gap: var(--space-2); padding-left: var(--space-4); }
+.small { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.5; }
+.block .small, .details > .small { font-size: var(--fs-sm); }
+
+.wait { font-size: var(--fs-xs); color: var(--text-muted); font-style: italic; }
+.aiTag { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); font-size: var(--fs-xs); color: var(--text-muted); }
+.link { color: var(--green-light); text-decoration: underline; text-underline-offset: 2px; font-size: var(--fs-xs); }
+.link:hover { color: var(--text); }
+
+@media (max-width: 760px) {
+  .card { padding: var(--space-3); }
+  .metrics { gap: var(--space-3); }
+}

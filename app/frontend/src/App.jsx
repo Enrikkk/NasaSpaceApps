@@ -3,6 +3,7 @@ import RegionsBar from './components/RegionsBar.jsx'
 import FiltersPanel from './components/FiltersPanel.jsx'
 import ViewSwitcher from './components/ViewSwitcher.jsx'
 import MapView from './components/MapView.jsx'
+import ParcelPanel from './components/parcel/ParcelPanel.jsx'
 import { useAppState } from './state/AppState.jsx'
 import styles from './App.module.css'
 
@@ -41,6 +42,7 @@ export default function App() {
             <FiltersPanel />
           </div>
           <ViewSwitcher className={styles.views} />
+          <ParcelPanel />
         </>
       )}
     </div>

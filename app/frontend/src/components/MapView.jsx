@@ -10,6 +10,7 @@ import styles from './MapView.module.css'
 import Starfield from './Starfield.jsx'
 import { sigpacUseLabel } from '../config/sigpacUses.js'
 import { addIgnOverlay, IGN_OVERLAY_IDS } from './ignOverlay.js'
+import { recintoFromProps } from '../api/client.js'
 
 // Map colours come from the design tokens so DESIGN.md stays the single source.
 const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
@@ -144,10 +145,11 @@ function applyView(map, view, parcels) {
  * map:  Spain-only. First scroll flies to Región de Murcia, then the wheel zooms normally.
  */
 export default function MapView() {
-  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry } = useAppState()
+  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry, setSelectedParcel } = useAppState()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const screenRef = useRef(screen)
+  const selectParcelRef = useRef(setSelectedParcel)
   const firstScrollDone = useRef(false)
   const enteredAt = useRef(0)
   const [zoom, setZoom] = useState(0)
@@ -155,6 +157,7 @@ export default function MapView() {
   const [overlay, setOverlay] = useState(0)
 
   screenRef.current = screen
+  selectParcelRef.current = setSelectedParcel
 
   // Create the map once, as the home globe.
   useEffect(() => {
@@ -206,10 +209,8 @@ export default function MapView() {
     })
     map.on('mouseleave', 'recintos-fill', () => { map.getCanvas().style.cursor = ''; setHover(null) })
     map.on('click', 'recintos-fill', (e) => {
-      new maplibregl.Popup({ className: styles.popup, maxWidth: '260px' })
-        .setLngLat(e.lngLat)
-        .setDOMContent(parcelCard(e.features?.[0]?.properties ?? {}))
-        .addTo(map)
+      const tile = e.features?.[0]?.properties ?? {}
+      selectParcelRef.current({ lat: e.lngLat.lat, lon: e.lngLat.lng, recinto: recintoFromProps(tile), tile })
     })
 
     // After MapLibre has resized its canvas (not on window 'resize', which comes first).
