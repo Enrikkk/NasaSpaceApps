@@ -2,7 +2,7 @@
 """Prueba real contra un servidor en marcha: peticiones, latencias y validacion contra el esquema del contrato v1.
 
     uvicorn app.backend.api.main:app --port 8099 &            # desde la raiz del repo
-    python app/backend/api/smoke.py http://127.0.0.1:8099 [--sin-red]     # --sin-red: omite el punto fuera de cobertura (llama a POWER/Open-Meteo/SoilGrids)
+    python app/backend/api/smoke.py http://127.0.0.1:8099 [--sin-red]     # --sin-red: pide solo el bloque parcela fuera de cobertura y omite Albacete (llamarian a POWER/Open-Meteo/SoilGrids); para CERO red real arranca el servidor con AGROCKHAM_OFFLINE=1 o el contenedor con --network none
 
 Necesita jsonschema (venv). Esquema y validador: app/data/contract.schema.json y app/data/contract/validate_contract.py.
 """
@@ -86,7 +86,8 @@ def main():
     d, _ = analizar(base, "demo zona_2 y recinto parcial", {**DEMO, "zona": "zona_2", "recinto": {"poligono": 18, "parcela": 426}})
     print("   semaforos zona_2:", [r["semaforo_legal"]["color"] for r in d["rotaciones"]], "recinto:", d["_meta"]["consulta"]["recinto"], d["_meta"]["consulta"]["recinto_completo"])
     d, _ = analizar(base, "demo solo parcela", DEMO, "?bloques=parcela")
-    d, _ = analizar(base, "fuera de cobertura (Murcia ciudad, sin ATOM)", {"lat": 37.9922, "lon": -1.1307})
+    # Con --sin-red solo se pide el bloque parcela: pedir todos los bloques hace que el servidor salga a POWER/Open-Meteo/SoilGrids.
+    d, _ = analizar(base, "fuera de cobertura (Murcia ciudad, sin ATOM)", {"lat": 37.9922, "lon": -1.1307}, "?bloques=parcela" if a.sin_red else "")
     if not a.sin_red:
         punto = {"lat": 38.95, "lon": -1.85}   # campo cerca de Albacete: clima y suelo globales, sin recintos cargados
         d, _ = analizar(base, "fuera de cobertura (Albacete rural; clima y suelo en vivo)", punto)
