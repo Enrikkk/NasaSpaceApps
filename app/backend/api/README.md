@@ -194,3 +194,10 @@ Citas completas y estado de licencia: `app/backend/pipeline/README.md`.
 - Filas de `submission/data-citations.md` (no es de esta carpeta).
 - Enchufar el motor por punto (T-020) y pasar `rotaciones` de `simulado` a `real` cuando enrique lo declare.
 - Revisar con el FEGA el uso en producción del ATOM y decidir si el semáforo `gris` del nivel básico es lo que quiere la UI.
+
+## Despliegue real (2026-11-14)
+- Servicio: `agrockham-api` en Cloud Run, proyecto `agrockham-nasa-2026`, region `europe-west1`, publico, `--max-instances 3 --min-instances 0 --memory 1Gi`. Imagen `europe-west1-docker.pkg.dev/agrockham-nasa-2026/agrockham/agrockham-api:v1` (Artifact Registry repo `agrockham`).
+- URL: https://agrockham-api-530791362085.europe-west1.run.app (`/health`, `/docs`).
+- Como se hizo: un contexto limpio fuera del repo (app/backend/api, pipeline, rules, app/data minimo y los GeoJSON de ATOM en `app/backend/api/atom_build`), `gcloud builds submit --config app/backend/api/cloudbuild.yaml --substitutions _IMAGE=<imagen>` y `gcloud run deploy agrockham-api --image <imagen> --allow-unauthenticated ...`. Los GeoJSON de ATOM NO estan en git (los genera `app/backend/pipeline/atom/build_recintos.py`).
+- Comprobado: `/health` (50 368 recintos cargados), `POST /analyze` en la parcela demo (0,4 s; clima y suelo reales, parcela precalculada, semaforo verde con `zona=zona_2`), `/recintos?bbox=` y CORS para `http://localhost:5173`.
+- Pendiente: `FRONTEND_ORIGIN` con el origen publico del frontend de jaime (CORS), descargar Cartagena y Fuente Alamo, enchufar el motor de enrique (`ENGINE_JSON`).

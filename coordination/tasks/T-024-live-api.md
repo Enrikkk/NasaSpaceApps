@@ -14,3 +14,5 @@ Done when: POST /analyze returns the contract by blocks for the demo parcel and 
 - 2026-11-14 16:40 | gonzalo claimed (new task, next free number).
 
 - 2026-11-14 18:15 | merged into main (t024-live-api, 80 tests OK): app/backend/api/ (/health, /analyze, /parcel, /recintos). Next: Cloud Run deploy (agrockham-api, europe-west1).
+
+- 2026-11-14 18:30 | deployed to Cloud Run: https://agrockham-api-530791362085.europe-west1.run.app (image v1, revision agrockham-api-00001-77j). /health, /analyze (0.4 s demo parcel), /recintos and CORS localhost:5173 checked.
