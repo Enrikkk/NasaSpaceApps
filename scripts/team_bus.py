@@ -3,15 +3,21 @@
 with the hub's orchestrator in the middle (T-008, coordination/PASEO.md, coordination/TEAM-SETUP.md).
 
 Why: Paseo's own MCP tools only act on the daemon they run in. This bus is reachable over Tailscale by Claude
-Code, Codex and Cursor (MCP Streamable HTTP, JSON responses), authenticates each seat with its own bearer
-token, keeps an inbox per seat and pushes messages live into running Paseo agents (`paseo send`), so nobody
-has to poll for messages.
+Code, Codex and Cursor (MCP Streamable HTTP, JSON responses), keeps an inbox per seat and pushes messages live
+into running Paseo agents (`paseo send`), so nobody has to poll for messages.
+
+Auth, zero secrets to hand out: being a member of the hub's tailnet IS the credential. The bus asks
+`tailscale whois <peer-ip>` who is calling (WireGuard identity, can't be spoofed) and maps that Tailscale login
+to a seat. A new laptop calls the `register` tool once (scripts/team_join.sh does it), which also hands the hub
+its Paseo daemon password so the orchestrator can dispatch there. Calls from the hub itself = seat `jaime`.
+Bearer tokens (`token <seat>`) still work and win over identity; the hub's orchestrator agent uses one.
+If a message arrives for the orchestrator and none is running, the bus starts one (at most every 10 min).
 
 Hub commands:
-    python3 scripts/team_bus.py token <seat>      # mint/rotate a seat's token, printed once ('orchestrator' = hub agent)
-    python3 scripts/team_bus.py tokens            # list seats that have a token
-    python3 scripts/team_bus.py serve             # serve on <tailscale-ip>:6780 (Ctrl-C to stop)
-Endpoint for agents: http://<hub-tailscale-ip>:6780/mcp  with header  Authorization: Bearer <token>
+    python3 scripts/team_bus.py serve             # serve on <tailscale-ip>:6780 (launchd runs this, see PASEO.md)
+    python3 scripts/team_bus.py seats             # who is registered
+    python3 scripts/team_bus.py token <seat>      # optional bearer token ('orchestrator' = hub agent)
+Endpoint for agents: http://<hub-tailscale-ip>:6780/mcp
 Stdlib only, Python >= 3.9. Remote daemons are reached with the credentials scripts/paseo_team.sh stores.
 """
 import argparse
@@ -36,7 +42,13 @@ ORCH = "orchestrator"
 DEAD = {"closed", "archived", "error", "failed", "stopped"}
 LOCK = threading.Lock()
 PASEO = shutil.which("paseo") or "/Applications/Paseo.app/Contents/Resources/bin/paseo"
+TAILSCALE = shutil.which("tailscale") or "/usr/local/bin/tailscale"
 SUPPORTED = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"]
+HUB_SEAT = os.environ.get("TEAM_BUS_HUB_SEAT", "jaime")
+AUTO_ORCH = os.environ.get("TEAM_BUS_AUTO_ORCHESTRATOR", "1") == "1"
+_WHOIS = {}                                            # ip -> (time, login, node)
+_LAST_ORCH_SPAWN = [0.0]
+HUB_IPS = {"127.0.0.1", "::1"}
 
 INSTRUCTIONS = (
     "Team bus of the NASA Space Apps team. The hub (jaime's Mac) runs the orchestrator. "
@@ -72,6 +84,38 @@ def _hash(token):
 
 def seat_for(token):
     return _load("tokens.json", {}).get(_hash(token)) if token else None
+
+
+def whois(ip):
+    """(login, node name) of a tailnet peer, cached 60 s; (None, None) if not a tailnet peer."""
+    hit = _WHOIS.get(ip)
+    if hit and time.time() - hit[0] < 60:
+        return hit[1], hit[2]
+    login = node = None
+    try:
+        r = subprocess.run([TAILSCALE, "whois", "--json", ip], capture_output=True, text=True, timeout=5)
+        d = json.loads(r.stdout) if r.returncode == 0 else {}
+        login = (d.get("UserProfile") or {}).get("LoginName")
+        node = (d.get("Node") or {}).get("Name", "").rstrip(".")
+        if (d.get("Node") or {}).get("Tags"):          # tagged devices have no human owner: key them by node
+            login = "node:" + node
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        pass
+    _WHOIS[ip] = (time.time(), login, node)
+    return login, node
+
+
+def identify(ip, token):
+    """-> (seat or None, login). Token beats identity; the hub machine is HUB_SEAT."""
+    seat = seat_for(token)
+    if seat:
+        return seat, "token"
+    if ip in HUB_IPS:
+        return HUB_SEAT, "hub"
+    login, _ = whois(ip)
+    if not login:
+        return None, None
+    return _load("identities.json", {}).get(login), login
 
 
 def add_message(frm, to, text, kind="message", task=""):
@@ -157,11 +201,68 @@ def push(seat, m):
         ok, _ = paseo(None if seat == ORCH else seat, "send", "--no-wait", a["id"], note)
         if ok:
             done.append(f"{seat}:{a.get('name') or a['id'][:8]}")
+    if seat == ORCH and not done and wake_orchestrator():
+        done.append("orchestrator:starting (it reads the inbox first)")
     return done
 
 
+def wake_orchestrator():
+    """Start the hub's orchestrator agent if none is live (rate-limited). It reads its inbox on start."""
+    if not AUTO_ORCH or time.time() - _LAST_ORCH_SPAWN[0] < 600:
+        return False
+    _LAST_ORCH_SPAWN[0] = time.time()
+    def go():
+        r = subprocess.run([str(ROOT / "scripts/paseo_team.sh"), "orchestrator"], capture_output=True, text=True,
+                           cwd=str(ROOT), timeout=120)
+        print(f"[team-bus] auto-start orchestrator: {(r.stdout or r.stderr).strip()[:200]}", flush=True)
+    threading.Thread(target=go, daemon=True).start()
+    return True
+
+
+def register(ctx, a):
+    """Bind the caller's Tailscale identity to a seat and store its Paseo daemon credentials for dispatch."""
+    seat = a["seat"].strip().lower()
+    if not re.fullmatch(r"[a-z][a-z0-9_-]{0,30}", seat) or seat in (ORCH, "all"):
+        return "seat must be a short lowercase name (not 'orchestrator'/'all')"
+    login, ip = ctx["login"], ctx["ip"]
+    if login in (None, "token"):
+        return "register only works over Tailscale (no token)"
+    with LOCK:
+        ids = _load("identities.json", {})
+        owner = next((l for l, s in ids.items() if s == seat), None)
+        if owner and owner != login and login != "hub":
+            return f"seat '{seat}' is already registered to another Tailscale user; ask jaime"
+        if login != "hub":
+            ids = {l: s for l, s in ids.items() if l != login}
+            ids[login] = seat
+            _save("identities.json", ids)
+    notes = [f"seat '{seat}' bound to this Tailscale identity"]
+    if a.get("repo"):
+        e = seat_env(seat) or {}
+        pw = a.get("daemon_password", e.get("password", ""))
+        host_ip = ip if ip not in HUB_IPS else (tailscale_ip() or ip)
+        TEAM.mkdir(parents=True, exist_ok=True)
+        os.chmod(TEAM, 0o700)
+        f = TEAM / f"{seat}.env"
+        q = lambda s: "'" + str(s).replace("'", "'\\''") + "'"
+        f.write_text(f"IP={q(host_ip)}\nREPO={q(a['repo'])}\nPASSWORD={q(pw)}\n", encoding="utf-8")
+        os.chmod(f, 0o600)
+        ok, out = paseo(seat, "provider", "ls", timeout=20)
+        prov = [l.split()[0] for l in out.splitlines()[1:] if ok and len(l.split()) > 2 and l.split()[2] == "available"]
+        notes.append(f"hub reached your Paseo daemon at {host_ip}:6767, providers: {', '.join(prov) or 'none'}" if ok
+                     else f"hub could NOT reach your Paseo daemon at {host_ip}:6767 ({out[:120]})")
+        if ok and login != "hub":                     # show the laptop in the hub's Paseo app
+            subprocess.run([PASEO, "host", "add", f"tcp://{host_ip}:6767?password={pw}", "--label", seat],
+                           capture_output=True, timeout=20)
+    m = add_message(seat, ORCH, f"{seat} joined the team bus. " + "; ".join(notes[1:]) +
+                    (f" Tool: {a['tool']}." if a.get("tool") else ""), "join")
+    push(ORCH, m)
+    return "\n".join(notes)
+
+
 def known_seats():
-    seats = sorted({p.stem for p in TEAM.glob("*.env")} | set(_load("tokens.json", {}).values()))
+    seats = sorted({p.stem for p in TEAM.glob("*.env")} | set(_load("tokens.json", {}).values())
+                   | set(_load("identities.json", {}).values()) | {HUB_SEAT})
     return [s for s in seats if s != ORCH]
 
 
@@ -192,6 +293,11 @@ def _s(desc, **props):
 
 
 TOOLS = {
+    "register": _s("Join the team once from a new laptop (scripts/team_join.sh calls it). Binds your Tailscale identity "
+                   "to a seat; with repo + daemon_password the orchestrator can start tasks on your laptop.",
+                   seat={"type": "string"}, repo={"type": "string", "description": "absolute repo path", "optional": True},
+                   daemon_password={"type": "string", "optional": True},
+                   tool={"type": "string", "description": "claude|codex|cursor", "optional": True}),
     "whoami": _s("Your seat and role on the team bus."),
     "team_status": _s("Who is online, their live agents, unread counts and open tasks on origin/main."),
     "send_message": _s("Message a seat, 'orchestrator' or 'all'. Delivered live to running agents, else queued.",
@@ -212,7 +318,13 @@ TOOLS = {
 }
 
 
-def call(seat, name, a):
+def call(seat, name, a, ctx=None):
+    ctx = ctx or {"ip": "127.0.0.1", "login": "hub"}
+    if name == "register":
+        return register(ctx, a)
+    if not seat:
+        return ("this laptop is in the tailnet but not registered yet: call register(seat, repo, daemon_password) "
+                "or run `bash scripts/team_join.sh <seat>`")
     orch = seat == ORCH
     if name == "whoami":
         return {"seat": seat, "role": "orchestrator" if orch else "worker", "seats": known_seats() + [ORCH],
@@ -270,7 +382,7 @@ def call(seat, name, a):
 
 # ------------------------------------------------------------------ MCP over HTTP (JSON responses)
 
-def rpc(seat, req):
+def rpc(seat, req, ctx=None):
     mid, method, params = req.get("id"), req.get("method", ""), req.get("params") or {}
     if mid is None:                                    # notification
         return None
@@ -291,7 +403,7 @@ def rpc(seat, req):
         if name not in TOOLS:
             return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": f"unknown tool {name}"}}
         try:
-            out = call(seat, name, params.get("arguments") or {})
+            out = call(seat, name, params.get("arguments") or {}, ctx)
             text = out if isinstance(out, str) else json.dumps(out, indent=1)
             return ok({"content": [{"type": "text", "text": text}], "isError": False})
         except KeyError as e:
@@ -321,8 +433,13 @@ class Handler(BaseHTTPRequestHandler):
         if origin and origin not in self.server.allowed_origins:     # DNS-rebinding guard (MCP spec)
             return None, 403
         auth = self.headers.get("Authorization", "")
-        seat = seat_for(auth[7:].strip()) if auth.lower().startswith("bearer ") else None
-        return (seat, 200) if seat else (None, 401)
+        token = auth[7:].strip() if auth.lower().startswith("bearer ") else ""
+        ip = self.client_address[0]
+        seat, login = identify(ip, token)
+        if not seat and not login:                     # neither a valid token nor a tailnet member
+            return None, 401
+        self.ctx = {"ip": ip, "login": login}
+        return seat, 200
 
     def do_GET(self):
         if self.path == "/health":
@@ -336,7 +453,7 @@ class Handler(BaseHTTPRequestHandler):
         if not self.path.startswith("/mcp"):
             return self._send(404)
         seat, code = self._seat()
-        if not seat:
+        if code != 200:
             return self._send(code, {"error": "unauthorized" if code == 401 else "bad origin"})
         try:
             body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"null")
@@ -345,8 +462,9 @@ class Handler(BaseHTTPRequestHandler):
         reqs = body if isinstance(body, list) else [body]
         for r in reqs:
             if isinstance(r, dict) and r.get("method") == "tools/call":
-                print(f"[team-bus {time.strftime('%H:%M:%S')}] {seat} -> {r.get('params', {}).get('name')}", flush=True)
-        out = [x for x in (rpc(seat, r) for r in reqs if isinstance(r, dict)) if x is not None]
+                print(f"[team-bus {time.strftime('%H:%M:%S')}] {seat or 'unregistered ' + str(self.ctx['login'])} -> "
+                      f"{r.get('params', {}).get('name')}", flush=True)
+        out = [x for x in (rpc(seat, r, self.ctx) for r in reqs if isinstance(r, dict)) if x is not None]
         if not out:
             return self._send(202)
         self._send(200, out if isinstance(body, list) else out[0])
@@ -369,6 +487,7 @@ def main():
     t = sub.add_parser("token")
     t.add_argument("seat")
     sub.add_parser("tokens")
+    sub.add_parser("seats")
     a = ap.parse_args()
 
     if a.cmd == "token":
@@ -389,11 +508,20 @@ def main():
         os.chmod(f, 0o600)
         print(tok)
         return
+    if a.cmd == "seats":
+        ids = _load("identities.json", {})
+        for s in known_seats():
+            e = seat_env(s) or {}
+            who = next((l for l, x in ids.items() if x == s), "hub" if s == HUB_SEAT else "-")
+            print(f"{s:12} tailscale={who[:3] + '...' if '@' in who else who:12} daemon={e.get('ip') or '-'}")
+        return
     if a.cmd == "tokens":
         print("\n".join(sorted(set(_load("tokens.json", {}).values()))) or "(no tokens yet)")
         return
     listen = a.listen or f"{tailscale_ip() or '127.0.0.1'}:{PORT}"
     host, port = listen.rsplit(":", 1)
+    HUB_IPS.add(host)
+    HUB_IPS.add(tailscale_ip())
     srv = ThreadingHTTPServer((host, int(port)), Handler)
     srv.allowed_origins = {f"http://{host}:{port}"}
     print(f"[team-bus] MCP endpoint http://{host}:{port}/mcp  seats with tokens: "

@@ -31,7 +31,7 @@ cmd="${1:-ls}"; shift || true
 case "$cmd" in
   add)
     seat="${1:?seat}"; ip="${2:?tailscale ip}"
-    repo="${3:?absolute repo path on their laptop (paseo_join.sh prints it)}"
+    repo="${3:?absolute repo path on their laptop (team_join.sh registers it automatically)}"
     mkdir -p "$DIR"; chmod 700 "$DIR"
     printf 'Daemon password for %s: ' "$seat"; read -r -s pw; echo
     PASEO_PASSWORD="$pw" paseo --host "tcp://$ip:$PORT" provider ls >/dev/null || {

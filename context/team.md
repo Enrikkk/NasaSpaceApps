@@ -8,7 +8,7 @@ files and logs; set it in your shell with `export SEAT=<seat>`.
 |---|---|---|---|---|---|
 | enrique | Enrique | AI/agents, LLM tooling (fill in) | Claude Code | Linux | (tbd) |
 | gonzalo | Gonzalo Morte | (fill in) | Claude Code | Linux | (tbd) |
-| (seat3) | | | | | |
+| jaime | Jaime | frontend/UI, pitch | Claude Code (+ Paseo hub) | macOS | frontend + pitch; runs the hub (Paseo + team-bus, D-004) |
 | (seat4) | | | | | |
 
 ## Suggested roles (decide after the challenge is picked)

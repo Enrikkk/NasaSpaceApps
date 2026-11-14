@@ -33,3 +33,5 @@ Rejected alternatives: see brainstorm/shortlist.md.
 ## D-005 | 2026-11-14 | PROPOSED: hackathon scope: one real end-to-end parcel, rest simulated or roadmap, always labelled | proposed by: gonzalo (agent)
 Why: 2 days. We may "sell a bit of vision" if it is feasible and honest. The table in app/README.md says what is real, simulated or roadmap; the pitch and submission copy it. "Success %" is defined as climate-threshold exceedance over 20 years x price >= breakeven, not a yield prediction (no open yield labels exist).
 Rejected alternatives: building a general multi-region system; claiming predictive accuracy we cannot validate.
+
+ACCEPTED D-002 | 2026-11-14 | jaime (instructed his agent in chat; the team chose Field Shift on 13 Nov, region Murcia)

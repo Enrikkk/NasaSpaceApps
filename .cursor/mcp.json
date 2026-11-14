@@ -1,8 +1,5 @@
 {
   "mcpServers": {
-    "team-bus": {
-      "url": "http://100.93.255.39:6780/mcp",
-      "headers": { "Authorization": "Bearer ${env:TEAM_BUS_TOKEN}" }
-    }
+    "team-bus": { "url": "http://100.93.255.39:6780/mcp" }
   }
 }
