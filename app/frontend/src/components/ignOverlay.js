@@ -17,7 +17,8 @@ export async function addIgnOverlay(map, beforeLabels) {
   const src = Object.values(style.sources).find((s) => s.type === 'vector')
   map.setGlyphs(style.glyphs)
   map.setSprite(style.sprite)
-  map.addSource(SOURCE, { ...src, attribution: ATTRIBUTION })
+  // Spain only (incl. Canary Islands) and from zoom 6: outside that the IGN server answers 403.
+  map.addSource(SOURCE, { ...src, bounds: [-18.4, 27.4, 4.6, 44.0], minzoom: Math.max(src.minzoom || 0, 6), attribution: ATTRIBUTION })
 
   for (const l of style.layers) {
     if (l.source && style.sources[l.source] !== src) continue
