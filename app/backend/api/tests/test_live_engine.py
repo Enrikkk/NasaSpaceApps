@@ -49,6 +49,10 @@ def test_punto_sin_recinto_sigue_dando_rotaciones_y_dice_lo_que_no_sabe(make_cli
     assert_valido(doc)
     assert "regadio" in doc["idoneidad"]["sin_dato"] and "pendiente_pct" in doc["idoneidad"]["sin_dato"]
     assert doc["clima_origen"]["lejos"] is True
+    ref = doc["_meta"]["rotaciones_referencia"]       # sin recinto no se afirma "calculado para esta parcela"
+    assert not ref.get("por_parcela")
+    assert ref["aplica_a_esta_parcela"] is False
+    assert any("no un calculo de esta parcela" in a for a in doc["_meta"]["avisos"])
 
 
 def test_secano_es_no_evaluable(make_client, atom_mini, monkeypatch):

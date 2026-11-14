@@ -151,7 +151,7 @@ class Servicio:
             motor_aviso = out.aviso
             fuentes_motor = out.fuentes
             extra = out.extra or {}
-            por_parcela = bool(extra.get("por_parcela"))     # LiveEngine (H-002): calculo propio de esta parcela
+            por_parcela = bool(extra.get("por_parcela")) and bool(tiene_parcela)   # LiveEngine (H-002): solo si hay recinto real
             for clave in ("idoneidad", "clima_origen", "no_evaluable", "actual_origen"):
                 if extra.get(clave) is not None:
                     doc[clave] = extra[clave]
