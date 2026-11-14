@@ -58,3 +58,16 @@ Hoy `app/backend/engine/decision/rules.py::semaforo()` es provisional. Gonzalo t
 ## Entrega
 
 Al acabar cada paso: mensaje por el bus a `enrique` con (1) hash del commit, (2) salida de pytest con su código de salida, (3) lo que cambió y lo que NO pudiste verificar. Empuja `t020-jaime` a origin. Enrique revisa el diff antes de que nadie una nada.
+
+## Paso D — Reescritor LLM de las tarjetas (T-022), experimental, tras A, B y C
+
+Decisión de Enrique: el LLM solo **reformula** lo que ya está en `texto{...}`; un comprobador determinista impide inventar números; si falla se le dice al modelo qué y dónde falló y reformula; **tras 3 fallos se queda el texto de plantilla**. La tarjeta muestra el texto del LLM si es válido y, si no, la plantilla.
+Regla del proyecto: el motor calcula, el LLM no. El LLM nunca ve ni toca cifras que no estén en su lista cerrada.
+
+Crea `app/backend/engine/decision/llm_rewrite.py` (stdlib, sin dependencias nuevas) con:
+- Interfaz de modelo intercambiable: `class Backend: complete(system:str, user:str) -> str`. Dos implementaciones: `OpenAICompatible` (para Ollama u otro servidor local: `base_url`, `model`) y `Anthropic` (clave solo desde la variable de entorno `LLM_API_KEY`; **nunca** en ficheros ni por el bus). Selección por variables de entorno. Una `FakeBackend` para tests.
+- `rewrite_rotation(rot, backend, max_attempts=3)`: para cada campo de `rot["texto"]`, prompt = plantilla + lista cerrada de números permitidos (`texts.numbers_in`) + reglas («solo reformula; no añadas hechos; conserva toda salvedad y todo «no sabemos»; castellano llano; sin promesas»).
+- Comprobación determinista tras cada intento: (1) todo número del texto nuevo ∈ lista permitida, **incluidos los escritos en letra** («tres», «cuarenta por ciento»); (2) todos los números de la plantilla siguen apareciendo; (3) lista de palabras prohibidas («garantizado», «seguro que», «sin riesgo», «asegura»...); (4) longitud ≤ 1,5× la plantilla. Si falla, el siguiente intento recibe un mensaje exacto con lo que falló («número 55 no permitido», «falta 41 %»).
+- Salida añadida al JSON, sin tocar `texto`: `texto_llm{campo: {texto, modelo, intentos, valido}}`; si 3 fallos, `valido:false` y la tarjeta usa `texto`. Registrar en `_meta.uso_ia` qué modelo, para qué y la fecha (se declara en el envío). Guardar los prompts y respuestas en `app/data/cache/llm_log/` (sin claves) como evidencia.
+- Tests con `FakeBackend`: acepta una reformulación válida; rechaza y reintenta ante un número inventado y ante un número en letra; tras 3 fallos deja la plantilla; no cambia ningún número del JSON fuera de `texto_llm`.
+- **No descargues ningún modelo ni nada de red sin avisar a Enrique con nombre, origen y tamaño.** Dime qué runtime/modelo tienes en tu portátil (Ollama, clave de API, otro) y probamos con ese.
