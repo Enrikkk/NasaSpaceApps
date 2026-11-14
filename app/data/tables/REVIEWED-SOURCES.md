@@ -24,3 +24,9 @@ El acceso se comprobó sin desactivar TLS, usando el certificado público FNMT G
 - Derechos de reutilización: los textos de copyright del registro de Enrique no se convierten en permisos abiertos. Revisión pública pendiente.
 
 El motor debe detectar vacíos antes de puntuar; no debe emitir resultados completos aparentando que estos datos están verificados.
+
+## Revisión visual ECREA 2026-11-14
+
+PDF Cereales 2021, páginas 1 y 2: coste de producción completo nacional de cebada secano 631.5 y regadío 1165.2 EUR/ha (columna Euro/ha, no Euro/100kg). PDF Proteaginosas 2020, página 13: guisantes y habas regadío nacional 1095.8 EUR/ha; muestra 38 explotaciones. Se utiliza la precisión de una decimal del cuadro principal, no otra precisión de cuadros comparativos. Ambos pies autorizan utilización con cita expresa de origen; se registra ese permiso sin inventar una licencia estándar. URLs en sources.csv. Se preparan candidatos B separados, no costes individuales de haba ni costes de cubierta.
+
+Los umbrales históricos de research_notes en 8b3a214 incluyen inferencias y resúmenes no comprobados. No bastan para pares t0/t100. Se conservan cuatro huecos por cultivo en degC. Los nombres frost_threshold/heat_threshold quedan retirados de las salidas.

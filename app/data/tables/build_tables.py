@@ -9,7 +9,8 @@ from pathlib import Path
 
 CROPS = ('lechuga', 'brocoli', 'melon', 'alcachofa', 'haba', 'cebada', 'veza', 'limon')
 REQUIRED = ('family', 'legal_group', 'kc_ini', 'kc_mid', 'kc_end', 'stages_days',
-            'zr_min', 'zr_max', 'p_depletion', 'ece_threshold', 'ece_slope', 'frost_threshold', 'heat_threshold',
+            'zr_min', 'zr_max', 'p_depletion', 'ece_threshold', 'ece_slope',
+            'sowing_month', 'frost_t0', 'frost_t100', 'heat_t0', 'heat_t100',
             'produccion_media', 'n_need', 'n_credit', 'legume')
 META = ('unit', 'source_id', 'conf', 'status', 'nota')
 
@@ -43,16 +44,35 @@ def build(source, dest, revision, supplement=None):
         if key in indexed or key[0] not in CROPS:
             raise ValueError(f'Duplicate/unknown crop parameter: {key}')
         placeholder = row['value'] == '' and row['conf'] == 'P' and row['status'] == 'placeholder'
-        if (row['source_id'] not in sources and not placeholder) or row['conf'] not in ('A', 'M', 'B', 'P'):
+        refs = row['source_id'].split('+')
+        if (any(ref not in sources for ref in refs) and not placeholder) or row['conf'] not in ('A', 'M', 'B', 'P'):
             raise ValueError(f'Invalid provenance: {key}')
+        if row['param'] in ('frost_threshold', 'heat_threshold'):
+            raise ValueError(f'Obsolete threshold name: {key}')
+        if row['value'] and row['param'] in ('frost_t0', 'frost_t100', 'heat_t0', 'heat_t100'):
+            if row['unit'] != 'degC':
+                raise ValueError(f'Threshold unit must be degC: {key}')
+            if not Decimal(row['value']).is_finite():
+                raise ValueError(f'Threshold must be finite: {key}')
+        if row['value'] and row['param'] in ('frost_window', 'heat_window'):
+            if row['value'] != 'all' and not set(row['value'].split('+')) <= {'ini', 'dev', 'mid', 'late'}:
+                raise ValueError(f'Invalid sensitive window: {key}')
         indexed[key] = dict(row)
-    required = set(REQUIRED) | {r['param'] for r in params}
+    for crop in CROPS:
+        for hazard in ('frost', 'heat'):
+            a = indexed.get((crop, hazard + '_t0'), {}).get('value')
+            b = indexed.get((crop, hazard + '_t100'), {}).get('value')
+            if a and b:
+                ordered = Decimal(b) < Decimal(a) if hazard == 'frost' else Decimal(b) > Decimal(a)
+                if not ordered:
+                    raise ValueError(f'Invalid threshold direction: {crop}/{hazard}')
+    required = set(REQUIRED) | {'frost_window', 'heat_window'} | {r['param'] for r in params}
     missing = []
     for crop in CROPS:
         for param in sorted(required):
             if (crop, param) not in indexed:
                 # Do not invent per-crop values or turn missing costs into zero.
-                row = dict(crop_id=crop, param=param, value='', unit='', source_id='',
+                row = dict(crop_id=crop, param=param, value='', unit='degC' if param in ('frost_t0', 'frost_t100', 'heat_t0', 'heat_t100') else '', source_id='',
                            conf='P', status='placeholder', nota='No verified value in source snapshot')
                 indexed[crop, param] = row
             if indexed[crop, param]['value'] == '' and (param in REQUIRED or param == 'coste_total'):
@@ -100,7 +120,31 @@ def build(source, dest, revision, supplement=None):
         write(dest / 'prices.csv', prices, list(prices[0]))
     area = read(source / 'eurostat_area_es.csv')
     write(dest / 'area.csv', area, list(area[0]))
+    hicp_path = source / 'eurostat_hicp_es.csv'
+    if hicp_path.exists():
+        hicp = read(hicp_path)
+        years = [r['year'] for r in hicp]
+        if len(years) != len(set(years)) or 'EUR-HICP' not in sources:
+            raise ValueError('Invalid HICP provenance or duplicate year')
+        if any(not Decimal(r['hicp_2015_100']).is_finite() or Decimal(r['hicp_2015_100']) <= 0 for r in hicp):
+            raise ValueError('HICP must be finite and positive')
+        write(dest / 'eurostat_hicp_es.csv', hicp, list(hicp[0]))
     write(dest / 'sources.csv', source_rows, list(source_rows[0]))
+    candidates = []
+    if supplement and (supplement / 'cost_candidates.csv').exists():
+        candidates = read(supplement / 'cost_candidates.csv')
+        keys = set()
+        for row in candidates:
+            key = row['crop_id'], row['water_regime'], row['param'], row['source_id']
+            if key in keys or row['source_id'] not in sources or row['conf'] != 'B' or row['status'] != 'proxy_candidate':
+                raise ValueError(f'Invalid cost candidate: {key}')
+            if row['water_regime'] not in ('secano', 'regadio') or row['use'] != 'harvested_grain':
+                raise ValueError(f'Invalid cost candidate use: {key}')
+            value = Decimal(row['value'])
+            if not value.is_finite() or value < 0:
+                raise ValueError(f'Invalid candidate cost: {key}')
+            keys.add(key)
+        write(dest / 'cost_candidates.csv', candidates, list(candidates[0]))
     hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(source.glob('*.csv'))}
     if supplement:
@@ -109,13 +153,16 @@ def build(source, dest, revision, supplement=None):
     manifest = {'source_revision': revision, 'input_sha256': hashes,
                 'crops': list(CROPS), 'source_parameter_rows': len(params),
                 'prices': len(prices), 'missing_required_values': missing,
+                'cost_candidates': len(candidates),
+                'cost_candidate_policy': 'Not loaded into canonical crop_params/costs: select matching water regime and convert from each native price_base_year before engine evaluation.',
+                'optional_window_values': 'Empty means undocumented; engine may apply its explicit all-cycle assumption. Values allowed: all or ini/dev/mid/late joined by +.',
                 'price_missing_crops': [c for c in CROPS if c not in {r['crop_id'] for r in prices}],
                 'limitations': ['National annual prices are not local farm forecasts.',
                                 'No inflation alignment: real2015 prices must not be mixed with historical nominal costs.',
                                 'Cover vetch is not harvested forage: forage costs require an explicit proxy decision.',
                                 'No missing value has been replaced by zero.'],
                 'license_review': {k: 'pending_review' for k in sources
-                                   if k.startswith(('F56', 'F29', 'IMIDA', 'RES', 'UC-', 'ECO-', 'KEW-', 'SIAM'))}}
+                                   if k.startswith(('F56', 'F29', 'IMIDA', 'RES', 'UC-', 'ECO-', 'KEW-', 'SIAM', 'CARM-'))}}
     (dest / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     return manifest
 

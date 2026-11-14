@@ -32,6 +32,7 @@ alcachofa,kc_mid,1.00,-,F56-T12,A,sourced,
 alcachofa,kc_end,0.95,-,F56-T12,A,sourced,
 alcachofa,h_max,0.7,m,F56-T12,A,sourced,
 alcachofa,stages_days,40/40/250/30,d,F56-T11,B,sourced,Apr 1st year California = 360 d; Murcia plants Jul-Aug and cuts Nov-May (CARM): calendar differs
+alcachofa,stages_days_murcia,34/34/211/25,d,F56-T11+CARM-ALC,B,derived,FAO 1st-year 40/40/250/30 scaled to the Murcia cycle 1 Aug-31 May = 304 d (CARM/IMIDA: harvests Nov-Jan and Apr-May with a shred between; the shred dip in Kc is not modelled)
 alcachofa,stages_days_2nd_year,20/25/250/30,d,F56-T11,B,sourced,May 2nd year California = 325 d
 alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows are Helianthus tuberosus (Jerusalem artichoke) not Cynara scolymus; no sourced value
 alcachofa,salt_class,,-,,P,placeholder,SUPUESTO: see above
@@ -96,3 +97,10 @@ veza,p_depletion,0.45,-,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry 
 limon,zr_min,1.2,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); smaller value: irrigation scheduling
 limon,zr_max,1.5,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); larger value: modelling water stress / rainfed
 limon,p_depletion,0.50,-,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+lechuga,sowing_month,11,month,F56-T11,A,sourced,"planting month of the stages_days row (Nov/Jan Mediterranean); spring row = 4, feb row = 2"
+brocoli,sowing_month,9,month,F56-T11,M,sourced,planting month of the stages_days row (Sept California desert)
+melon,sowing_month,5,month,F56-T11,A,sourced,planting month of the stages_days row (May Mediterranean)
+alcachofa,sowing_month,8,month,CARM-ALC,M,sourced,CARM/IMIDA: planting 15 Jul-15 Aug (1 Aug used)
+haba,sowing_month,11,month,F56-T11,A,sourced,planting month of the stages_days row (Nov Europe)
+cebada,sowing_month,11,month,F56-T11,M,sourced,planting month of the stages_days row (Nov; region cell blank)
+limon,sowing_month,1,month,F56-T11,A,sourced,Citrus row starts Jan (perennial: one cycle = one calendar year)

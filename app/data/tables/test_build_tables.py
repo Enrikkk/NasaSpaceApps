@@ -56,6 +56,43 @@ class TablesTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'provenance'):
             tables.build(self.src, self.out, 'fixture')
 
+    def test_composite_source_and_threshold_contract(self):
+        self.param.update(param='stages_days_murcia', value='34/34/211/25', source_id='F56-T12+EUR-PRICE')
+        tables.write(self.src / 'fao_crop_params.csv', [self.param], list(self.param))
+        tables.build(self.src, self.out, 'fixture')
+        crops = {r['crop_id']: r for r in tables.read(self.out / 'crops.csv')}
+        self.assertEqual(crops['lechuga']['frost_t100'], '')
+        self.assertEqual(crops['lechuga']['frost_t100__unit'], 'degC')
+        self.assertNotIn('frost_threshold', crops['lechuga'])
+        self.param.update(param='heat_window', value='flowering')
+        tables.write(self.src / 'fao_crop_params.csv', [self.param], list(self.param))
+        with self.assertRaisesRegex(ValueError, 'sensitive window'):
+            tables.build(self.src, self.out, 'fixture')
+
+    def test_hicp_export_and_invalid_index(self):
+        path = self.src / 'eurostat_hicp_es.csv'
+        tables.write(path, [dict(year='2025', hicp_2015_100='126.65')], ['year', 'hicp_2015_100'])
+        tables.build(self.src, self.out, 'fixture')
+        self.assertEqual(tables.read(self.out / path.name)[0]['hicp_2015_100'], '126.65')
+        for value in ('0', 'NaN', 'Infinity'):
+            tables.write(path, [dict(year='2025', hicp_2015_100=value)], ['year', 'hicp_2015_100'])
+            with self.assertRaisesRegex(ValueError, 'finite and positive'):
+                tables.build(self.src, self.out, 'fixture')
+
+    def test_nonfinite_and_inverted_thresholds(self):
+        for hazard in ('frost', 'heat'):
+            for value in ('NaN', 'Infinity', '-Infinity'):
+                row = dict(self.param, param=hazard + '_t0', value=value, unit='degC')
+                tables.write(self.src / 'fao_crop_params.csv', [row], list(row))
+                with self.assertRaisesRegex(ValueError, 'finite'):
+                    tables.build(self.src, self.out, 'fixture')
+            for b in ('0', '2' if hazard == 'frost' else '-2'):
+                rows = [dict(self.param, param=hazard + '_t0', value='0', unit='degC'),
+                        dict(self.param, param=hazard + '_t100', value=b, unit='degC')]
+                tables.write(self.src / 'fao_crop_params.csv', rows, list(rows[0]))
+                with self.assertRaisesRegex(ValueError, 'direction'):
+                    tables.build(self.src, self.out, 'fixture')
+
 
 if __name__ == '__main__':
     unittest.main()
