@@ -1,0 +1,485 @@
+{
+ "clima": {
+  "_status": "real",
+  "lluvia_anual_mm": {
+   "valor": 308,
+   "horquilla": [
+    262,
+    366
+   ],
+   "fuentes": [
+    "power",
+    "imerg",
+    "open-meteo"
+   ],
+   "por_fuente_mm": {
+    "power": 296.8,
+    "imerg": 366.4,
+    "era5": 262.2
+   },
+   "metodo": "media 2005-2024 de la lluvia anual de cada fuente; valor = media de las fuentes; horquilla = [min, max] entre fuentes (no es un intervalo de confianza)"
+  },
+  "dias_calor_gt_38": {
+   "valor": 0.0,
+   "tendencia": "sin dias > 38 C en 20 anios en la celda MERRA-2",
+   "metodo": "dias/anio con T2M_MAX > 38 C en la celda MERRA-2 de 0,5 x 0,625 grados (no es el campo exacto)",
+   "dias_calor_gt_35": 0.9,
+   "tmax_max_20_anios_c": 37.6,
+   "aviso": "MERRA-2 promedia ~50 km (incluye mar) y suaviza los extremos: aqui da 0 dias > 38 C aunque la parcela los tiene. Tratar como cota inferior; los extremos reales vendran de SIAM (T-014)."
+  },
+  "dias_helada": {
+   "valor": 0.0,
+   "fuente": "pendiente SIAM",
+   "provisional": true,
+   "estacion": "pendiente SIAM (T-014): el valor real saldra de las series de la estacion IMIDA, no de POWER",
+   "tmin_min_20_anios_c_power": 1.4,
+   "valor_provisional_power": "dias/anio con T2M_MIN < 0 C (MERRA-2, celda de ~50 km, sesgo calido). NO es FROST_DAYS de POWER (no equivale a Tmin<0). No usar como cifra final."
+  },
+  "serie_anual": [
+   {
+    "anio": 2005,
+    "lluvia_mm": 192.7,
+    "lluvia_por_fuente_mm": {
+     "power": 179.3,
+     "imerg": 232.4,
+     "era5": 166.3
+    },
+    "tmin_min_c": 1.4,
+    "tmax_max_c": 34.4,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2006,
+    "lluvia_mm": 302.4,
+    "lluvia_por_fuente_mm": {
+     "power": 269.5,
+     "imerg": 369.4,
+     "era5": 268.3
+    },
+    "tmin_min_c": 2.4,
+    "tmax_max_c": 34.2,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2007,
+    "lluvia_mm": 381.4,
+    "lluvia_por_fuente_mm": {
+     "power": 293.0,
+     "imerg": 451.6,
+     "era5": 399.6
+    },
+    "tmin_min_c": 4.4,
+    "tmax_max_c": 34.2,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2008,
+    "lluvia_mm": 316.7,
+    "lluvia_por_fuente_mm": {
+     "power": 286.5,
+     "imerg": 386.3,
+     "era5": 277.2
+    },
+    "tmin_min_c": 4.8,
+    "tmax_max_c": 33.8,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2009,
+    "lluvia_mm": 380.3,
+    "lluvia_por_fuente_mm": {
+     "power": 346.6,
+     "imerg": 484.4,
+     "era5": 309.8
+    },
+    "tmin_min_c": 1.8,
+    "tmax_max_c": 35.6,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2010,
+    "lluvia_mm": 356.5,
+    "lluvia_por_fuente_mm": {
+     "power": 357.8,
+     "imerg": 443.5,
+     "era5": 268.3
+    },
+    "tmin_min_c": 2.9,
+    "tmax_max_c": 34.4,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2011,
+    "lluvia_mm": 265.5,
+    "lluvia_por_fuente_mm": {
+     "power": 218.1,
+     "imerg": 340.5,
+     "era5": 237.8
+    },
+    "tmin_min_c": 1.9,
+    "tmax_max_c": 33.4,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2012,
+    "lluvia_mm": 273.3,
+    "lluvia_por_fuente_mm": {
+     "power": 253.8,
+     "imerg": 312.7,
+     "era5": 253.3
+    },
+    "tmin_min_c": 1.8,
+    "tmax_max_c": 35.6,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2013,
+    "lluvia_mm": 208.4,
+    "lluvia_por_fuente_mm": {
+     "power": 208.8,
+     "imerg": 252.3,
+     "era5": 164.2
+    },
+    "tmin_min_c": 3.6,
+    "tmax_max_c": 32.9,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2014,
+    "lluvia_mm": 187.1,
+    "lluvia_por_fuente_mm": {
+     "power": 184.4,
+     "imerg": 219.8,
+     "era5": 157.1
+    },
+    "tmin_min_c": 4.4,
+    "tmax_max_c": 33.5,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2015,
+    "lluvia_mm": 268.1,
+    "lluvia_por_fuente_mm": {
+     "power": 301.4,
+     "imerg": 306.1,
+     "era5": 196.7
+    },
+    "tmin_min_c": 4.4,
+    "tmax_max_c": 35.2,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2016,
+    "lluvia_mm": 356.1,
+    "lluvia_por_fuente_mm": {
+     "power": 392.1,
+     "imerg": 421.3,
+     "era5": 254.9
+    },
+    "tmin_min_c": 4.8,
+    "tmax_max_c": 35.9,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2017,
+    "lluvia_mm": 254.1,
+    "lluvia_por_fuente_mm": {
+     "power": 286.8,
+     "imerg": 258.5,
+     "era5": 217.0
+    },
+    "tmin_min_c": 3.9,
+    "tmax_max_c": 35.2,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2018,
+    "lluvia_mm": 355.5,
+    "lluvia_por_fuente_mm": {
+     "power": 366.6,
+     "imerg": 402.0,
+     "era5": 297.8
+    },
+    "tmin_min_c": 4.2,
+    "tmax_max_c": 32.8,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2019,
+    "lluvia_mm": 455.3,
+    "lluvia_por_fuente_mm": {
+     "power": 393.6,
+     "imerg": 529.6,
+     "era5": 442.7
+    },
+    "tmin_min_c": 4.7,
+    "tmax_max_c": 34.7,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2020,
+    "lluvia_mm": 350.5,
+    "lluvia_por_fuente_mm": {
+     "power": 358.7,
+     "imerg": 429.8,
+     "era5": 262.9
+    },
+    "tmin_min_c": 5.8,
+    "tmax_max_c": 34.5,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2021,
+    "lluvia_mm": 365.2,
+    "lluvia_por_fuente_mm": {
+     "power": 367.4,
+     "imerg": 432.7,
+     "era5": 295.5
+    },
+    "tmin_min_c": 4.0,
+    "tmax_max_c": 36.2,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2022,
+    "lluvia_mm": 454.8,
+    "lluvia_por_fuente_mm": {
+     "power": 452.6,
+     "imerg": 528.1,
+     "era5": 383.8
+    },
+    "tmin_min_c": 5.9,
+    "tmax_max_c": 37.6,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2023,
+    "lluvia_mm": 226.0,
+    "lluvia_por_fuente_mm": {
+     "power": 207.1,
+     "imerg": 264.5,
+     "era5": 206.3
+    },
+    "tmin_min_c": 3.9,
+    "tmax_max_c": 37.5,
+    "dias_calor_gt_38": 0
+   },
+   {
+    "anio": 2024,
+    "lluvia_mm": 219.7,
+    "lluvia_por_fuente_mm": {
+     "power": 210.9,
+     "imerg": 263.4,
+     "era5": 184.7
+    },
+    "tmin_min_c": 5.9,
+    "tmax_max_c": 35.4,
+    "dias_calor_gt_38": 0
+   }
+  ],
+  "et0_mm_mes": {
+   "valores": [
+    64.5,
+    76.9,
+    107.5,
+    127.3,
+    160.0,
+    176.2,
+    185.9,
+    169.8,
+    128.1,
+    96.0,
+    71.6,
+    57.8
+   ],
+   "unidad": "mm/mes",
+   "meses": "ene..dic",
+   "periodo": "2005-2024 (media de cada mes)",
+   "anual_mm": 1421.6,
+   "metodo": "ET0 FAO-56 Penman-Monteith de Open-Meteo sobre ERA5",
+   "fuente_id": "open-meteo"
+  },
+  "metadatos": {
+   "periodo": "2005-2024, diario, agregado por anio natural",
+   "descarga": {
+    "power_merra2": "2026-11-14T14:36Z",
+    "power_imerg": "2026-11-14T14:36Z",
+    "open_meteo": "2026-11-14T14:36Z"
+   },
+   "fuentes": {
+    "power_merra2": {
+     "fuente_id": "power",
+     "parametros": [
+      "T2M_MAX",
+      "T2M_MIN",
+      "PRECTOTCORR"
+     ],
+     "unidades": {
+      "T2M_MAX": "C",
+      "T2M_MIN": "C",
+      "PRECTOTCORR": "mm/day"
+     },
+     "resolucion": "MERRA-2 0,5 x 0,625 grados (nodo mas cercano), diario",
+     "url": "https://power.larc.nasa.gov/api/temporal/daily/point?community=AG&format=JSON&parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&latitude=37.5&longitude=-1.25&start=20050101&end=20241231&time-standard=UTC",
+     "time_standard": "UTC",
+     "celda": {
+      "clave": "75_-2",
+      "lat": 37.5,
+      "lon": -1.25,
+      "elevacion_m": 123.68
+     },
+     "relleno_descartado": {
+      "T2M_MAX": 0,
+      "T2M_MIN": 0,
+      "PRECTOTCORR": 0
+     }
+    },
+    "power_imerg": {
+     "fuente_id": "imerg",
+     "parametros": [
+      "IMERG_PRECTOT"
+     ],
+     "unidades": {
+      "IMERG_PRECTOT": "mm/day"
+     },
+     "resolucion": "GPM IMERG 0,1 grados, diario (sin la correccion de pluviometros: IMERG Final/Late segun fecha)",
+     "url": "https://power.larc.nasa.gov/api/temporal/daily/point?community=AG&format=JSON&parameters=IMERG_PRECTOT&latitude=37.75&longitude=-0.95&start=20050101&end=20241231&time-standard=UTC",
+     "time_standard": "UTC",
+     "celda": {
+      "clave": "377_-10",
+      "lat": 37.75,
+      "lon": -0.95,
+      "elevacion_m": 298.65
+     },
+     "relleno_descartado": {
+      "IMERG_PRECTOT": 0
+     }
+    },
+    "open_meteo": {
+     "fuente_id": "open-meteo",
+     "parametros": [
+      "precipitation_sum",
+      "et0_fao_evapotranspiration"
+     ],
+     "unidades": {
+      "time": "iso8601",
+      "precipitation_sum": "mm",
+      "et0_fao_evapotranspiration": "mm"
+     },
+     "resolucion": "ERA5 (reanalisis ECMWF/Copernicus, ~0,25 grados) servido por Open-Meteo, diario",
+     "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.75&longitude=-0.95&start_date=2005-01-01&end_date=2024-12-31&daily=precipitation_sum,et0_fao_evapotranspiration&models=era5&timezone=Europe%2FMadrid",
+     "celda": {
+      "clave": "377_-10",
+      "lat": 37.75,
+      "lon": -0.95
+     },
+     "rejilla_devuelta": {
+      "lat": 37.75,
+      "lon": -1.0,
+      "elevacion_m": 40.0
+     },
+     "licencia": "Datos CC BY 4.0 (Open-Meteo.com); la API gratuita es solo para uso NO comercial. Origen ERA5: Copernicus Climate Change Service (licencia C3S)."
+    }
+   },
+   "aviso_lluvia": "Las tres fuentes difieren mucho (reanalisis y satelite no son pluviometros); por eso se da horquilla y lluvia por fuente.",
+   "trampas": [
+    "POWER FROST_DAYS no es Tmin<0; las heladas reales vendran de SIAM (dias_helada pendiente).",
+    "POWER EVLAND (evapotranspiracion del modelo de superficie) no ve el riego: no sirve para una parcela de regadio; ET0 viene de Open-Meteo.",
+    "IMERG via POWER exige time-standard=UTC; -999 es relleno y se descarta.",
+    "T2M de POWER es de un nodo de ~50 km: subestima extremos locales (heladas y calor)."
+   ],
+   "cache": {
+    "power_merra2": true,
+    "power_imerg": true,
+    "open_meteo": true
+   }
+  }
+ },
+ "suelo": {
+  "_status": "real",
+  "textura": "franco-arcillo-limoso",
+  "materia_organica_pct": 2.14,
+  "agua_disponible_mm": 44.9,
+  "fuente": "ISRIC SoilGrids 2.0 (modelado, 250 m)",
+  "fuente_id": "soilgrids",
+  "arena_pct": 18.7,
+  "limo_pct": 43.8,
+  "arcilla_pct": 37.4,
+  "soc_g_kg": 12.4,
+  "ph_h2o": 7.97,
+  "nitrogeno_g_kg": 1.23,
+  "capas": [
+   {
+    "profundidad_cm": "0-5",
+    "arcilla_pct": 37.1,
+    "arena_pct": 19.2,
+    "limo_pct": 43.8,
+    "soc_g_kg": 21.6,
+    "materia_organica_pct": 3.72,
+    "ph_h2o": 7.8,
+    "nitrogeno_g_kg": 1.91,
+    "agua_disponible_mm": 7.6
+   },
+   {
+    "profundidad_cm": "5-15",
+    "arcilla_pct": 38.1,
+    "arena_pct": 18.1,
+    "limo_pct": 43.9,
+    "soc_g_kg": 12.6,
+    "materia_organica_pct": 2.17,
+    "ph_h2o": 8.0,
+    "nitrogeno_g_kg": 1.1,
+    "agua_disponible_mm": 14.9
+   },
+   {
+    "profundidad_cm": "15-30",
+    "arcilla_pct": 37.2,
+    "arena_pct": 19.0,
+    "limo_pct": 43.9,
+    "soc_g_kg": 9.2,
+    "materia_organica_pct": 1.59,
+    "ph_h2o": 8.0,
+    "nitrogeno_g_kg": 1.09,
+    "agua_disponible_mm": 22.4
+   }
+  ],
+  "metadatos": {
+   "profundidad": "0-30 cm, media ponderada por espesor de las capas 0-5, 5-15 y 15-30 cm",
+   "agua_disponible": "Saxton y Rawls 2006 (CC 33 kPa - PMP 1500 kPa) por capa x espesor, sumado en 0-30 cm. Equivale a 150 mm por metro; NO es la reserva de toda la zona radicular (los cultivos de la rotacion enraizan 0,3-1 m+). Sin correccion por gravas.",
+   "conversiones": {
+    "textura": "SoilGrids clay/sand/silt en g/kg; /10 = %; se normaliza a suma 100 y se clasifica con el triangulo USDA",
+    "materia_organica_pct": "soc en dg/kg; /10 = g/kg de carbono organico; /10 = % C; x 1.724 (van Bemmelen) = % materia organica",
+    "ph_h2o": "phh2o = pH x 10; /10",
+    "nitrogeno_g_kg": "nitrogen en cg/kg; /100 = g/kg"
+   },
+   "descarga": "2026-11-14T14:36Z",
+   "resolucion": "SoilGrids v2.0, 250 m, MODELADO (aprendizaje automatico sobre perfiles + covariables), no medido en la parcela",
+   "url": "https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-0.98875&lat=37.73875&property=clay&property=sand&property=silt&property=soc&property=phh2o&property=nitrogen&depth=0-5cm&depth=5-15cm&depth=15-30cm&value=mean",
+   "celda": {
+    "clave": "15095_-396",
+    "lat": 37.73875,
+    "lon": -0.98875
+   },
+   "licencia": "CC BY 4.0 (Poggio et al. 2021, SOIL 7, 217-240, doi:10.5194/soil-7-217-2021)",
+   "unidades_crudas": {
+    "clay": "g/kg",
+    "nitrogen": "cg/kg",
+    "phh2o": "pH*10",
+    "sand": "g/kg",
+    "silt": "g/kg",
+    "soc": "dg/kg"
+   },
+   "aviso": "SoilGrids es un modelo global a 250 m, no una medicion en la parcela: las incertidumbres (sobre todo SOC en suelos agricolas mediterraneos y regadios) pueden ser grandes. En el mock el SOC parecia alto; comparar con los suelos IMIDA/analisis local antes de fiarse de la cifra de materia organica.",
+   "cache": true
+  }
+ },
+ "fuentes_nuevas": [
+  {
+   "id": "open-meteo",
+   "nombre": "Open-Meteo Historical Weather API (ERA5; ET0 FAO-56 Penman-Monteith)",
+   "url": "https://open-meteo.com/en/docs/historical-weather-api",
+   "licencia": "Datos CC BY 4.0 (citar Open-Meteo.com); API gratuita solo para uso no comercial; origen ERA5: licencia Copernicus C3S",
+   "licencia_estado": "verify"
+  }
+ ]
+}

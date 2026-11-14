@@ -1,0 +1,973 @@
+{
+  "schema_version": "1.0.0-draft",
+  "_meta": {
+    "aviso": "MOCK: valores ilustrativos para desarrollar la UI y el validador. No son datos medidos ni salida del motor. Generado con semilla fija por generate_draft.py. Sustituir por la salida real de la tuberia.",
+    "borrador_fecha": "2026-11-14",
+    "generador": "research/contract-v1-draft/generate_draft.py",
+    "semilla": 20261114,
+    "congelado": false,
+    "bloques_pendientes": [],
+    "cobertura": {
+      "nivel": "completo",
+      "ambito": "Campo de Cartagena (por municipio, D-009)"
+    },
+    "normalizacion_criterios": "Todos en 0-1 con 1 = mejor para el agricultor. margen = margen_eur_ha.valor/4000; agua = 1 - agua_m3_ha/6000; riesgo = exito_pct.valor/100; suelo_n = supuesto etiquetado. Escalas de referencia fijas (no min-max entre rotaciones).",
+    "unidades": {
+      "margen_eur_ha": "euros 2025 por ha y anio medio de la secuencia",
+      "agua_m3_ha": "m3 brutos por ha y anio"
+    }
+  },
+  "parcela": {
+    "_status": "simulado",
+    "id": "30-0-0-0-0-0-demo (SIGPAC 18/426/1)",
+    "lat": 37.7383,
+    "lon": -0.98838,
+    "ha": 4.1,
+    "pendiente_pct": 1.2,
+    "regadio": true,
+    "municipio": "Torre-Pacheco",
+    "comarca": "Campo de Cartagena",
+    "sigpac": {
+      "poligono": 18,
+      "parcela": 426,
+      "recinto": 1
+    },
+    "zonas": ["zona_vulnerable_nitratos", "mar_menor_zona_por_verificar"],
+    "fuente_id": "sigpac"
+  },
+  "historia": {
+    "_status": "simulado",
+    "fuente_id": "sigpac",
+    "cultivos_declarados": [
+      {
+        "campana": "2023",
+        "anio": 2023,
+        "cultivo": "lechuga",
+        "fuente": "FEGA"
+      },
+      {
+        "campana": "2024",
+        "anio": 2024,
+        "cultivo": "brocoli",
+        "fuente": "FEGA"
+      },
+      {
+        "campana": "2025",
+        "anio": 2025,
+        "cultivo": "melon",
+        "fuente": "FEGA"
+      },
+      {
+        "campana": "2026",
+        "anio": 2026,
+        "cultivo": "barbecho",
+        "fuente": "FEGA"
+      }
+    ]
+  },
+  "ndvi": {
+    "_status": "simulado",
+    "fuente": "HLS-VI (mock)",
+    "fuente_id": "hls",
+    "meses_desnudo": ["2025-10", "2025-11", "2025-12", "2026-01", "2026-02"],
+    "meses_vulnerable": ["2025-08"]
+  },
+  "clima": {
+    "_status": "simulado",
+    "lluvia_anual_mm": {
+      "valor": 274,
+      "horquilla": [228, 317],
+      "fuentes": ["power", "imerg", "siam"]
+    },
+    "dias_calor_gt_38": {
+      "valor": 4,
+      "tendencia": "+1.7 por decada"
+    },
+    "dias_helada": {
+      "valor": 1,
+      "estacion": "SIAM TP91 (estacion, no tu campo exacto)"
+    },
+    "escenario_2050": {
+      "lluvia_pct": -12,
+      "temp_c": 1.8,
+      "metodo": "deltas aplicados a los umbrales (simulado; NEX-GDDP-CMIP6 es hoja de ruta)"
+    },
+    "serie_anual": [
+      {
+        "anio": 2005,
+        "lluvia_mm": 312,
+        "tmin_min_c": 0.7,
+        "tmax_max_c": 42.0,
+        "dias_calor_gt_38": 2,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2006,
+        "lluvia_mm": 294,
+        "tmin_min_c": -0.6,
+        "tmax_max_c": 40.7,
+        "dias_calor_gt_38": 2,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2007,
+        "lluvia_mm": 279,
+        "tmin_min_c": -0.1,
+        "tmax_max_c": 42.0,
+        "dias_calor_gt_38": 0,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2008,
+        "lluvia_mm": 229,
+        "tmin_min_c": -1.7,
+        "tmax_max_c": 39.6,
+        "dias_calor_gt_38": 5,
+        "dias_helada": 2
+      },
+      {
+        "anio": 2009,
+        "lluvia_mm": 316,
+        "tmin_min_c": -0.7,
+        "tmax_max_c": 42.2,
+        "dias_calor_gt_38": 3,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2010,
+        "lluvia_mm": 215,
+        "tmin_min_c": 1.1,
+        "tmax_max_c": 41.7,
+        "dias_calor_gt_38": 3,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2011,
+        "lluvia_mm": 296,
+        "tmin_min_c": -3.0,
+        "tmax_max_c": 40.3,
+        "dias_calor_gt_38": 1,
+        "dias_helada": 4
+      },
+      {
+        "anio": 2012,
+        "lluvia_mm": 270,
+        "tmin_min_c": 2.6,
+        "tmax_max_c": 40.0,
+        "dias_calor_gt_38": 5,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2013,
+        "lluvia_mm": 240,
+        "tmin_min_c": -1.7,
+        "tmax_max_c": 41.1,
+        "dias_calor_gt_38": 4,
+        "dias_helada": 2
+      },
+      {
+        "anio": 2014,
+        "lluvia_mm": 302,
+        "tmin_min_c": 0.0,
+        "tmax_max_c": 41.8,
+        "dias_calor_gt_38": 6,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2015,
+        "lluvia_mm": 274,
+        "tmin_min_c": 0.3,
+        "tmax_max_c": 41.2,
+        "dias_calor_gt_38": 4,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2016,
+        "lluvia_mm": 243,
+        "tmin_min_c": -0.4,
+        "tmax_max_c": 41.8,
+        "dias_calor_gt_38": 8,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2017,
+        "lluvia_mm": 249,
+        "tmin_min_c": -0.4,
+        "tmax_max_c": 41.9,
+        "dias_calor_gt_38": 6,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2018,
+        "lluvia_mm": 283,
+        "tmin_min_c": -2.0,
+        "tmax_max_c": 38.3,
+        "dias_calor_gt_38": 3,
+        "dias_helada": 3
+      },
+      {
+        "anio": 2019,
+        "lluvia_mm": 330,
+        "tmin_min_c": -1.4,
+        "tmax_max_c": 40.7,
+        "dias_calor_gt_38": 2,
+        "dias_helada": 2
+      },
+      {
+        "anio": 2020,
+        "lluvia_mm": 232,
+        "tmin_min_c": 3.8,
+        "tmax_max_c": 39.7,
+        "dias_calor_gt_38": 6,
+        "dias_helada": 0
+      },
+      {
+        "anio": 2021,
+        "lluvia_mm": 286,
+        "tmin_min_c": -1.5,
+        "tmax_max_c": 39.8,
+        "dias_calor_gt_38": 4,
+        "dias_helada": 2
+      },
+      {
+        "anio": 2022,
+        "lluvia_mm": 224,
+        "tmin_min_c": -0.8,
+        "tmax_max_c": 40.7,
+        "dias_calor_gt_38": 4,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2023,
+        "lluvia_mm": 360,
+        "tmin_min_c": -0.8,
+        "tmax_max_c": 38.6,
+        "dias_calor_gt_38": 7,
+        "dias_helada": 1
+      },
+      {
+        "anio": 2024,
+        "lluvia_mm": 256,
+        "tmin_min_c": 1.0,
+        "tmax_max_c": 41.5,
+        "dias_calor_gt_38": 4,
+        "dias_helada": 0
+      }
+    ]
+  },
+  "suelo": {
+    "_status": "simulado",
+    "textura": "franco-arcilloso",
+    "materia_organica_pct": 1.1,
+    "agua_disponible_mm": 120,
+    "fuente": "SoilGrids",
+    "fuente_id": "soilgrids"
+  },
+  "prioridades_defecto": {
+    "rentabilidad": 0.4,
+    "agua": 0.25,
+    "suelo": 0.2,
+    "riesgo": 0.15
+  },
+  "escenarios_meta": {
+    "_status": "simulado",
+    "n": 200,
+    "semilla": 20261114,
+    "unidad": "eur_ha_por_anio_medio_de_la_secuencia",
+    "metodo": "Remuestreo con reemplazo de los 20 anios historicos (clima y precio emparejados) + beta de sobreoferta + factor de coste +-15 %. El indice i es el MISMO anio y los MISMOS parametros en todas las rotaciones, para que 'B gana en el X %' compare muestra a muestra. 20 anios no son 200 realizaciones independientes: se propaga incertidumbre de parametros, no informacion climatica nueva.",
+    "rotaciones_orden": ["actual", "alt-a", "alt-b"],
+    "anio_clima": [
+      2008, 2020, 2019, 2014, 2020, 2014, 2022, 2023, 2007, 2018, 2011, 2016, 2014, 2016, 2006, 2014, 2022, 2005,
+      2023, 2021, 2013, 2014, 2010, 2010, 2010, 2017, 2010, 2024, 2013, 2012, 2008, 2017, 2005, 2005, 2023, 2013,
+      2011, 2014, 2006, 2013, 2013, 2018, 2021, 2006, 2010, 2023, 2006, 2016, 2016, 2018, 2013, 2014, 2013, 2017,
+      2023, 2024, 2017, 2016, 2010, 2014, 2020, 2021, 2021, 2019, 2017, 2023, 2010, 2019, 2018, 2018, 2008, 2010,
+      2011, 2023, 2010, 2019, 2017, 2005, 2024, 2006, 2023, 2007, 2019, 2012, 2019, 2007, 2024, 2015, 2011, 2016,
+      2005, 2012, 2008, 2020, 2008, 2011, 2022, 2014, 2008, 2013, 2013, 2013, 2010, 2017, 2007, 2008, 2020, 2019,
+      2008, 2005, 2018, 2013, 2015, 2007, 2019, 2016, 2017, 2014, 2024, 2020, 2022, 2019, 2009, 2010, 2013, 2005,
+      2012, 2008, 2007, 2007, 2013, 2007, 2021, 2017, 2009, 2007, 2011, 2018, 2015, 2007, 2022, 2024, 2018, 2021,
+      2021, 2017, 2014, 2008, 2006, 2012, 2014, 2007, 2019, 2008, 2019, 2008, 2017, 2007, 2019, 2019, 2016, 2023,
+      2015, 2012, 2020, 2009, 2024, 2016, 2024, 2010, 2022, 2012, 2021, 2015, 2019, 2015, 2019, 2014, 2014, 2012,
+      2023, 2015, 2017, 2018, 2012, 2008, 2008, 2021, 2010, 2007, 2016, 2020, 2017, 2012, 2007, 2024, 2007, 2006,
+      2013, 2016
+    ],
+    "beta_sobreoferta": [
+      -0.3712, -0.4901, -0.151, -0.2927, -0.255, -0.1474, -0.2064, -0.4408, -0.3429, -0.1953, -0.3819, -0.3138,
+      -0.4183, -0.2248, -0.2798, -0.1117, -0.1079, -0.3787, -0.3766, -0.3033, -0.4393, -0.1021, -0.2872, -0.3362,
+      -0.2893, -0.5128, -0.2087, -0.0762, -0.3261, -0.281, -0.3269, -0.3667, -0.355, -0.4119, -0.1543, -0.2832,
+      -0.3456, -0.1653, -0.2202, -0.2059, -0.3442, -0.1104, -0.281, -0.1894, -0.4523, -0.167, -0.1209, -0.5114,
+      -0.3099, -0.5154, -0.2211, -0.1399, -0.2945, -0.3731, -0.3618, -0.1727, -0.1216, -0.1547, -0.3435, -0.0688,
+      -0.1749, -0.2879, -0.3915, -0.3659, -0.2543, -0.091, -0.3382, -0.3454, -0.3647, -0.3746, -0.2128, -0.268,
+      -0.1154, -0.3842, -0.5614, -0.3732, -0.2303, -0.3007, -0.1432, -0.2912, -0.124, -0.3185, -0.2427, -0.2271,
+      -0.4308, -0.344, -0.1631, -0.3447, -0.284, -0.2053, -0.2535, -0.1969, -0.1505, -0.169, -0.1288, -0.2703,
+      -0.3227, -0.1952, -0.4805, -0.2692, -0.1251, -0.123, -0.5152, -0.2369, -0.1971, -0.2751, -0.2879, -0.2354,
+      -0.2629, -0.3518, -0.3759, -0.1954, -0.4741, -0.1795, -0.3878, -0.3327, -0.375, -0.2711, -0.1976, -0.2665,
+      -0.1764, -0.1749, -0.4373, -0.1988, -0.4327, -0.3114, -0.2918, -0.2212, -0.0821, -0.0774, -0.2598, -0.2769,
+      -0.2113, -0.2761, -0.3435, -0.354, -0.3162, -0.2815, -0.2358, -0.4034, -0.2932, -0.2605, -0.2019, -0.1513,
+      -0.3128, -0.4509, -0.2624, -0.169, -0.5293, -0.2888, -0.3777, -0.2622, -0.1851, -0.2913, -0.3222, -0.3606,
+      -0.3418, -0.2589, -0.2508, -0.273, -0.4041, -0.2218, -0.1412, -0.2319, -0.1078, -0.2869, -0.1394, -0.3125,
+      -0.2791, -0.1307, -0.3478, -0.1699, -0.4003, -0.2456, -0.3399, -0.1252, -0.3803, -0.4139, -0.5509, -0.202,
+      -0.4064, -0.2374, -0.1562, -0.2256, -0.1707, -0.3081, -0.3036, -0.4579, -0.3079, -0.2951, -0.1943, -0.1134,
+      -0.2184, -0.163, -0.1498, -0.3439, -0.2871, -0.3909, -0.1056, -0.1288
+    ],
+    "factor_coste": [
+      1.004, 1.132, 0.859, 0.859, 1.022, 1.032, 0.922, 0.879, 1.06, 0.853, 0.872, 1.127, 1.121, 0.9, 1.039, 0.924,
+      1.094, 1.113, 0.921, 1.032, 0.874, 1.014, 0.895, 1.007, 1.131, 1.066, 1.047, 1.003, 1.038, 0.961, 1.048,
+      1.147, 0.87, 0.857, 1.017, 1.061, 0.874, 0.92, 1.1, 1.094, 0.853, 0.9, 1.064, 0.871, 0.939, 0.888, 1.126,
+      1.06, 1.05, 0.887, 0.955, 1.099, 0.901, 1.043, 1.122, 1.035, 1.009, 0.916, 0.914, 0.994, 0.88, 1.036, 1.11,
+      1.023, 0.885, 1.085, 1.06, 1.013, 1.072, 1.08, 1.026, 0.89, 1.078, 1.053, 0.989, 1.135, 1.004, 0.911, 1.14,
+      0.872, 0.884, 0.992, 1.119, 0.968, 1.091, 0.909, 1.024, 1.045, 1.0, 0.885, 0.887, 0.913, 0.96, 1.09, 0.982,
+      1.124, 1.044, 1.122, 1.095, 1.001, 0.906, 1.128, 1.009, 0.986, 0.908, 0.851, 0.933, 1.008, 0.922, 0.91, 1.135,
+      0.859, 0.891, 0.952, 0.85, 1.138, 1.148, 1.046, 0.909, 0.948, 1.056, 1.09, 0.957, 1.052, 0.947, 1.103, 1.128,
+      0.892, 0.969, 1.144, 1.034, 1.12, 0.874, 1.119, 0.851, 1.081, 0.91, 0.856, 1.101, 1.067, 1.028, 0.986, 1.13,
+      1.06, 0.982, 1.122, 1.101, 1.005, 1.131, 0.887, 1.022, 1.103, 1.032, 1.101, 0.953, 1.1, 0.903, 0.884, 1.144,
+      1.039, 1.021, 1.087, 0.87, 1.054, 0.926, 0.937, 1.121, 1.061, 1.115, 1.112, 0.94, 0.999, 1.012, 0.977, 0.862,
+      0.953, 0.936, 1.148, 1.088, 1.132, 1.125, 0.999, 0.904, 1.138, 0.92, 1.073, 1.031, 1.129, 0.971, 0.884, 0.936,
+      1.091, 0.933, 1.13, 1.117, 0.872, 0.913, 1.14, 0.977, 1.04
+    ]
+  },
+  "rotaciones": [
+    {
+      "id": "actual",
+      "nombre": "Lo que haces hoy: melon, barbecho, lechuga",
+      "es_actual": true,
+      "ciclos": ["melon", "barbecho", "lechuga"],
+      "_status": "simulado",
+      "exito_pct": {
+        "_status": "simulado",
+        "valor": 60,
+        "horquilla": [39, 78],
+        "k_malos": 8,
+        "n": 20,
+        "metodo": "conjunto_20_anios_wilson_95 (D-008: perdida clima < 20 % Y margen >= 0, mismo anio)",
+        "desglose": {
+          "clima": {
+            "k_malos": 8,
+            "n": 20,
+            "umbral_perdida_pct": 20
+          },
+          "economico": {
+            "k_malos": 1,
+            "n": 20,
+            "umbral": "margen_eur_ha < 0"
+          },
+          "conjunto": {
+            "k_malos": 8,
+            "n": 20
+          }
+        },
+        "peores_anios": [
+          {
+            "anio": 2022,
+            "perdida_clima_pct": 24.0,
+            "margen_eur_ha": -560,
+            "motivo": "clima+economico"
+          },
+          {
+            "anio": 2016,
+            "perdida_clima_pct": 23.0,
+            "margen_eur_ha": 1385,
+            "motivo": "clima"
+          },
+          {
+            "anio": 2023,
+            "perdida_clima_pct": 23.1,
+            "margen_eur_ha": 1966,
+            "motivo": "clima"
+          }
+        ]
+      },
+      "margen_eur_ha": {
+        "_status": "simulado",
+        "valor": 2055,
+        "horquilla": [-245, 3991],
+        "p10": -245,
+        "p50": 1974,
+        "p90": 3991,
+        "breakeven_precio_eur_kg": {
+          "melon": 0.3,
+          "lechuga": 0.36
+        },
+        "nota": "valor = media de las muestras; la horquilla es exactamente [p10, p90]"
+      },
+      "agua_m3_ha": 5200,
+      "agua_detalle": {
+        "_status": "simulado",
+        "etc_mm": 528,
+        "precipitacion_efectiva_mm": 60,
+        "eficiencia_riego": 0.9,
+        "bruto_m3_ha": 5200,
+        "tarifa_eur_m3": 0.35,
+        "coste_eur_ha": 1820,
+        "ecw_dSm": 1.2,
+        "ece_dSm": 1.8,
+        "perdida_sal_pct": 6.6,
+        "nota": "ECw ilustrativa; perdida media de los cultivos con dato FAO-29 (los demas no cuentan)"
+      },
+      "sobreoferta": 0.35,
+      "sobreoferta_detalle": {
+        "_status": "simulado",
+        "indice_SI": 0.35,
+        "beta": -0.278,
+        "efecto_precio_pct": {
+          "valor": -9.3,
+          "horquilla": [-13.4, -4.4]
+        },
+        "semaforo": "amarillo",
+        "escala": "indice 0-1 (proxy: superficie declarada del cultivo en la comarca); efecto = exp(beta*a)-1"
+      },
+      "criterios": {
+        "margen": 0.514,
+        "agua": 0.133,
+        "suelo_n": 0.25,
+        "riesgo": 0.6
+      },
+      "suelo_desnudo_meses": 5,
+      "inversion": {
+        "_status": "simulado",
+        "pico_caja_negativa_eur_ha": 6000,
+        "meses_hasta_primer_ingreso": 4
+      },
+      "semaforo_legal": {
+        "_status": "simulado",
+        "color": "amarillo",
+        "motivo": "Suelo de regadio desnudo mas de 2 meses en otono-invierno (5 meses segun el NDVI simulado); reglas exclusivas de zona 1 sin evaluar hasta verificar la zona",
+        "articulo": "Ley 3/2020 art. 51.6 (por verificar en el BOE)",
+        "comprobaciones": [
+          {
+            "regla": "Suelo de regadio desnudo > 2 meses en otono-invierno exige cubierta",
+            "resultado": "no_cumple",
+            "articulo": "Ley 3/2020 art. 51.6",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Maximo 2 ciclos por anio (3 solo hoja < 45 dias)",
+            "resultado": "cumple",
+            "articulo": "Ley 3/2020 art. 39",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Un solo ciclo del grupo 1 y nunca dos seguidos (solo zona 1)",
+            "resultado": "indeterminado",
+            "articulo": "Ley 3/2020 art. 51",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Rotacion de cultivos (BCAM 7 de la PAC)",
+            "resultado": "cumple",
+            "articulo": "BCAM 7 (FEGA)",
+            "estado": "por_verificar"
+          }
+        ]
+      },
+      "escenarios_margen_eur_ha": [
+        -261, 89, 3047, 2886, 1466, 2194, -464, 1537, 2707, 4087, 3735, -285, 791, 1441, 96, 3018, -1403, 1150, 1431,
+        3172, 3288, 2453, 4116, 3207, 2554, 456, 3389, 8542, 2571, 583, -452, 313, 2820, 2739, 1406, 2566, 3845, 2878,
+        -159, 2610, 3734, 4073, 3036, 1424, 3266, 2220, -83, -321, 236, 2832, 3472, 1777, 3580, 984, 143, 7823, 1930,
+        1519, 3796, 2693, 2636, 3202, 2353, 1335, 2360, 1134, 2846, 1462, 2082, 1997, -44, 4217, 3303, 540, 2579, 577,
+        1640, 2715, 7280, 1169, 2366, 3236, 1059, 666, 702, 3702, 7947, 773, 3221, 1587, 3019, 1105, 541, 1269, 448,
+        2450, -1498, 1448, -1104, 3007, 4133, 2675, 2593, 1741, 4220, 964, 1956, 1811, 526, 2570, 1633, 4196, 1453,
+        3987, 2413, -406, 284, 1716, 8528, 1921, -1291, 1449, 1743, 3394, 2831, 1419, -551, 821, 4233, 3093, 2820,
+        2536, 4544, 751, 2710, 2531, 3703, 3777, 704, 2459, -1336, 7707, 2233, 3529, 3469, 247, 1379, 198, -1097,
+        1050, 1560, 2703, 1803, -724, 1925, -872, 1993, 4155, 866, 1496, 197, 748, 2497, 89, 2533, 2310, 7431, 157,
+        6759, 3247, -856, 605, 2969, 1498, 2471, 1996, 1867, 628, 637, -352, 3, 1372, 2518, 2105, 1124, -579, -291,
+        2009, 3538, 4031, 1281, 1427, 2148, -243, 3006, 8046, 3868, -840, 3734, 770
+      ],
+      "por_que": "Es tu rotacion actual, sirve de referencia.",
+      "beneficios": ["Cultivos y mercados que ya conoces", "Sin inversion nueva en maquinaria ni semilla"],
+      "evidencia": [
+        {
+          "dato": "5 meses de suelo desnudo (simulado)",
+          "dataset": "HLS-VI NDVI",
+          "fuente_id": "hls",
+          "url": "https://lpdaac.usgs.gov/products/hlsl30v002/"
+        }
+      ],
+      "huecos": [
+        "Sin rendimientos reales de tu parcela",
+        "Zona 1 o 2 del Mar Menor sin verificar en el Anexo I de la Ley 3/2020"
+      ],
+      "riesgos": [
+        "Arrastre de nitrato con lluvia fuerte en otono",
+        "Precio de la lechuga por debajo del coste en varios anios"
+      ]
+    },
+    {
+      "id": "alt-a",
+      "nombre": "Brocoli, haba (leguminosa), alcachofa",
+      "es_actual": false,
+      "ciclos": ["brocoli", "haba", "alcachofa"],
+      "_status": "simulado",
+      "exito_pct": {
+        "_status": "simulado",
+        "valor": 70,
+        "horquilla": [48, 85],
+        "k_malos": 6,
+        "n": 20,
+        "metodo": "conjunto_20_anios_wilson_95 (D-008: perdida clima < 20 % Y margen >= 0, mismo anio)",
+        "desglose": {
+          "clima": {
+            "k_malos": 6,
+            "n": 20,
+            "umbral_perdida_pct": 20
+          },
+          "economico": {
+            "k_malos": 0,
+            "n": 20,
+            "umbral": "margen_eur_ha < 0"
+          },
+          "conjunto": {
+            "k_malos": 6,
+            "n": 20
+          }
+        },
+        "peores_anios": [
+          {
+            "anio": 2022,
+            "perdida_clima_pct": 23.5,
+            "margen_eur_ha": 4,
+            "motivo": "clima"
+          },
+          {
+            "anio": 2023,
+            "perdida_clima_pct": 28.6,
+            "margen_eur_ha": 822,
+            "motivo": "clima"
+          },
+          {
+            "anio": 2013,
+            "perdida_clima_pct": 25.3,
+            "margen_eur_ha": 1832,
+            "motivo": "clima"
+          }
+        ]
+      },
+      "margen_eur_ha": {
+        "_status": "simulado",
+        "valor": 2828,
+        "horquilla": [987, 4918],
+        "p10": 987,
+        "p50": 2682,
+        "p90": 4918,
+        "breakeven_precio_eur_kg": {
+          "brocoli": 0.52,
+          "haba": 0.45,
+          "alcachofa": 0.4
+        },
+        "nota": "valor = media de las muestras; la horquilla es exactamente [p10, p90]"
+      },
+      "agua_m3_ha": 4300,
+      "agua_detalle": {
+        "_status": "simulado",
+        "etc_mm": 457,
+        "precipitacion_efectiva_mm": 70,
+        "eficiencia_riego": 0.9,
+        "bruto_m3_ha": 4300,
+        "tarifa_eur_m3": 0.35,
+        "coste_eur_ha": 1505,
+        "ecw_dSm": 1.2,
+        "ece_dSm": 1.8,
+        "perdida_sal_pct": 1.0,
+        "nota": "ECw ilustrativa; perdida media de los cultivos con dato FAO-29 (los demas no cuentan)"
+      },
+      "sobreoferta": 0.2,
+      "sobreoferta_detalle": {
+        "_status": "simulado",
+        "indice_SI": 0.2,
+        "beta": -0.278,
+        "efecto_precio_pct": {
+          "valor": -5.4,
+          "horquilla": [-7.9, -2.5]
+        },
+        "semaforo": "verde",
+        "escala": "indice 0-1 (proxy: superficie declarada del cultivo en la comarca); efecto = exp(beta*a)-1"
+      },
+      "criterios": {
+        "margen": 0.707,
+        "agua": 0.283,
+        "suelo_n": 0.7,
+        "riesgo": 0.7
+      },
+      "suelo_desnudo_meses": 1,
+      "inversion": {
+        "_status": "simulado",
+        "pico_caja_negativa_eur_ha": 7800,
+        "meses_hasta_primer_ingreso": 5
+      },
+      "semaforo_legal": {
+        "_status": "simulado",
+        "color": "verde",
+        "motivo": "Cubierta en otono-invierno y leguminosa que reduce abono N; un solo ciclo del grupo 1 (reglas de zona 1 por verificar)",
+        "articulo": "Ley 3/2020 art. 51.6 y art. 40 (por verificar en el BOE)",
+        "comprobaciones": [
+          {
+            "regla": "Suelo de regadio desnudo > 2 meses en otono-invierno exige cubierta",
+            "resultado": "cumple",
+            "articulo": "Ley 3/2020 art. 51.6",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Maximo 2 ciclos por anio (3 solo hoja < 45 dias)",
+            "resultado": "cumple",
+            "articulo": "Ley 3/2020 art. 39",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Un solo ciclo del grupo 1 y nunca dos seguidos (solo zona 1)",
+            "resultado": "indeterminado",
+            "articulo": "Ley 3/2020 art. 51",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Sin urea ni N mineral en fondo",
+            "resultado": "aviso",
+            "articulo": "Ley 3/2020 art. 40",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Rotacion de cultivos (BCAM 7 de la PAC)",
+            "resultado": "cumple",
+            "articulo": "BCAM 7 (FEGA)",
+            "estado": "por_verificar"
+          }
+        ]
+      },
+      "escenarios_margen_eur_ha": [
+        1507, 1997, 5855, 4634, 3165, 3814, 250, 988, 2658, 3250, 2881, 1773, 2680, 3413, 2086, 4590, -745, 3432, 806,
+        1320, 1948, 4023, 5537, 4699, 4001, 1347, 4725, 6771, 1056, 2665, 1292, 1065, 5057, 5023, 491, 979, 2932,
+        4505, 1796, 886, 2232, 3098, 1145, 3335, 4885, 1311, 1804, 1856, 2284, 2483, 1762, 3396, 1997, 1732, -481,
+        6306, 2390, 3440, 5287, 4225, 4246, 1322, 672, 4310, 2962, 134, 4346, 4422, 1534, 1465, 1622, 5614, 2011, -63,
+        4321, 3568, 2227, 4910, 5698, 3150, 1395, 3143, 3961, 2714, 3724, 3639, 6404, 3421, 2218, 3544, 5168, 3127,
+        2155, 2894, 2049, 1436, -691, 3127, 738, 1388, 2238, 799, 4288, 2334, 3929, 2655, 3675, 4697, 2215, 4809,
+        1108, 2429, 4164, 3673, 5384, 1666, 1045, 3462, 7060, 3623, -586, 4298, 2512, 4718, 1488, 3641, 1555, 2479,
+        3758, 2628, 1188, 2393, 2499, 1401, 3364, 2500, 2746, 3079, 3284, 2498, -551, 6401, 1436, 1383, 1631, 1083,
+        3122, 1830, 1054, 3130, 3403, 2535, 4654, 1003, 4865, 899, 2694, 3960, 3776, 4411, 2304, -65, 4985, 2148,
+        4081, 2907, 5837, 2207, 5511, 4486, -43, 2617, 1295, 4073, 5413, 4481, 4843, 2516, 2633, 1696, -564, 3943,
+        3009, 1346, 3128, 1156, 1436, 448, 4992, 3891, 3234, 2997, 2714, 1777, 2660, 6925, 3719, 1231, 1809, 2683
+      ],
+      "por_que": "La haba fija nitrogeno y cubre el suelo en invierno; menos agua y menos riesgo de nitrato.",
+      "beneficios": [
+        "Menos abono nitrogenado gracias a la leguminosa",
+        "Suelo cubierto en invierno",
+        "Posible ingreso del ecorregimen de rotacion (por verificar)"
+      ],
+      "evidencia": [
+        {
+          "dato": "Lluvia anual ilustrativa en la serie simulada",
+          "dataset": "NASA POWER / IMERG",
+          "fuente_id": "power",
+          "url": "https://power.larc.nasa.gov/"
+        }
+      ],
+      "huecos": [
+        "Precio de la alcachofa y del brocoli sin serie larga de fuente oficial",
+        "Grupo legal de alcachofa y haba sin confirmar"
+      ],
+      "riesgos": ["Mercado de la alcachofa saturado si todos la plantan"]
+    },
+    {
+      "id": "alt-b",
+      "nombre": "Cebada, veza (cubierta), cebada",
+      "es_actual": false,
+      "ciclos": ["cebada", "veza", "cebada"],
+      "_status": "simulado",
+      "exito_pct": {
+        "_status": "simulado",
+        "valor": 75,
+        "horquilla": [53, 89],
+        "k_malos": 5,
+        "n": 20,
+        "metodo": "conjunto_20_anios_wilson_95 (D-008: perdida clima < 20 % Y margen >= 0, mismo anio)",
+        "desglose": {
+          "clima": {
+            "k_malos": 5,
+            "n": 20,
+            "umbral_perdida_pct": 20
+          },
+          "economico": {
+            "k_malos": 0,
+            "n": 20,
+            "umbral": "margen_eur_ha < 0"
+          },
+          "conjunto": {
+            "k_malos": 5,
+            "n": 20
+          }
+        },
+        "peores_anios": [
+          {
+            "anio": 2009,
+            "perdida_clima_pct": 26.0,
+            "margen_eur_ha": 1150,
+            "motivo": "clima"
+          },
+          {
+            "anio": 2023,
+            "perdida_clima_pct": 27.0,
+            "margen_eur_ha": 1154,
+            "motivo": "clima"
+          },
+          {
+            "anio": 2007,
+            "perdida_clima_pct": 28.9,
+            "margen_eur_ha": 1430,
+            "motivo": "clima"
+          }
+        ]
+      },
+      "margen_eur_ha": {
+        "_status": "simulado",
+        "valor": 1725,
+        "horquilla": [1099, 2349],
+        "p10": 1099,
+        "p50": 1756,
+        "p90": 2349,
+        "breakeven_precio_eur_kg": {
+          "cebada": 0.2
+        },
+        "nota": "valor = media de las muestras; la horquilla es exactamente [p10, p90]"
+      },
+      "agua_m3_ha": 2100,
+      "agua_detalle": {
+        "_status": "simulado",
+        "etc_mm": 279,
+        "precipitacion_efectiva_mm": 90,
+        "eficiencia_riego": 0.9,
+        "bruto_m3_ha": 2100,
+        "tarifa_eur_m3": 0.35,
+        "coste_eur_ha": 735,
+        "ecw_dSm": 1.2,
+        "ece_dSm": 1.8,
+        "perdida_sal_pct": 0.0,
+        "nota": "ECw ilustrativa; perdida media de los cultivos con dato FAO-29 (los demas no cuentan)"
+      },
+      "sobreoferta": 0.1,
+      "sobreoferta_detalle": {
+        "_status": "simulado",
+        "indice_SI": 0.1,
+        "beta": -0.278,
+        "efecto_precio_pct": {
+          "valor": -2.7,
+          "horquilla": [-4.0, -1.3]
+        },
+        "semaforo": "verde",
+        "escala": "indice 0-1 (proxy: superficie declarada del cultivo en la comarca); efecto = exp(beta*a)-1"
+      },
+      "criterios": {
+        "margen": 0.431,
+        "agua": 0.65,
+        "suelo_n": 0.8,
+        "riesgo": 0.75
+      },
+      "suelo_desnudo_meses": 1,
+      "inversion": {
+        "_status": "simulado",
+        "pico_caja_negativa_eur_ha": 1800,
+        "meses_hasta_primer_ingreso": 6
+      },
+      "semaforo_legal": {
+        "_status": "simulado",
+        "color": "verde",
+        "motivo": "Bajo consumo de agua y suelo cubierto con la veza",
+        "articulo": "Ley 3/2020 art. 51.6 (por verificar en el BOE)",
+        "comprobaciones": [
+          {
+            "regla": "Suelo de regadio desnudo > 2 meses en otono-invierno exige cubierta",
+            "resultado": "cumple",
+            "articulo": "Ley 3/2020 art. 51.6",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Maximo 2 ciclos por anio (3 solo hoja < 45 dias)",
+            "resultado": "cumple",
+            "articulo": "Ley 3/2020 art. 39",
+            "estado": "por_verificar"
+          },
+          {
+            "regla": "Rotacion de cultivos (BCAM 7 de la PAC)",
+            "resultado": "cumple",
+            "articulo": "BCAM 7 (FEGA)",
+            "estado": "por_verificar"
+          }
+        ]
+      },
+      "escenarios_margen_eur_ha": [
+        1178, 1753, 2149, 2439, 2083, 2139, 1242, 1267, 1185, 1706, 2113, 1437, 1837, 1948, 1485, 2381, 912, 1422,
+        1201, 1816, 2084, 2195, 2660, 2403, 2164, 1931, 2376, 2622, 1784, 1331, 1100, 1822, 1940, 1946, 1070, 1754,
+        2124, 2367, 1379, 1715, 2166, 1638, 1757, 1870, 2494, 1336, 1360, 1503, 1601, 1524, 2000, 2002, 2084, 2038,
+        783, 2509, 2217, 1941, 2595, 2252, 2415, 1815, 1617, 1721, 2420, 946, 2289, 1751, 1187, 1167, 1185, 2679,
+        1787, 921, 2340, 1484, 2179, 1875, 2301, 1831, 1357, 1336, 1568, 1333, 1553, 1503, 2537, 1532, 1883, 1986,
+        1943, 1459, 1344, 1977, 1305, 1628, 947, 1929, 950, 1885, 2143, 1677, 2318, 2215, 1555, 1531, 2255, 1804,
+        1386, 1858, 1052, 2213, 1809, 1467, 2075, 1406, 1816, 2056, 2762, 2234, 969, 1654, 1101, 2370, 1934, 1468,
+        974, 1463, 1466, 1099, 1819, 1081, 2185, 1919, 1353, 1138, 2059, 1669, 1456, 1150, 990, 2572, 1121, 1817,
+        1918, 1838, 1944, 1243, 1200, 1483, 2061, 1123, 1773, 1000, 1887, 980, 2345, 1583, 1511, 1724, 1626, 899,
+        1977, 1152, 2347, 1190, 2345, 1577, 2291, 2276, 1159, 1288, 1819, 1714, 2069, 1809, 1898, 1783, 1851, 998,
+        762, 1670, 2421, 1097, 1453, 1053, 1143, 1552, 2490, 1571, 1883, 1998, 2335, 1015, 1131, 2771, 1513, 1231,
+        2002, 1691
+      ],
+      "por_que": "Aguanta calor y sequia; margen menor pero muy estable bajo clima 2050.",
+      "beneficios": ["Muy poca agua", "La veza cubre el suelo y aporta nitrogeno"],
+      "evidencia": [
+        {
+          "dato": "Dias de calor > 38 C en la serie simulada, con tendencia al alza",
+          "dataset": "NASA POWER",
+          "fuente_id": "power",
+          "url": "https://power.larc.nasa.gov/"
+        }
+      ],
+      "huecos": [
+        "La veza se trata como cubierta de ingreso cero: sin precio, coste ni rendimiento verificados",
+        "Sin rendimientos reales de cebada de regadio"
+      ],
+      "riesgos": ["Ingresos bajos si tu prioridad es maximizar margen"]
+    }
+  ],
+  "variantes": {
+    "_status": "simulado",
+    "definiciones": [
+      {
+        "id": "lluvia_-30",
+        "descripcion": "Lluvia -30 %",
+        "delta": {
+          "lluvia_pct": -30,
+          "temp_c": 0
+        }
+      },
+      {
+        "id": "lluvia_-15",
+        "descripcion": "Lluvia -15 %",
+        "delta": {
+          "lluvia_pct": -15,
+          "temp_c": 0
+        }
+      },
+      {
+        "id": "lluvia_+10",
+        "descripcion": "Lluvia +10 %",
+        "delta": {
+          "lluvia_pct": 10,
+          "temp_c": 0
+        }
+      },
+      {
+        "id": "temp_+1",
+        "descripcion": "Temperatura +1 C",
+        "delta": {
+          "lluvia_pct": 0,
+          "temp_c": 1
+        }
+      },
+      {
+        "id": "temp_+2",
+        "descripcion": "Temperatura +2 C",
+        "delta": {
+          "lluvia_pct": 0,
+          "temp_c": 2
+        }
+      },
+      {
+        "id": "2050",
+        "descripcion": "Escenario 2050 (simulado)",
+        "delta": {
+          "lluvia_pct": -12,
+          "temp_c": 1.8
+        }
+      }
+    ],
+    "resultados": {},
+    "nota": "Esqueleto P2: el motor rellenara resultados[id] con los criterios, exito_pct y margen por rotacion."
+  },
+  "sensores": {
+    "_status": "cargando",
+    "fuente_id": "siam",
+    "estacion": {
+      "id": "TP91",
+      "red": "SIAM",
+      "distancia_parcela_km": 1.1
+    },
+    "resolucion": "horaria",
+    "variables": ["tmin_c", "tmax_c", "hr_pct", "lluvia_mm", "et0_mm"],
+    "periodo": null,
+    "lecturas": [],
+    "nota": "Esqueleto para el export SIAM de T-014: lecturas[] con t (ISO 8601 UTC) y las variables listadas."
+  },
+  "fuentes": [
+    {
+      "id": "power",
+      "nombre": "NASA POWER (temperatura, radiacion, lluvia)",
+      "url": "https://power.larc.nasa.gov/",
+      "licencia": "Datos abiertos NASA; citar el DOI del producto",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "imerg",
+      "nombre": "GPM IMERG (lluvia)",
+      "url": "https://gpm.nasa.gov/data",
+      "licencia": "Datos abiertos NASA; citar el DOI del producto",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "hls",
+      "nombre": "HLS v2.0 L30 (NDVI, Landsat/Sentinel-2 armonizado)",
+      "url": "https://lpdaac.usgs.gov/products/hlsl30v002/",
+      "licencia": "Datos abiertos NASA; citar el DOI del producto",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "soilgrids",
+      "nombre": "ISRIC SoilGrids 2.0",
+      "url": "https://soilgrids.org/",
+      "licencia": "CC BY 4.0 (Poggio et al. 2021, SOIL 7, 217-240)",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "sigpac",
+      "nombre": "SIGPAC y cultivo declarado (FEGA)",
+      "url": "https://sigpac.mapa.es/fega/visor/",
+      "licencia": "CC BY 4.0 segun INSPIRE/datos.gob.es; acceso desde codigo por confirmar con el FEGA",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "siam",
+      "nombre": "SIAM-IMIDA, estacion TP91 (series horarias)",
+      "url": "https://datosabiertos.carm.es/odata/Agricultura/IMIDA_estaciones.csv",
+      "licencia": "Por verificar (no revisada)",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "ley-3-2020",
+      "nombre": "Ley 3/2020 de recuperacion y proteccion del Mar Menor (BOE)",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2020-9793",
+      "licencia": "Informacion del sector publico, reutilizacion permitida; citar BOE-A-2020-9793",
+      "licencia_estado": "ok"
+    },
+    {
+      "id": "fao-56",
+      "nombre": "FAO Riego y Drenaje 56 (evapotranspiracion de cultivos)",
+      "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+      "licencia": "Por verificar (no revisada)",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "fao-29",
+      "nombre": "FAO Riego y Drenaje 29 (calidad del agua para la agricultura)",
+      "url": "https://www.fao.org/4/Y4263E/y4263e0e.htm",
+      "licencia": "Por verificar (no revisada)",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "eurostat-precios",
+      "nombre": "Eurostat apri_ap_crpouta (precios de productos agricolas)",
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/apri_ap_crpouta?format=JSON&geo=ES",
+      "licencia": "Por verificar (no revisada)",
+      "licencia_estado": "verify"
+    },
+    {
+      "id": "mock",
+      "nombre": "Valores ilustrativos de este borrador (no son un dataset)",
+      "url": "",
+      "licencia": "Propios del equipo",
+      "licencia_estado": "ok"
+    }
+  ],
+  "no_sustituye": "Herramienta de apoyo. Consulta a tu tecnico agricola antes de decidir."
+}

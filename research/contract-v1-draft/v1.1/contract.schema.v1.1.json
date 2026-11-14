@@ -1,0 +1,1972 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrockham.local/contract-v1.1-draft.schema.json",
+  "title": "Agrockham contrato v1.1 (BORRADOR)",
+  "x-schema_version": "1.1.0-draft",
+  "description": "Contrato v1.1-draft. Un documento por parcela. Obligatorio = P0; todo lo demas opcional; additionalProperties abierto en todas partes (tras congelar solo se ANADEN campos). Cambios respecto al borrador v1: ver CHANGELOG-v1.1.md. Un bloque con _status 'cargando' puede ir vacio (D-009). Las listas (historia, rotaciones) no pueden llevar _status: su estado va en _meta.estado_bloques (y cada rotacion lleva su _status). Vocabulario de estado: cargando|real|precalculado|simulado (mock->simulado; provisional->simulado + provisional:true). Vocabulario de comprobaciones legales: ok|falla|no_aplica|no_evaluable. Se admiten null en exito_pct, margen_eur_ha, criterios y sus valores SOLO si la rotacion explica el motivo en huecos[] o exito_pct.definicion. Campos propios de enrique admitidos y documentados: _estado_bloques, licencia, criterios_sentido, supuestos_decision, generado, rotaciones[].{estrategias,horizonte_anios,plan_anios,variantes}, exito_pct.definicion, margen_eur_ha.{media,unidad}, evidencia[].{escala,confianza,aviso}, comprobaciones[].detalle. Las comprobaciones que un esquema no expresa (horquilla == [p10,p90], k_malos <= n, mismo numero de escenarios...) estan en validate_v1_1.py.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "_meta",
+    "parcela",
+    "historia",
+    "ndvi",
+    "clima",
+    "suelo",
+    "prioridades_defecto",
+    "rotaciones",
+    "fuentes",
+    "no_sustituye"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.[0-9]+\\.[0-9]+(-draft)?$",
+      "examples": [
+        "1.1.0-draft"
+      ]
+    },
+    "_meta": {
+      "type": "object",
+      "properties": {
+        "aviso": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Aviso de mock o de procedencia. Obligatorio; debe llevar 'MOCK' mientras haya bloques simulados."
+        },
+        "generado": {
+          "type": "string",
+          "description": "Fecha de generacion de los datos (la pone el motor)."
+        },
+        "origen": {
+          "type": "string",
+          "description": "De donde sale este documento (rama/fichero)."
+        },
+        "adaptado_por": {
+          "type": "string"
+        },
+        "adaptado": {
+          "type": "string",
+          "description": "Fecha (ISO) de la adaptacion."
+        },
+        "adaptaciones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Lista de cambios mecanicos hechos por el adaptador."
+        },
+        "avisos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Cosas que faltan o no se pudieron deducir; no son errores de esquema."
+        },
+        "estado_bloques": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/status"
+          },
+          "description": "Estado por bloque, incluidos los que son lista (historia, rotaciones)."
+        },
+        "bloques_pendientes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "borrador_fecha": {
+          "type": "string"
+        },
+        "generador": {
+          "type": "string"
+        },
+        "semilla": {
+          "type": "integer"
+        },
+        "congelado": {
+          "type": "boolean"
+        },
+        "cobertura": {
+          "type": "object",
+          "properties": {
+            "nivel": {
+              "enum": [
+                "completo",
+                "basico"
+              ]
+            },
+            "ambito": {
+              "type": "string"
+            }
+          }
+        },
+        "normalizacion_criterios": {
+          "type": "string"
+        },
+        "unidades": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "aviso"
+      ]
+    },
+    "parcela": {
+      "$ref": "#/$defs/bloque_parcela"
+    },
+    "historia": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/historia_item"
+      },
+      "description": "Lista [{anio, cultivo, fuente, declaraciones?}] (forma de enrique). Estado en _meta.estado_bloques.historia."
+    },
+    "ndvi": {
+      "$ref": "#/$defs/bloque_ndvi"
+    },
+    "clima": {
+      "$ref": "#/$defs/bloque_clima"
+    },
+    "suelo": {
+      "$ref": "#/$defs/bloque_suelo"
+    },
+    "prioridades_defecto": {
+      "type": "object",
+      "properties": {
+        "rentabilidad": {
+          "$ref": "#/$defs/peso"
+        },
+        "agua": {
+          "$ref": "#/$defs/peso"
+        },
+        "suelo": {
+          "$ref": "#/$defs/peso"
+        },
+        "riesgo": {
+          "$ref": "#/$defs/peso"
+        }
+      },
+      "required": [
+        "rentabilidad",
+        "agua",
+        "suelo",
+        "riesgo"
+      ],
+      "description": "Pesos que suman 1 (validate_v1_1.py). rentabilidad->margen, agua->agua, suelo->suelo_n, riesgo->riesgo."
+    },
+    "escenarios_meta": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "semilla": {
+          "type": "integer"
+        },
+        "unidad": {
+          "type": "string"
+        },
+        "metodo": {
+          "type": "string"
+        },
+        "rotaciones_orden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "anio_clima": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "beta_sobreoferta": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "factor_coste": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "nota": {
+          "type": "string"
+        },
+        "alineados": {
+          "type": "boolean",
+          "description": "true solo si el indice i de 'escenarios' es la MISMA muestra (mismo anio de clima, precio y coste) en todas las rotaciones. Si es false o falta, la UI no debe presentar 'B gana en el X %' como resultado firme (mostrarlo como orientativo u ocultarlo). Lo confirma el productor del motor (enrique); el adaptador lo deja en false mientras no lo declare."
+        }
+      },
+      "required": [
+        "n"
+      ]
+    },
+    "rotaciones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rotacion"
+      },
+      "description": "Minimo 3 (actual + >=2 alternativas), ids libres, una sola es_actual (validate_v1_1.py); puede ir vacia mientras se carga."
+    },
+    "variantes": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "definiciones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "descripcion": {
+                "type": "string"
+              },
+              "delta": {
+                "type": "object",
+                "properties": {
+                  "lluvia_pct": {
+                    "type": "number"
+                  },
+                  "temp_c": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "required": [
+              "id",
+              "delta"
+            ]
+          }
+        },
+        "resultados": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "rotaciones": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "exito_pct": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "$ref": "#/$defs/exito_pct"
+                        }
+                      ]
+                    },
+                    "margen_eur_ha": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "$ref": "#/$defs/margen_eur_ha"
+                        }
+                      ]
+                    },
+                    "agua_m3_ha": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "criterios": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "$ref": "#/$defs/criterios"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_status"
+      ],
+      "description": "Esqueleto P2 de nivel superior (borrador v1). enrique hoy entrega las variantes dentro de cada rotacion (rotaciones[].variantes); decision pendiente."
+    },
+    "sensores": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "estacion": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "red": {
+              "type": "string"
+            },
+            "distancia_parcela_km": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "resolucion": {
+          "enum": [
+            "horaria",
+            "diaria"
+          ]
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "periodo": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "desde": {
+                  "type": "string"
+                },
+                "hasta": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "desde",
+                "hasta"
+              ]
+            }
+          ]
+        },
+        "lecturas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string"
+              },
+              "tmin_c": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "tmax_c": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "hr_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "lluvia_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "et0_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "t"
+            ]
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_status"
+      ]
+    },
+    "fuentes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+            "description": "Se admiten mayusculas (ids de enrique: SIAM-TP91...)."
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string"
+          },
+          "licencia": {
+            "type": "string",
+            "minLength": 1
+          },
+          "licencia_estado": {
+            "enum": [
+              "ok",
+              "verify"
+            ],
+            "description": "ok = confirmada en la pagina oficial; verify = por confirmar (AGENTS.md seccion 6)."
+          },
+          "atribucion": {
+            "type": "string"
+          },
+          "nota": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "nombre",
+          "licencia"
+        ]
+      },
+      "minItems": 1
+    },
+    "no_sustituye": {
+      "type": "string",
+      "minLength": 1
+    },
+    "_estado_bloques": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Campo de enrique, conservado tal cual (mock|provisional|real|simulado). Referencia legacy; la fuente de verdad es _status por bloque + _meta.estado_bloques."
+    },
+    "licencia": {
+      "type": "object",
+      "properties": {
+        "incluye_precios_carm": {
+          "type": "boolean"
+        },
+        "estado": {
+          "type": "string"
+        },
+        "fuentes_restringidas": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Campo de enrique (restricciones de licencia). La politica de licencia dice que el JSON PUBLICABLE no debe mencionar CARM/esam: validate_v1_1.py avisa."
+    },
+    "criterios_sentido": {
+      "type": "string",
+      "description": "Campo de enrique: como leer criterios (1 = mejor; relativo a las rotaciones mostradas)."
+    },
+    "supuestos_decision": {
+      "type": "object",
+      "description": "Campo de enrique: supuestos del motor de decision (horizonte, muestras, bandas...)."
+    },
+    "generado": {
+      "type": "string",
+      "description": "Campo de enrique: fecha de generacion (se copia tambien a _meta.generado)."
+    }
+  },
+  "$defs": {
+    "status": {
+      "description": "Estado de un bloque. Vocabulario de enrique 'mock' -> simulado; 'provisional' -> simulado + provisional:true; 'real' -> real. Puede llevar un sufijo explicativo tras el valor ('simulado: ...', 'simulado (...)'), como emite el motor de enrique; la UI usa solo la primera palabra.",
+      "type": "string",
+      "pattern": "^(cargando|real|precalculado|simulado)([ :(].*)?$"
+    },
+    "peso": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "unit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "unit_o_null": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "pct": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "horquilla2": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "horquilla2_o_null": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/horquilla2"
+        }
+      ]
+    },
+    "percentiles": {
+      "type": "object",
+      "properties": {
+        "p10": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "p50": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "p90": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "description": "Percentiles; cada uno puede ir a null si no se calcula."
+    },
+    "semaforo_color": {
+      "enum": [
+        "verde",
+        "amarillo",
+        "rojo",
+        "gris"
+      ]
+    },
+    "bloque_parcela": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "ha": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "pendiente_pct": {
+          "type": "number",
+          "minimum": 0
+        },
+        "regadio": {
+          "type": "boolean"
+        },
+        "municipio": {
+          "type": "string"
+        },
+        "comarca": {
+          "type": "string"
+        },
+        "sigpac": {
+          "type": "object",
+          "properties": {
+            "poligono": {
+              "type": "integer"
+            },
+            "parcela": {
+              "type": "integer"
+            },
+            "recinto": {
+              "type": "integer"
+            }
+          }
+        },
+        "zonas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Etiquetas de zona. No afirmar mar_menor_zona_1/2 sin verificar el Anexo I: usar mar_menor_zona_por_verificar (el validador lo comprueba)."
+        },
+        "fuente_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_status"
+      ],
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "id",
+          "lat",
+          "lon",
+          "ha",
+          "regadio",
+          "zonas"
+        ]
+      }
+    },
+    "declaracion": {
+      "type": "object",
+      "properties": {
+        "campana": {
+          "type": "string",
+          "pattern": "^[0-9]{4}(-[0-9]{2})?$"
+        },
+        "anio": {
+          "type": "integer"
+        },
+        "cultivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fuente": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cultivo"
+      ],
+      "description": "Una declaracion PAC/SIGPAC concreta (0..N por anio: doble cultivo o sin declaracion)."
+    },
+    "historia_item": {
+      "type": "object",
+      "properties": {
+        "anio": {
+          "type": "integer"
+        },
+        "cultivo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Cultivo principal del anio; null si no hay declaracion."
+        },
+        "fuente": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "declaraciones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/declaracion"
+          },
+          "description": "Opcional, 0..N declaraciones SIGPAC/FEGA de ese anio (campana explicita)."
+        }
+      },
+      "required": [
+        "anio",
+        "cultivo",
+        "fuente"
+      ]
+    },
+    "bloque_ndvi": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "fuente": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "meses_desnudo": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+          }
+        },
+        "meses_vulnerable": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+          }
+        },
+        "serie_mensual": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mes": {
+                "type": "string"
+              },
+              "ndvi": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": -1,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "mes",
+              "ndvi"
+            ]
+          }
+        }
+      },
+      "required": [
+        "_status"
+      ],
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "meses_desnudo",
+          "meses_vulnerable"
+        ]
+      }
+    },
+    "bloque_clima": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "lluvia_anual_mm": {
+          "type": "object",
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "horquilla": {
+              "$ref": "#/$defs/horquilla2"
+            },
+            "fuentes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "ids de fuentes[]"
+            },
+            "anios": {
+              "type": "string",
+              "description": "Periodo de la serie, texto libre (enrique)."
+            }
+          },
+          "required": [
+            "valor",
+            "horquilla"
+          ]
+        },
+        "dias_calor_gt_38": {
+          "type": "object",
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "media": {
+              "type": "number"
+            },
+            "tendencia": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valor"
+          ]
+        },
+        "dias_helada": {
+          "type": "object",
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "media": {
+              "type": "number"
+            },
+            "estacion": {
+              "type": "string"
+            },
+            "nota": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "valor"
+          ]
+        },
+        "escenario_2050": {
+          "type": "object",
+          "properties": {
+            "_status": {
+              "$ref": "#/$defs/status"
+            },
+            "lluvia_pct": {
+              "type": "number"
+            },
+            "temp_c": {
+              "type": "number"
+            },
+            "metodo": {
+              "type": "string"
+            },
+            "nota": {
+              "type": "string"
+            }
+          }
+        },
+        "serie_anual": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "anio": {
+                "type": "integer"
+              },
+              "lluvia_mm": {
+                "type": "number",
+                "minimum": 0
+              },
+              "tmin_min_c": {
+                "type": "number"
+              },
+              "tmax_max_c": {
+                "type": "number"
+              },
+              "dias_calor_gt_38": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "dias_helada": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "anio",
+              "lluvia_mm"
+            ]
+          }
+        }
+      },
+      "required": [
+        "_status"
+      ],
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "lluvia_anual_mm",
+          "dias_calor_gt_38",
+          "dias_helada"
+        ]
+      }
+    },
+    "bloque_suelo": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "textura": {
+          "type": "string"
+        },
+        "materia_organica_pct": {
+          "type": "number",
+          "minimum": 0
+        },
+        "agua_disponible_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fuente": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_status"
+      ],
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "textura",
+          "materia_organica_pct",
+          "agua_disponible_mm",
+          "fuente"
+        ]
+      }
+    },
+    "criterios": {
+      "type": "object",
+      "properties": {
+        "margen": {
+          "$ref": "#/$defs/unit_o_null"
+        },
+        "agua": {
+          "$ref": "#/$defs/unit_o_null"
+        },
+        "suelo_n": {
+          "$ref": "#/$defs/unit_o_null"
+        },
+        "riesgo": {
+          "$ref": "#/$defs/unit_o_null"
+        }
+      },
+      "required": [
+        "margen",
+        "agua",
+        "suelo_n",
+        "riesgo"
+      ],
+      "description": "0-1, 1 = mejor. null = no evaluable (la rotacion debe explicarlo en huecos/definicion). Normalizacion relativa a las rotaciones mostradas (criterios_sentido de enrique)."
+    },
+    "desglose_item": {
+      "type": "object",
+      "properties": {
+        "k_malos": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "umbral_perdida_pct": {
+          "type": "number"
+        },
+        "umbral": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "k_malos",
+        "n"
+      ]
+    },
+    "exito_pct": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "valor": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/pct"
+            }
+          ]
+        },
+        "horquilla": {
+          "$ref": "#/$defs/horquilla2_o_null"
+        },
+        "k_malos": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "n": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "metodo": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "definicion": {
+          "type": "string",
+          "description": "Que cuenta n y que es un anio malo; explica un valor null."
+        },
+        "desglose": {
+          "type": "object",
+          "properties": {
+            "clima": {
+              "$ref": "#/$defs/desglose_item"
+            },
+            "economico": {
+              "$ref": "#/$defs/desglose_item"
+            },
+            "conjunto": {
+              "$ref": "#/$defs/desglose_item"
+            }
+          }
+        },
+        "peores_anios": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "anio": {
+                    "type": "integer"
+                  },
+                  "perdida_clima_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "margen_eur_ha": {
+                    "type": "number"
+                  },
+                  "motivo": {
+                    "enum": [
+                      "clima",
+                      "economico",
+                      "clima+economico"
+                    ]
+                  }
+                },
+                "required": [
+                  "anio"
+                ]
+              }
+            ]
+          },
+          "description": "Enteros (enrique) u objetos {anio, ...} (borrador)."
+        },
+        "n_anios_historicos": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Años históricos distintos (clima y precio emparejados) sobre los que se calcula valor y horquilla. Hoy 19 (2006-2024, clima observado) según enrique #144; no se fija en el contrato: lo da el motor. Wilson/Jeffreys se calcula con este n."
+        },
+        "n_muestras": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Nº de muestras remuestreadas (años del plan x años históricos). Informativo: NO son independientes, no se usa para el intervalo."
+        },
+        "n_efectivo": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "n que se usa realmente para el intervalo de confianza (normalmente = n_anios_historicos)."
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "valor",
+          "horquilla"
+        ]
+      }
+    },
+    "margen_eur_ha": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "valor": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "horquilla": {
+          "$ref": "#/$defs/horquilla2_o_null"
+        },
+        "p10": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "p50": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "p90": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "media": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "cvar80": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unidad": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Ej.: '€ de 2025 por hectárea y año (media del plan)'. Obligatoria."
+        },
+        "breakeven_precio_eur_kg": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "valor",
+          "horquilla",
+          "unidad"
+        ]
+      }
+    },
+    "agua_detalle": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "etc_mm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "precipitacion_efectiva_mm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "eficiencia_riego": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "bruto_m3_ha": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/percentiles"
+            }
+          ]
+        },
+        "tarifa_eur_m3": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coste_eur_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ecw_dSm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ece_dSm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "perdida_sal_pct": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "description": "Forma de enrique: bruto_m3_ha con percentiles; cualquier campo puede ser null si no hay dato."
+    },
+    "sobreoferta_detalle": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "indice_SI": {
+          "$ref": "#/$defs/unit_o_null"
+        },
+        "beta": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "efecto_precio_pct": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "valor": {
+                  "type": "number"
+                },
+                "horquilla": {
+                  "$ref": "#/$defs/horquilla2"
+                }
+              },
+              "required": [
+                "valor"
+              ]
+            }
+          ]
+        },
+        "semaforo": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/semaforo_color"
+            }
+          ]
+        },
+        "escala": {
+          "type": "string"
+        }
+      }
+    },
+    "inversion": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "pico_caja_negativa_eur_ha": {
+          "type": "number",
+          "minimum": 0
+        },
+        "meses_hasta_primer_ingreso": {
+          "type": "number",
+          "minimum": 0
+        },
+        "payback_anios": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "van_eur_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tir": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "anualidad_equivalente_eur_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "comprobacion": {
+      "type": "object",
+      "properties": {
+        "regla": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resultado": {
+          "enum": [
+            "ok",
+            "falla",
+            "no_aplica",
+            "no_evaluable"
+          ]
+        },
+        "articulo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "estado": {
+          "enum": [
+            "verificado",
+            "por_verificar"
+          ],
+          "description": "verificado = articulo leido en el BOE por una persona. Opcional."
+        },
+        "detalle": {
+          "type": "string",
+          "description": "Texto explicativo (enrique)."
+        },
+        "nota": {
+          "type": "string"
+        },
+        "resultado_original": {
+          "type": "string",
+          "description": "Solo lo anade adapt_enrique.py cuando traduce un valor del vocabulario anterior (aviso, por_verificar, no_evaluado)."
+        }
+      },
+      "required": [
+        "regla",
+        "resultado",
+        "articulo"
+      ]
+    },
+    "semaforo_legal": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "provisional": {
+          "type": "boolean",
+          "description": "true = tabla legal de T-019 aun no verificada (enrique)."
+        },
+        "color": {
+          "$ref": "#/$defs/semaforo_color"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "articulo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comprobaciones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/comprobacion"
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "color",
+          "motivo",
+          "articulo"
+        ]
+      }
+    },
+    "evidencia_item": {
+      "type": "object",
+      "properties": {
+        "dato": {
+          "type": "string"
+        },
+        "dataset": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "escala": {
+          "type": "string"
+        },
+        "confianza": {
+          "type": "string",
+          "description": "Letra de confianza del dato (enrique: A/B/M)."
+        },
+        "aviso": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "dato",
+        "dataset",
+        "url"
+      ]
+    },
+    "plan_anio": {
+      "type": "object",
+      "properties": {
+        "anio_plan": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ciclos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "opcion": {
+          "type": "string"
+        },
+        "siembras": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9]{2}-[0-9]{2}$"
+          }
+        }
+      },
+      "description": "Campo de enrique: que se cultiva cada anio del horizonte; siembras = {cultivo: 'MM-DD'}."
+    },
+    "variante_rotacion": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "exito_pct": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "margen_p50": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "agua_m3_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "criterios": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/criterios"
+            }
+          ]
+        },
+        "escenarios": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          }
+        },
+        "lluvia_pct": {
+          "type": "number"
+        },
+        "temp_c": {
+          "type": "number"
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "description": "Forma de enrique (por rotacion): resultados de una variante climatica. Se mantiene hasta decidir si pasa al bloque 'variantes' de nivel superior."
+    },
+    "rotacion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1
+        },
+        "es_actual": {
+          "type": "boolean"
+        },
+        "ciclos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "estrategias": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "horizonte_anios": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "plan_anios": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plan_anio"
+          }
+        },
+        "exito_pct": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/exito_pct"
+            }
+          ]
+        },
+        "margen_eur_ha": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/margen_eur_ha"
+            }
+          ]
+        },
+        "agua_m3_ha": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "agua_detalle": {
+          "$ref": "#/$defs/agua_detalle"
+        },
+        "sobreoferta": {
+          "$ref": "#/$defs/unit_o_null"
+        },
+        "sobreoferta_detalle": {
+          "$ref": "#/$defs/sobreoferta_detalle"
+        },
+        "criterios": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/criterios"
+            }
+          ]
+        },
+        "suelo_desnudo_meses": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "inversion": {
+          "$ref": "#/$defs/inversion"
+        },
+        "semaforo_legal": {
+          "$ref": "#/$defs/semaforo_legal"
+        },
+        "escenarios": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          },
+          "description": "Muestras de margen (EUR/ha y anio segun margen_eur_ha.unidad). Indice i alineado entre rotaciones: PENDIENTE de confirmar por enrique. Antes se llamaba escenarios_margen_eur_ha. Puede ser null cuando la rotacion no es evaluable (por ejemplo 'actual' en la version abierta sin precios); entonces huecos[] lo explica."
+        },
+        "variantes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/variante_rotacion"
+          }
+        },
+        "filtros": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cultivo": {
+                "type": "string"
+              },
+              "factor_limitante": {
+                "type": "string"
+              },
+              "valor": {},
+              "umbral": {},
+              "motivo_exclusion": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rendimiento_t_ha": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "number"
+            },
+            "p10": {
+              "type": "number"
+            },
+            "p90": {
+              "type": "number"
+            },
+            "fuente": {
+              "type": "string"
+            },
+            "confianza": {
+              "type": "string"
+            }
+          }
+        },
+        "por_que": {
+          "type": "string"
+        },
+        "beneficios": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidencia": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidencia_item"
+          }
+        },
+        "huecos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "riesgos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "nombre",
+        "ciclos",
+        "_status"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "_status"
+            ],
+            "properties": {
+              "_status": {
+                "const": "cargando"
+              }
+            }
+          },
+          "then": {},
+          "else": {
+            "required": [
+              "exito_pct",
+              "margen_eur_ha",
+              "agua_m3_ha",
+              "semaforo_legal",
+              "por_que",
+              "evidencia",
+              "huecos"
+            ]
+          }
+        },
+        {
+          "if": {
+            "allOf": [
+              {
+                "not": {
+                  "required": [
+                    "_status"
+                  ],
+                  "properties": {
+                    "_status": {
+                      "const": "cargando"
+                    }
+                  }
+                }
+              },
+              {
+                "anyOf": [
+                  {
+                    "required": [
+                      "exito_pct"
+                    ],
+                    "properties": {
+                      "exito_pct": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "margen_eur_ha"
+                    ],
+                    "properties": {
+                      "margen_eur_ha": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "criterios"
+                    ],
+                    "properties": {
+                      "criterios": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "exito_pct"
+                    ],
+                    "properties": {
+                      "exito_pct": {
+                        "type": "object",
+                        "required": [
+                          "valor"
+                        ],
+                        "properties": {
+                          "valor": {
+                            "type": "null"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "margen_eur_ha"
+                    ],
+                    "properties": {
+                      "margen_eur_ha": {
+                        "type": "object",
+                        "required": [
+                          "valor"
+                        ],
+                        "properties": {
+                          "valor": {
+                            "type": "null"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "huecos"
+                ],
+                "properties": {
+                  "huecos": {
+                    "type": "array",
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "required": [
+                  "exito_pct"
+                ],
+                "properties": {
+                  "exito_pct": {
+                    "type": "object",
+                    "required": [
+                      "definicion"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

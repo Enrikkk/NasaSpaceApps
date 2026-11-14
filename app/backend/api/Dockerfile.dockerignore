@@ -1,0 +1,24 @@
+# Lista blanca del contexto (raiz del repo): BuildKit usa <Dockerfile>.dockerignore. Solo entra lo que el Dockerfile copia.
+*
+!app/backend/api/__init__.py
+!app/backend/api/main.py
+!app/backend/api/blocks.py
+!app/backend/api/engine_adapter.py
+!app/backend/api/legal_blocks.py
+!app/backend/api/live.py
+!app/backend/api/settings.py
+!app/backend/api/store.py
+!app/backend/api/requirements.txt
+!app/backend/api/atom_build
+!app/backend/pipeline/__init__.py
+!app/backend/pipeline/atom/__init__.py
+!app/backend/pipeline/atom/lookup.py
+!app/backend/pipeline/clima_suelo/__init__.py
+!app/backend/pipeline/clima_suelo/pipeline.py
+!app/backend/rules
+!app/data/torre-pacheco.contract.example.json
+!app/data/contract/adapt_enrique.py
+!app/data/cache/pipeline/clima_suelo
+**/__pycache__
+**/*.pyc
+!app/backend/api/engine_data
