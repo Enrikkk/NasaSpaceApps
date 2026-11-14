@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import GlyphIcon from './icons.jsx'
-import { Summary, YourParcel, Influence, Rotations, Footer } from './sections.jsx'
+import { Summary, MoreAboutParcel, Rotations, Footer } from './sections.jsx'
 import { useAnalysis } from './hooks.js'
 import { refFromRecinto, isNum } from './helpers.js'
 import { useAppState } from '../../state/AppState.jsx'
@@ -83,9 +83,8 @@ function Body({ parcel, onClose }) {
 
         {data && (
           <>
-            <YourParcel data={data} />
-            <Influence data={data} />
             <Rotations key={data._meta?.consulta_id ?? 'x'} data={data} priorities={priorities} />
+            <MoreAboutParcel data={data} />
           </>
         )}
 

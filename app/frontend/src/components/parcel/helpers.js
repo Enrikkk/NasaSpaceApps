@@ -67,8 +67,10 @@ export function priorityScore(criterios, priorities) {
 }
 
 /**
- * Reference rotation first, then the rest by priority score (best first, unscored last, ties keep API order).
- * Returns [{ rot, score, best }], `best` marks the top-ranked non-reference rotation that has a score.
+ * The options by priority score, best first (unscored after the scored ones, ties keep API order), and the reference
+ * rotation LAST: it is only there to compare, and in open mode it lacks margin/risk so its score would not be comparable.
+ * Returns [{ rot, score, rank, best }]: `rank` is 1..n for the options and null for the reference (which has no score),
+ * `best` marks the top-ranked option that has a score.
  */
 export function rankRotations(rotaciones, priorities) {
   const list = Array.isArray(rotaciones) ? rotaciones : []
@@ -78,8 +80,8 @@ export function rankRotations(rotaciones, priorities) {
     .map((rot, i) => ({ rot, i, score: priorityScore(rot.criterios, priorities) }))
     .sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.i - b.i)
   const out = [
-    ...ref.map((rot) => ({ rot, score: priorityScore(rot.criterios, priorities), best: false })),
-    ...rest.map(({ rot, score }) => ({ rot, score, best: false })),
+    ...rest.map(({ rot, score }, k) => ({ rot, score, rank: k + 1, best: false })),
+    ...ref.map((rot) => ({ rot, score: null, rank: null, best: false })),
   ]
   const top = out.find((x) => !x.rot.es_actual && x.score !== null)
   if (top) top.best = true

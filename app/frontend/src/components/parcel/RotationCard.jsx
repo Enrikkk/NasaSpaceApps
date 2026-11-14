@@ -4,6 +4,7 @@ import GlyphIcon from './icons.jsx'
 import {
   isNum, fmtInt, fmtPlain, fmtHa, splitName, legalOf, ENV_LEVELS,
 } from './helpers.js'
+import { cropsOf, subtitleOf, ecoInfo, riskInfo } from './ranking.js'
 import styles from './RotationCard.module.css'
 
 // "una pérdida de 1.041 €" / "1.041 €": losses are always said as losses.
@@ -166,7 +167,7 @@ function Why({ original, narr }) {
  * One rotation. Metrics are always visible; the details open on click (one card open at a time, the parent decides).
  * Opening a card asks for the plain-language "por qué" (once per rotation, cached by the parent).
  */
-export default function RotationCard({ rot, best, open, onToggle, narr, onNeedNarrative, globalFrases }) {
+export default function RotationCard({ rot, rank, score, best, open, onToggle, narr, onNeedNarrative, globalFrases }) {
   const bodyId = useId()
   const { label, steps } = splitName(rot.nombre)
   const t = rot.texto ?? {}
@@ -175,43 +176,81 @@ export default function RotationCard({ rot, best, open, onToggle, narr, onNeedNa
 
   useEffect(() => { if (open) onNeedNarrative(rot.id) }, [open, rot.id, onNeedNarrative])
 
+  const crops = cropsOf(rot)
+  const eco = ecoInfo(rot)
+  const risk = riskInfo(rot)
+  const tips = { eco, riesgo: risk }
+  const [tip, setTip] = useState(null)           // which flag explanation is open: 'eco' | 'riesgo' | null
+  const tipId = `${bodyId}-tip`
+  const flip = (k) => setTip((cur) => (cur === k ? null : k))
+
   return (
     <Panel as="article" className={`${styles.card} ${open ? styles.open : ''} ${rot.es_actual ? styles.ref : ''}`}>
-      <h3 className={styles.head}>
-        <button type="button" className={styles.toggle} aria-expanded={open} aria-controls={bodyId} onClick={onToggle}>
-          <span className={styles.titleLine}>
-            <span className={styles.title}>{label}</span>
-            <span className={styles.chevron} aria-hidden="true"><GlyphIcon name="chevron" /></span>
-          </span>
-          {(rot.es_actual || best) && (
-            <span className={styles.badges}>
-              {rot.es_actual && <span className={`${styles.badge} ${styles.badgeRef}`}>Referencia para comparar</span>}
-              {best && (
-                <span className={`${styles.badge} ${styles.badgeBest}`}>
-                  <GlyphIcon name="star" size={16} />La que mejor encaja con tus prioridades
-                </span>
-              )}
-            </span>
-          )}
-          {steps.length > 0 && (
-            <span className={styles.plan}>
-              {steps.map((s, i) => <span key={i}>{s}</span>)}
-            </span>
-          )}
-        </button>
-      </h3>
+      <div className={styles.row}>
+        <div className={styles.lead}>
+          {isNum(rank) && <span className={styles.rank} aria-label={`Puesto ${rank}`}>{rank}</span>}
+          <div className={styles.names}>
+            <h3 className={styles.title}>{crops.length ? crops.join(' · ') : label}</h3>
+            <p className={styles.sub}>{rot.es_actual ? label : subtitleOf(rot)}</p>
+            {(rot.es_actual || best) && (
+              <span className={styles.badges}>
+                {rot.es_actual && <span className={`${styles.badge} ${styles.badgeRef}`}>Referencia para comparar</span>}
+                {best && (
+                  <span className={`${styles.badge} ${styles.badgeBest}`}>
+                    <GlyphIcon name="star" size={16} />La que mejor encaja con tus prioridades
+                  </span>
+                )}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className={styles.side}>
+          {isNum(score) ? (
+            <div className={styles.score} role="img" aria-label={`Puntuación ${score} sobre 100`}>
+              <span className={styles.scoreNum}>{score}</span><small>/100</small>
+              <span className={styles.bar} aria-hidden="true"><i style={{ width: `${score}%` }} /></span>
+            </div>
+          ) : <span className={styles.noScore}>Sin puntuación</span>}
+          <div className={styles.flags}>
+            {[['eco', eco, 'leaf'], ['riesgo', risk, 'warn']].map(([k, info, icon]) => (
+              <button
+                key={k}
+                type="button"
+                className={`${styles.flag} ${styles[`tone_${info.tone}`]} ${tip === k ? styles.flagOn : ''}`}
+                aria-expanded={tip === k}
+                aria-controls={tipId}
+                onClick={() => flip(k)}
+              >
+                <GlyphIcon name={icon} size={16} /><span>{info.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <dl className={styles.metrics}>
-        <Money margen={rot.margen_eur_ha} />
-        <GoodYears exito={rot.exito_pct} />
-        <Water agua={rot.agua_m3_ha} />
-        <Legal semaforo={legal} />
-        <Environment ambiente={rot.ambiente} />
-        <Totals totales={rot.totales_parcela} />
-      </dl>
+      {tip && <p id={tipId} className={styles.tip} role="note">{tips[tip].text}</p>}
+
+      <button type="button" className={styles.more} aria-expanded={open} aria-controls={bodyId} onClick={onToggle}>
+        {open ? 'Ocultar detalle' : 'Ver detalle'}
+        <span className={styles.chevron} aria-hidden="true"><GlyphIcon name="chevron" /></span>
+      </button>
 
       {open && (
         <div id={bodyId} className={styles.details}>
+          <dl className={styles.metrics}>
+            <Money margen={rot.margen_eur_ha} />
+            <GoodYears exito={rot.exito_pct} />
+            <Water agua={rot.agua_m3_ha} />
+            <Legal semaforo={legal} />
+            <Environment ambiente={rot.ambiente} />
+            <Totals totales={rot.totales_parcela} />
+          </dl>
+          {steps.length > 0 && (
+            <section className={styles.block}>
+              <h4>Plan año a año</h4>
+              <ul>{steps.map((s, i) => <li key={i}>{s}</li>)}</ul>
+            </section>
+          )}
           <Why original={t.por_que} narr={narr} />
           {legal && (legal.motivo || legal.provisional) && (
             <section className={styles.block}>

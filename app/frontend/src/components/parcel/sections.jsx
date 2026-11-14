@@ -3,6 +3,7 @@ import Panel from '../ui/Panel.jsx'
 import { sigpacUseLabel } from '../../config/sigpacUses.js'
 import RotationCard from './RotationCard.jsx'
 import { useNarrativas } from './hooks.js'
+import { score100 } from './ranking.js'
 import {
   isNum, fmtHa, fmtOne, fmtInt, capitalize, rankRotations, BLOCK_LABELS,
 } from './helpers.js'
@@ -22,6 +23,18 @@ export function Summary({ parcela, loading }) {
       </Panel>
     )
   }
+  // One line, so the ranked list starts right under the reference; the full grid lives in "Más sobre tu parcela".
+  const line = [
+    isNum(parcela.ha) ? `${fmtHa(parcela.ha)} ha` : 'superficie: no la sabemos',
+    parcela.regadio === true ? 'regadío' : parcela.regadio === false ? 'secano' : 'riego: no lo sabemos',
+    isNum(parcela.pendiente_pct) ? `pendiente ${fmtOne(parcela.pendiente_pct)} %` : null,
+  ].filter(Boolean).join(' · ')
+  return <p className={styles.line} aria-label="Datos de la parcela">{capitalize(line)}</p>
+}
+
+/** The full facts grid (surface, irrigation, slope, region, SIGPAC use), for the folded section. */
+function FactsGrid({ parcela }) {
+  if (!parcela || parcela.sin_cobertura) return null
   const irrigation = parcela.regadio === true ? 'Regadío' : parcela.regadio === false ? 'Secano' : 'Regadío: no lo sabemos'
   const use = parcela.uso_sigpac ? sigpacUseLabel(parcela.uso_sigpac) : null
   const facts = [
@@ -94,15 +107,28 @@ export function Influence({ data }) {
   )
 }
 
-/** Rotation cards: the reference first, then ranked by the farmer's priorities. */
+/** Everything that is not the answer itself, folded away: soil and rain, the crops declared, how the parcel shapes the result. */
+export function MoreAboutParcel({ data }) {
+  return (
+    <details className={styles.more}>
+      <summary>Más sobre tu parcela</summary>
+      <div className={styles.moreBody}>
+        <FactsGrid parcela={data.parcela} />
+        <YourParcel data={data} />
+        <Influence data={data} />
+      </div>
+    </details>
+  )
+}
+
+/** The options as a ranked list (best first, score 1-100, Eco and Riesgo flags); the reference to compare goes last. */
 export function Rotations({ data, priorities }) {
   const rotaciones = data.rotaciones ?? []
   const noEval = data.idoneidad?.no_evaluable?.motivo
   const ranked = rankRotations(rotaciones, priorities)
   const consultaId = data._meta?.consulta_id
   const { items, request } = useNarrativas(consultaId)
-  // Top-ranked non-reference card open by default, chosen once when the analysis arrives (not on every slider move).
-  const [openId, setOpenId] = useState(() => (ranked.find((x) => x.best) ?? ranked[0])?.rot.id ?? null)
+  const [openId, setOpenId] = useState(null)       // the detail of a card opens only when asked for
   const need = useCallback((id) => request(id), [request])
 
   if (noEval || !rotaciones.length) {
@@ -118,16 +144,18 @@ export function Rotations({ data, priorities }) {
   return (
     <section className={styles.rotations} aria-labelledby="sec-rot">
       <div>
-        <h3 id="sec-rot" className={styles.h}>Rotaciones{isNum(years) ? ` a ${years} años` : ''}</h3>
-        <p className={styles.muted}>
-          Son estimaciones con incertidumbre, no una garantía. Van ordenadas según lo que te importa
-          (puedes cambiarlo en Filtros); la referencia siempre va primero para comparar.
+        <h3 id="sec-rot" className={styles.h}>Qué te conviene{isNum(years) ? ` · a ${years} años` : ''}</h3>
+        <p className={styles.fine}>
+          De más a menos recomendada. La puntuación (1 a 100) compara estas opciones entre sí según tus
+          prioridades (Filtros). No es una garantía.
         </p>
       </div>
-      {ranked.map(({ rot, best }) => (
+      {ranked.map(({ rot, best, rank, score }) => (
         <RotationCard
           key={rot.id}
           rot={rot}
+          rank={rank}
+          score={score100(score)}
           best={best}
           open={openId === rot.id}
           onToggle={() => setOpenId((cur) => (cur === rot.id ? null : rot.id))}
