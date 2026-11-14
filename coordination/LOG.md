@@ -48,3 +48,5 @@ Format: `- YYYY-MM-DD HH:MM | seat=<name> | <task or -> | <what happened> | next
 - 2026-11-14 18:15 | seat=gonzalo | T-024 | live API merged to main (80 tests OK, Docker image built and tested locally, not deployed) | next: deploy to Cloud Run (agrockham-api, europe-west1, max-instances 3)
 
 - 2026-11-14 17:12 | seat=arturo | T-017 | local preparation: scripts/deploy.sh inspector + scripts/t017_smoke.py; API main2ec59e1 and motor473f2c2 OPEN JSON pass13 HTTP/contract/engine checks offline with66recintos sample. Docker unavailable locally; Gonzalo reports networknone50368, engine/schema confirmation pending. | next: Docker handoff + frontend package; no deploy/mainmerge/licencechange
+
+- 2026-11-14T17:15:49+01:00 | seat=arturo | T-017 | integration handoff#166 closed: GonzaloDocker02e4b89 networknone+openengine473f2c2 evidencec281ac1 hash verified; producer validator0schemaerrors/0failedinvariants/3warnings preserved and sentEnrique. | next: frontend/build/browserfallback fromJaime; demo still incomplete

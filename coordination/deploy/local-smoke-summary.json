@@ -112,5 +112,35 @@
   "demo_ready": false,
   "recorded_at": "2026-11-14T17:12:42+01:00",
   "raw_responses": "Kept outside git in /tmp/agrockham-t017-open-1; no engine price data published by this task",
-  "docker_run": "Not run by Arturo (Docker unavailable). Gonzalo #169 reports network-none API test; engine-JSON/schema confirmation requested #172."
+  "docker_run": {
+    "execution_by": "gonzalo, bus #176",
+    "api_commit": "02e4b89",
+    "engine_commit": "473f2c2",
+    "engine_variant": "abierto",
+    "network": "none",
+    "pipeline_offline": true,
+    "artifact_commit": "c281ac1",
+    "artifact_path": "research/evidence/analyze-docker-abierto-02e4b89.json",
+    "artifact_sha256": "6a6f934bc1b2cbbdfa5356bd93ee800184c5651e057dbf5bc6b92a772ed540d5",
+    "verified_by_arturo": "2026-11-14T17:15:49+01:00",
+    "verification": "Artifact SHA256 and producer validator re-executed; not Docker execution on Arturo laptop",
+    "engine_selected": "JSON de enrique",
+    "rotation_ids": [
+      "actual",
+      "s1",
+      "s2",
+      "s3"
+    ],
+    "actual_margin": null,
+    "scenario_alignment": false,
+    "schema_errors": 0,
+    "failed_invariants": 0,
+    "warning_groups": 3,
+    "warnings": [
+      "Margin means differ from Monte Carlo sample means beyond validator tolerance",
+      "peores_anios exceeds k_malos for s1/s3",
+      "Two CARM/esam metadata matches (SIAM sources); not evidence of CARM price usage"
+    ],
+    "handoff_166": "completed; frontend/browser fallback remains pending"
+  }
 }

@@ -56,3 +56,9 @@ El modo local solo desactiva la red del pipeline mediante su configuración. **N
 - #169 comunica prueba de Gonzalo sobre Docker `2ec59e1`, `--network none` y `AGROCKHAM_OFFLINE=1`: health versión correcta, 50.368 recintos, analyze demo y fuera de cobertura, recintos 203; imagen/contenedor borrados. Es evidencia reportada por Gonzalo, no ejecución de Arturo. Se pidió confirmar carga del JSON del motor y validación de su respuesta (#172): no se asumen del health o del 200.
 - Frontend versionado, API base, origen de producción y fallback del navegador siguen esperando paquete/commit de Jaime. No se declara la demo terminada.
 - Cloud Run ya fue desplegado por Gonzalo según #163/#165; esta tarea no lo consulta ni cambia recursos. GCP sigue a cargo de Gonzalo y no existe autorización de despliegue por Arturo.
+
+## Cierre de integración #166, evidencia #176
+
+Gonzalo aclaró que su primera imagen usaba DraftEngine. Repitió con API `02e4b89` y JSON abierto `473f2c2` dentro de `engine_data/engine.json` (`ENGINE_JSON` vacío), `--network none` y `AGROCKHAM_OFFLINE=1`. Conservó la respuesta en main `c281ac1`, `research/evidence/analyze-docker-abierto-02e4b89.json`. Arturo comprobó SHA-256 `6a6f934bc1b2cbbdfa5356bd93ee800184c5651e057dbf5bc6b92a772ed540d5` y ejecutó el validador de `c281ac1`: cero errores de esquema, cero invariantes fallidas y tres avisos. Está seleccionado JSON de Enrique, con cuatro rotaciones, `actual` sin margen y `alineados=false`.
+
+Avisos conservados: medias de margen difieren de las muestras Monte Carlo; `peores_anios` supera `k_malos` en s1/s3; dos menciones CARM en metadatos SIAM (no equivalen a precios CARM). Remitidos a Enrique (#178). No se cambió el motor ni la política del validador. #166 queda cerrado para integración API + JSON + Docker; T-017 sigue abierto por frontend/fallback. La ejecución Docker fue de Gonzalo; Arturo verificó el artefacto, sin instalar Docker.
