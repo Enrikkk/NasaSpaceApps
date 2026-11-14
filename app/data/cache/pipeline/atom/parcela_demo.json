@@ -1,0 +1,18 @@
+{
+ "_status": "precalculado",
+ "id": "30-37-0-0-18-426-1",
+ "lat": 37.7383,
+ "lon": -0.98838,
+ "ha": 4.0868,
+ "regadio": true,
+ "zonas": [],
+ "sigpac": {
+  "poligono": 18,
+  "parcela": 426,
+  "recinto": 1
+ },
+ "fuente_id": "sigpac",
+ "pendiente_pct": 0.8,
+ "municipio": "Torre-Pacheco",
+ "comarca": "Campo de Cartagena"
+}
