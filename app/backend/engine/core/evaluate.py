@@ -10,7 +10,7 @@ Run:  python3 -m app.backend.engine.core.evaluate [base_year]     prints the 7 e
 import datetime as dt
 import sys
 
-from . import data, stats, submodels as sm
+from . import data, price as pr, stats, submodels as sm
 
 COST_BASE_YEAR = 2018  # IMIDA surveys 2017-19, agreed with arturo (bus #54)
 
@@ -33,7 +33,9 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
     y_ref, y_ev = sm.reference_yield(crop, (area or {}).get(crop.crop_id))
     k = money(hicp, base_year)
     cost_total, harvest = crop.get("coste_total"), crop.get("recoleccion", 0.0)
-    price = prices.get(crop.crop_id, {})
+    price, price_info = {}, None
+    if prices.get(crop.crop_id):
+        price, price_info = pr.scenarios(prices[crop.crop_id], base_year)  # trend only where the backtest says so
 
     for hazard in ("frost", "heat"):
         if sm.thresholds(crop, hazard) is None:
@@ -104,8 +106,11 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
         "agua_m3_ha": None if not gross else {"p10": stats.quantile(gross, 0.1), "p50": stats.quantile(gross, 0.5),
                                               "p90": stats.quantile(gross, 0.9),
                                               "imida_encuesta": crop.get("riego_dosis")},
+        "precio_metodo": price_info,
         "huecos": gaps, "evidencia": evidence,
-        "supuestos": {k2: v[1] for k2, v in sm.ASSUMPTIONS.items()},
+        "supuestos": {**{k2: v[1] for k2, v in sm.ASSUMPTIONS.items()},
+                      "trend_gain": f"la tendencia de precio solo se usa si baja el error de la mediana >= "
+                                    f"{(1 - pr.TREND_GAIN) * 100:.0f} % en la prueba hacia delante (diseño)"},
         "anios": years,
     }
     return out
@@ -116,7 +121,8 @@ def demo(base_year=2025):
     climate, meta = data.load_climate()
     prices, hicp, area = data.load_prices(), data.load_hicp(), data.load_area()
     print(f"clima: {meta}")
-    print(f"{'cultivo':10} {'n':>3} {'malos':>5} {'éxito':>6} {'horquilla':>11}  {'margen P10/P50/P90 €/ha':>26}  "
+    print("T = precio corregido por tendencia (la prueba hacia delante lo justifica)")
+    print(f"{'cultivo':10} {'n':>4} {'malos':>5} {'éxito':>6} {'horquilla':>11}  {'margen P10/P50/P90 €/ha':>26}  "
           f"{'agua P50 m³/ha':>14} (IMIDA)  huecos")
     for cid in ("lechuga", "brocoli", "melon", "alcachofa", "haba", "cebada", "limon"):
         r = evaluate(crops[cid], climate, prices, hicp, area, base_year=base_year)
@@ -130,7 +136,9 @@ def demo(base_year=2025):
             continue
         ms = "-" if not m else f"{m['p10']:>8.0f}/{m['p50']:>7.0f}/{m['p90']:>7.0f}"
         imida = a.get("imida_encuesta") if a else None
-        print(f"{cid:10} {e['n']:>3} {e['k_malos']:>5} {e['valor'] * 100:>5.0f}% "
+        pm = r["precio_metodo"] or {}
+        tag = "T" if pm.get("usa_tendencia") else " "
+        print(f"{cid:10}{tag}{e['n']:>3} {e['k_malos']:>5} {e['valor'] * 100:>5.0f}% "
               f"{e['horquilla'][0] * 100:>4.0f}-{e['horquilla'][1] * 100:<4.0f}%  {ms:>26}  "
               f"{a['p50'] if a else 0:>14.0f} ({imida if imida else '-'})  {len(r['huecos'])}")
     return crops

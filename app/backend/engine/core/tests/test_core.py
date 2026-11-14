@@ -79,3 +79,14 @@ def test_real_data_runs():
     clim, meta = data.load_climate()
     r = evaluate(crops["brocoli"], clim, data.load_prices(), data.load_hicp(), data.load_area())
     assert r["exito_pct"]["n"] >= 19 and r["margen_eur_ha"]["euros_de"] == 2025
+
+
+def test_price_trend_only_when_backtest_wins():
+    from app.backend.engine.core import price
+    import numpy as np
+    rng = np.random.default_rng(0)
+    flat = {2000 + i: 1.0 + float(v) for i, v in enumerate(rng.normal(0, 0.3, 25))}  # pure noise, no trend
+    trend = {2000 + i: 2.0 - 0.05 * i + (0.01 if i % 2 else -0.01) for i in range(20)}  # strong fall
+    assert not price.backtest(flat)["usa_tendencia"]
+    adj, info = price.scenarios(trend, 2025)
+    assert info["usa_tendencia"] and abs(adj[2000] - (2.0 - 0.05 * 25 - 0.01)) < 0.02

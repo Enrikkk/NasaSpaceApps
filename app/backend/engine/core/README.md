@@ -16,3 +16,9 @@ python3 -m pytest app/backend/engine/core/tests -q           # 10 tests
 Climate-threshold params read from the tables (long format): `frost_t0`, `frost_t100`, `heat_t0`, `heat_t100` (degC:
 damage starts at t0, total at t100, linear in between) and optional `frost_window` / `heat_window`
 (`ini`, `dev`, `mid`, `late` joined with `+`, or `all`; default `all`). Frost uses the station's absolute daily minimum.
+
+## Prices (T-018 part 1, `price.py`)
+Decision 2026-11-14 (Enrique): no ML price regressor. Walk-forward backtest on Eurostat 2000-2024 (predict each year
+from earlier years only): gradient boosting on 3 lags lost to the plain median in 5/6 crops (+18..+42 % MAE) and
+tied on lettuce. The engine keeps the real years as scenarios and re-centres them on the trend line only when the
+trend beats the median by >= 20 % (today: lettuce only, national real price 0.59 -> 0.32 EUR/kg from 2000-04 to 2020-24).
