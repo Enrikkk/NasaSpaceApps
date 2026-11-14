@@ -48,6 +48,7 @@ class Servicio:
         self.atom = atom
         self.borrador = EA.Borrador(cfg.contract_path)
         self.engine = EA.get_engine(cfg, self.borrador)
+        self._motor_aviso = ""   # aviso del motor (rotaciones simuladas/precalculadas); se fija al ejecutarlo
         live.preparar(cfg)
 
     # ------------------------------------------------------------------------------------------ parcela
@@ -150,13 +151,10 @@ class Servicio:
         meta["generador"] = "app/backend/api (API en vivo: ATOM + pipeline clima/suelo + reglas legales + motor)"
         meta["cobertura"] = self._cobertura(tiene_parcela)
         estados = {b: _estado(doc, b, base) for b in BLOQUES}
-        simulados = [b for b, s in estados.items() if s == "simulado"]
         meta["estado_bloques"] = estados
-        if simulados:
-            meta["aviso"] = (f"MOCK PARCIAL: los bloques simulados ({', '.join(simulados)}) NO corresponden al punto consultado "
-                             f"(son del borrador Torre-Pacheco). {motor_aviso or ''} Referencia del borrador: {base['_meta']['aviso']}").strip()
-        else:
-            meta["aviso"] = "Todos los bloques servidos proceden de datos reales o precalculados del punto (ver estado_bloques)."
+        if motor_aviso:
+            self._motor_aviso = motor_aviso
+        meta["aviso"] = self.aviso(estados)
         meta["aviso_legal"] = legal_blocks.L.NOTA
         meta["consulta"] = {"lat": lat, "lon": lon, "zona_legal": zona, **self._consulta_recinto(recinto, info)}
         meta["consulta_id"] = consulta_id(lat, lon)
@@ -173,6 +171,15 @@ class Servicio:
             meta["avisos"] = avisos
         _marcar_pendientes(doc)
         return doc
+
+    def aviso(self, estados: dict) -> str:
+        """`_meta.aviso`: lleva MOCK mientras haya bloques simulados (el validador lo exige) y nombra cuales."""
+        simulados = [b for b, s in estados.items() if s == "simulado"]
+        if not simulados:
+            return "Todos los bloques servidos proceden de datos reales o precalculados del punto (ver estado_bloques)."
+        return (f"MOCK PARCIAL: los bloques simulados ({', '.join(simulados)}) NO corresponden al punto consultado "
+                f"(son del contrato de ejemplo Torre-Pacheco). {self._motor_aviso} "
+                f"Referencia del ejemplo: {self.borrador.copia()['_meta']['aviso']}").replace("  ", " ").strip()
 
     def _cobertura(self, tiene_parcela: bool) -> dict:
         if tiene_parcela:
@@ -224,8 +231,11 @@ def _marcar_pendientes(doc: dict) -> None:
         doc["_meta"].pop("bloques_sin_datos", None)
 
 
-def fusionar(previo: Optional[dict], nuevo: dict) -> dict:
-    """Contrato guardado: lo ya cargado de la misma consulta no se pierde cuando llega una peticion con otros bloques."""
+def fusionar(previo: Optional[dict], nuevo: dict, aviso=None) -> dict:
+    """Contrato guardado: lo ya cargado de la misma consulta no se pierde cuando llega una peticion con otros bloques.
+
+    `aviso(estados) -> str` (Servicio.aviso) rehace `_meta.aviso` con los estados fusionados: tras fusionar puede haber bloques
+    simulados que la ultima peticion no pidio y el aviso MOCK no puede faltar."""
     if not previo or previo.get("_meta", {}).get("consulta_id") != nuevo["_meta"].get("consulta_id"):
         return nuevo
     out = copy.deepcopy(nuevo)
@@ -239,6 +249,8 @@ def fusionar(previo: Optional[dict], nuevo: dict) -> dict:
                 if extra in previo:
                     out[extra] = copy.deepcopy(previo[extra])
     out["_meta"]["estado_bloques"] = estados
+    if aviso is not None:
+        out["_meta"]["aviso"] = aviso(estados)
     _marcar_pendientes(out)
     return out
 
