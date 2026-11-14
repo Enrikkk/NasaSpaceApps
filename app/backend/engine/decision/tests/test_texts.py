@@ -57,9 +57,9 @@ def test_apply_refuses_to_ship_a_wrong_number(out, monkeypatch):
 def test_validator_catches_number_written_as_a_word(out):
     bad = copy.deepcopy(out)
     alt = next(r for r in bad["rotaciones"] if not r["es_actual"])
-    alt["texto"]["por_que"] += " Dejaría tres euros más."
+    alt["texto"]["por_que"] += " Dejaría cuarenta euros más."
     found = texts.check(bad)
-    assert any(n.lower() == "tres" and i == alt["id"] for i, n, _ in found)
+    assert any(n.lower() == "cuarenta" and i == alt["id"] for i, n, _ in found)
 
 
 def test_numbers_in_parses_spanish_format():

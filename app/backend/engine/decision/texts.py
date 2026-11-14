@@ -160,6 +160,16 @@ def _texts_of(r):
     return items
 
 
+def _legal_blob(r):
+    """Text of the legal light, so a word-number quoted from it is not an invented figure."""
+    s = r.get("semaforo_legal") or {}
+    parts = [str(s.get("motivo") or ""), str(s.get("nota") or "")]
+    for c in s.get("comprobaciones") or []:
+        parts.append(str(c.get("nota") or ""))
+        parts.append(str(c.get("regla") or ""))
+    return " ".join(parts).lower()
+
+
 def check(out):
     """List of offending (rotation id, number as written, sentence). Empty list = every number is backed by the JSON."""
     rots = out.get("rotaciones", [])
@@ -176,7 +186,7 @@ def check(out):
                 if m:
                     bad.append((r["id"], m.group(1), sentence))
                 w = _WORD_NUM.search(sentence)
-                if w:
+                if w and w.group(1).lower() not in _legal_blob(r):
                     bad.append((r["id"], w.group(1), sentence))
     return bad
 
@@ -216,7 +226,8 @@ def _stage_levels(r):
 
 def _legal_sentence(r):
     s = r["semaforo_legal"]
-    return f"Semáforo legal (provisional): {s['color']}, {s['motivo'].rstrip('.')}."
+    return (f"Semáforo legal (provisional): {s['color']}, y la zona del Mar Menor no está confirmada, "
+            "así que esto no dice que cumplas la ley.")
 
 
 def _meaning(r):
@@ -395,7 +406,7 @@ def _riesgos(r):
         out.append(f"En {_join(blind)} hay etapas sin evidencia documentada de daño por frío o calor. "
                    "Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.")
     if r["semaforo_legal"]["color"] != "verde":
-        out.append(f"El semáforo legal sale {r['semaforo_legal']['color']}: {r['semaforo_legal']['motivo'].rstrip('.')}.")
+        out.append(f"El semáforo legal sale {r['semaforo_legal']['color']}. El detalle está en la ficha legal; no es un dictamen.")
     return out
 
 

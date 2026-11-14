@@ -389,46 +389,108 @@
     "lechuga": 105
    },
    "semaforo_legal": {
-    "color": "verde",
-    "motivo": "cumple las comprobaciones que podemos hacer; el abonado sigue por verificar",
-    "articulo": "Ley 3/2020 art. 39",
+    "color": "amarillo",
+    "motivo": "Zona del Mar Menor por verificar: las reglas exclusivas de Zona 1 (art. 51.2, art. 51.3, art. 51.4, art. 51.6) no se afirman. Si fuese Zona 1: zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno -> «no_evaluable». RD 1049/2022 anexo II, BCAM 7: Mismo cultivo durante 3 años seguidos (BCAM 7); la exención de explotaciones <= 10 ha no se puede descartar sin `explotacion_ha`. 5 comprobación(es) no evaluable(s) por falta de datos: L-02, L-03, L-09, L-10, L-11",
+    "articulo": "RD 1049/2022 anexo II, BCAM 7",
     "comprobaciones": [
      {
-      "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
-      "articulo": "Ley 3/2020 art. 39",
+      "id": "L-07",
+      "regla": "Máx. 2 ciclos de cultivo al año por parcela (3 solo hoja < 45 días)",
       "resultado": "ok",
-      "detalle": "2 ciclos como máximo en un año",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 39.2",
+      "estado": "verificado",
+      "nota": "Máximo 2 ciclo(s) de cultivo en un año"
      },
      {
-      "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
-      "articulo": "Ley 3/2020 art. 51",
-      "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
-      "severidad": "ok",
-      "estado": "por_verificar"
-     },
-     {
-      "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
-      "articulo": "Ley 3/2020 art. 51.6",
-      "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 46 días (límite 60)",
-      "severidad": "ok",
-      "estado": "por_verificar"
-     },
-     {
-      "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
-      "articulo": "Ley 3/2020 arts. 29 y 40",
+      "id": "L-14",
+      "regla": "Zona 1: máx. 2 ciclos al año y 1 de Grupo 1",
       "resultado": "no_evaluable",
-      "detalle": "depende del plan de abonado, que esta herramienta no define",
-      "severidad": "no_evaluado",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.2",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Máximo 2 ciclos al año y 1 de Grupo 1)"
+     },
+     {
+      "id": "L-15",
+      "regla": "Zona 1: prohibidos dos ciclos consecutivos de Grupo 1",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.3",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Sin dos ciclos de Grupo 1 consecutivos (barbecho se salta, la rotación se repite))"
+     },
+     {
+      "id": "L-17",
+      "regla": "Zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.6",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «no_evaluable» (Faltan meses de suelo desnudo (`suelo_desnudo_meses` o NDVI))"
+     },
+     {
+      "id": "L-16",
+      "regla": "Zona 1: especies no listadas se adscriben a Grupo 1 o 2",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.4",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Todos los cultivos tienen grupo (INFERIDO para lechuga))"
+     },
+     {
+      "id": "L-02",
+      "regla": "Franja 1.500 m: prohibidos fertilizante químico, estiércol no compostado y abono en verde",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.a (y 29.2)",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`: no se sabe si la parcela está en la franja de 1.500 m"
+     },
+     {
+      "id": "L-03",
+      "regla": "Franja 1.500 m: máx. 170 kg N/ha/año",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.b",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`"
+     },
+     {
+      "id": "L-09",
+      "regla": "Prohibida la urea y fertilizantes con N ureico",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.2",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-10",
+      "regla": "Prohibido abonado mineral de fondo con N",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.4 (y 52.3)",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-11",
+      "regla": "Nitrato amónico: nunca en el último tercio del ciclo hortícola",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.3",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "P-02",
+      "regla": "BCAM 7: cambio de cultivo al menos una vez cada tres años",
+      "resultado": "falla",
+      "articulo": "RD 1049/2022 anexo II, BCAM 7",
+      "estado": "por_verificar",
+      "nota": "Mismo cultivo durante 3 años seguidos (BCAM 7); la exención de explotaciones <= 10 ha no se puede descartar sin `explotacion_ha`"
      }
     ],
-    "_status": "simulado",
+    "zona": "por_verificar",
+    "version_reglas": "borrador-2026-11-14",
+    "nota": "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.",
     "provisional": true,
-    "_nota": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
+    "_status": "simulado",
+    "motor_legal": "legal.check (reglas borrador-2026-11-14, todas por_verificar)",
+    "supuestos": [
+     "Zona del Mar Menor sin confirmar: se evalúa como por_verificar (defecto de Gonzalo), no como Zona 1 ni Zona 2."
+    ]
    },
    "riesgo_etapas": [
     {
@@ -4088,10 +4150,10 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 1.067 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.192 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+   "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 1.067 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.192 m³ de agua por hectárea y año. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
    "_status": "real",
    "texto": {
-    "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 1.067 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.192 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+    "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 1.067 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.192 m³ de agua por hectárea y año. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
     "evidencia_resumen": [
      "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
      "Margen por hectárea y año: 1.067 € en un año típico, -5.687 € en un mal año y 8.439 € en un buen año.",
@@ -4114,7 +4176,8 @@
      "Los años más duros del histórico para este plan fueron 2017 (-9.706 € por hectárea), 2011 (-8.300 € por hectárea) y 2012 (-6.068 € por hectárea).",
      "En un mal año (del decil inferior) podrías perder 5.687 € por hectárea.",
      "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
-     "En Melón piel de sapo y Lechuga iceberg hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos."
+     "En Melón piel de sapo y Lechuga iceberg hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo. El detalle está en la ficha legal; no es un dictamen."
     ],
     "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
    }
@@ -4210,53 +4273,107 @@
    },
    "semaforo_legal": {
     "color": "amarillo",
-    "motivo": "grupo legal sin confirmar: alcachofa",
-    "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
+    "motivo": "Zona del Mar Menor por verificar: las reglas exclusivas de Zona 1 (art. 51.2, art. 51.3, art. 51.4, art. 51.6) no se afirman. Si fuese Zona 1: zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno -> «no_evaluable». 5 comprobación(es) no evaluable(s) por falta de datos: L-02, L-03, L-09, L-10, L-11",
+    "articulo": "Ley 3/2020 art. 51.6",
     "comprobaciones": [
      {
-      "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
-      "articulo": "Ley 3/2020 art. 39",
+      "id": "L-07",
+      "regla": "Máx. 2 ciclos de cultivo al año por parcela (3 solo hoja < 45 días)",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 39.2",
+      "estado": "verificado",
+      "nota": "Máximo 1 ciclo(s) de cultivo en un año"
      },
      {
-      "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
-      "articulo": "Ley 3/2020 art. 51",
-      "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
-      "severidad": "ok",
-      "estado": "por_verificar"
-     },
-     {
-      "regla": "grupo legal del cultivo",
-      "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
+      "id": "L-14",
+      "regla": "Zona 1: máx. 2 ciclos al año y 1 de Grupo 1",
       "resultado": "no_evaluable",
-      "detalle": "grupo legal sin confirmar: alcachofa",
-      "severidad": "por_verificar",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.2",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Máximo 2 ciclos al año y 1 de Grupo 1)"
      },
      {
-      "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
+      "id": "L-15",
+      "regla": "Zona 1: prohibidos dos ciclos consecutivos de Grupo 1",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.3",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Sin dos ciclos de Grupo 1 consecutivos (barbecho se salta, la rotación se repite))"
+     },
+     {
+      "id": "L-17",
+      "regla": "Zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno",
+      "resultado": "no_evaluable",
       "articulo": "Ley 3/2020 art. 51.6",
-      "resultado": "falla",
-      "detalle": "tramo desnudo más largo sin cubierta: 77 días (límite 60)",
-      "severidad": "aviso",
-      "estado": "por_verificar"
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «no_evaluable» (Faltan meses de suelo desnudo (`suelo_desnudo_meses` o NDVI))"
      },
      {
-      "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
-      "articulo": "Ley 3/2020 arts. 29 y 40",
+      "id": "L-16",
+      "regla": "Zona 1: especies no listadas se adscriben a Grupo 1 o 2",
       "resultado": "no_evaluable",
-      "detalle": "depende del plan de abonado, que esta herramienta no define",
-      "severidad": "no_evaluado",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.4",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Todos los cultivos tienen grupo)"
+     },
+     {
+      "id": "L-02",
+      "regla": "Franja 1.500 m: prohibidos fertilizante químico, estiércol no compostado y abono en verde",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.a (y 29.2)",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`: no se sabe si la parcela está en la franja de 1.500 m"
+     },
+     {
+      "id": "L-03",
+      "regla": "Franja 1.500 m: máx. 170 kg N/ha/año",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.b",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`"
+     },
+     {
+      "id": "L-09",
+      "regla": "Prohibida la urea y fertilizantes con N ureico",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.2",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-10",
+      "regla": "Prohibido abonado mineral de fondo con N",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.4 (y 52.3)",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-11",
+      "regla": "Nitrato amónico: nunca en el último tercio del ciclo hortícola",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.3",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "P-02",
+      "regla": "BCAM 7: cambio de cultivo al menos una vez cada tres años",
+      "resultado": "ok",
+      "articulo": "RD 1049/2022 anexo II, BCAM 7",
+      "estado": "por_verificar",
+      "nota": "Hay cambio de cultivo en toda ventana de 3 años (BCAM 7, nivel parcela)"
      }
     ],
-    "_status": "simulado",
+    "zona": "por_verificar",
+    "version_reglas": "borrador-2026-11-14",
+    "nota": "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.",
     "provisional": true,
-    "_nota": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
+    "_status": "simulado",
+    "motor_legal": "legal.check (reglas borrador-2026-11-14, todas por_verificar)",
+    "supuestos": [
+     "Zona del Mar Menor sin confirmar: se evalúa como por_verificar (defecto de Gonzalo), no como Zona 1 ni Zona 2."
+    ]
    },
    "riesgo_etapas": [
     {
@@ -7901,10 +8018,10 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 1.978 € por hectárea y año más que lo que haces hoy (3.045 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 1.978 € por hectárea y año más que lo que haces hoy (3.045 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
    "_status": "real",
    "texto": {
-    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 1.978 € por hectárea y año más que lo que haces hoy (3.045 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 1.978 € por hectárea y año más que lo que haces hoy (3.045 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
     "evidencia_resumen": [
      "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
      "Margen por hectárea y año: 3.045 € en un año típico, -522 € en un mal año y 8.028 € en un buen año.",
@@ -7928,7 +8045,7 @@
      "En un mal año (del decil inferior) podrías perder 522 € por hectárea.",
      "Alcachofa (gorda): en 3 de 19 años del histórico hubo frío fuerte en la etapa de capítulos (brácteas) (mínima ≤ -1,3 °C); riesgo medio. Es lo que midió la estación, no daño observado.",
      "En Alcachofa (gorda) y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
-     "El semáforo legal sale amarillo: grupo legal sin confirmar: alcachofa."
+     "El semáforo legal sale amarillo. El detalle está en la ficha legal; no es un dictamen."
     ],
     "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
    }
@@ -8028,45 +8145,107 @@
    },
    "semaforo_legal": {
     "color": "amarillo",
-    "motivo": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)",
-    "articulo": "Ley 3/2020 art. 51",
+    "motivo": "Zona del Mar Menor por verificar: las reglas exclusivas de Zona 1 (art. 51.2, art. 51.3, art. 51.4, art. 51.6) no se afirman. Si fuese Zona 1: zona 1: prohibidos dos ciclos consecutivos de grupo 1 -> «falla». 5 comprobación(es) no evaluable(s) por falta de datos: L-02, L-03, L-09, L-10, L-11",
+    "articulo": "Ley 3/2020 art. 51.3",
     "comprobaciones": [
      {
-      "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
-      "articulo": "Ley 3/2020 art. 39",
+      "id": "L-07",
+      "regla": "Máx. 2 ciclos de cultivo al año por parcela (3 solo hoja < 45 días)",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 39.2",
+      "estado": "verificado",
+      "nota": "Máximo 1 ciclo(s) de cultivo en un año"
      },
      {
-      "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
-      "articulo": "Ley 3/2020 art. 51",
+      "id": "L-14",
+      "regla": "Zona 1: máx. 2 ciclos al año y 1 de Grupo 1",
       "resultado": "no_evaluable",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)",
-      "severidad": "por_verificar",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.2",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Máximo 2 ciclos al año y 1 de Grupo 1)"
      },
      {
-      "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
+      "id": "L-15",
+      "regla": "Zona 1: prohibidos dos ciclos consecutivos de Grupo 1",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.3",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «falla» (Dos ciclos consecutivos de Grupo 1)"
+     },
+     {
+      "id": "L-17",
+      "regla": "Zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno",
+      "resultado": "no_evaluable",
       "articulo": "Ley 3/2020 art. 51.6",
-      "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «no_evaluable» (Faltan meses de suelo desnudo (`suelo_desnudo_meses` o NDVI))"
      },
      {
-      "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
-      "articulo": "Ley 3/2020 arts. 29 y 40",
+      "id": "L-16",
+      "regla": "Zona 1: especies no listadas se adscriben a Grupo 1 o 2",
       "resultado": "no_evaluable",
-      "detalle": "depende del plan de abonado, que esta herramienta no define",
-      "severidad": "no_evaluado",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.4",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Todos los cultivos tienen grupo)"
+     },
+     {
+      "id": "L-02",
+      "regla": "Franja 1.500 m: prohibidos fertilizante químico, estiércol no compostado y abono en verde",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.a (y 29.2)",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`: no se sabe si la parcela está en la franja de 1.500 m"
+     },
+     {
+      "id": "L-03",
+      "regla": "Franja 1.500 m: máx. 170 kg N/ha/año",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.b",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`"
+     },
+     {
+      "id": "L-09",
+      "regla": "Prohibida la urea y fertilizantes con N ureico",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.2",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-10",
+      "regla": "Prohibido abonado mineral de fondo con N",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.4 (y 52.3)",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-11",
+      "regla": "Nitrato amónico: nunca en el último tercio del ciclo hortícola",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.3",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "P-02",
+      "regla": "BCAM 7: cambio de cultivo al menos una vez cada tres años",
+      "resultado": "ok",
+      "articulo": "RD 1049/2022 anexo II, BCAM 7",
+      "estado": "por_verificar",
+      "nota": "Hay cambio de cultivo en toda ventana de 3 años (BCAM 7, nivel parcela)"
      }
     ],
-    "_status": "simulado",
+    "zona": "por_verificar",
+    "version_reglas": "borrador-2026-11-14",
+    "nota": "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.",
     "provisional": true,
-    "_nota": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
+    "_status": "simulado",
+    "motor_legal": "legal.check (reglas borrador-2026-11-14, todas por_verificar)",
+    "supuestos": [
+     "Zona del Mar Menor sin confirmar: se evalúa como por_verificar (defecto de Gonzalo), no como Zona 1 ni Zona 2."
+    ]
    },
    "riesgo_etapas": [
     {
@@ -11759,10 +11938,10 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 246 € por hectárea y año más que lo que haces hoy (1.313 € frente a 1.067 €). Gastaría unos 3.645 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 53 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 246 € por hectárea y año más que lo que haces hoy (1.313 € frente a 1.067 €). Gastaría unos 3.645 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 53 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
    "_status": "real",
    "texto": {
-    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 246 € por hectárea y año más que lo que haces hoy (1.313 € frente a 1.067 €). Gastaría unos 3.645 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 53 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 246 € por hectárea y año más que lo que haces hoy (1.313 € frente a 1.067 €). Gastaría unos 3.645 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 53 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
     "evidencia_resumen": [
      "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
      "Margen por hectárea y año: 1.313 € en un año típico, -1.734 € en un mal año y 5.556 € en un buen año.",
@@ -11787,7 +11966,7 @@
      "En un mal año (del decil inferior) podrías perder 1.734 € por hectárea.",
      "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
      "En Brócoli y Melón piel de sapo hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
-     "El semáforo legal sale amarillo: grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)."
+     "El semáforo legal sale amarillo. El detalle está en la ficha legal; no es un dictamen."
     ],
     "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
    }
@@ -11884,53 +12063,107 @@
    },
    "semaforo_legal": {
     "color": "amarillo",
-    "motivo": "grupo legal sin confirmar: alcachofa",
-    "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
+    "motivo": "Zona del Mar Menor por verificar: las reglas exclusivas de Zona 1 (art. 51.2, art. 51.3, art. 51.4, art. 51.6) no se afirman. Si fuese Zona 1: zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno -> «no_evaluable». 5 comprobación(es) no evaluable(s) por falta de datos: L-02, L-03, L-09, L-10, L-11",
+    "articulo": "Ley 3/2020 art. 51.6",
     "comprobaciones": [
      {
-      "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
-      "articulo": "Ley 3/2020 art. 39",
+      "id": "L-07",
+      "regla": "Máx. 2 ciclos de cultivo al año por parcela (3 solo hoja < 45 días)",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 39.2",
+      "estado": "verificado",
+      "nota": "Máximo 1 ciclo(s) de cultivo en un año"
      },
      {
-      "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
-      "articulo": "Ley 3/2020 art. 51",
-      "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
-      "severidad": "ok",
-      "estado": "por_verificar"
-     },
-     {
-      "regla": "grupo legal del cultivo",
-      "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
+      "id": "L-14",
+      "regla": "Zona 1: máx. 2 ciclos al año y 1 de Grupo 1",
       "resultado": "no_evaluable",
-      "detalle": "grupo legal sin confirmar: alcachofa",
-      "severidad": "por_verificar",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.2",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Máximo 2 ciclos al año y 1 de Grupo 1)"
      },
      {
-      "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
+      "id": "L-15",
+      "regla": "Zona 1: prohibidos dos ciclos consecutivos de Grupo 1",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 51.3",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Sin dos ciclos de Grupo 1 consecutivos (barbecho se salta, la rotación se repite))"
+     },
+     {
+      "id": "L-17",
+      "regla": "Zona 1 regadío: cobertera si suelo desnudo > 2 meses en otoño-invierno",
+      "resultado": "no_evaluable",
       "articulo": "Ley 3/2020 art. 51.6",
-      "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)",
-      "severidad": "ok",
-      "estado": "por_verificar"
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «no_evaluable» (Faltan meses de suelo desnudo (`suelo_desnudo_meses` o NDVI))"
      },
      {
-      "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
-      "articulo": "Ley 3/2020 arts. 29 y 40",
+      "id": "L-16",
+      "regla": "Zona 1: especies no listadas se adscriben a Grupo 1 o 2",
       "resultado": "no_evaluable",
-      "detalle": "depende del plan de abonado, que esta herramienta no define",
-      "severidad": "no_evaluado",
-      "estado": "por_verificar"
+      "articulo": "Ley 3/2020 art. 51.4",
+      "estado": "verificado",
+      "nota": "Zona del Mar Menor por verificar: no se afirma. Si fuese Zona 1 el resultado sería «ok» (Todos los cultivos tienen grupo)"
+     },
+     {
+      "id": "L-02",
+      "regla": "Franja 1.500 m: prohibidos fertilizante químico, estiércol no compostado y abono en verde",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.a (y 29.2)",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`: no se sabe si la parcela está en la franja de 1.500 m"
+     },
+     {
+      "id": "L-03",
+      "regla": "Franja 1.500 m: máx. 170 kg N/ha/año",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 29.4.b",
+      "estado": "verificado",
+      "nota": "Falta `distancia_orilla_m`"
+     },
+     {
+      "id": "L-09",
+      "regla": "Prohibida la urea y fertilizantes con N ureico",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.2",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-10",
+      "regla": "Prohibido abonado mineral de fondo con N",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.4 (y 52.3)",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "L-11",
+      "regla": "Nitrato amónico: nunca en el último tercio del ciclo hortícola",
+      "resultado": "no_evaluable",
+      "articulo": "Ley 3/2020 art. 40.3",
+      "estado": "verificado",
+      "nota": "Falta `abonado` (plan de abonado de la rotación)"
+     },
+     {
+      "id": "P-02",
+      "regla": "BCAM 7: cambio de cultivo al menos una vez cada tres años",
+      "resultado": "ok",
+      "articulo": "RD 1049/2022 anexo II, BCAM 7",
+      "estado": "por_verificar",
+      "nota": "Hay cambio de cultivo en toda ventana de 3 años (BCAM 7, nivel parcela)"
      }
     ],
-    "_status": "simulado",
+    "zona": "por_verificar",
+    "version_reglas": "borrador-2026-11-14",
+    "nota": "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.",
     "provisional": true,
-    "_nota": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
+    "_status": "simulado",
+    "motor_legal": "legal.check (reglas borrador-2026-11-14, todas por_verificar)",
+    "supuestos": [
+     "Zona del Mar Menor sin confirmar: se evalúa como por_verificar (defecto de Gonzalo), no como Zona 1 ni Zona 2."
+    ]
    },
    "riesgo_etapas": [
     {
@@ -15575,10 +15808,10 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 1.937 € por hectárea y año más que lo que haces hoy (3.004 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 1.937 € por hectárea y año más que lo que haces hoy (3.004 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
    "_status": "real",
    "texto": {
-    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 1.937 € por hectárea y año más que lo que haces hoy (3.004 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 1.937 € por hectárea y año más que lo que haces hoy (3.004 € frente a 1.067 €). Gastaría unos 1.163 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 81 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, y la zona del Mar Menor no está confirmada, así que esto no dice que cumplas la ley.",
     "evidencia_resumen": [
      "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
      "Margen por hectárea y año: 3.004 € en un año típico, -563 € en un mal año y 7.989 € en un buen año.",
@@ -15603,7 +15836,7 @@
      "En un mal año (del decil inferior) podrías perder 563 € por hectárea.",
      "Alcachofa (gorda): en 3 de 19 años del histórico hubo frío fuerte en la etapa de capítulos (brácteas) (mínima ≤ -1,3 °C); riesgo medio. Es lo que midió la estación, no daño observado.",
      "En Alcachofa (gorda) y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
-     "El semáforo legal sale amarillo: grupo legal sin confirmar: alcachofa."
+     "El semáforo legal sale amarillo. El detalle está en la ficha legal; no es un dictamen."
     ],
     "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
    }
