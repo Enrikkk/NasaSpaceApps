@@ -88,7 +88,7 @@ async function icon(Icon, color = '#F0EDE4') {
   s.addImage({ path: A('globo.jpg'), x: 0, y: 0, w: 13.333, h: 7.5, objectName: 'Globo (app)' });
     s.addImage({ path: A('agrockham-logo-on-dark.png'), x: 0.7, y: 2.2, w: 6.2, h: 6.2 * 461 / 2400, objectName: 'Logo Agrockham' });
   s.addText('Qué sembrar, cuándo y con qué riesgo', { placeholder: 'body' });
-  text(s, 'Clima de satélite, suelo, precios y la ley del Mar Menor, juntos en tu parcela.',
+  text(s, 'Clima, suelo, precios y la ley del Mar Menor para tu parcela.',
     { x: 0.7, y: 4.75, w: 6.4, h: 0.8, fontSize: 18, color: C.background1, objectName: 'Subtítulo' });
   text(s, 'NASA Space Apps Challenge 2026 · Reto «Field Shift: Adapting Farms with NASA Data» · Murcia',
     { x: 0.7, y: 6.45, w: 10.5, h: 0.3, fontSize: 12, color: C.background1, objectName: 'Evento' });
@@ -140,11 +140,11 @@ Cómo cambiarla sin perder tamaño ni posición: clic derecho en la imagen → C
   });
   card(s, gx, 5.4, 2 * cw + gap, 1.0, 'Aviso lluvia', C.accent3);
   s.addImage({ data: ICON.rain, x: gx + 0.3, y: 5.62, w: 0.56, h: 0.56, objectName: 'Icono lluvia' });
-  text(s, [{ text: '3 fuentes de lluvia, ~40 % de diferencia en la misma parcela. ', options: { bold: true } },
-           { text: 'Te damos una horquilla, no un número inventado.' }],
+  text(s, [{ text: '3 fuentes de lluvia, hasta ~40 % de diferencia en la misma parcela. ', options: { bold: true } },
+           { text: 'Por eso mostramos un rango.' }],
     { x: gx + 1.1, y: 5.55, w: 2 * cw + gap - 1.35, h: 0.75, fontSize: 15, color: C.text1, valign: 'middle', objectName: 'Aviso lluvia texto' });
   s.addNotes(`[0:23-0:43]
-GUION: «Con ese clic juntamos datos que antes estaban dispersos: veinte años de clima diario de NASA POWER, la lluvia del satélite GPM IMERG, el suelo y los cultivos que declaraste. Y somos honestos: tres fuentes de lluvia difieren hasta un cuarenta por ciento, así que te damos una horquilla, no un número inventado.»
+GUION: «Con ese clic juntamos datos que antes estaban dispersos: veinte años de clima diario de NASA POWER, la lluvia del satélite GPM IMERG, el suelo y los cultivos que declaraste. Tres fuentes de lluvia difieren hasta un cuarenta por ciento en la misma parcela, así que mostramos un rango.»
 Enlaza con el vídeo de apertura («Three rain sources. Same field. Forty percent apart.»).`);
 
   // ======================= 4. PRECIOS =======================
@@ -165,8 +165,8 @@ Enlaza con el vídeo de apertura («Three rain sources. Same field. Forty percen
   });
   text(s, '20', { x: 0.6, y: 4.85, w: 1.6, h: 1.3, fontSize: 80, bold: true, color: C.accent1, objectName: 'Cifra 20' });
   text(s, 'años', { x: 2.25, y: 5.33, w: 1.2, h: 0.6, fontSize: 26, bold: true, objectName: 'Cifra años' });
-  text(s, [{ text: 'Cada año simulado usa el clima y el precio de ese mismo año.', options: { bold: true, breakLine: true } },
-           { text: 'Así el riesgo sale de lo que pasó de verdad, no de una media. Los precios son nacionales: en Murcia pueden ser otros.', options: { color: C.background2 } }],
+  text(s, [{ text: 'Cada año simulado usa el clima y el precio de ese año.', options: { bold: true, breakLine: true } },
+           { text: 'Los precios son nacionales; en Murcia pueden variar.', options: { color: C.background2 } }],
     { x: 3.75, y: 4.97, w: 8.95, h: 1.15, fontSize: 16, valign: 'middle', paraSpaceAfter: 6, objectName: 'Explicación' });
   s.addNotes(`[0:43-0:55]
 GUION: «Además, hemos creado un sistema económico con veinte años de precios de mercado. Simulamos cada rotación año a año, con el clima y el precio de ese mismo año.»`);
@@ -211,9 +211,9 @@ Nota: «menos riesgo» = riesgo de un mal año (clima y precio, más días de he
     'Rotaciones con incertidumbre y semáforo legal'], 'Ya funciona', C.accent2);
   col(6.83, ICON.next, 'Lo siguiente', ['Registro «Mis parcelas»: añadir y quitar con un clic', 'Tu capacidad de inversión dentro del modelo',
     'Análisis completo en toda España y NDVI por satélite'], 'Lo siguiente', C.accent3);
-  text(s, 'No sustituye a tu técnico: le da mejores datos.', { x: 0.6, y: 6.45, w: 12.13, h: 0.45, fontSize: 18, italic: true, color: C.accent1, objectName: 'Cierre frase' });
+  text(s, 'Para el agricultor y su técnico.', { x: 0.6, y: 6.45, w: 12.13, h: 0.45, fontSize: 18, italic: true, color: C.accent1, objectName: 'Cierre frase' });
   s.addNotes(`[1:14-1:30]
-GUION: «Lo siguiente: tu registro de parcelas y tu capacidad de inversión. Agrockham no sustituye a tu técnico: le da mejores datos. Haciendo fácil lo difícil.»
+GUION: «Lo siguiente: tu registro de parcelas y tu capacidad de inversión. Agrockham es una herramienta para ti y para tu técnico. Haciendo fácil lo difícil.»
 (Unos 5 s de margen hasta 1:30.)`);
 
   await pres.writeFile({ fileName: OUT });
