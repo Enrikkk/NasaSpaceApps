@@ -155,6 +155,15 @@ def test_bloques_parcial_y_fusion_en_parcel(client_mini):
     assert_valido(g)
 
 
+def test_parcel_tras_peticion_completa_y_parcial_sigue_valido_con_aviso_mock(client_mini):
+    """La ultima peticion (solo parcela) no pide bloques simulados, pero el contrato guardado los conserva: el aviso MOCK no puede faltar."""
+    client_mini.post("/analyze", json=DEMO)
+    client_mini.post("/analyze?bloques=parcela", json=DEMO)
+    g = client_mini.get("/parcel/30-37-0-0-18-426-1").json()
+    assert len(g["rotaciones"]) == 3 and "MOCK" in g["_meta"]["aviso"] and g["_meta"]["estado_bloques"]["historia"] == "simulado"
+    assert_valido(g)
+
+
 @pytest.mark.parametrize("q", ["?bloques=", "?bloques=nada", "?bloques=clima,nada"])
 def test_bloques_invalidos_422(client_mini, q):
     assert client_mini.post("/analyze" + q, json=DEMO).status_code == 422

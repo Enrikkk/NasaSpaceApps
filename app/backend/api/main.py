@@ -74,10 +74,10 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
     def servicio(request: Request) -> blocks.Servicio:
         return request.app.state.servicio
 
-    def guardar(doc: dict) -> None:
+    def guardar(doc: dict, aviso) -> None:
         qid = doc["_meta"]["consulta_id"]
         with lock:
-            guardado = blocks.fusionar(cache.get(qid), doc)
+            guardado = blocks.fusionar(cache.get(qid), doc, aviso)
             claves = [qid] + ([blocks.id_parcela(guardado)] if blocks.id_parcela(guardado) else [])
             for k in claves:
                 cache[k] = guardado
@@ -112,7 +112,7 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
                 raise HTTPException(422, detail=f"bloques desconocidos {malos}; validos: {list(blocks.BLOQUES)}")
         recinto = req.recinto.model_dump(exclude_none=True) if req.recinto is not None else None
         doc = servicio(request).construir(req.lat, req.lon, recinto, req.zona, pedidos)
-        guardar(doc)
+        guardar(doc, servicio(request).aviso)
         return doc
 
     @app.get("/parcel/{parcel_id:path}")
