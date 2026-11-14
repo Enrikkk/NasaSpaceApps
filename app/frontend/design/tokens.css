@@ -26,6 +26,7 @@
   --green-light: #6BB383; /* green text/icons on dark */
   --warn: #E0B04A;
   --danger: #E07A5F;
+  --own-parcel: #D62828; /* outline of the farmer's own parcels on the map ("Tus parcelas"); with a cream halo */
 
   /* Display type is a system stack. Brunson is NOT bundled (no licence yet): it is used only where it is installed.
      Fallback Impact (all caps, on almost every device), then Anton / Arial Narrow. */

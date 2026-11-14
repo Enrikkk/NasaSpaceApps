@@ -1,5 +1,21 @@
 /* Desktop: a column on the left, under the logo and above the map controls (the filters and the view switcher
    live on the right). It scrolls inside. Phones: bottom sheet above the view switcher. */
+/* "Añadir a mis parcelas" under the SIGPAC reference. */
+.saveRow { display: grid; gap: var(--space-1); justify-items: start; margin-top: var(--space-2); }
+.save {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-3);
+  border: 1px solid var(--green-light);
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--green-light);
+}
+.save:hover { background: color-mix(in srgb, var(--green-light) 16%, transparent); }
+.save.saved { border-color: var(--own-parcel); color: var(--text); background: color-mix(in srgb, var(--own-parcel) 22%, transparent); }
+
 .root {
   position: absolute;
   z-index: 3;

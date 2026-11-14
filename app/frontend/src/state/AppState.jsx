@@ -21,6 +21,9 @@ export function AppStateProvider({ children }) {
   // Where the zoom from the globe lands: 'cartagena' (Ver el mapa, click, scroll) or 'parcel' (Ir a mis parcelas).
   const [entry, setEntry] = useState('cartagena')
   const [selectedParcel, setSelectedParcel] = useState(null)
+  // "Tus parcelas" list: open or folded; flyTarget = { lat, lon, n } asks the map to go to one of them.
+  const [myParcelsOpen, setMyParcelsOpen] = useState(false)
+  const [flyTarget, setFlyTarget] = useState(null)
 
   const value = useMemo(() => ({
     screen, setScreen,
@@ -31,7 +34,9 @@ export function AppStateProvider({ children }) {
     crop, setCrop,
     entry, setEntry,
     selectedParcel, setSelectedParcel,
-  }), [screen, view, regionId, priorities, crop, entry, selectedParcel])
+    myParcelsOpen, setMyParcelsOpen,
+    flyTarget, setFlyTarget,
+  }), [screen, view, regionId, priorities, crop, entry, selectedParcel, myParcelsOpen, flyTarget])
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>
 }

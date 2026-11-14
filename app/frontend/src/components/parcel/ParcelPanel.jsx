@@ -4,6 +4,8 @@ import { Summary, MoreAboutParcel, Rotations, Footer } from './sections.jsx'
 import { useAnalysis } from './hooks.js'
 import { refFromRecinto, isNum } from './helpers.js'
 import { useAppState } from '../../state/AppState.jsx'
+import { useMyParcels } from '../../state/useMyParcels.js'
+import { isRegistrable, refOf, hasRef, MAX_PARCELS } from '../../state/myParcels.js'
 import styles from './ParcelPanel.module.css'
 
 const SLOW_AFTER_MS = 8000
@@ -32,6 +34,30 @@ function Loading() {
   )
 }
 
+/** Save / remove this recinto in "Tus parcelas" (kept only in this browser; outlined in red on the map). */
+function SaveButton({ parcel, ha }) {
+  const { list, guarda, add, remove } = useMyParcels()
+  const [msg, setMsg] = useState('')
+  if (!isRegistrable(parcel.recinto)) return null
+  const ref = refOf(parcel.recinto)
+  const saved = hasRef(list, ref)
+  const toggle = () => {
+    if (saved) { remove(ref); setMsg(''); return }
+    const status = add({ recinto: parcel.recinto, lat: parcel.lat, lon: parcel.lon, ha })
+    setMsg(status === 'full' ? `Ya tienes ${MAX_PARCELS} parcelas: quita alguna para añadir otra.` : '')
+  }
+  return (
+    <div className={styles.saveRow}>
+      <button type="button" className={`${styles.save} ${saved ? styles.saved : ''}`} aria-pressed={saved} onClick={toggle}>
+        <GlyphIcon name={saved ? 'ok' : 'star'} size={16} />
+        {saved ? 'En tus parcelas · Quitar' : 'Añadir a mis parcelas'}
+      </button>
+      {msg && <p className={styles.fine} role="status">{msg}</p>}
+      {saved && !guarda && <p className={styles.fine} role="status">Tu navegador no deja guardar: se perderá al recargar.</p>}
+    </div>
+  )
+}
+
 function Body({ parcel, onClose }) {
   const { priorities } = useAppState()
   const { quick, full, error, loading, retry } = useAnalysis(parcel)
@@ -55,6 +81,7 @@ function Body({ parcel, onClose }) {
         <div className={styles.titles}>
           <p className={styles.eyebrow}>Recinto SIGPAC</p>
           <h2 className={styles.ref}>{reference || 'Sin referencia SIGPAC'}</h2>
+          <SaveButton parcel={parcel} ha={isNum(parcela?.ha) ? parcela.ha : undefined} />
         </div>
         <button type="button" className={styles.close} onClick={onClose} aria-label="Cerrar la ficha de la parcela">
           <GlyphIcon name="close" />

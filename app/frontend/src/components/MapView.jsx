@@ -12,6 +12,8 @@ import { sigpacUseLabel } from '../config/sigpacUses.js'
 import { haFromSquareMetres } from './parcel/helpers.js'
 import { addIgnOverlay, IGN_OVERLAY_IDS } from './ignOverlay.js'
 import { recintoFromProps } from '../api/client.js'
+import { useMyParcels, myParcels } from '../state/useMyParcels.js'
+import { mapFilter, boundsOf, NO_MATCH } from '../state/myParcels.js'
 
 // Map colours come from the design tokens so DESIGN.md stays the single source.
 const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
@@ -41,9 +43,16 @@ function regionCamera(map, r) {
   return { center: [(w + e) / 2, (s + n) / 2], zoom, padding: pad, bearing: 0, pitch: 0, roll: 0 }
 }
 
-const parcelCamera = () => ({
-  center: [DEMO_PARCEL.lon, DEMO_PARCEL.lat], zoom: 15.5, padding: panelPadding(), bearing: 0, pitch: 0, roll: 0,
-})
+// "Ir a mis parcelas": onto the farmer's saved parcels (all of them in view), or the demo parcel when none is saved yet.
+function parcelCamera() {
+  const saved = myParcels.getSnapshot().list
+  const flat = { padding: panelPadding(), bearing: 0, pitch: 0, roll: 0 }
+  if (!saved.length) return { center: [DEMO_PARCEL.lon, DEMO_PARCEL.lat], zoom: 15.5, ...flat }
+  const b = boundsOf(saved)
+  const cam = regionCamera(null, { bounds: b })
+  const zoom = Number.isFinite(cam.zoom) ? Math.min(16, cam.zoom) : 16
+  return { ...cam, zoom: saved.length === 1 ? 16 : zoom }
+}
 
 // Last refined home camera, so flying back home lands exactly (no correction jump).
 let savedHome = null
@@ -100,6 +109,18 @@ function buildStyle() {
         layout: { visibility: 'none' },
         paint: { 'line-color': token('--cream'), 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 0.4, 17, 1.6], 'line-opacity': 0.8 },
       },
+      // The farmer's own parcels ("Tus parcelas"): red outline over a thin white halo so it reads on any base map.
+      // The filter is set from the saved list (see the effect below); until then it matches nothing.
+      {
+        id: 'mis-parcelas-halo', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none', 'line-join': 'round' },
+        paint: { 'line-color': token('--cream'), 'line-opacity': 0.95, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.2, 17, 7.5] },
+      },
+      {
+        id: 'mis-parcelas-line', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none', 'line-join': 'round' },
+        paint: { 'line-color': token('--own-parcel'), 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 1.8, 17, 4.5] },
+      },
     ],
   }
 }
@@ -125,6 +146,8 @@ function applyView(map, view, parcels) {
   show('ign-base', !sat)
   show('recintos-fill', parcels)
   show('recintos-line', parcels)
+  show('mis-parcelas-halo', parcels)
+  show('mis-parcelas-line', parcels)
   // Satellite in the map (not the home globe): IGN towns, roads and names on top.
   for (const id of IGN_OVERLAY_IDS) show(id, sat && parcels)
   map.setPaintProperty('water', 'background-color', sat
@@ -146,7 +169,7 @@ function applyView(map, view, parcels) {
  * map:  Spain-only. First scroll flies to Región de Murcia, then the wheel zooms normally.
  */
 export default function MapView() {
-  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry, setSelectedParcel } = useAppState()
+  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry, setSelectedParcel, flyTarget } = useAppState()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const screenRef = useRef(screen)
@@ -306,6 +329,24 @@ export default function MapView() {
     const home = screen === 'home'
     applyView(map, home ? 'satelite' : view, !home)
   }, [view, ready, screen, overlay])
+
+  // The saved parcels drive the red outline (filter on the SIGPAC tile properties).
+  const { list: savedParcels } = useMyParcels()
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !ready) return
+    const f = mapFilter(savedParcels)
+    for (const id of ['mis-parcelas-halo', 'mis-parcelas-line']) if (map.getLayer(id)) map.setFilter(id, f)
+  }, [savedParcels, ready, overlay])
+
+  // "Ver" in Tus parcelas: fly to that parcel, leaving room for the parcel sheet (left on desktop, bottom on phones).
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !flyTarget || screenRef.current !== 'map') return
+    const phone = window.innerWidth <= NARROW_MAX
+    const padding = phone ? { ...NO_PADDING, bottom: Math.round(window.innerHeight * 0.45) } : { ...NO_PADDING, left: 460 }
+    map.flyTo({ center: [flyTarget.lon, flyTarget.lat], zoom: Math.max(map.getZoom(), 16.5), padding, duration: 1800, essential: true })
+  }, [flyTarget])
 
   return (
     <div className={`${styles.wrap} ${screen === 'home' ? styles.home : ''}`}>
