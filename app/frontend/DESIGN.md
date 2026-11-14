@@ -18,6 +18,13 @@ Owner: jaime. Fuente de verdad del aspecto visual del frontend. Los valores vive
 | `--brand-dark` | `#1E3626` | Terciario. Cabecera, bandas de marca, chips |
 | `--bg` | `#2B2F2B` | Fondo de la página (gris carbón verdoso, opción B) |
 
+Mapa base (globo de inicio y vista Monocromática, decidido por jaime):
+
+| Token | Hex | Papel |
+|---|---|---|
+| `--water` | `#E3E3DC` | Agua, gris claro |
+| `--land` | `#297847` | Tierra, el verde de AGRO |
+
 Derivados (calculados para que se lean sobre el fondo oscuro):
 
 | Token | Hex | Papel |
@@ -68,6 +75,11 @@ licencia. jaime decidió usarlos ya en desarrollo mientras revisa la licencia. L
 identificada, así que antes del deploy (T-017) y del envío (T-015) hay que: (a) tener una licencia que
 permita uso público + webfont + redistribución y citarla en `submission/`, o (b) cambiar a Anton +
 filtro SVG propio para el efecto *rough* (dos líneas de `tokens.css`) y borrar `design/fonts/`.
+
+## Componentes
+
+Primitivas en `src/components/ui/` (Panel, SegmentedControl, Slider, Select, Icon). Cualquier pantalla nueva se
+construye con ellas y con los tokens, sin colores sueltos. Los iconos son propios (sin librería).
 
 ## Escala
 

@@ -1,0 +1,71 @@
+.app { position: relative; height: 100vh; overflow: hidden; }
+
+/* Chrome floats over the map; only its boxes catch the pointer. */
+.brand, .side, .views { position: absolute; z-index: 2; }
+
+/* The logo glides from its home spot to the corner while it scales down (Logo.module.css). */
+.brand { top: 6vh; left: 2.5vw; transition: top 900ms var(--ease), left 900ms var(--ease); }
+.onMap .brand { top: var(--space-4); left: var(--space-4); }
+
+/* Home buttons, side by side bottom-left: "Ver el mapa" (cream, green text) and "Ir a mis parcelas" (green). */
+.homeActions {
+  position: absolute;
+  z-index: 2;
+  left: 2.5vw;
+  bottom: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  animation: fade 600ms var(--ease) both;
+}
+.seeMap, .myParcels {
+  padding: var(--space-3) var(--space-8);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgb(0 0 0 / 0.35);
+  transition: transform 150ms, background 150ms;
+}
+.seeMap:hover, .myParcels:hover { transform: translateY(-2px); }
+.seeMap { background: var(--cream); color: var(--green); }
+.seeMap:hover { background: #FFFDF6; }
+.myParcels { background: var(--green); color: var(--cream); }
+.myParcels:hover { background: #2F8A52; }
+
+/* Regions + filters: only on the map, after the entry zoom has started */
+.side {
+  top: var(--space-4);
+  right: var(--space-4);
+  bottom: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-4);
+  pointer-events: none;
+  animation: rise 600ms var(--ease) 1800ms both;
+}
+.side > * { pointer-events: auto; }
+.side > nav { max-width: 45vw; }
+.side > aside { width: max(280px, 23.8vw); flex: 0 1 auto; min-height: 0; }
+
+.views {
+  right: var(--space-4);
+  bottom: var(--space-4);
+  animation: rise 600ms var(--ease) 2000ms both;
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 760px) {
+  .brand { top: var(--space-6); left: var(--space-4); }
+  .homeActions { left: var(--space-4); right: var(--space-4); bottom: 40px; }
+  .seeMap, .myParcels { flex: 1; padding: var(--space-3) var(--space-4); font-size: var(--fs-md); }
+
+  .side { top: 64px; left: var(--space-3); right: var(--space-3); bottom: 84px; align-items: stretch; gap: var(--space-2); }
+  .side > nav { max-width: none; }
+  .side > aside { width: auto; align-self: flex-end; min-width: 180px; max-width: 100%; }
+
+  .views { left: var(--space-3); right: var(--space-3); bottom: var(--space-3); }
+}

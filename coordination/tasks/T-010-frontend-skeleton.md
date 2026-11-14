@@ -15,3 +15,4 @@ Works first on the mock JSON. Add a 'what if' slider (rain/temperature) and a '2
 
 - 2026-11-14 13:20 | plan v1 (coordination/PLAN.md): Seat (plan): jaime. Split: 10a Vite+React+MapLibre skeleton, map (PNOA) + parcel card; 10b timeline 2017-2026 with bare months; 10c priorities sliders + comparator cards, weighting and 'B gana X %' computed in the browser from criterios + escenarios; 10d (P2) what-if / 2050 variants + sensor panel. Labels real/precalculado/simulado from _status. Static build, no server.
 - 2026-11-14 16:23 | jaime: claimed. First step: static prototype of the home layout (logo, REGIONES bar, FILTROS panel, MUNDO globe) in app/frontend/prototype/.
+- 2026-11-14 18:19 | jaime: frontend skeleton pushed on t010-frontend-skeleton (run: cd app/frontend && npm install && npm run dev). Filters/regions UI not yet wired to the contract JSON.

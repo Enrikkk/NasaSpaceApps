@@ -94,3 +94,22 @@ Bibliographic review only, no copied material or active calibrated dataset: UC A
 MAPA, Índices y Precios Percibidos Agrarios: https://www.mapa.gob.es/es/estadistica/temas/estadisticas-agrarias/economia/precios-percibidos-pagados/precios-percibidos-por-los-agricultores-y-ganaderos. Downloaded 2026-11-14 with verified FNMT TLS. `mapa_prices.csv` transcribes 60 annual-column observations, national generic lettuce/melon/artichoke, 2005–2024, EUR/100 kg; explicit product proxies. Exact workbook URLs, sheet/cell references, original modification metadata and SHA-256 in `app/data/tables/mapa_manifest.json`; derived real-2015 columns use the already cited Eurostat Spain HICP.
 
 Reuse permission read directly at https://www.mapa.gob.es/es/atencion-al-ciudadano/aviso-legal: attribution required, update/reuse metadata retained, third-party rights excluded, Ley 37/2007; not a Creative Commons licence. Source records `MAPA-PER-2005/2015/2020/2024` in tables/sources.csv. Original workbook notes retained; prices are bulk at buyer warehouse, harvest-cost inclusion not verified. No assertion of a regional or cultivar-specific price, no piece/weight conversion, no independent cross-source validation claimed.
+Open items for the team: (1) FEGA access-from-code question; (2) exact GIBS wording; (3) review of the rows marked `verify` before the submission form.
+
+## Frontend: map services, software and design assets (jaime's agent, 2026-11-14, T-010)
+
+| Item | Where used | License | Attribution / status |
+|---|---|---|---|
+| NASA Blue Marble, Shaded Relief and Bathymetry (GIBS WMTS layer `BlueMarble_ShadedRelief_Bathymetry`), https://gibs.earthdata.nasa.gov/ | Home globe and "Satélite" view (whole world, up to zoom 8) | NASA data, no copyright; credit NASA, no implied endorsement ([Earthdata data use policy](https://www.earthdata.nasa.gov/earth-observation-data/data-use-policy)) | "Blue Marble: NASA GIBS / NASA Earth Observatory" on the map; confirm exact GIBS acknowledgement wording |
+| IGN Base (WMTS `ign-base`, layer `IGNBaseTodo`), https://www.ign.es/wmts/ign-base | Basemap, "Normal" and "Monocromática" views | CC BY 4.0 ([IGN conditions](https://www.ign.es/resources/licencia/Condiciones_licenciaUso_IGN.pdf)) | "CC BY 4.0 scne.es · Instituto Geográfico Nacional" shown on the map; ok |
+| IGN vector base map (Mapa Base Vectorial, style `mapaBase_scn_color1_CNIG`, tiles https://vt-mapabase.idee.es/1.0.0/mapabase/{z}/{x}/{y}.pbf) | Town, municipality and road names + main roads over the "Satélite" view | CC BY 4.0 scne.es (IGN) | "Mapa base vectorial: CC BY 4.0 scne.es" on the map; glyphs and sprites loaded from the same IGN server |
+| PNOA máxima actualidad (WMTS `pnoa-ma`), https://www.ign.es/wmts/pnoa-ma | "Por parcela" view (orthophoto) | CC BY 4.0 (see PNOA row above) | same on-map attribution; ok |
+| SIGPAC recintos, vector tiles https://sigpac-hubcloud.es/mvt/recinto@3857@pbf/{z}/{x}/{y}.pbf | "Por parcela" view (outlines + click card) | CC BY 4.0 (see SIGPAC row above) | "Recintos SIGPAC © FEGA (CC BY 4.0)" on the map; live service, offline copy pending (T-023) |
+| Natural Earth 1:10m / 1:50m / 1:110m land and countries, https://www.naturalearthdata.com/ | Home globe and "Monocromática" view (land fill, borders) | Public domain | "Natural Earth" shown in the map attribution; ok |
+| world-atlas 2.0.2 (Natural Earth as TopoJSON), https://github.com/topojson/world-atlas | Packaging of the Natural Earth data | ISC | ok |
+| topojson-client 3.1.0, https://github.com/topojson/topojson-client | TopoJSON to GeoJSON in the browser | ISC | ok |
+| React 19 + React DOM, https://react.dev | UI | MIT | ok |
+| MapLibre GL JS 6, https://maplibre.org | Map rendering | BSD-3-Clause | ok |
+| Vite 8 + @vitejs/plugin-react, https://vite.dev | Build tooling | MIT | ok |
+| Brunson / Brunson Rough fonts, The Branded Quotes, https://thebrandedquotes.sellfy.store | Logo and display titles | **"All Rights Reserved", no licence file** | **PENDING: licence check by jaime; swap to Anton (OFL) before public deploy if not open** |
+| Icons in `app/frontend/src/components/ui/Icon.jsx` | UI icons | Original work (team) | ok |
