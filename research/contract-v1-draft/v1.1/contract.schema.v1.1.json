@@ -204,6 +204,10 @@
         },
         "nota": {
           "type": "string"
+        },
+        "alineados": {
+          "type": "boolean",
+          "description": "true solo si el indice i de 'escenarios' es la MISMA muestra (mismo anio de clima, precio y coste) en todas las rotaciones. Si es false o falta, la UI no debe presentar 'B gana en el X %' como resultado firme (mostrarlo como orientativo u ocultarlo). Lo confirma el productor del motor (enrique); el adaptador lo deja en false mientras no lo declare."
         }
       },
       "required": [

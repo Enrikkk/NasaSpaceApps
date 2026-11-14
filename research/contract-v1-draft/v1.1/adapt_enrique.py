@@ -301,10 +301,13 @@ def adapt_enrique(src, origen="app/data/torre-pacheco.json (enrique, t012-motor-
     if longs and len(set(longs.values())) == 1:
         n = next(iter(longs.values()))
         escenarios_meta = {"_status": estado_bloques["rotaciones"], "n": n,
+                           "alineados": bool((d.get("escenarios_meta") or {}).get("alineados", False)),
                            "nota": "n deducido de len(escenarios). Alineacion del indice i entre rotaciones (mismo anio/precio/coste): pendiente de confirmar por enrique."}
         um = next((r["margen_eur_ha"].get("unidad") for r in rots if isinstance(r.get("margen_eur_ha"), dict) and r["margen_eur_ha"].get("unidad")), None)
         if um:
             escenarios_meta["unidad"] = um
+        if not escenarios_meta["alineados"]:
+            ctx.av("escenarios_meta.alineados = false: enrique confirmo (#138) que el indice i NO es hoy la misma muestra en todas las rotaciones; la UI no debe presentar 'B gana X %' como firme")
         ctx.ad("escenarios_meta {n, unidad} deducido de las muestras (sin semilla ni anio_clima: no existen en el origen)")
     elif longs:
         ctx.av(f"nº de escenarios distinto entre rotaciones {longs}: no se genera escenarios_meta")
