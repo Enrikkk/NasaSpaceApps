@@ -66,7 +66,7 @@ function Body({ parcel, onClose }) {
 
         {error && (
           <div className={styles.error} role="alert">
-            <p>{errorText(error)} Los datos de la parcela de arriba sí los tenemos; las rotaciones no.</p>
+            <p>{errorText(error)} {parcela ? 'Los datos de la parcela de arriba sí los tenemos; las rotaciones no.' : 'No hemos podido leer ni la parcela ni las rotaciones.'}</p>
             <button type="button" className={styles.retry} onClick={retry}>
               <GlyphIcon name="retry" size={16} />Reintentar
             </button>
