@@ -1,0 +1,74 @@
+crop_id,param,value,unit,source_id,conf,status,nota
+lechuga,kc_ini,0.7,-,F56-T12,A,sourced,group a. Small Vegetables row (lettuce row leaves Kc ini blank)
+lechuga,kc_mid,1.00,-,F56-T12,A,sourced,
+lechuga,kc_end,0.95,-,F56-T12,A,sourced,
+lechuga,h_max,0.3,m,F56-T12,A,sourced,
+lechuga,stages_days,30/40/25/10,d,F56-T11,A,sourced,Nov/Jan Mediterranean = 105 d (default for Murcia autumn-winter)
+lechuga,stages_days_spring,20/30/15/10,d,F56-T11,A,sourced,April Mediterranean = 75 d
+lechuga,stages_days_feb,35/50/45/10,d,F56-T11,A,sourced,Feb Mediterranean = 140 d
+lechuga,ece_threshold,1.3,dS/m,F29-T4,A,sourced,ECe at 100 % yield potential
+lechuga,ece_zero_yield,9.0,dS/m,F29-T4,A,sourced,ECe at 0 % yield
+lechuga,ece_slope,13.0,%/(dS/m),F29-T4,A,derived,100/(9.0-1.3)
+lechuga,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+brocoli,kc_ini,0.7,-,F56-T12,A,sourced,group a. Small Vegetables row
+brocoli,kc_mid,1.05,-,F56-T12,A,sourced,
+brocoli,kc_end,0.95,-,F56-T12,A,sourced,
+brocoli,h_max,0.3,m,F56-T12,A,sourced,
+brocoli,stages_days,35/45/40/15,d,F56-T11,M,sourced,Sept California desert = 135 d; FAO-56 has no Mediterranean broccoli row
+brocoli,ece_threshold,2.8,dS/m,F29-T4,A,sourced,
+brocoli,ece_zero_yield,14,dS/m,F29-T4,A,sourced,
+brocoli,ece_slope,8.9,%/(dS/m),F29-T4,A,derived,100/(14-2.8)
+brocoli,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+melon,kc_ini,0.5,-,F56-T12,A,sourced,group c. Cucurbitaceae row
+melon,kc_mid,1.05,-,F56-T12,A,sourced,Sweet Melons row (piel de sapo type assumed; cantaloupe would be lower)
+melon,kc_end,0.75,-,F56-T12,A,sourced,Sweet Melons row
+melon,h_max,0.4,m,F56-T12,A,sourced,
+melon,stages_days,25/35/40/20,d,F56-T11,A,sourced,May Mediterranean = 120 d
+melon,ece_threshold,1.0,dS/m,RES-F29,B,secondary,not in FAO-29 Table 4 (only classed moderately sensitive); value from research notes (Maas & Hoffman via secondary source)
+melon,ece_slope,8.4,%/(dS/m),RES-F29,B,secondary,same as above
+melon,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+alcachofa,kc_ini,0.5,-,F56-T12,A,sourced,Artichokes row (perennial vegetables)
+alcachofa,kc_mid,1.00,-,F56-T12,A,sourced,
+alcachofa,kc_end,0.95,-,F56-T12,A,sourced,
+alcachofa,h_max,0.7,m,F56-T12,A,sourced,
+alcachofa,stages_days,40/40/250/30,d,F56-T11,B,sourced,Apr 1st year California = 360 d; Murcia plants Jul-Aug and cuts Nov-May (CARM): calendar differs
+alcachofa,stages_days_2nd_year,20/25/250/30,d,F56-T11,B,sourced,May 2nd year California = 325 d
+alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows are Helianthus tuberosus (Jerusalem artichoke) not Cynara scolymus; no sourced value
+alcachofa,salt_class,,-,,P,placeholder,SUPUESTO: see above
+haba,kc_ini,0.5,-,F56-T12,A,sourced,Fababean Dry/Seed row (decision 14 Nov: dry broad bean)
+haba,kc_mid,1.15,-,F56-T12,A,sourced,
+haba,kc_end,0.30,-,F56-T12,A,sourced,
+haba,h_max,0.8,m,F56-T12,A,sourced,
+haba,stages_days,90/45/40/60,d,F56-T11,A,sourced,dry; Nov Europe = 235 d
+haba,ece_threshold,1.5,dS/m,F29-T4,A,sourced,Broadbean (Vicia faba)
+haba,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
+haba,ece_slope,9.5,%/(dS/m),F29-T4,A,derived,100/(12-1.5)
+haba,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+haba,legume,yes,-,F56-T12,A,sourced,fixes N (credit from research notes 90-130 kg N/ha)
+cebada,kc_ini,0.3,-,F56-T12,A,sourced,group i. Cereals row
+cebada,kc_mid,1.15,-,F56-T12,A,sourced,
+cebada,kc_end,0.25,-,F56-T12,A,sourced,
+cebada,h_max,1,m,F56-T12,A,sourced,
+cebada,stages_days,40/60/60/40,d,F56-T11,M,sourced,Nov = 200 d; region cell blank in the HTML table (likely 35-45 deg latitude like Murcia: not confirmed)
+cebada,ece_threshold,8.0,dS/m,F29-T4,A,sourced,
+cebada,ece_zero_yield,28,dS/m,F29-T4,A,sourced,
+cebada,ece_slope,5.0,%/(dS/m),F29-T4,A,derived,100/(28-8.0)
+cebada,salt_class,tolerant,-,F29-T6,A,sourced,
+veza,kc_ini,0.4,-,F56-T12,B,derived,no vetch row in FAO-56: group e. Legumes row
+veza,kc_mid,1.15,-,F56-T12,B,derived,group e. Legumes
+veza,kc_end,0.55,-,F56-T12,B,derived,group e. Legumes
+veza,stages_days,,d,,P,placeholder,cover crop: engine fills the bare window; no FAO stage lengths
+veza,ece_threshold,3.0,dS/m,F29-T4,A,sourced,Vetch common (Vicia angustifolia)
+veza,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
+veza,ece_slope,11.1,%/(dS/m),F29-T4,A,derived,100/(12-3.0)
+veza,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+veza,legume,yes,-,F29-T6,A,sourced,Vicia; N credit 100-120 kg N/ha in research notes
+limon,kc_ini,0.70,-,F56-T12,A,sourced,Citrus no ground cover 70 % canopy
+limon,kc_mid,0.65,-,F56-T12,A,sourced,
+limon,kc_end,0.70,-,F56-T12,A,sourced,
+limon,h_max,4,m,F56-T12,A,sourced,
+limon,stages_days,60/90/120/95,d,F56-T11,A,sourced,Citrus Jan Mediterranean = 365 d
+limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange (Citrus sinensis) row used
+limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
+limon,ece_slope,15.9,%/(dS/m),F29-T4,M,derived,100/(8.0-1.7)
+limon,salt_class,sensitive,-,F29-T6,A,sourced,Lemon (Citrus limon) listed as sensitive
