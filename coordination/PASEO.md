@@ -37,13 +37,14 @@ There are no tokens or passwords to exchange:
 - **Dispatch credentials travel by themselves.** `team_join.sh` generates the laptop's Paseo daemon password and
   `register` hands it to the hub over Tailscale. It's stored in `~/.paseo-team/<seat>.env` (chmod 600).
 
-**Hub (jaime): done on 2026-11-14 by his agent.** Daemon on `100.93.255.39:6767` with a password. Bus running (terminal
-tab `team-bus`). Seat `jaime` registered. `orchestrator` token minted (`~/.paseo-team/bus/tokens/`). The orchestrator
+**Hub (jaime): done on 2026-11-14 by his agent.** Daemon on `100.93.255.39:6767` with a password. Bus running as a
+LaunchAgent (`scripts/hub_service.sh`, survives reboots; runs its own clone in `~/.paseo-team/app`, pulled at each start). Seat `jaime` registered. `orchestrator` token minted (`~/.paseo-team/bus/tokens/`). The orchestrator
 auto-starts when a message arrives.
 **The one thing only jaime can do:** Tailscale admin console → Users → **Invite users** → copy the invite link
 and post it in the team chat. Free plan: 6 users.
-Optional: `bash scripts/hub_service.sh install` makes the bus a LaunchAgent (survives reboots). Close the
-`team-bus` terminal tab first. His agent wasn't allowed to install persistent services.
+Bus service: `bash scripts/hub_service.sh status | logs | install | uninstall`. After pushing changes to
+`team_bus.py`, run `install` again (or reboot) to restart it with the new code. macOS doesn't let launchd jobs
+read `~/Documents`, which is why the service uses its own clone outside it.
 
 **Hub, every session:** nothing to do if the bus is running (`bash scripts/hub_service.sh status`). Talk to the
 orchestrator in the Paseo app (agent `orchestrator`). If none is running: `scripts/paseo_team.sh orchestrator`. Seats:
