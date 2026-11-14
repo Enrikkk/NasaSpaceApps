@@ -1216,8 +1216,33 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Es lo que haces hoy; sirve de referencia para comparar.",
-   "_status": "real"
+   "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. No sale cifra de dinero: a esta rotación le falta el precio abierto de Lechuga iceberg, y sin precio no se puede calcular el margen ni el porcentaje de años buenos. Usa unos 7.226 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+   "_status": "real",
+   "texto": {
+    "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. No sale cifra de dinero: a esta rotación le falta el precio abierto de Lechuga iceberg, y sin precio no se puede calcular el margen ni el porcentaje de años buenos. Usa unos 7.226 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Agua de riego: unos 7.226 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.046 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,3 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Para esta rotación no hay margen ni porcentaje de años buenos: falta el precio de algún cultivo con datos abiertos.",
+     "Para Melón piel de sapo el precio es la media nacional de Eurostat, que suele ser optimista para Murcia: el margen puede salir más alto de lo real.",
+     "Para Lechuga iceberg no hay precio abierto: tendrías que poner el tuyo.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja."
+    ],
+    "riesgos_texto": [
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Melón piel de sapo y Lechuga iceberg hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s1",
@@ -5050,8 +5075,37 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Máximo margen»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 7.594 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 808 m³ más de agua por hectárea y año que ahora (un 11 % más) y, en años simulados, sale bien el 100 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): amarillo, tramo desnudo más largo sin cubierta: 63 días (límite 60).",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 7.594 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 808 m³ más de agua por hectárea y año que ahora (un 11 % más) y, en años simulados, sale bien el 100 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): amarillo, tramo desnudo más largo sin cubierta: 63 días (límite 60).",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 7.594 € en un año típico, 3.469 € en un mal año y 11.201 € en un buen año.",
+     "Años buenos: 100 % de los años simulados (entre 93 % y 100 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 8.034 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.026 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,3 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Para Brócoli y Melón piel de sapo el precio es la media nacional de Eurostat, que suele ser optimista para Murcia: el margen puede salir más alto de lo real.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 54 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2014 (1.384 € por hectárea), 2011 (1.923 € por hectárea) y 2021 (3.627 € por hectárea).",
+     "En un mal año (del decil inferior) el margen bajaría a 3.469 € por hectárea.",
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Melón piel de sapo y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo: tramo desnudo más largo sin cubierta: 63 días (límite 60)."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s2",
@@ -8857,8 +8911,38 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Suelo y agua»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 2.605 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 3.870 m³ menos de agua por hectárea y año que ahora (un 54 % menos) y, en años simulados, sale bien el 79 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 2.605 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 3.870 m³ menos de agua por hectárea y año que ahora (un 54 % menos) y, en años simulados, sale bien el 79 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 2.605 € en un año típico, 238 € en un mal año y 4.991 € en un buen año.",
+     "Años buenos: 79 % de los años simulados (entre 67 % y 88 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 3.356 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.026 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,9 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Para Brócoli y Melón piel de sapo el precio es la media nacional de Eurostat, que suele ser optimista para Murcia: el margen puede salir más alto de lo real.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 57 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja.",
+     "El coste y el aporte de nitrógeno de la cubierta de veza son supuestos, no medidos."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2010 (-2.322 € por hectárea), 2013 (-1.395 € por hectárea) y 2014 (-1.367 € por hectárea).",
+     "En un mal año (del decil inferior) el margen bajaría a 238 € por hectárea.",
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Brócoli y Melón piel de sapo hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo: grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s3",
@@ -12695,8 +12779,37 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Riesgo bajo»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 7.470 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 808 m³ más de agua por hectárea y año que ahora (un 11 % más) y, en años simulados, sale bien el 100 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de Lechuga iceberg, y sin precio no hay margen. Para esta opción, un año típico saldría en 7.470 € por hectárea y año con el precio medio nacional, que puede ser optimista para Murcia. Gastaría unos 808 m³ más de agua por hectárea y año que ahora (un 11 % más) y, en años simulados, sale bien el 100 % de las veces con el precio medio nacional (no hay porcentaje comparable de lo de hoy). Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 7.470 € en un año típico, 3.345 € en un mal año y 11.077 € en un buen año.",
+     "Años buenos: 100 % de los años simulados (entre 93 % y 100 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 8.034 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.026 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,3 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Para Brócoli y Melón piel de sapo el precio es la media nacional de Eurostat, que suele ser optimista para Murcia: el margen puede salir más alto de lo real.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 54 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja.",
+     "El coste y el aporte de nitrógeno de la cubierta de veza son supuestos, no medidos."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2014 (1.264 € por hectárea), 2011 (1.803 € por hectárea) y 2021 (3.507 € por hectárea).",
+     "En un mal año (del decil inferior) el margen bajaría a 3.345 € por hectárea.",
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Melón piel de sapo y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   }
  ],
  "criterios_sentido": "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas",

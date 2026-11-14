@@ -4077,8 +4077,36 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Es lo que haces hoy; sirve de referencia para comparar.",
-   "_status": "real"
+   "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 328 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.230 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+   "_status": "real",
+   "texto": {
+    "por_que": "Es lo que haces hoy y sirve de referencia para comparar las demás. En un año típico deja unos 328 € por hectárea y año y, en años simulados, sale bien el 41 % de las veces. Usa unos 7.230 m³ de agua por hectárea y año. Semáforo legal (provisional): verde, cumple las comprobaciones que podemos hacer; el abonado sigue por verificar.",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 328 € en un año típico, -5.527 € en un mal año y 8.382 € en un buen año.",
+     "Años buenos: 41 % de los años simulados (entre 29 % y 55 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 7.230 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.046 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,3 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Los precios de Lechuga iceberg y Melón piel de sapo son cotizaciones orientativas de la CARM, no el precio pactado de tu finca: si vendes a otro precio, el resultado cambia.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 51 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2017 (-9.706 € por hectárea), 2011 (-8.300 € por hectárea) y 2012 (-6.068 € por hectárea).",
+     "En un mal año (del decil inferior) podrías perder 5.527 € por hectárea.",
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Melón piel de sapo y Lechuga iceberg hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s1",
@@ -7851,8 +7879,37 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Máximo margen»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 3.628 € por hectárea y año más que lo que haces hoy (3.956 € frente a 328 €). Gastaría unos 1.143 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 73 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que más margen deja en un año típico. En un año típico dejaría unos 3.628 € por hectárea y año más que lo que haces hoy (3.956 € frente a 328 €). Gastaría unos 1.143 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 73 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 3.956 € en un año típico, -876 € en un mal año y 9.829 € en un buen año.",
+     "Años buenos: 73 % de los años simulados (entre 60 % y 83 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 6.087 m³ por hectárea y año.",
+     "Hay que adelantar hasta 7.925 € por hectárea antes de cobrar; el primer ingreso llegaría a los 2,2 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Los precios de Alcachofa (gorda) y Brócoli son cotizaciones orientativas de la CARM, no el precio pactado de tu finca: si vendes a otro precio, el resultado cambia.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 52 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja.",
+     "La alcachofa se calcula como cultivo de un año, aunque en realidad dura varios."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2019 (-4.057 € por hectárea), 2012 (-2.197 € por hectárea) y 2011 (-1.206 € por hectárea).",
+     "En un mal año (del decil inferior) podrías perder 876 € por hectárea.",
+     "Alcachofa (gorda): en 3 de 19 años del histórico hubo frío fuerte en la etapa de capítulos (brácteas) (mínima ≤ -1,3 °C); riesgo medio. Es lo que midió la estación, no daño observado.",
+     "En Alcachofa (gorda) y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo: grupo legal sin confirmar: alcachofa."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s2",
@@ -11669,8 +11726,38 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Suelo y agua»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 1.697 € por hectárea y año más que lo que haces hoy (2.025 € frente a 328 €). Gastaría unos 3.670 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 62 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo y menos agua gasta. En un año típico dejaría unos 1.697 € por hectárea y año más que lo que haces hoy (2.025 € frente a 328 €). Gastaría unos 3.670 m³ menos de agua por hectárea y año que ahora (un 51 % menos) y, en años simulados, sale bien el 62 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar).",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 2.025 € en un año típico, -1.385 € en un mal año y 5.863 € en un buen año.",
+     "Años buenos: 62 % de los años simulados (entre 48 % y 74 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 3.560 m³ por hectárea y año.",
+     "Hay que adelantar hasta 9.026 € por hectárea antes de cobrar; el primer ingreso llegaría a los 3,9 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Los precios de Brócoli y Melón piel de sapo son cotizaciones orientativas de la CARM, no el precio pactado de tu finca: si vendes a otro precio, el resultado cambia.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 50 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "Para algún cultivo no hay estudio de costes propio y se usan los de un cultivo parecido.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja.",
+     "El coste y el aporte de nitrógeno de la cubierta de veza son supuestos, no medidos."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2011 (-4.781 € por hectárea), 2015 (-4.101 € por hectárea) y 2006 (-2.657 € por hectárea).",
+     "En un mal año (del decil inferior) podrías perder 1.385 € por hectárea.",
+     "Con la evidencia disponible no sale ninguna etapa con riesgo medio o alto.",
+     "En Brócoli y Melón piel de sapo hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo: grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   },
   {
    "id": "s3",
@@ -15444,8 +15531,38 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Riesgo bajo»; la web solo reordena con tus pesos.",
-   "_status": "real"
+   "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 3.586 € por hectárea y año más que lo que haces hoy (3.914 € frente a 328 €). Gastaría unos 1.143 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 73 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+   "_status": "real",
+   "texto": {
+    "por_que": "Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 3.586 € por hectárea y año más que lo que haces hoy (3.914 € frente a 328 €). Gastaría unos 1.143 m³ menos de agua por hectárea y año que ahora (un 16 % menos) y, en años simulados, sale bien el 73 % de las veces, frente al 41 % de hoy. Semáforo legal (provisional): amarillo, grupo legal sin confirmar: alcachofa.",
+    "evidencia_resumen": [
+     "Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior.",
+     "Margen por hectárea y año: 3.914 € en un año típico, -918 € en un mal año y 9.793 € en un buen año.",
+     "Años buenos: 73 % de los años simulados (entre 60 % y 83 %). Cuenta como bueno un año con margen positivo y sin pérdida de clima grande; es un cálculo, no una promesa.",
+     "Agua de riego: unos 6.087 m³ por hectárea y año.",
+     "Hay que adelantar hasta 7.925 € por hectárea antes de cobrar; el primer ingreso llegaría a los 2,2 meses.",
+     "Se ha probado con el clima real de 19 años de la estación más cercana; no es un pronóstico."
+    ],
+    "no_sabemos": [
+     "Los precios de Alcachofa (gorda) y Brócoli son cotizaciones orientativas de la CARM, no el precio pactado de tu finca: si vendes a otro precio, el resultado cambia.",
+     "El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los 52 casos que se cuentan no son independientes y la horquilla es optimista.",
+     "El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.",
+     "El semáforo legal es provisional: falta la tabla de normas y no sabemos si la parcela está en Zona 1 o Zona 2.",
+     "El abonado (nitrógeno) no lo puede evaluar la herramienta: depende de tu plan de abonado.",
+     "No sabemos la salinidad de tu agua de riego, así que no se descuenta pérdida por sal.",
+     "No se tiene en cuenta que, si muchos agricultores plantan lo mismo, el precio baja.",
+     "La alcachofa se calcula como cultivo de un año, aunque en realidad dura varios.",
+     "El coste y el aporte de nitrógeno de la cubierta de veza son supuestos, no medidos."
+    ],
+    "riesgos_texto": [
+     "Los años más duros del histórico para este plan fueron 2019 (-4.057 € por hectárea), 2012 (-2.197 € por hectárea) y 2011 (-1.206 € por hectárea).",
+     "En un mal año (del decil inferior) podrías perder 918 € por hectárea.",
+     "Alcachofa (gorda): en 3 de 19 años del histórico hubo frío fuerte en la etapa de capítulos (brácteas) (mínima ≤ -1,3 °C); riesgo medio. Es lo que midió la estación, no daño observado.",
+     "En Alcachofa (gorda) y Brócoli hay etapas sin evidencia documentada de daño por frío o calor. Eso no es lo mismo que riesgo bajo: significa que no lo sabemos.",
+     "El semáforo legal sale amarillo: grupo legal sin confirmar: alcachofa."
+    ],
+    "consulta": "Herramienta de apoyo. Consulta a tu técnico agrícola antes de decidir."
+   }
   }
  ],
  "criterios_sentido": "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas",

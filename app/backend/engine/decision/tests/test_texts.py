@@ -54,6 +54,14 @@ def test_apply_refuses_to_ship_a_wrong_number(out, monkeypatch):
         texts.apply(copy.deepcopy(out))
 
 
+def test_validator_catches_number_written_as_a_word(out):
+    bad = copy.deepcopy(out)
+    alt = next(r for r in bad["rotaciones"] if not r["es_actual"])
+    alt["texto"]["por_que"] += " Dejaría tres euros más."
+    found = texts.check(bad)
+    assert any(n.lower() == "tres" and i == alt["id"] for i, n, _ in found)
+
+
 def test_numbers_in_parses_spanish_format():
     assert texts.numbers_in("3.956 € y 2,2 meses, el 73 % en 2019") == [3956.0, 2.2, 73.0, 2019.0]
     assert texts.numbers_in("sin cifras") == []

@@ -23,6 +23,12 @@ _NUM = re.compile(r"(?<![\w.,])(\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:,\d+)?)")
 _DATE = re.compile(r"\b\d{2}-\d{2}\b")
 _SENT = re.compile(r"(?<=[.!?])\s+")
 _BAD_WORD = re.compile(r"\b(None|nan|NaN|null)\b")
+# Cardinals written out hide a quantity from `_NUM` («tres», «diez»). Articles «un»/«una» are not included.
+_WORD_NUM = re.compile(
+    r"\b(cero|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|"
+    r"veinte|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|cien|ciento|mil)\b",
+    re.IGNORECASE,
+)
 
 
 def _numbers_raw(text):
@@ -169,6 +175,9 @@ def check(out):
                 m = _BAD_WORD.search(sentence)
                 if m:
                     bad.append((r["id"], m.group(1), sentence))
+                w = _WORD_NUM.search(sentence)
+                if w:
+                    bad.append((r["id"], w.group(1), sentence))
     return bad
 
 
@@ -301,7 +310,7 @@ def _why_alt(r, ref):
 
 
 def _evidencia(r):
-    out = ["Un año típico es el año del medio entre todos los simulados; un mal año es uno de los peores (uno de cada diez)."]
+    out = ["Un año típico es el año del medio entre todos los simulados; un mal año es del decil inferior."]
     if _has_margin(r):
         m = r["margen_eur_ha"]
         out.append(f"Margen por hectárea y año: {_eur(m['p50'])} en un año típico, {_eur(m['p10'])} en un mal año "
@@ -372,9 +381,9 @@ def _riesgos(r):
     if _has_margin(r):
         p10 = r["margen_eur_ha"]["p10"]
         if round(p10) < 0:
-            out.append(f"En un mal año (uno de cada diez) podrías perder {_n(p10)} € por hectárea.")
+            out.append(f"En un mal año (del decil inferior) podrías perder {_n(p10)} € por hectárea.")
         else:
-            out.append(f"En un mal año (uno de cada diez) el margen bajaría a {_n(p10)} € por hectárea.")
+            out.append(f"En un mal año (del decil inferior) el margen bajaría a {_n(p10)} € por hectárea.")
     found, blind = _stage_levels(r)
     for prod, e2 in found:
         where = f" en la etapa de {e2['organo']}" if e2.get("organo") else ""

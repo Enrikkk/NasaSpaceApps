@@ -35,8 +35,8 @@ BIT_CIRRUS, BIT_CLOUD, BIT_ADJACENT, BIT_SHADOW, BIT_SNOW, BIT_WATER = 0, 1, 2, 
 DEFAULT_BAD_BITS = (BIT_CLOUD, BIT_ADJACENT, BIT_SHADOW, BIT_SNOW, BIT_WATER)
 
 # --- classification thresholds: SUPUESTO (design values) -------------------------------------------------------------
-NDVI_BARE_MAX = 0.20      # NDVI <  0.20 -> 'desnudo'
-NDVI_COVER_MIN = 0.35     # NDVI >= 0.35 -> 'cubierto'; between the two -> 'vulnerable' (low cover)
+NDVI_BARE_MAX = 0.20      # supuesto. NDVI < 0.20 -> 'desnudo' (literatura de contexto en el README; no medido aquí)
+NDVI_COVER_MIN = 0.35     # supuesto, sin fuente. NDVI >= 0.35 -> 'cubierto'; entre ambos -> 'vulnerable'
 MIN_CLEAR_DATES = 2       # fewer clear dates in a month -> 'sin dato' (design value)
 MIN_CLEAR_PIXEL_FRACTION = 0.5   # parcel mean needs >= 50% clear valid pixels on that date (design value)
 
