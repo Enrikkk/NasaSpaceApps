@@ -9,8 +9,9 @@
   "regadio": true,
   "zonas": [
    "zona_vulnerable_nitratos",
-   "mar_menor_zona_2"
-  ]
+   "mar_menor_zona_por_verificar"
+  ],
+  "_status": "simulado"
  },
  "historia": [
   {
@@ -45,7 +46,8 @@
   ],
   "meses_vulnerable": [
    "2025-08"
-  ]
+  ],
+  "_status": "simulado"
  },
  "clima": {
   "lluvia_anual_mm": {
@@ -72,13 +74,15 @@
    "lluvia_pct": -12,
    "temp_c": 1.8,
    "_status": "simulado (deltas del contrato, no NEX-GDDP)"
-  }
+  },
+  "_status": "real"
  },
  "suelo": {
   "textura": "franco-arcilloso",
   "materia_organica_pct": 1.1,
   "agua_disponible_mm": 120,
-  "fuente": "SoilGrids"
+  "fuente": "SoilGrids",
+  "_status": "simulado"
  },
  "prioridades_defecto": {
   "rentabilidad": 0.4,
@@ -127,6 +131,23 @@
       "Lechuga iceberg"
      ],
      "opcion": "Melón piel de sapo + Lechuga iceberg",
+     "ciclos_por_anio": 2,
+     "ciclos_detalle": [
+      {
+       "producto": "Melón piel de sapo",
+       "cultivo": "melon",
+       "siembra": "05-01",
+       "ciclo_dias": 120,
+       "primera_cosecha_dias": 100
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "cultivo": "lechuga",
+       "siembra": "11-01",
+       "ciclo_dias": 105,
+       "primera_cosecha_dias": 95
+      }
+     ],
      "siembras": {
       "Melón piel de sapo": "05-01",
       "Lechuga iceberg": "11-01"
@@ -140,6 +161,23 @@
       "Lechuga iceberg"
      ],
      "opcion": "Melón piel de sapo + Lechuga iceberg",
+     "ciclos_por_anio": 2,
+     "ciclos_detalle": [
+      {
+       "producto": "Melón piel de sapo",
+       "cultivo": "melon",
+       "siembra": "05-01",
+       "ciclo_dias": 120,
+       "primera_cosecha_dias": 100
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "cultivo": "lechuga",
+       "siembra": "11-01",
+       "ciclo_dias": 105,
+       "primera_cosecha_dias": 95
+      }
+     ],
      "siembras": {
       "Melón piel de sapo": "05-01",
       "Lechuga iceberg": "11-01"
@@ -153,6 +191,23 @@
       "Lechuga iceberg"
      ],
      "opcion": "Melón piel de sapo + Lechuga iceberg",
+     "ciclos_por_anio": 2,
+     "ciclos_detalle": [
+      {
+       "producto": "Melón piel de sapo",
+       "cultivo": "melon",
+       "siembra": "05-01",
+       "ciclo_dias": 120,
+       "primera_cosecha_dias": 100
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "cultivo": "lechuga",
+       "siembra": "11-01",
+       "ciclo_dias": 105,
+       "primera_cosecha_dias": 95
+      }
+     ],
      "siembras": {
       "Melón piel de sapo": "05-01",
       "Lechuga iceberg": "11-01"
@@ -169,25 +224,29 @@
       "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
       "articulo": "Ley 3/2020 art. 39",
       "resultado": "ok",
-      "detalle": "2 ciclos como máximo en un año"
+      "detalle": "2 ciclos como máximo en un año",
+      "severidad": "ok"
      },
      {
       "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
       "articulo": "Ley 3/2020 art. 51",
       "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite"
+      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
+      "severidad": "ok"
      },
      {
       "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
       "articulo": "Ley 3/2020 art. 51.6",
       "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 46 días (límite 60)"
+      "detalle": "tramo desnudo más largo sin cubierta: 46 días (límite 60)",
+      "severidad": "ok"
      },
      {
       "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
       "articulo": "Ley 3/2020 arts. 29 y 40",
-      "resultado": "no_evaluado",
-      "detalle": "depende del plan de abonado, que esta herramienta no define"
+      "resultado": "no_evaluable",
+      "detalle": "depende del plan de abonado, que esta herramienta no define",
+      "severidad": "no_evaluado"
      }
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
@@ -513,7 +572,7 @@
      2011,
      2012
     ],
-    "definicion": "años (de cada año del plan) sin pérdida de clima >= 20 % y con margen >= 0; los años del histórico se reutilizan, por eso el intervalo es optimista"
+    "definicion": "n = años del plan x años del histórico con dato (51); un año cuenta como bueno si no hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada año del plan: no son observaciones independientes y el intervalo es optimista"
    },
    "margen_eur_ha": {
     "valor": 328,
@@ -2238,7 +2297,8 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Es lo que haces hoy; sirve de referencia para comparar."
+   "por_que": "Es lo que haces hoy; sirve de referencia para comparar.",
+   "_status": "real"
   },
   {
    "id": "s1",
@@ -2257,6 +2317,16 @@
       "Alcachofa (gorda)"
      ],
      "opcion": "Alcachofa (gorda)",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "cultivo": "alcachofa",
+       "siembra": "08-01",
+       "ciclo_dias": 304,
+       "primera_cosecha_dias": 68
+      }
+     ],
      "siembras": {
       "Alcachofa (gorda)": "08-01"
      }
@@ -2267,6 +2337,16 @@
       "Brócoli"
      ],
      "opcion": "Brócoli",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Brócoli",
+       "cultivo": "brocoli",
+       "siembra": "09-01",
+       "ciclo_dias": 135,
+       "primera_cosecha_dias": 120
+      }
+     ],
      "siembras": {
       "Brócoli": "09-01"
      }
@@ -2277,6 +2357,16 @@
       "Alcachofa (gorda)"
      ],
      "opcion": "Alcachofa (gorda)",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "cultivo": "alcachofa",
+       "siembra": "08-01",
+       "ciclo_dias": 304,
+       "primera_cosecha_dias": 68
+      }
+     ],
      "siembras": {
       "Alcachofa (gorda)": "08-01"
      }
@@ -2292,31 +2382,36 @@
       "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
       "articulo": "Ley 3/2020 art. 39",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año"
+      "detalle": "1 ciclos como máximo en un año",
+      "severidad": "ok"
      },
      {
       "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
       "articulo": "Ley 3/2020 art. 51",
       "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite"
+      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
+      "severidad": "ok"
      },
      {
       "regla": "grupo legal del cultivo",
       "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
-      "resultado": "por_verificar",
-      "detalle": "grupo legal sin confirmar: alcachofa"
+      "resultado": "no_evaluable",
+      "detalle": "grupo legal sin confirmar: alcachofa",
+      "severidad": "por_verificar"
      },
      {
       "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
       "articulo": "Ley 3/2020 art. 51.6",
-      "resultado": "aviso",
-      "detalle": "tramo desnudo más largo sin cubierta: 77 días (límite 60)"
+      "resultado": "falla",
+      "detalle": "tramo desnudo más largo sin cubierta: 77 días (límite 60)",
+      "severidad": "aviso"
      },
      {
       "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
       "articulo": "Ley 3/2020 arts. 29 y 40",
-      "resultado": "no_evaluado",
-      "detalle": "depende del plan de abonado, que esta herramienta no define"
+      "resultado": "no_evaluable",
+      "detalle": "depende del plan de abonado, que esta herramienta no define",
+      "severidad": "no_evaluado"
      }
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
@@ -2661,7 +2756,7 @@
      2012,
      2011
     ],
-    "definicion": "años (de cada año del plan) sin pérdida de clima >= 20 % y con margen >= 0; los años del histórico se reutilizan, por eso el intervalo es optimista"
+    "definicion": "n = años del plan x años del histórico con dato (52); un año cuenta como bueno si no hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada año del plan: no son observaciones independientes y el intervalo es optimista"
    },
    "margen_eur_ha": {
     "valor": 3956,
@@ -4350,7 +4445,8 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Máximo margen»; la web solo reordena con tus pesos."
+   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Máximo margen»; la web solo reordena con tus pesos.",
+   "_status": "real"
   },
   {
    "id": "s2",
@@ -4371,6 +4467,16 @@
       "cubierta de veza"
      ],
      "opcion": "Brócoli + cubierta de veza",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Brócoli",
+       "cultivo": "brocoli",
+       "siembra": "09-01",
+       "ciclo_dias": 135,
+       "primera_cosecha_dias": 120
+      }
+     ],
      "siembras": {
       "Brócoli": "09-01"
      }
@@ -4382,6 +4488,16 @@
       "cubierta de veza"
      ],
      "opcion": "Melón piel de sapo + cubierta de veza",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Melón piel de sapo",
+       "cultivo": "melon",
+       "siembra": "05-15",
+       "ciclo_dias": 120,
+       "primera_cosecha_dias": 100
+      }
+     ],
      "siembras": {
       "Melón piel de sapo": "05-15"
      }
@@ -4393,6 +4509,16 @@
       "cubierta de veza"
      ],
      "opcion": "Brócoli + cubierta de veza",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Brócoli",
+       "cultivo": "brocoli",
+       "siembra": "09-01",
+       "ciclo_dias": 135,
+       "primera_cosecha_dias": 120
+      }
+     ],
      "siembras": {
       "Brócoli": "09-01"
      }
@@ -4408,25 +4534,29 @@
       "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
       "articulo": "Ley 3/2020 art. 39",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año"
+      "detalle": "1 ciclos como máximo en un año",
+      "severidad": "ok"
      },
      {
       "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
       "articulo": "Ley 3/2020 art. 51",
-      "resultado": "por_verificar",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)"
+      "resultado": "no_evaluable",
+      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; se repite: solo es un problema en Zona 1 (parcela sin confirmar)",
+      "severidad": "por_verificar"
      },
      {
       "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
       "articulo": "Ley 3/2020 art. 51.6",
       "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)"
+      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)",
+      "severidad": "ok"
      },
      {
       "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
       "articulo": "Ley 3/2020 arts. 29 y 40",
-      "resultado": "no_evaluado",
-      "detalle": "depende del plan de abonado, que esta herramienta no define"
+      "resultado": "no_evaluable",
+      "detalle": "depende del plan de abonado, que esta herramienta no define",
+      "severidad": "no_evaluado"
      }
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
@@ -4783,7 +4913,7 @@
      2015,
      2006
     ],
-    "definicion": "años (de cada año del plan) sin pérdida de clima >= 20 % y con margen >= 0; los años del histórico se reutilizan, por eso el intervalo es optimista"
+    "definicion": "n = años del plan x años del histórico con dato (50); un año cuenta como bueno si no hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada año del plan: no son observaciones independientes y el intervalo es optimista"
    },
    "margen_eur_ha": {
     "valor": 2025,
@@ -6508,7 +6638,8 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Suelo y agua»; la web solo reordena con tus pesos."
+   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Suelo y agua»; la web solo reordena con tus pesos.",
+   "_status": "real"
   },
   {
    "id": "s3",
@@ -6527,6 +6658,16 @@
       "Alcachofa (gorda)"
      ],
      "opcion": "Alcachofa (gorda)",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "cultivo": "alcachofa",
+       "siembra": "08-01",
+       "ciclo_dias": 304,
+       "primera_cosecha_dias": 68
+      }
+     ],
      "siembras": {
       "Alcachofa (gorda)": "08-01"
      }
@@ -6538,6 +6679,16 @@
       "cubierta de veza"
      ],
      "opcion": "Brócoli + cubierta de veza",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Brócoli",
+       "cultivo": "brocoli",
+       "siembra": "09-01",
+       "ciclo_dias": 135,
+       "primera_cosecha_dias": 120
+      }
+     ],
      "siembras": {
       "Brócoli": "09-01"
      }
@@ -6548,6 +6699,16 @@
       "Alcachofa (gorda)"
      ],
      "opcion": "Alcachofa (gorda)",
+     "ciclos_por_anio": 1,
+     "ciclos_detalle": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "cultivo": "alcachofa",
+       "siembra": "08-01",
+       "ciclo_dias": 304,
+       "primera_cosecha_dias": 68
+      }
+     ],
      "siembras": {
       "Alcachofa (gorda)": "08-01"
      }
@@ -6563,31 +6724,36 @@
       "regla": "máximo 2 ciclos por año (3 solo hoja de < 45 días)",
       "articulo": "Ley 3/2020 art. 39",
       "resultado": "ok",
-      "detalle": "1 ciclos como máximo en un año"
+      "detalle": "1 ciclos como máximo en un año",
+      "severidad": "ok"
      },
      {
       "regla": "zona 1: un solo ciclo del grupo 1 al año y nunca dos seguidos",
       "articulo": "Ley 3/2020 art. 51",
       "resultado": "ok",
-      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite"
+      "detalle": "grupo 1 = brásicas, hoja, cebolla, puerro, aromáticas; no se repite",
+      "severidad": "ok"
      },
      {
       "regla": "grupo legal del cultivo",
       "articulo": "Ley 3/2020 art. 51 (Anexo no leído)",
-      "resultado": "por_verificar",
-      "detalle": "grupo legal sin confirmar: alcachofa"
+      "resultado": "no_evaluable",
+      "detalle": "grupo legal sin confirmar: alcachofa",
+      "severidad": "por_verificar"
      },
      {
       "regla": "suelo de regadío desnudo más de 2 meses en otoño-invierno: cubierta",
       "articulo": "Ley 3/2020 art. 51.6",
       "resultado": "ok",
-      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)"
+      "detalle": "tramo desnudo más largo sin cubierta: 0 días (límite 60)",
+      "severidad": "ok"
      },
      {
       "regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha",
       "articulo": "Ley 3/2020 arts. 29 y 40",
-      "resultado": "no_evaluado",
-      "detalle": "depende del plan de abonado, que esta herramienta no define"
+      "resultado": "no_evaluable",
+      "detalle": "depende del plan de abonado, que esta herramienta no define",
+      "severidad": "no_evaluado"
      }
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
@@ -6932,7 +7098,7 @@
      2012,
      2011
     ],
-    "definicion": "años (de cada año del plan) sin pérdida de clima >= 20 % y con margen >= 0; los años del histórico se reutilizan, por eso el intervalo es optimista"
+    "definicion": "n = años del plan x años del histórico con dato (52); un año cuenta como bueno si no hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada año del plan: no son observaciones independientes y el intervalo es optimista"
    },
    "margen_eur_ha": {
     "valor": 3914,
@@ -8621,7 +8787,8 @@
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
     }
    },
-   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Riesgo bajo»; la web solo reordena con tus pesos."
+   "por_que": "Sale de recorrer todas las combinaciones de cultivos permitidas durante 3 años y quedarse con la mejor según el criterio «Riesgo bajo»; la web solo reordena con tus pesos.",
+   "_status": "real"
   }
  ],
  "criterios_sentido": "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas",
@@ -8637,5 +8804,58 @@
   "cubierta_coste_eur_ha": 120.0,
   "et0_por_grado": 0.04
  },
- "generado": "2026-11-14"
+ "generado": "2026-11-14",
+ "schema_version": "1.0",
+ "_meta": {
+  "version": "1.0",
+  "generado": "2026-11-14",
+  "semilla_escenarios": 2026,
+  "muestras": 200,
+  "euros_de": 2025,
+  "motor": "app/backend/engine (T-012/T-018/T-020)"
+ },
+ "fuentes": [
+  {
+   "id": "CARM-ANUARIO",
+   "nombre": "Anuario de Estadística Agraria de la Región de Murcia 2002-03..2022-23, tablas 'Precios percibidos por los productores agrarios' (mensual, por variedad y calidad)",
+   "url": "https://esam.carm.es/anuarios-estadistica-agraria/",
+   "licencia": "RESTRICTED: esam.carm.es/legal — reproduction with citation, personal non-commercial use only, no modification; NOT open. Permission requested (agri-estadistica@carm.es). Internal use only until granted"
+  },
+  {
+   "id": "EUR-HICP",
+   "nombre": "prc_hicp_aind",
+   "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_aind?format=JSON&lang=en&geo=ES&coicop=CP00&unit=INX_A_AVG&sinceTimePeriod=1999",
+   "licencia": "Eurostat, CC BY 4.0 (https://ec.europa.eu/eurostat/about-us/policies/copyright)"
+  },
+  {
+   "id": "F29-T4",
+   "nombre": "FAO-29 Table 4 (crop tolerance and yield potential vs ECe/ECw)",
+   "url": "https://www.fao.org/4/t0234e/T0234E03.htm",
+   "licencia": "FAO, (c) FAO 1985; cite: Ayers & Westcot 1985, FAO Irrigation and Drainage Paper 29 Rev.1"
+  },
+  {
+   "id": "F56-T12",
+   "nombre": "FAO-56 Table 12 (single crop coefficients Kc, max height)",
+   "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+   "licencia": "FAO, (c) FAO 1998; cite: Allen et al. 1998, FAO-56"
+  },
+  {
+   "id": "IMIDA-HORT2020",
+   "nombre": "García García J. (IMIDA) 2020, Estructura de costes de las orientaciones productivas agrícolas de la Región de Murcia: horticultura al aire libre y bajo invernadero (MAPA Observatorio)",
+   "url": "https://www.mapa.gob.es/dam/mapa/contenido/alimentacion/servicios/observatorio-de-precios-de-los-alimentos/nueva-estructura-oca-2024/estudios-de-costes-y-otros-estudios-de-interes/estudios-regionales/murcia/estructuradecostesdelasorientacionesproductivasagricolasdelaregiondemurciahorticulturaalairelibreybajo.pdf",
+   "licencia": "MAPA/IMIDA publication; cite source (no explicit open licence found)"
+  },
+  {
+   "id": "RES-F29",
+   "nombre": "research_notes/field-shift-predictive-models (secondary)",
+   "url": "research/predictive-model-research.md",
+   "licencia": "team research notes"
+  },
+  {
+   "id": "SIAM-TP91",
+   "nombre": "SIAM-IMIDA Informe Agrometeorologico Personalizado (diario)",
+   "url": "http://siam.imida.es/apex/f?p=101:46",
+   "licencia": "SIAM-IMIDA, CARM: cite source (no explicit open licence found)"
+  }
+ ]
 }

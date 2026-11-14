@@ -147,6 +147,10 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
     out = {"id": rid, "nombre": name, "es_actual": actual, "estrategias": list(strategies),
            "ciclos": sequence(sts[0]),
            "plan_anios": [{"anio_plan": i + 1, "ciclos": sequence(s), "opcion": o.name(static),
+                           "ciclos_por_anio": len(o.keys),
+                           "ciclos_detalle": [{"producto": static[k]["label"], "cultivo": static[k]["crop"], "siembra": k[1],
+                                               "ciclo_dias": static[k]["days"],
+                                               "primera_cosecha_dias": static[k]["first_harvest_day"]} for k in o.keys],
                            "siembras": {static[k]["label"]: k[1] for k in o.keys}} for i, (o, s) in enumerate(zip(path, sts))],
            "horizonte_anios": len(path),
            "semaforo_legal": legal,
@@ -168,8 +172,9 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
     if sim:
         q = lambda p: stats.quantile(sim["margen"], p)
         out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()}, "peores_anios": sim["peores_anios"],
-                            "definicion": "años (de cada año del plan) sin pérdida de clima >= 20 % y con margen >= 0; "
-                                          "los años del histórico se reutilizan, por eso el intervalo es optimista"}
+                            "definicion": f"n = años del plan x años del histórico con dato ({sim['n']}); un año cuenta como bueno si no "
+                                          "hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada "
+                                          "año del plan: no son observaciones independientes y el intervalo es optimista"}
         out["exito_pct"]["valor"] = round(out["exito_pct"]["valor"] * 100, 1)
         out["exito_pct"]["horquilla"] = [round(x * 100, 1) for x in out["exito_pct"]["horquilla"]]
         out["margen_eur_ha"] = {"valor": r0(q(.5)), "horquilla": [r0(q(.1)), r0(q(.9))], "p10": r0(q(.1)), "p50": r0(q(.5)),
@@ -268,6 +273,10 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     mock = json.load(open(DATA / "torre-pacheco.mock.json", encoding="utf-8"))
     out = {k: v for k, v in mock.items() if k != "rotaciones"}
     out["clima"] = climate_block(climate)
+    out["parcela"] = {**out["parcela"], "zonas": ["zona_vulnerable_nitratos", "mar_menor_zona_por_verificar"]}
+    for blk in ("parcela", "ndvi", "suelo"):
+        out[blk] = {**out[blk], "_status": "simulado"}      # mock -> simulado (gonzalo's vocabulary) until T-011/T-013
+    out["clima"]["_status"] = "real"
     out["_status"] = ("Bloque `rotaciones` y `clima`: calculados por el motor. Precios: "
                       + ("CARM (anuarios) con Eurostat de respaldo; permiso de la CARM pendiente" if allow_restricted else
                          "sin precios CARM; solo Eurostat")
@@ -287,6 +296,14 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
                                  "siembra": "fecha base y +15 días (no se adelanta mientras no haya umbrales de helada validados)",
                                  "cubierta_coste_eur_ha": rt.COVER_COST_EUR_HA, "et0_por_grado": rt.ET0_PER_DEGC}
     out["generado"] = dt.date.today().isoformat()
+    out["schema_version"] = "1.0"
+    out["_meta"] = {"version": "1.0", "generado": out["generado"], "semilla_escenarios": 2026, "muestras": st.N_SAMPLES,
+                    "euros_de": base_year, "motor": "app/backend/engine (T-012/T-018/T-020)"}
+    used = sorted({e["fuente_id"] for r in rots for e in r["evidencia"]} | {"SIAM-TP91", "EUR-HICP"})
+    out["fuentes"] = [{"id": i, "nombre": SOURCES[i]["dataset"], "url": SOURCES[i]["url"], "licencia": SOURCES[i]["licence"]}
+                      for i in used if i in SOURCES]
+    for r in rots:
+        r["_status"] = "real"
     return out
 
 

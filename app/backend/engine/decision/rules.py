@@ -66,12 +66,17 @@ def semaforo(plan_years, zone_confirmed=False):
                    "detalle": f"tramo desnudo más largo sin cubierta: {bare} días (límite {BARE_LIMIT_DAYS})"})
     checks.append({"regla": "nitrógeno: sin urea ni N mineral de fondo; 170 kg N/ha", "articulo": "Ley 3/2020 arts. 29 y 40",
                    "resultado": "no_evaluado", "detalle": "depende del plan de abonado, que esta herramienta no define"})
+    VOCAB = {"ok": "ok", "no_evaluado": "no_evaluable", "por_verificar": "no_evaluable", "aviso": "falla",
+             "incumple_si_zona_1": "falla", "incumple": "falla"}
+    for c in checks:   # team vocabulary (gonzalo, contract v1.1); the original severity stays in `severidad`
+        c["severidad"] = c["resultado"]
+        c["resultado"] = VOCAB[c["resultado"]]
     rank = {"ok": 0, "no_evaluado": 0, "por_verificar": 1, "aviso": 1, "incumple_si_zona_1": 2, "incumple": 2}
-    worst = max(checks, key=lambda c: rank[c["resultado"]])
-    color = {0: "verde", 1: "amarillo", 2: "rojo"}[rank[worst["resultado"]]]
+    worst = max(checks, key=lambda c: rank[c["severidad"]])
+    color = {0: "verde", 1: "amarillo", 2: "rojo"}[rank[worst["severidad"]]]
     reason = {"verde": "cumple las comprobaciones que podemos hacer; el abonado sigue por verificar",
               "amarillo": worst["detalle"], "rojo": worst["detalle"]}[color]
     if color == "verde":
-        worst = next(c for c in checks if c["resultado"] == "ok")
+        worst = next(c for c in checks if c["severidad"] == "ok")
     return {"color": color, "motivo": reason, "articulo": worst["articulo"], "comprobaciones": checks,
             "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"}
