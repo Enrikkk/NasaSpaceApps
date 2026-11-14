@@ -1,13 +1,28 @@
 {
   "hooks": {
     "SessionStart": [
-      { "hooks": [ { "type": "command",
-        "command": "cd \"$CLAUDE_PROJECT_DIR\" && git pull --rebase --autostash -q 2>&1 | tail -2; echo \"--- seat: ${SEAT:-UNSET (export SEAT=<name>)} ---\"; echo '--- TASK BOARD ---'; python3 -I scripts/board.py 2>/dev/null; echo '--- LAST LOG LINES ---'; tail -n 12 coordination/LOG.md 2>/dev/null" } ] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git pull --rebase --autostash -q 2>&1 | tail -2; echo \"--- seat: ${SEAT:-UNSET (export SEAT=<name>)} ---\"; echo '--- TASK BOARD ---'; python3 -I scripts/board.py 2>/dev/null; echo '--- LAST LOG LINES ---'; tail -n 12 coordination/LOG.md 2>/dev/null"
+          }
+        ]
+      }
     ],
     "PreToolUse": [
-      { "matcher": "Edit|Write|MultiEdit|NotebookEdit",
-        "hooks": [ { "type": "command",
-          "command": "python3 -I \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ownership.py" } ] }
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ownership.py"
+          }
+        ]
+      }
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "team-bus"
+  ]
 }

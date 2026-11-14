@@ -3,50 +3,56 @@
 ## Shape
 
 ```
-              Tailscale tailnet (jaime's, free plan up to 6 users)
-   ┌───────────────────────── hub: jaime's Mac 100.93.255.39 ─────────────────────────┐
-   │ Paseo daemon + orchestrator agent (Claude)                                       │
-   │ scripts/paseo_team.sh dispatch <seat> T-NNN  ──►  paseo --host tcp://<ip>:6767   │
-   └───────┬──────────────────────────┬──────────────────────────┬────────────────────┘
-           ▼                          ▼                          ▼
-   enrique's laptop            seat3 laptop               seat4 laptop
-   Paseo daemon :6767          Paseo daemon :6767         Paseo daemon :6767
-   claude / codex / cursor     (own login)                (own login)
+                    Tailscale tailnet (jaime's, free plan up to 6 users)
+ ┌──────────────────────────── hub: jaime's Mac 100.93.255.39 ─────────────────────────────┐
+ │ orchestrator agent (Paseo, Claude)  ◄──pushes──  team-bus MCP :6780/mcp  (team_bus.py)  │
+ │ Paseo daemon :6767                  ──dispatch──►  paseo --host tcp://<ip>:6767 run ...  │
+ └──────┬───────────────────────────────┬───────────────────────────────┬───────────────────┘
+        │ team-bus tools (HTTP+token)   │                               │
+        ▼                               ▼                               ▼
+  enrique's laptop                seat3 laptop                    seat4 laptop
+  Paseo daemon :6767              Paseo daemon :6767              Paseo daemon :6767
+  claude/codex/cursor (own login) ...                             ...
 ```
 
 - **Agents run on the laptop whose daemon starts them, with that laptop's CLI logins.** Each person's work uses
   their own subscription. Nobody logs into anyone else's account.
-- **Git stays the durable record.** Task files, branches, LOG.md and DECISIONS.md are unchanged. Paseo is the
-  live layer: it starts agents, follows them and stops duplicate work. If the hub or the Wi-Fi drops, everyone
-  carries on with the git workflow (and `scripts/agent_watcher.py`, T-006).
+- **Agents talk to each other only through the hub's team-bus MCP** (`scripts/team_bus.py`): `send_message`,
+  `read_messages`, `report`, `request_handoff`, plus `dispatch`/`agent_result` for the orchestrator only. Each seat
+  has its own bearer token. A message to a seat that has a live hub-dispatched agent (`T-NNN <seat>`), or to the
+  `orchestrator`, is **pushed into that agent's conversation** with `paseo send`. Otherwise it waits in the inbox.
+  Nobody polls.
+- **Git stays the durable record.** Task files, branches, LOG.md and DECISIONS.md are unchanged. Paseo and the bus
+  are the live layer. If the hub or the Wi-Fi drops, everyone carries on with the git workflow (and
+  `scripts/agent_watcher.py`, T-006).
 
 ## Setup
 
+**Each teammate:** tell your agent *"Lee `coordination/TEAM-SETUP.md` y deja este portátil preparado"*. It does
+everything and stops at the human steps (Tailscale sign-in, CLI login, daemon password, team-bus token).
+
 **Hub (jaime), once:**
 1. Tailscale admin console → Users → Invite the 3 teammates (free Personal plan: 6 users).
-2. `bash scripts/paseo_join.sh`, so the hub's daemon also listens on Tailscale with a password and teammates can
-   watch it from their Paseo app.
+2. `bash scripts/paseo_join.sh` (done 2026-11-14: daemon on 100.93.255.39:6767 with a password).
+3. Tokens: `python3 scripts/team_bus.py token <seat>` for each teammate. DM each one their token. `orchestrator`
+   and `jaime` tokens are already minted. Copies live in `~/.paseo-team/bus/tokens/` (chmod 600).
+4. For each teammate who sends you their line: `scripts/paseo_team.sh add <seat> <ip> '<repo path>'` (asks for
+   their daemon password, hidden). Also add yourself so the hub can dispatch to its own laptop:
+   `scripts/paseo_team.sh add jaime 100.93.255.39 /Users/jaime/Documents/NasaSpaceApps`.
 
-**Each teammate, ~10 min:**
-1. Install Tailscale, accept jaime's invite, connect.
-2. Install Paseo Desktop (https://paseo.sh/download) or `npm install -g @getpaseo/cli`.
-3. Install and log in your agent CLI: `claude` (run it once), `codex login`, or `cursor-agent login`.
-4. `git clone` the repo, `export SEAT=<you>`, then `bash scripts/paseo_join.sh`. It sets a password, listens on
-   your Tailscale IP, and prints one line to send to jaime **privately**, with your password.
-
-**Hub registers each teammate:** `scripts/paseo_team.sh add <seat> <ip> <repo-path>` (asks for the password,
-hidden). Secrets stay in `~/.paseo-team/` (chmod 600), never in the repo. `scripts/paseo_team.sh ls` shows who
-is online and which providers they have.
+**Hub, every session (2 commands):**
+1. Keep the bus running in a terminal tab: `python3 scripts/team_bus.py serve`
+2. `scripts/paseo_team.sh orchestrator`, then talk to it in the Paseo app ("goal: ..."). It follows
+   `coordination/ORCHESTRATOR.md`.
 
 ## Daily flow (no duplicate work)
 
-1. The orchestrator writes or updates `coordination/tasks/T-NNN-*.md` (owner, status `doing`, branch, paths) and
-   pushes. The board is still the lock.
-2. `scripts/paseo_team.sh dispatch <seat> T-NNN [provider/model]` starts an agent on that laptop, in a new
-   worktree on branch `tNNN-slug` from `origin/main`.
-3. `scripts/paseo_team.sh on <seat> wait <id>`, then `... logs <id> --tail 5` to read the `RESULT:` line.
-4. The orchestrator sets the task to `review`/`blocked` with the result and appends to LOG. A human merges
-   into main.
+1. The orchestrator writes `coordination/tasks/T-NNN-*.md` (owner, `doing`, branch, paths) and pushes. The board is the lock.
+2. It calls `dispatch(seat, T-NNN, provider)`, or you run `scripts/paseo_team.sh dispatch <seat> T-NNN [provider/model]`.
+   That starts an agent on that laptop in a new worktree, branch `tNNN-slug` from `origin/main`, with the bus token in its env.
+3. The worker talks through the bus (questions, `request_handoff`) and finishes with `report` + a `RESULT:` line.
+   The report is pushed into the orchestrator. No `wait` or polling is needed.
+4. The orchestrator sets the task to `review`/`blocked` and appends to LOG. A human merges into main.
 5. Anyone can watch every agent live: Paseo app → Settings → Add host → Direct connection, IP + 6767, SSL off.
 
 ## Shared rules that keep token use low
@@ -85,4 +91,10 @@ is online and which providers they have.
   client gets `Password required`, a wrong password `Incorrect password`, and `GET /api/agents` returns 401.
   **Don't be fooled:** on the daemon's own machine, `paseo --host tcp://<own-ip>:6767 ...` works *without* a password,
   because the CLI uses that machine's `~/.paseo/local-credential`. Test auth from another laptop, or with `PASEO_HOME=<empty dir>`.
+- team-bus (2026-11-14, isolated test instance): no token → 401, foreign `Origin` → 403, worker `dispatch` refused,
+  inbox and read cursors work. **Real Claude Code** (`claude -p`, Haiku) loaded the repo-style `.mcp.json` with
+  `${TEAM_BUS_URL:-…}`/`${TEAM_BUS_TOKEN:-}` expansion, called whoami/read_messages/send_message, and the message was
+  **pushed live** into a Paseo agent titled `orchestrator`, which answered `got it #3`.
+- Codex (`codex mcp add … --bearer-token-env-var`, per the OpenAI docs) and Cursor (`.cursor/mcp.json` with
+  `${env:TEAM_BUS_TOKEN}`) configs are written but untested: no logged-in Codex/Cursor on the hub.
 - Not tested yet: a second physical laptop.
