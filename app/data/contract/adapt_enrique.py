@@ -313,7 +313,7 @@ def adapt_enrique(src, origen="app/data/torre-pacheco.json (enrique, t012-motor-
     if longs and len(set(longs.values())) == 1:
         n = next(iter(longs.values()))
         escenarios_meta = {"_status": estado_bloques["rotaciones"], "n": n,
-                           "alineados": bool((d.get("escenarios_meta") or {}).get("alineados", False)),
+                           "alineados": _alineados(d, rots),
                            "nota": "n deducido de len(escenarios). Alineacion del indice i entre rotaciones (mismo anio/precio/coste): pendiente de confirmar por enrique."}
         um = next((r["margen_eur_ha"].get("unidad") for r in rots if isinstance(r.get("margen_eur_ha"), dict) and r["margen_eur_ha"].get("unidad")), None)
         if um:
@@ -411,6 +411,17 @@ def adapt_draft_v1(src, origen="research/contract-v1-draft/torre-pacheco.contrac
                        "estado_bloques": estado_bloques, "adaptaciones": ctx.adaptaciones, "avisos": ctx.avisos})
     return d
 
+
+
+def _alineados(d, rots):
+    """True solo si el origen lo declara: escenarios_meta.alineados en la raiz, o en CADA rotacion que tiene muestras
+    (enrique, t020-jaime 91ba395, lo declara por rotacion). Nunca se deduce: sin declaracion explicita es False."""
+    raiz = (d.get("escenarios_meta") or {}).get("alineados")
+    if raiz is not None:
+        return bool(raiz)
+    con = [r for r in rots if isinstance(r.get("escenarios"), list)]
+    flags = [(r.get("escenarios_meta") or {}).get("alineados") for r in con]
+    return bool(con) and all(f is True for f in flags)
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
