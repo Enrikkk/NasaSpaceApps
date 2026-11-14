@@ -64,9 +64,15 @@ res = r.get("result") or {}
 txt = "\n".join(c.get("text", "") for c in res.get("content", []))
 if res.get("isError") or "not registered" in txt:
     print("bus_listen: bus error: " + txt.replace("\n", " | ")[:300]); sys.exit(2)
+import re
+msgs = []
 for line in txt.splitlines():
-    if line.startswith("#"):
-        print("[team-bus] " + line, flush=True)
+    if re.match(r"#\d+ \d{4}-", line):
+        msgs.append(line)
+    elif msgs:
+        msgs[-1] += " \u23ce " + line  # keep multi-line messages whole, on one event line
+for m in msgs:
+    print("[team-bus] " + m, flush=True)
 ' || register
   fi
   sleep "$POLL"
