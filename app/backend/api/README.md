@@ -34,6 +34,7 @@ descargas grandes de noche). Por defecto la API busca `app/backend/api/atom_buil
 | `POST /analyze[?bloques=a,b]` | contrato por bloques. `bloques` ⊂ `parcela,historia,ndvi,clima,suelo,rotaciones`; los no pedidos salen `cargando` (`historia` y `rotaciones`, que son listas en v1.1, salen `[]`) |
 | `GET /parcel/{id}` | último contrato de esa consulta (`parcela.id` o `_meta.consulta_id`), fusionando peticiones por bloques. En memoria del proceso (no se comparte entre instancias) |
 | `GET /recintos?bbox=minlon,minlat,maxlon,maxlat` | GeoJSON de los recintos que intersecan el rectángulo, para el globo |
+| `POST /narrativa` | texto de una tarjeta reescrito por un modelo local y comprobado cifra a cifra (enrique, T-022); ver su sección |
 
 ### `POST /analyze`
 
@@ -63,6 +64,23 @@ pedir en cada `moveend`. `422` bbox mal formado; `503` sin recintos. `Cache-Cont
 **Atribución obligatoria (FEGA, CC BY 4.0):** "Fuente de los datos: FONDO ESPAÑOL DE GARANTÍA AGRARIA O.A." va en `attribution` de cada respuesta, en
 `_meta.atribuciones`, en `parcela.atribucion` y en `fuentes[sigpac]`; la UI debe mostrarla junto al mapa.
 
+### `POST /narrativa`
+
+Texto de una tarjeta reescrito por un modelo de lenguaje **local** (código en `narrativa.py`; el reescritor y su comprobador están en
+`app/backend/engine/decision/llm_rewrite.py`). Va aparte de `/analyze` porque puede tardar. El modelo solo reformula un texto que el motor ya calculó: no calcula nada.
+
+```json
+{"id": "<_meta.consulta_id o parcela.id de un /analyze previo>", "rotacion": "<id de la rotación>", "campos": ["por_que"]}
+```
+- `campos` es opcional (por defecto `por_que`); valores: `por_que`, `evidencia_resumen`, `no_sabemos`, `riesgos_texto`, `consulta`. Campos extra: **422**.
+- Respuesta: `{rotacion, campos: {<campo>: {texto, valido, origen, modelo, intentos, errores}}, uso_ia, aviso}`. `404` si la consulta no está en la caché de `/parcel/{id}` (haz antes un `/analyze`) o si la rotación no existe en esa consulta.
+- `origen`, por orden: `precalculado` (fichero de `NARRATIVA_DIR`, `<sha256 de la plantilla>.json`; sirve también sin modelo y se **vuelve a comprobar** contra la plantilla actual antes de servirlo),
+  `en_vivo` (solo si `OLLAMA_URL` está definida y el modelo instalado) o `plantilla` (el texto determinista de siempre, con `valido: false`).
+- El comprobador rechaza cifras nuevas o que falten, cantidades escritas con letras, promesas y salvedades perdidas. Hasta 3 intentos; después, la plantilla.
+- Con `NARRATIVA_GUARDAR=1`, lo generado en vivo y válido se guarda en `NARRATIVA_DIR` (así se precalienta la demo). Un solo texto a la vez (un cerrojo): el modelo local no gana nada con concurrencia.
+- `GET /health` lleva un bloque `narrativa` con `en_vivo`, `modelo`, `precalculados` y `motivo`.
+- El modelo previsto (gpt-oss-20b Q4_K_M con Ollama) aún no se ha probado; con `granite3.3:2b` el comprobador rechazó 4 de 4 textos y se usó la plantilla.
+
 CORS: siempre `http://localhost:5173` más los de `FRONTEND_ORIGIN`; sin credenciales, solo GET y POST.
 
 ## Qué es real, precalculado y simulado
@@ -89,7 +107,13 @@ Los endpoints no cambian al enchufar el motor. Protocolo `Engine.run(EngineInput
    `app/data/contract/adapt_enrique.py` (v1.1; no se duplica su lógica). Se usan sus `rotaciones` (con `_status` de su `_estado_bloques`), `escenarios_meta` y `fuentes`;
    se ignoran sus `parcela/historia/ndvi/clima/suelo` y se recalcula su semáforo. Si el fichero no carga, se cae al ejemplo con un error en el log.
    Probado con la rama de enrique de hoy (4 rotaciones, 200 muestras): 0 errores de esquema, 0 invariantes fallidas.
-3. Futuro: `LiveEngine` que llame a `run(parcela, clima, suelo)` de enrique por punto (cuando enrique lo exponga como función, T-020).
+3. `LiveEngine` (`ENGINE_MODE=vivo`; enrique, H-002): envuelve al motor anterior y, en cada `/analyze`, llama a `app.backend.engine.build.run_parcel(parcel_input)` con la parcela de la consulta
+   (`parcel_input.construir(ctx)`). Sin red: solo lee tablas del repo; ~0,7-0,8 s por ejecución, `/analyze` completo de la parcela demo ~1,1 s (medido en el portátil de enrique, 14-nov-2026).
+   Precios **abiertos** por defecto (MAPA nacional como proxy y Eurostat); CARM solo con `ENGINE_PRECIOS=carm` explícito (D-010; permiso pendiente, no para una imagen pública).
+   Pasa a `blocks.py` los bloques por parcela `idoneidad`, `clima_origen`, `no_evaluable` y `actual_origen`, que salen en la raíz del contrato, y marca `por_parcela: True`
+   (entonces `_meta.rotaciones_referencia` dice que las rotaciones son de esta parcela). Si el motor falla, la API no se cae: usa el motor anterior (JSON o ejemplo) y añade un aviso a `_meta.avisos`.
+   Si `ENGINE_MODE=vivo` pero el motor no carga, se queda el motor anterior y se avisa en el log.
+   Límite que no hay que olvidar: el clima del motor es **una sola estación** (SIAM TP91, Torre-Pacheco) para cualquier parcela; `clima_origen` lo dice. Detalle del motor: `app/backend/engine/README.md`; cómo ejecutarlo todo: `app/INTEGRACION.md`.
 
 ## Variables de entorno
 
@@ -100,6 +124,12 @@ Los endpoints no cambian al enchufar el motor. Protocolo `Engine.run(EngineInput
 | `FRONTEND_ORIGIN` | vacío | orígenes CORS extra, separados por comas, sin `/` final (se ignora `*`) |
 | `GIT_SHA` | `dev` | versión de `/health` |
 | `ENGINE_JSON` | vacío | JSON de enrique (ver arriba) |
+| `ENGINE_MODE` | vacío | `vivo` activa `LiveEngine` (motor por parcela). `scripts/dev_app.sh` lo pone a `vivo` si no lo defines |
+| `ENGINE_PRECIOS` | `abierto` | `abierto` = MAPA nacional como proxy + Eurostat. `carm` = precios CARM, solo en local (permiso pendiente, D-010) |
+| `OLLAMA_URL` | vacío | URL del Ollama local para generar textos en vivo en `POST /narrativa`. Sin ella solo se sirven los precalculados |
+| `OLLAMA_MODEL` | `gpt-oss:20b` | modelo que usa el reescritor (lo lee `llm_rewrite.py`; también `OLLAMA_TIMEOUT_S`, por defecto `300`, y `OLLAMA_THINK`) |
+| `NARRATIVA_DIR` | `app/data/cache/narrativa` | carpeta de textos precalculados (`<sha256 de la plantilla>.json`) |
+| `NARRATIVA_GUARDAR` | sin definir | `1` guarda en `NARRATIVA_DIR` los textos generados en vivo que pasan el comprobador |
 | `CONTRACT_PATH` | `app/data/torre-pacheco.contract.example.json` | contrato de ejemplo que sirve el motor por defecto |
 | `PIPELINE_CACHE_DIR` | `<tmp>/agrockham-pipeline-cache` | caché de ejecución de clima/suelo; se siembra con `app/data/cache/pipeline/clima_suelo/` (parcela demo) |
 | `AGROCKHAM_OFFLINE` | sin definir | `1` prohíbe la red del pipeline (sin caché → bloque `cargando`). Los tests lo ponen siempre |

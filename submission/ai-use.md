@@ -15,9 +15,26 @@ Cloud), the pitch, the video and the final decisions. Only humans decide; agents
 dataset research, transcription of whiteboard notes, documentation, and cross-checks of licences and of the Ley 3/2020 text against the
 consolidated BOE. Every AI-written piece was kept in the repo with tests where possible and reviewed by a teammate **[confirm]**.
 
-**AI inside the product:** at the time of writing, **no language model runs inside the app**. The scoring engine computes everything
-with explicit rules and physics; card texts come from templates. If a language model is added to explain results, it will only receive
-the engine's evidence package and its numbers will be checked **[confirm before submission]**.
+**AI inside the product:** the scoring engine computes everything (money, yields, water, success percentages, legal light, suitability)
+with explicit rules and physics, and the card texts exist as deterministic templates. **The model never computes.** On top of that, the app
+can show card texts **reworded by a local open-weights language model** (added on branch `integracion`, 2026-11-14). This is how it works:
+
+- **Model:** gpt-oss-20b, quantisation Q4_K_M, served by Ollama on a team laptop (intended setup; the exact model name is read from
+  `OLLAMA_MODEL`). **Licence of the model: por confirmar antes de entregar** (not recorded in the repo yet). Not yet tested at the time
+  of writing; a small model (`granite3.3:2b`) was run only to test the checker.
+- **No external provider, no API key, no cost.** The model runs on the team's own machine. Nothing is sent to a cloud service for this.
+  Texts can be generated in advance and stored as files (`app/data/cache/narrativa/`), so the demo does not need the model to be running.
+- **What it does:** takes a text the engine already produced and rewrites it in shorter, plainer Spanish for a farmer. It receives the
+  template and a closed list of the figures that text contains.
+- **What it does not do:** it does not compute, choose crops, change a figure, add facts or advice, give legal advice or promise results.
+- **Verification (code: `app/backend/engine/decision/llm_rewrite.py`):** a deterministic checker reads every answer. It rejects any new
+  figure, any missing figure, quantities written in words, forbidden promises, a lost caveat ("provisional", "supuesto", "proxy",
+  "no sabemos"...), a text longer than the template, and markup. If it fails, the model is told exactly what failed and tries again, up to
+  3 times. After the third failure the deterministic template is shown. A stored text is checked again against the current template before it
+  is served, so an old or edited file cannot slip in a wrong figure. The card shows the model text only when it passed the checker.
+- **Disclosure in the product:** the response says which texts were reworded by a model (`uso_ia`, `aviso` in `POST /narrativa`). Exact wording
+  of the on-screen label: **[confirm with the frontend owner]**.
+- **Log:** each attempt is kept locally in `app/data/cache/llm_log/` (ignored by git).
 
 **What AI did not do:** decide the product, accept licence risks, or validate legal rules as legal advice. The tool states that it does
 not replace the farmer or the technician.
