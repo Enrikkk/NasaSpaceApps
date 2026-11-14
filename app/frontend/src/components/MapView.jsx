@@ -8,6 +8,7 @@ import { COARSE_LAND, loadWorldFine } from '../config/worldData.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './MapView.module.css'
 import Starfield from './Starfield.jsx'
+import { sigpacUseLabel } from '../config/sigpacUses.js'
 import { addIgnOverlay, IGN_OVERLAY_IDS } from './ignOverlay.js'
 
 // Map colours come from the design tokens so DESIGN.md stays the single source.
@@ -313,7 +314,7 @@ function parcelCard(p) {
   const div = document.createElement('div')
   const rows = [
     ['Referencia SIGPAC', ref || '—'],
-    ['Uso', p.uso_sigpac ?? '—'],
+    ['Uso', sigpacUseLabel(p.uso_sigpac)],
     ha && ['Superficie', ha],
     p.coef_regadio !== undefined && ['Regadío', `${p.coef_regadio} %`],
   ].filter(Boolean)

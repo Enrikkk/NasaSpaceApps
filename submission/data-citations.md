@@ -108,6 +108,7 @@ Open items for the team: (1) FEGA access-from-code question; (2) exact GIBS word
 | Natural Earth 1:10m / 1:50m / 1:110m land and countries, https://www.naturalearthdata.com/ | Home globe and "Monocromática" view (land fill, borders) | Public domain | "Natural Earth" shown in the map attribution; ok |
 | world-atlas 2.0.2 (Natural Earth as TopoJSON), https://github.com/topojson/world-atlas | Packaging of the Natural Earth data | ISC | ok |
 | topojson-client 3.1.0, https://github.com/topojson/topojson-client | TopoJSON to GeoJSON in the browser | ISC | ok |
+| SIGPAC land-use code table `cod_usosigpac.csv` (FEGA, https://www.fega.gob.es/atom/2026/sigpac_codes_2026.zip) | Readable land-use names in the parcel card (`app/frontend/src/config/sigpacUses.js`) | Same as SIGPAC (CC BY 4.0, FEGA) | ok |
 | React 19 + React DOM, https://react.dev | UI | MIT | ok |
 | MapLibre GL JS 6, https://maplibre.org | Map rendering | BSD-3-Clause | ok |
 | Vite 8 + @vitejs/plugin-react, https://vite.dev | Build tooling | MIT | ok |
