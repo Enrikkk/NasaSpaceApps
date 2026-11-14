@@ -17,8 +17,11 @@ Motores disponibles (los elige `get_engine(cfg, borrador)`):
   2. `JsonFileEngine` (ENGINE_JSON=/ruta/torre-pacheco.json): lee el JSON precalculado de enrique (rama t012-motor-nucleo,
      app/data/torre-pacheco.json) y lo convierte con `app/data/contract/adapt_enrique.py` (v1.1, no se duplica aqui). Sirve el
      mismo resultado para cualquier punto: es la parcela demo. `_status` = lo que diga su `_estado_bloques.rotaciones`.
-  3. FUTURO: `LiveEngine.run(ctx)` llamando a `run(parcela, clima, suelo)` de enrique, calculado por punto. Solo hay que
-     implementar esa clase y devolverla en `get_engine`.
+  3. `LiveEngine` (ENGINE_MODE=vivo; enrique, H-002): llama a `app.backend.engine.build.run_parcel(parcel_input)` en cada
+     consulta (~0,8 s, sin red: solo lee tablas del repo). `parcel_input` = `parcel_input.construir(ctx)`. Precios abiertos
+     por defecto; CARM solo con ENGINE_PRECIOS=carm explicito (D-010). Si el motor falla, cae al motor anterior (JSON o
+     ejemplo) y lo dice en `extra["avisos"]` (blocks.py lo pasa a `_meta.avisos`). `extra` lleva ademas los bloques por
+     parcela: `idoneidad`, `clima_origen`, `no_evaluable`, `actual_origen` y `por_parcela: True`.
 
 De lo que devuelve `adapt_enrique` solo se usan `rotaciones`, `escenarios_meta` y `fuentes`; sus `parcela/historia/ndvi/clima/suelo`
 se IGNORAN (la API sirve los suyos, reales o del ejemplo) y su `semaforo_legal` se descarta (se recalcula).
@@ -136,11 +139,50 @@ class JsonFileEngine:
         return copy.deepcopy(self._out)
 
 
+# ------------------------------------------------------------------------------------------ motor en vivo por parcela
+class LiveEngine:
+    """Motor de enrique calculado para la parcela de la consulta (H-002). Sin red. Ver la cabecera del modulo."""
+    nombre = "motor en vivo por parcela (enrique, H-002)"
+
+    def __init__(self, respaldo: Engine, precios: str = "abierto"):
+        self.respaldo = respaldo
+        self.con_carm = precios == "carm"          # solo con ENGINE_PRECIOS=carm explicito
+        self._build = importlib.import_module("app.backend.engine.build")   # falla al arrancar si el motor no esta
+
+    def run(self, ctx: EngineInput) -> EngineOutput:
+        from . import parcel_input
+        try:
+            pi = parcel_input.construir(ctx)
+            pi.pop("sin_dato", None)               # el motor calcula su propia lista de datos que faltan
+            doc = self._build.run_parcel(pi, allow_restricted=self.con_carm)
+            extra = {k: doc.get(k) for k in ("idoneidad", "clima_origen", "no_evaluable", "actual_origen")}
+            out = adapt_enrique(doc, origen="motor en vivo (run_parcel)")
+        except Exception as exc:                    # el motor nunca tumba la API: motor anterior + aviso
+            log.error("motor en vivo fallo (%r): se usa el motor de respaldo", exc)
+            out = self.respaldo.run(ctx)
+            out.extra = {**(out.extra or {}), "avisos": [
+                "El cálculo en vivo para esta parcela ha fallado: se muestran las rotaciones de la parcela de referencia."]}
+            return out
+        out.motor = self.nombre
+        out.aviso = ("Rotaciones calculadas en vivo para esta parcela: idoneidad (regadío, pendiente, suelo), zona legal y "
+                     "cultivo declarado. El clima es el de la estación SIAM de Torre-Pacheco para cualquier punto. Precios: "
+                     + ("CARM (permiso pendiente)." if self.con_carm else "abiertos (MAPA nacional como proxy y Eurostat)."))
+        out.extra = {**(out.extra or {}), **extra, "por_parcela": True}
+        return out
+
+
 def get_engine(cfg: settings.Settings, borrador: Borrador) -> Engine:
-    """Elige el motor. Si ENGINE_JSON falla, se cae al ejemplo (la API no se rompe) y se avisa en el log."""
+    """Elige el motor. Si ENGINE_JSON falla, se cae al ejemplo (la API no se rompe) y se avisa en el log.
+    ENGINE_MODE=vivo envuelve al anterior con LiveEngine (motor por parcela); si no carga, se queda el anterior."""
+    base: Engine = DraftEngine(borrador)
     if cfg.engine_json:
         try:
-            return JsonFileEngine(cfg.engine_json)
+            base = JsonFileEngine(cfg.engine_json)
         except (OSError, ValueError, KeyError, TypeError, AttributeError, ImportError) as exc:
             log.error("ENGINE_JSON=%s no se pudo cargar (%r): se usa el contrato de ejemplo simulado", cfg.engine_json, exc)
-    return DraftEngine(borrador)
+    if getattr(cfg, "engine_mode", "") == "vivo":
+        try:
+            return LiveEngine(base, getattr(cfg, "engine_precios", "abierto"))
+        except Exception as exc:
+            log.error("ENGINE_MODE=vivo pero el motor no carga (%r): se usa %s", exc, getattr(base, "nombre", "?"))
+    return base

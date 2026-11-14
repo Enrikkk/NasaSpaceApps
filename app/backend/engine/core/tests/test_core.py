@@ -13,6 +13,7 @@ def test_wilson_n20_matches_research_table():
 
 
 def test_jeffreys_n20():
+    pytest.importorskip("scipy")   # only this optional interval needs scipy; the API image does not carry it
     assert abs(stats.jeffreys(0, 20)[1] - 0.117) < 2e-3
     lo, hi = stats.jeffreys(4, 20)
     assert abs(lo - 0.072) < 2e-3 and abs(hi - 0.408) < 2e-3

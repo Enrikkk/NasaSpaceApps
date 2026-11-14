@@ -1,7 +1,6 @@
 """Small-sample statistics for 19-20 historical scenarios (research/predictive-model-research.md)."""
 import math
 
-from scipy.stats import beta
 
 
 def wilson(k, n, z=1.959964):
@@ -17,6 +16,7 @@ def wilson(k, n, z=1.959964):
 
 def jeffreys(k, n, a=0.05):
     """95 % Jeffreys interval (Beta(k+1/2, n-k+1/2) quantiles, endpoints clamped at k=0 / k=n as Brown-Cai-DasGupta)."""
+    from scipy.stats import beta   # lazy: the default interval (Wilson) needs no scipy (API image stays light)
     lo = 0.0 if k == 0 else float(beta.ppf(a / 2, k + 0.5, n - k + 0.5))
     hi = 1.0 if k == n else float(beta.ppf(1 - a / 2, k + 0.5, n - k + 0.5))
     return (lo, hi)

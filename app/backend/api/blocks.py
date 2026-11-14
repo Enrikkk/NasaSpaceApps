@@ -150,16 +150,24 @@ class Servicio:
                 doc["escenarios_meta"] = out.escenarios_meta
             motor_aviso = out.aviso
             fuentes_motor = out.fuentes
+            extra = out.extra or {}
+            por_parcela = bool(extra.get("por_parcela"))     # LiveEngine (H-002): calculo propio de esta parcela
+            for clave in ("idoneidad", "clima_origen", "no_evaluable", "actual_origen"):
+                if extra.get(clave) is not None:
+                    doc[clave] = extra[clave]
+            avisos.extend(extra.get("avisos") or [])
             # Hasta que exista un motor por punto, las rotaciones y sus cifras son las de la parcela de referencia (D-009/T-020).
             es_ref = bool(tiene_parcela and str(parcela.get("id", "")) == PARCELA_REFERENCIA)
-            ref_info = {
+            ref_info = {"por_parcela": True, "aplica_a_esta_parcela": True,
+                        "nota": "Rotaciones calculadas para esta parcela (idoneidad, zona legal y cultivo declarado). "
+                                "El clima es el de una sola estación (SIAM, Torre-Pacheco)."} if por_parcela else {
                 "parcela_referencia": PARCELA_REFERENCIA,
                 "aplica_a_esta_parcela": es_ref,
                 "nota": ("Rotaciones calculadas para la parcela de referencia del Campo de Cartagena (Torre-Pacheco, SIGPAC "
                          "18/426/1); no son un calculo especifico de esta parcela. Cambian con el clic: parcela, clima, suelo y "
                          "semaforo legal por zona."),
             }
-            if not es_ref:
+            if not es_ref and not por_parcela:
                 avisos.append("Las rotaciones son las de la parcela de referencia (Torre-Pacheco 18/426/1), no un calculo de esta parcela.")
             lat_ms["rotaciones"] = (time.perf_counter() - t) * 1000
         doc["prioridades_defecto"] = base["prioridades_defecto"]

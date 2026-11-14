@@ -71,6 +71,15 @@ class Settings:
     live_deadline_s: float = field(default_factory=lambda: _float("LIVE_DEADLINE_S", 60.0))
     # motor de rotaciones: vacio = borrador simulado; ENGINE_JSON = ruta al JSON de enrique (ver engine_adapter.py)
     engine_json: str = field(default_factory=lambda: os.getenv("ENGINE_JSON") or (str(ENGINE_DATA_JSON) if ENGINE_DATA_JSON.is_file() else ""))
+    # motor EN VIVO por parcela (H-002, engine_adapter.LiveEngine): ENGINE_MODE=vivo. Precios: abierto por defecto (D-010);
+    # CARM solo con ENGINE_PRECIOS=carm explicito (nunca en una imagen publica).
+    engine_mode: str = field(default_factory=lambda: (os.getenv("ENGINE_MODE") or "").strip().lower())
+    engine_precios: str = field(default_factory=lambda: (os.getenv("ENGINE_PRECIOS") or "abierto").strip().lower())
+    # textos reescritos por un modelo local (narrativa.py): OLLAMA_URL activa la generacion en vivo; sin ella solo se sirven
+    # los precalculados de NARRATIVA_DIR. NARRATIVA_GUARDAR=1 guarda en ese directorio lo generado en vivo (precalentado).
+    ollama_url: str = field(default_factory=lambda: (os.getenv("OLLAMA_URL") or "").strip())
+    narrativa_dir: Path = field(default_factory=lambda: Path(os.getenv("NARRATIVA_DIR") or DATA_DIR / "cache" / "narrativa"))
+    narrativa_guardar: bool = field(default_factory=lambda: os.getenv("NARRATIVA_GUARDAR") == "1")
 
 
 def get_settings() -> Settings:

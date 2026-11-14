@@ -1,7 +1,7 @@
 """API Agrockham (T-024, D-009): contrato v1.1 por bloques con datos reales donde ya existen. Ver README.md.
 
 Arranque desde la raiz del repo:  uvicorn app.backend.api.main:app --host 0.0.0.0 --port ${PORT:-8080}
-Endpoints: /health, POST /analyze[?bloques=], GET /parcel/{id}, GET /recintos?bbox=.
+Endpoints: /health, POST /analyze[?bloques=], GET /parcel/{id}, GET /recintos?bbox=, POST /narrativa (texto reescrito).
 """
 import json
 import logging
@@ -18,7 +18,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.gzip import GZipMiddleware
 
-from . import blocks, settings, store
+from . import blocks, narrativa, settings, store
 
 log = logging.getLogger("agrockham.api")
 KM_POR_GRADO = 111.32
@@ -46,6 +46,15 @@ class AnalyzeRequest(BaseModel):
         "por_verificar", description="Zona legal del Mar Menor para el semaforo (Ley 3/2020). Por defecto sin verificar.")
 
 
+class NarrativaRequest(BaseModel):
+    """Texto reescrito (modelo local) de una rotacion de una consulta ya hecha con POST /analyze."""
+    model_config = ConfigDict(extra="forbid")
+    id: str = Field(..., min_length=1, max_length=120, description="`_meta.consulta_id` o `parcela.id` de un /analyze previo")
+    rotacion: str = Field(..., min_length=1, max_length=60, description="`id` de la rotacion")
+    campos: Optional[list[Literal["por_que", "evidencia_resumen", "no_sabemos", "riesgos_texto", "consulta"]]] = Field(
+        None, max_length=5, description="Campos de `texto` a reescribir. Por defecto: por_que.")
+
+
 def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
     cfg = cfg or settings.get_settings()
     cache: "OrderedDict[str, dict]" = OrderedDict()   # ultimo contrato por id (memoria del proceso)
@@ -55,6 +64,7 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         atom = store.cargar(cfg.atom_build_dir)   # nunca lanza: sin recintos la API arranca y avisa
         app.state.servicio = blocks.Servicio(cfg, atom)
+        app.state.narrador = narrativa.Narrador(cfg.narrativa_dir, cfg.ollama_url, cfg.narrativa_guardar)
         yield
 
     app = FastAPI(title="Agrockham API", version=cfg.version, lifespan=lifespan,
@@ -91,6 +101,8 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
         out = {"status": "ok", "version": cfg.version,
                "recintos": {"cargado": atom.cargado, "n": len(atom.index) if atom.cargado else 0,
                             "municipios": atom.nombres(), "segundos_carga": atom.segundos_carga}}
+        out["motor"] = getattr(servicio(request).engine, "nombre", "?")
+        out["narrativa"] = request.app.state.narrador.estado()
         if not atom.cargado:
             out["avisos"] = [f"Recintos SIGPAC no cargados ({atom.error}): /recintos da 503 y /analyze no devuelve parcela."]
         return out
@@ -122,6 +134,19 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
         if doc is None:
             raise HTTPException(404, detail="parcela no encontrada en cache (haz primero POST /analyze)")
         return doc
+
+    @app.post("/narrativa")
+    def narrativa_rotacion(req: NarrativaRequest, request: Request) -> dict:
+        """Texto de la tarjeta reescrito por un modelo local y verificado cifra a cifra; si no hay modelo ni texto
+        precalculado, devuelve la plantilla (`valido: false`). Puede tardar: el cliente lo pide aparte de /analyze."""
+        with lock:
+            doc = cache.get(req.id)
+        if doc is None:
+            raise HTTPException(404, detail="consulta no encontrada en cache (haz primero POST /analyze)")
+        rot = next((r for r in doc.get("rotaciones", []) if r.get("id") == req.rotacion), None)
+        if rot is None:
+            raise HTTPException(404, detail="rotacion no encontrada en esa consulta")
+        return request.app.state.narrador.rotacion(rot, req.campos)
 
     @app.get("/recintos")
     def recintos(request: Request, bbox: Annotated[str, Query(description="minlon,minlat,maxlon,maxlat (grados)")]) -> Response:
