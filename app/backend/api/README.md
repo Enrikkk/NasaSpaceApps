@@ -221,3 +221,9 @@ Parada de emergencia (si el gasto sube sin motivo):
 - Borrar el servicio: `gcloud run services delete agrockham-api --project agrockham-nasa-2026 --region europe-west1`
 - Desvincular la facturacion del proyecto: `gcloud billing projects unlink agrockham-nasa-2026`
 Antes de cualquier despliegue nuevo: mantener `--max-instances 2 --min-instances 0 --allow-unauthenticated` solo para `agrockham-api`, no crear otros servicios ni recursos de coste continuo, y borrar imagenes antiguas.
+
+## Imagen con el motor en vivo (2026-11-14, prueba hecha con la rama integracion 3c225b7)
+- `Dockerfile.engine` + `Dockerfile.engine.dockerignore`: copian `app/backend/engine` SIN tests y SIN `carm_precios_mensuales.csv` (restringido, D-010), `mapa_prices.csv` y `torre-pacheco.mock.json`; fijan `ENGINE_MODE=vivo` y `ENGINE_PRECIOS=abierto`. Solo necesita numpy (ya en requirements).
+- Probado sin red (`--network none`): /analyze 0,6-0,7 s por parcela, motor "en vivo por parcela", 4 rotaciones; el contenedor arranca con 170 265 recintos.
+- Datos incluidos: serie SIAM TP91 diaria y POWER diaria de la parcela (el motor las lee). SIAM sin licencia abierta explicita (fila "verify" de data-citations.md): atribucion "Fuente: SIAM-IMIDA, Region de Murcia".
+- NO desplegada todavia: pendiente de que enrique confirme las cifras del modo abierto (ver LOG).
