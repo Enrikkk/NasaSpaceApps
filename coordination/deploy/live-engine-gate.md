@@ -62,3 +62,35 @@ Desktop's frontend gate remains unchanged and its tests are not repeated.
 - Desktop supplies nonduplicated new-candidate build/browser evidence. Only a new
   assigned candidate or concrete doubt justifies repeating affected checks.
 - Gonzalo owns any image build/deploy/GCP; no cloud changes by this receiver.
+
+## Follow-up #270/#281/#285/#289 — candidate7403fe6
+
+Gonzalo fixed the restricted-CSV packaging issue in mainb74ed52: exclusions after
+the allowlist plus RUN cleanup/assertion. Read-only diff checked by Arturo;
+producer reports image built from a context containing CSV has zero restricted
+files/test directories. No duplicate image build here. Public v6d2eb748 remains
+JSON; Arturo's bounded7-request smoke passed10checks (historyFEGA real0..N,
+endpoints, attribution,CORSlocalhost/127 and rejection of another origin).
+Artifacts outsidegit: /tmp/agrockham-t017-v6-smoke/report.json.
+
+New exact local candidate integracion7403fe6: dev_app.sh API running on18080,
+66-feature sample, ENGINE_MODE=vivo, open prices, AGROCKHAM_OFFLINE=1; no assertion
+of container network isolation. Three separate sampled recintos return live
+por_parcela=true; dryland example honestly no_evaluable. Outside coverage returns
+parcela cargando/noid but live metadata still applies=true and no_evaluable null;
+semantic concern sent Enrique293, not silently repaired by this task.
+
+New frontend build70modulesexit0 using matching-lock existing dependencies;
+worker asset referenced by emitted bundle remains missing, gateexit1. Jaime288
+owns the fix. Dev frontend5173 points to API18080 for Desktop's real-browserQA;
+this receiver's CUA has no browser, Desktop's CUA does. Handoff283 toJaime was
+cancelled287 to avoid duplicateQA. Local environment/coordinates handed toDesktop
+in outputs/e2e-entorno.md; rawresponses/gate reports stay outsidegit.
+
+Deployment sequence agreed289: Jaime/Enrique resolve frontend/App union;
+Enrique approves open-price figures (lettuce currently under review, not tested
+as correct); Gonzalo builds/deploys exact approved image and supplies digest,
+revision and live-marker evidence; Arturo/Desktop validate published URL.
+Gonzalo owns API/image/GCP, Arturo QA/scripts/deploydocs. Same-origin frontend
+serving is available on mainf1b2ffa but is not proof of deployment/integration.
+No main merge by agents; no new project/billing/spend expansion authorised.
