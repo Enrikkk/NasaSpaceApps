@@ -1,0 +1,18 @@
+# Dependencias de ejecucion, versiones fijadas (comprobadas en PyPI el 2026-11-14). Licencias en README.md.
+fastapi==0.162.7
+uvicorn==0.54.0
+pydantic==2.14.3
+starlette==1.10.0
+numpy==2.4.6
+shapely==2.2.0
+# transitivas (pip freeze de un venv limpio con lo anterior)
+annotated-doc==0.0.6
+annotated-types==0.8.0
+anyio==4.16.0
+click==8.5.1
+h11==0.16.0
+idna==3.20
+opentelemetry-api==1.45.2
+pydantic_core==2.50.4
+typing-inspection==0.4.5
+typing_extensions==4.16.0

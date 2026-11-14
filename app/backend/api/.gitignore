@@ -1,0 +1,5 @@
+# GeoJSON de ATOM para la imagen Docker y para ejecutar en local (salida de build_recintos.py): datos, no codigo
+atom_build/
+.pytest_cache/
+__pycache__/
+.venv/
