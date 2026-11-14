@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git pull --rebase --autostash -q 2>&1 | tail -2; echo \"--- seat: ${SEAT:-UNSET (export SEAT=<name>)} ---\"; echo '--- TASK BOARD ---'; python3 -I scripts/board.py 2>/dev/null; echo '--- LAST LOG LINES ---'; tail -n 12 coordination/LOG.md 2>/dev/null; echo '--- LIVE INBOX: interactive session? Start the Monitor tool with `bash scripts/bus_listen.sh` (timeout 30 min, re-arm on expiry) so team-bus messages interrupt you. One per seat. See coordination/BUS-LISTEN.md ---'"
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git pull --rebase --autostash -q 2>&1 | tail -2; echo \"--- seat: ${SEAT:-UNSET (export SEAT=<name>)} ---\"; echo '--- TASK BOARD ---'; python3 -I scripts/board.py 2>/dev/null; echo '--- LAST LOG LINES ---'; tail -n 12 coordination/LOG.md 2>/dev/null; echo '--- MANDATORY LIVE INBOX: unless you were started by dispatch (T-NNN <seat>), start NOW the Monitor tool with `bash scripts/bus_listen.sh` (timeout 30 min, re-arm on expiry) so team-bus messages interrupt you. One per seat. See coordination/BUS-LISTEN.md ---'"
           }
         ]
       }

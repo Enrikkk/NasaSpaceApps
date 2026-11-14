@@ -35,3 +35,5 @@ Why: 2 days. We may "sell a bit of vision" if it is feasible and honest. The tab
 Rejected alternatives: building a general multi-region system; claiming predictive accuracy we cannot validate.
 
 ACCEPTED D-002 | 2026-11-14 | jaime (instructed his agent in chat; the team chose Field Shift on 13 Nov, region Murcia)
+ACCEPTED D-002 | 2026-11-14 | Challenge 06 Field Shift: Adapting Farms with NASA Data | decided by: enrique (for the team, in chat)
+Why: team choice. Data brainstorm in brainstorm/field-shift-data.md; prior-art caveats in research/prior-art-2026.md (4 Murcia teams on this challenge as of 10 Nov).

@@ -4,14 +4,14 @@
 the `orchestrator`. An agent session a human opened by hand (Claude Code, Codex, opencode, Antigravity, pi…)
 gets nothing until it calls `read_messages` itself, so teammates' messages sit unread.
 
-**Fix.** `scripts/bus_listen.sh` polls the bus every 20 s with plain `curl` (0 tokens while nothing arrives) and
+**Fix.** `scripts/bus_listen.sh` polls the bus every 5 s with plain `curl` (0 tokens while nothing arrives) and
 prints each new message as one line: `[team-bus] #N <time> message from <seat>: <text>`. Run it as a background
 monitor whose output interrupts the agent, so messages land in its context as soon as they arrive.
 
 ## Every interactive session does this once, at start
 
 1. `export SEAT=<your seat>` (already in `~/.profile` if you ran `scripts/team_join.sh`).
-2. Start the listener as a **persistent background monitor**:
+2. **MANDATORY for every agent of the team.** Start the listener as a background monitor:
    - **Claude Code:** Monitor tool, `command: bash scripts/bus_listen.sh`, `timeout_ms: 1800000` (the 30 min
      maximum), description `team-bus inbox (<seat>)`. Each line wakes the agent. **Re-arm it every time it
      expires** (you get a notice), for the whole session.

@@ -2,16 +2,16 @@
 # Live inbox for an INTERACTIVE agent session (a human-driven Claude Code / Codex / opencode window).
 # Hub-dispatched Paseo agents ("T-NNN <seat>") already get messages pushed by the hub: they don't need this.
 #
-# Polls the team bus every $BUS_POLL seconds (default 20) with plain curl, so waiting costs 0 tokens. Each new
+# Polls the team bus every $BUS_POLL seconds (default 5) with plain curl, so waiting costs 0 tokens. Each new
 # message is printed as ONE stdout line and marked read. Run it as a background monitor whose every output
 # line interrupts the agent:
-#   Claude Code: Monitor tool, command `bash scripts/bus_listen.sh` (persistent).
+#   Claude Code: Monitor tool, command `bash scripts/bus_listen.sh`, timeout_ms 1800000, re-arm on every expiry.
 #   Other tools: run it in a background terminal and have the agent read its output, or ask the human to.
 # Only one listener per seat: two would race for the same messages. Details: coordination/BUS-LISTEN.md.
 set -u
 URL="${TEAM_BUS_URL:-http://100.93.255.39:6780/mcp}"
 SEAT="${SEAT:?export SEAT=<your seat> first}"
-POLL="${BUS_POLL:-20}"
+POLL="${BUS_POLL:-5}"
 LOCK="${TMPDIR:-/tmp}/bus_listen.${SEAT}.lock"
 
 exec 9>"$LOCK"
