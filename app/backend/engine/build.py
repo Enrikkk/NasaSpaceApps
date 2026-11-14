@@ -119,8 +119,8 @@ def price_notes(keys_used, static):
     return sorted(notes)
 
 
-def rotation(rid, name, path, static, runs, shared, crops, actual=False, strategies=()):
-    sim = st.simulate(path, runs, shared)
+def rotation(rid, name, path, static, runs, shared, crops, actual=False, strategies=(), common=None):
+    sim = st.simulate(path, runs, shared, common=common)
     water_draws = sim["agua"] if sim else st.simulate_water(path, runs, shared)
     raw = st.raw_criteria(path, static, runs, sim, None)
     sts = [rt.option_static(o, static) for o in path]
@@ -177,10 +177,13 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                 "fuente_id": "IMIDA-HORT2020", "url": SOURCES["IMIDA-HORT2020"]["url"], "escala": "Región de Murcia"}])}
     if sim:
         q = lambda p: stats.quantile(sim["margen"], p)
-        out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()}, "peores_anios": [{"anio": y, "margen_eur_ha": r0(m)} for y, m in sim["peores_anios_margen"]],
-                            "definicion": f"n = años del plan x años del histórico con dato ({sim['n']}); un año cuenta como bueno si no "
-                                          "hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada "
-                                          "año del plan: no son observaciones independientes y el intervalo es optimista"}
+        out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()},
+                            "n_anios_historicos": sim["n"], "n_efectivo": sim["n"], "n_muestras": sim["n_muestras"],
+                            "peores_anios": [{"anio": y, "margen_eur_ha": r0(m)} for y, m in sim["peores_anios_margen"]],
+                            "definicion": f"n = n_anios_historicos = {sim['n']}: años del histórico en los que todos los años del plan "
+                                          "tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio "
+                                          "del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} "
+                                          "conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."}
         out["exito_pct"]["valor"] = round(out["exito_pct"]["valor"] * 100, 1)
         out["exito_pct"]["horquilla"] = [round(x * 100, 1) for x in out["exito_pct"]["horquilla"]]
         out["margen_eur_ha"] = {"valor": r0(q(.5)), "horquilla": [r0(q(.1)), r0(q(.9))], "p10": r0(q(.1)), "p50": r0(q(.5)),
@@ -189,9 +192,11 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
         out["escenarios"] = [r0(x) for x in sim["margen"]]
         out["escenarios_margen_eur_ha"] = out["escenarios"]     # same list under the name gonzalo's UI reads
         out["escenarios_meta"] = {"n": len(out["escenarios"]), "semilla": sim["semilla"], "anio_clima": sim["anio_clima"],
-                                  "factor_coste": sim["factor_coste"],
-                                  "nota": "misma semilla y mismos números aleatorios en todas las rotaciones; anio_clima = año histórico "
-                                          "(clima y precio emparejados) sorteado para cada año del plan"}
+                                  "factor_coste": sim["factor_coste"], "alineados": common is not None,
+                                  "n_anios_comunes": len(common) if common is not None else None,
+                                  "nota": "misma semilla y mismos números aleatorios en todas las rotaciones. Si alineados, el escenario i "
+                                          "usa en cada año del plan el mismo año histórico (clima y precio emparejados) en todas las "
+                                          "rotaciones evaluables: el conjunto común de años con precio."}
     else:
         out["exito_pct"] = {"valor": None, "horquilla": None, "k_malos": None, "n": 0, "metodo": None,
                             "definicion": "NO EVALUABLE: falta el precio de algún cultivo con datos abiertos"}
@@ -251,25 +256,38 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
         return f"{sid}-{'-'.join(m['strategies'][1:]).lower()}".rstrip("-") if len(m["strategies"]) > 1 else sid, \
             " / ".join(labels[s] for s in m["strategies"]) + ": " + plan_text(m["path"], run_static)
 
+    def common_years(runs):
+        """Intersection of historical years with a price, over rotations that can be scored."""
+        sets = []
+        for m in merged:
+            ys = st.money_years(m["path"], runs)
+            if ys:
+                sets.append(set(ys))
+        return sorted(set.intersection(*sets)) if sets else []
+
     def assemble(run_static, runs):
+        common = common_years(runs)
         rots = []
         for m in merged:
+            own = st.money_years(m["path"], runs)
             rid, nm = names(m, static)
             rots.append(rotation(rid, nm, m["path"], static, runs, shared, crops, actual=m["strategies"] == ["actual"],
-                                 strategies=m["strategies"]))
+                                 strategies=m["strategies"], common=common if own else None))
         crit = st.normalise_rotations([r["_raw"] for r in rots])
         for r, c in zip(rots, crit):
             r["criterios"] = c
-        return rots
+        return rots, len(common)
 
-    rots = assemble(static, static)
+    rots, n_common = assemble(static, static)
     for rr in rots:
         sim = rr["_sim"]
     variants = {}
+    common_by_variant = {"base": n_common}
     for vid, (rain, temp) in VARIANTS.items():
         vs = rt.run_cycles(products, rt.perturb(climate, rain, temp), prices, hicp, area, carm, base_year, allow_restricted)
-        vr = assemble(vs, vs)
-        variants[vid] = {"lluvia_pct": rain, "temp_c": temp,
+        vr, n_var = assemble(vs, vs)
+        common_by_variant[vid] = n_var
+        variants[vid] = {"lluvia_pct": rain, "temp_c": temp, "n_anios_comunes": n_var,
                          "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)",
                          "rotaciones": {r["id"]: {"exito_pct": r["exito_pct"]["valor"], "margen_p50": (r["margen_eur_ha"] or {}).get("p50"),
                                                   "agua_m3_ha": r["agua_m3_ha"], "criterios": r["criterios"], "escenarios": r["escenarios"],
@@ -279,6 +297,7 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
         r["variantes"] = {vid: {"exito_pct": v["rotaciones"][r["id"]]["exito_pct"], "margen_p50": v["rotaciones"][r["id"]]["margen_p50"],
                                 "agua_m3_ha": v["rotaciones"][r["id"]]["agua_m3_ha"], "criterios": v["rotaciones"][r["id"]]["criterios"],
                                 "escenarios": v["rotaciones"][r["id"]]["escenarios"], "riesgo_etapas": v["rotaciones"][r["id"]]["riesgo_etapas"], "lluvia_pct": v["lluvia_pct"], "temp_c": v["temp_c"],
+                                "n_anios_comunes": v["n_anios_comunes"],
                                 "_status": v["_status"]} for vid, v in variants.items()}
         r.pop("_raw"), r.pop("_sim")
         why = {"actual": "Es lo que haces hoy; sirve de referencia para comparar."}

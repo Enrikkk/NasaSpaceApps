@@ -53,6 +53,23 @@ def test_normalise_rotations_range_and_none():
     assert c[0]["riesgo"] == 1.0                                 # higher CVaR is better
 
 
+def test_scenarios_share_the_same_year_and_cost():
+    out = bd.build("torre-pacheco", allow_restricted=True)
+    ev = [r for r in out["rotaciones"] if r.get("escenarios")]
+    assert len(ev) >= 2
+    ref = ev[0]["escenarios_meta"]
+    assert ref["alineados"] is True and ref["n_anios_comunes"]
+    for r in ev:
+        meta = r["escenarios_meta"]
+        assert meta["alineados"] is True
+        assert meta["anio_clima"] == ref["anio_clima"]
+        assert meta["factor_coste"] == ref["factor_coste"]
+        for i, (years, cost) in enumerate(zip(meta["anio_clima"], meta["factor_coste"])):
+            assert years == ref["anio_clima"][i] and cost == ref["factor_coste"][i]
+        assert r["exito_pct"]["n"] == r["exito_pct"]["n_anios_historicos"] == r["exito_pct"]["n_efectivo"]
+        assert r["exito_pct"]["n_muestras"] > r["exito_pct"]["n"]
+
+
 def test_shared_draws_deterministic():
     assert st.draws()[:3] == st.draws()[:3] and len(st.draws()) == st.N_SAMPLES
 

@@ -350,8 +350,8 @@ def _no_sabemos(r):
     for c in _crops_without_price(r):
         out.append(f"Para {c} no hay precio abierto: tendrías que poner el tuyo.")
     if _has_exito(r):
-        out.append(f"El porcentaje de años buenos reutiliza los mismos años del histórico en cada año del plan: los "
-                   f"{r['exito_pct']['n']} casos que se cuentan no son independientes y la horquilla es optimista.")
+        out.append(f"El porcentaje de años buenos cuenta cada año del histórico una sola vez, con el plan completo: "
+                   f"hay {r['exito_pct']['n']} años. No es un pronóstico.")
     gaps = " ".join(r.get("huecos", []))
     if "el clima NO resta kilos" in gaps:
         out.append("El clima todavía no resta kilos de cosecha: si hay helada o calor, el aviso va por etapas, pero el margen no lo descuenta.")

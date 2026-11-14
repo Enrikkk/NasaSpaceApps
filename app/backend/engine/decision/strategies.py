@@ -87,18 +87,44 @@ def draws(n=N_SAMPLES, horizon=rt.HORIZON, seed=2026):
     return [([rng.random() for _ in range(horizon)], rng.uniform(*COST_BAND)) for _ in range(n)]
 
 
-def simulate(path, runs, shared):
-    """Per-draw annual margin and water for a path, plus pooled bad-year counts. None if any plan-year has no money year."""
+def money_years(path, runs):
+    """Historical years Y for which every plan-year of the path has a price."""
+    sets = []
+    for o in path:
+        yv = rt.year_values(o, runs)
+        sets.append({y for y, v in yv.items() if v["money"]})
+    if not sets or any(not s for s in sets):
+        return []
+    return sorted(set.intersection(*sets))
+
+
+def simulate(path, runs, shared, common=None):
+    """Per-draw annual margin and water for a path. None if any plan-year has no money year.
+
+    Success is one count per historical year in Y (every plan-year has a price): the year is bad when any
+    plan-year has clima_malo under that year, or the mean margin of the whole plan under that year is < 0.
+    `n_muestras` keeps the old plan-year × year tally (not independent). When `common` is set, draw i uses
+    common[int(u_t * len(common))] in every plan-year, so the same index is the same year across rotations.
+    """
     yv = [rt.year_values(o, runs) for o in path]
     pools = [sorted(y for y, v in d.items() if v["money"]) for d in yv]
     if any(not p for p in pools):
         return None
+    Y = money_years(path, runs)
+    if not Y:
+        return None
+    if common is not None:
+        years = list(common)
+        if not years:
+            return None
+    else:
+        years = None
     margins, waters, years_drawn = [], [], []
     for us, mult in shared:
         tot_m = tot_w = 0.0
         ys = []
         for t, u in enumerate(us):
-            y = pools[t][int(u * len(pools[t]))]
+            y = years[int(u * len(years))] if years is not None else pools[t][int(u * len(pools[t]))]
             v = yv[t][y]
             tot_m += v["rev"] - v["cost"] * mult
             tot_w += v["agua"]
@@ -106,15 +132,16 @@ def simulate(path, runs, shared):
         margins.append(tot_m / len(path))
         waters.append(tot_w / len(path))
         years_drawn.append(ys)
-    k = n = 0
-    for t, d in enumerate(yv):
-        for y in pools[t]:
-            n += 1
-            k += bool(d[y]["clima_malo"] or d[y]["margen"] < 0)
+    k = 0
+    for y in Y:
+        margins_y = [d[y]["margen"] for d in yv]
+        bad = any(d[y]["clima_malo"] for d in yv) or (sum(margins_y) / len(margins_y) < 0)
+        k += bool(bad)
     first = sorted(pools[0], key=lambda y: yv[0][y]["margen"])[:3]
     first_m = [(y, yv[0][y]["margen"]) for y in first]
     return {"margen": margins, "agua": waters, "anio_clima": years_drawn, "factor_coste": [round(m, 3) for _, m in shared],
-            "semilla": 2026, "k_malos": k, "n": n, "peores_anios": first, "peores_anios_margen": first_m,
+            "semilla": 2026, "k_malos": k, "n": len(Y), "n_muestras": sum(len(p) for p in pools),
+            "peores_anios": first, "peores_anios_margen": first_m,
             "margen_medio": sum(sum(d[y]["margen"] for y in pools[t]) / len(pools[t]) for t, d in enumerate(yv)) / len(path)}
 
 
