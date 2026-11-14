@@ -20,14 +20,14 @@ State as of Sat 14 Nov 2026, evening. Every block of the contract carries its ow
 
 | Piece | Status for the demo | Notes |
 |---|---|---|
-| Parcel (SIGPAC recinto, geometry, slope, area) | **Real** from the official SIGPAC download by municipality (ATOM); live OGC API access pending FEGA terms check (D-009) | FEGA's 2026 terms say no authorisation is needed; a 2023 MAPA reply says third-party access from code is not allowed, so ATOM is the safe route. Demo parcel Torre-Pacheco 18/426/1 |
+| Parcel (SIGPAC recinto, geometry, slope, area) | **Real** from the official SIGPAC download by municipality (ATOM); live OGC API access is covered by FEGA's 2026 terms of use (no express authorisation required; CC BY 4.0, attribution to FEGA) | FEGA's 2026 terms say no authorisation is needed; a 2023 MAPA reply says third-party access from code is not allowed, so ATOM is the safe route. Demo parcel Torre-Pacheco 18/426/1 |
 | Declared crop history (FEGA) | **Real** where the pipeline reads it (T-011), else `simulado` | licence not confirmed separately |
 | Climate history (NASA POWER, IMERG rain, SIAM TP91 frost) | **Real**, 19 observed years (2006-2024), cached per cell | POWER/ERA5 miss frost: frost days come from the SIAM TP91 station (not the exact field) |
 | Soil (SoilGrids) | **Real**, cached per 250 m cell | |
 | NDVI and bare-soil months (HLS / Sentinel-2) | **Real if T-013 lands**, else `simulado`, labelled | |
 | Success % per crop | **Real calculation, simple model** (D-008, D-011) | share of the 19 historical years in which climate loss < 20 % AND margin >= 0 at that year's price, with a Wilson interval; no yield labels exist, we say so; never a yield prediction |
 | Prices and breakeven | **CARM/ESAM yearbook prices under D-010**, written permission still **pending** (esam.carm.es/legal is personal, non-commercial, not open) | open twin `torre-pacheco.abierto.json` kept as fallback; re-review before the submission (Sun 21:00) |
-| Costs, yields, irrigation | **Real tables** (IMIDA/MAPA, FAO-56, FAO-29), 8 crops | alcaparra is out (D-008) |
+| Costs, yields, irrigation | **Real source tables with caveats**: costs from IMIDA studies per crop type (a similar crop is used and flagged where there is no study of its own); prices from CARM yearbook under D-010 (permission pending) with an open MAPA/Eurostat/FAOSTAT alternative documented in `research/precios-abiertos.md`; water and yield from FAO-56 / FAO-29 | alcaparra is out (D-008); none of this is measured on the parcel |
 | Oversupply | **Proxy** (declared area per crop in the comarca), not emitted by the engine yet | |
 | Legal traffic light (Ley 3/2020 Mar Menor, PAC) | **Rules table, articles cited, all `por_verificar`**; Mar Menor zone 1/2 **not verified** (Anexo I unread) | not legal advice; grey light outside the full-coverage area |
 | "B wins X %" comparison | **Indicative** until `escenarios_meta.alineados = true` | the scenario index is not yet the same sample in every rotation (D-011) |

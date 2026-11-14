@@ -110,3 +110,9 @@ Si `prev` es barbecho, la DP debe pasar el último cultivo real.
 11. **Análisis del BOE** el día de la entrega: ninguna modificación posterior a 06/09/2023 (reforma sancionadora solo en trámite).
 12. Al contrastar cada regla, cambiar `estado` a `verificado` en `rules.csv`/`grupos_cultivo.csv` (el motor lo propaga a `comprobaciones[].estado`).
 13. **Licencias** (AGENTS.md §6): el prototipo solo usa la librería estándar y citas de normas del BOE; `jsonschema` (MIT) se usa solo en el venv de desarrollo y no se distribuye.
+
+
+## Zona de la parcela demo y verificacion (2026-11-14)
+- Texto de la ley contrastado con el consolidado del BOE (version 06/09/2023): arts. 29.4, 37.1, 39.2, 40, 50, 51.1-51.6 (grupos de cultivo: melon, haba, alcachofa = grupo 2; Brassica y hortalizas de hoja = grupo 1; art. 50.2 y la seccion de Zona 1 acotan 51.x a la Zona 1). Las reglas confirmadas llevan `estado = verificado` en `rules.csv`; el resto sigue `por_verificar`. No es dictamen legal.
+- Zona de SIGPAC 30-37-0-0-18-426-1 (Torre-Pacheco): **Zona 2** segun el WMS de la CARM (capas `zonas_sost`) y por distancia: esta a ~12-14 km de la orilla del Mar Menor, muy por encima de los 1.500 m del art. 29; el borde de la Zona 1 queda a ~9-11 km al este. Para el demo, la API puede pasar `zona="zona_2"` a este recinto. Fuera de esta parcela la zona sigue `por_verificar`.
+- Consecuencia en Zona 2: aplican arts. 37 (5 % de retencion), 39.2 (maximo 2 ciclos al anio) y 40 (sin urea ni abonado mineral de fondo con N); el art. 51 (grupos, cobertera en suelo desnudo > 2 meses) no obliga.

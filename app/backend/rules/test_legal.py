@@ -64,10 +64,12 @@ def colores(zona, **extra):
 
 
 class TablaDatos(unittest.TestCase):
-    def test_todas_las_reglas_por_verificar(self):
+    def test_estado_de_reglas_valido(self):
         self.assertTrue(legal.REGLAS)
         for r in legal.REGLAS.values():
-            self.assertEqual(r["estado"], "por_verificar", r["id"])
+            self.assertIn(r["estado"], ("por_verificar", "verificado"), r["id"])
+            if r["estado"] == "verificado":
+                self.assertIn("Contrastado con el texto consolidado", r["notas"], r["id"])
             self.assertIn(r["tipo"], ("dura", "aviso", "informativo"))
             self.assertIn(r["ambito"], ("zona_1", "ambas", "PAC"))
 
