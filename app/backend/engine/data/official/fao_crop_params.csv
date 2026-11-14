@@ -72,3 +72,27 @@ limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange 
 limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
 limon,ece_slope,15.9,%/(dS/m),F29-T4,M,derived,100/(8.0-1.7)
 limon,salt_class,sensitive,-,F29-T6,A,sourced,Lemon (Citrus limon) listed as sensitive
+lechuga,zr_min,0.3,m,F56-T22,A,sourced,Lettuce row; smaller value: irrigation scheduling
+lechuga,zr_max,0.5,m,F56-T22,A,sourced,Lettuce row; larger value: modelling water stress / rainfed
+lechuga,p_depletion,0.30,-,F56-T22,A,sourced,Lettuce row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+brocoli,zr_min,0.4,m,F56-T22,A,sourced,Broccoli row; smaller value: irrigation scheduling
+brocoli,zr_max,0.6,m,F56-T22,A,sourced,Broccoli row; larger value: modelling water stress / rainfed
+brocoli,p_depletion,0.45,-,F56-T22,A,sourced,Broccoli row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+melon,zr_min,0.8,m,F56-T22,A,sourced,Sweet Melons row; smaller value: irrigation scheduling
+melon,zr_max,1.5,m,F56-T22,A,sourced,Sweet Melons row; larger value: modelling water stress / rainfed
+melon,p_depletion,0.40,-,F56-T22,A,sourced,Sweet Melons row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+alcachofa,zr_min,0.6,m,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); smaller value: irrigation scheduling"
+alcachofa,zr_max,0.9,m,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); larger value: modelling water stress / rainfed"
+alcachofa,p_depletion,0.45,-,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
+haba,zr_min,0.5,m,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; smaller value: irrigation scheduling
+haba,zr_max,0.7,m,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; larger value: modelling water stress / rainfed
+haba,p_depletion,0.45,-,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+cebada,zr_min,1.0,m,F56-T22,A,sourced,Barley row; smaller value: irrigation scheduling
+cebada,zr_max,1.5,m,F56-T22,A,sourced,Barley row; larger value: modelling water stress / rainfed
+cebada,p_depletion,0.55,-,F56-T22,A,sourced,Barley row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+veza,zr_min,0.6,m,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; smaller value: irrigation scheduling"
+veza,zr_max,0.9,m,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; larger value: modelling water stress / rainfed"
+veza,p_depletion,0.45,-,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
+limon,zr_min,1.2,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); smaller value: irrigation scheduling
+limon,zr_max,1.5,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); larger value: modelling water stress / rainfed
+limon,p_depletion,0.50,-,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
