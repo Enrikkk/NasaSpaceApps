@@ -10,7 +10,10 @@ cd "$(dirname "$0")/.."
 ROOT="$PWD"
 OLLAMA="${OLLAMA_URL:-http://127.0.0.1:11434}"
 if curl -s -m 3 "$OLLAMA/api/tags" >/dev/null 2>&1; then
-  export OLLAMA_URL="$OLLAMA" OLLAMA_MODEL="${OLLAMA_MODEL:-gpt-oss:20b}" NARRATIVA_GUARDAR=1
+  if [ -z "${OLLAMA_MODEL:-}" ]; then   # el nombre varia entre portatiles (gpt-oss:20b, gpt-oss-20b:latest...): se usa el primero que contenga "gpt-oss"
+    OLLAMA_MODEL="$(curl -s -m 3 "$OLLAMA/api/tags" | python3 -c 'import json,sys; n=[m["name"] for m in json.load(sys.stdin).get("models",[]) if "gpt-oss" in m["name"]]; print(n[0] if n else "gpt-oss:20b")' 2>/dev/null || echo gpt-oss:20b)"
+  fi
+  export OLLAMA_URL="$OLLAMA" OLLAMA_MODEL NARRATIVA_GUARDAR=1
   echo "Ollama detectado en $OLLAMA (modelo $OLLAMA_MODEL): textos del modelo activados (se guardan los validos)."
 else
   echo "AVISO: no hay Ollama en $OLLAMA: la ficha mostrara los textos de plantilla (sin reescritura del modelo)."
