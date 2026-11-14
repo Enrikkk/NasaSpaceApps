@@ -172,3 +172,12 @@ Léelos antes de enseñar la app. No están suavizados.
    probado.
 7. Las rotaciones y sus cifras son las del motor para esa parcela, pero `historia`, `ndvi` y el suelo siguen sus
    propios estados (`_status` de cada bloque). No es consejo agronómico ni legal.
+
+## Todo en un portátil con un solo comando
+
+`bash scripts/demo_local.sh` arranca la API (motor en vivo, precios abiertos) en :8080 y el frontend en :5173. Si detecta
+Ollama en `http://127.0.0.1:11434`, activa los textos del modelo local (`OLLAMA_MODEL`, por defecto `gpt-oss:20b`) y guarda
+en `app/data/cache/narrativa/` los textos que pasan el comprobador. Sin Ollama, la ficha muestra la plantilla de siempre.
+Requisitos una sola vez: entorno de Python (`requirements-dev.txt` de la API), `npm install` (lo hace el script) y, para el
+texto del modelo, `ollama pull gpt-oss:20b` (~13 GB). Con la muestra de 66 recintos solo se encuentran parcelas alrededor de
+la demo de Torre-Pacheco; con `ATOM_BUILD_DIR` apuntando a los recintos completos se encuentran todas.
