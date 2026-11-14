@@ -50,6 +50,9 @@ def _float(nombre: str, defecto: float) -> float:
         return defecto
 
 
+# JSON publicado del motor (enrique) copiado en tiempo de construccion: app/backend/api/engine_data/engine.json (ignorado por git; ver engine_data/README.md)
+ENGINE_DATA_JSON = Path(__file__).resolve().parent / "engine_data" / "engine.json"
+
 @dataclass(frozen=True)
 class Settings:
     version: str = field(default_factory=lambda: os.getenv("GIT_SHA") or "dev")
@@ -67,7 +70,7 @@ class Settings:
     live_retries: int = field(default_factory=lambda: _int("LIVE_RETRIES", 1))
     live_deadline_s: float = field(default_factory=lambda: _float("LIVE_DEADLINE_S", 60.0))
     # motor de rotaciones: vacio = borrador simulado; ENGINE_JSON = ruta al JSON de enrique (ver engine_adapter.py)
-    engine_json: str = field(default_factory=lambda: os.getenv("ENGINE_JSON", ""))
+    engine_json: str = field(default_factory=lambda: os.getenv("ENGINE_JSON") or (str(ENGINE_DATA_JSON) if ENGINE_DATA_JSON.is_file() else ""))
 
 
 def get_settings() -> Settings:

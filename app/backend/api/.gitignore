@@ -3,3 +3,5 @@ atom_build/
 .pytest_cache/
 __pycache__/
 .venv/
+# JSON del motor copiado al construir (puede llevar precios CARM, D-010)
+engine_data/engine.json

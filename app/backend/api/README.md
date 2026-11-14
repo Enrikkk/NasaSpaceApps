@@ -201,3 +201,7 @@ Citas completas y estado de licencia: `app/backend/pipeline/README.md`.
 - Como se hizo: un contexto limpio fuera del repo (app/backend/api, pipeline, rules, app/data minimo y los GeoJSON de ATOM en `app/backend/api/atom_build`), `gcloud builds submit --config app/backend/api/cloudbuild.yaml --substitutions _IMAGE=<imagen>` y `gcloud run deploy agrockham-api --image <imagen> --allow-unauthenticated ...`. Los GeoJSON de ATOM NO estan en git (los genera `app/backend/pipeline/atom/build_recintos.py`).
 - Comprobado: `/health` (50 368 recintos cargados), `POST /analyze` en la parcela demo (0,4 s; clima y suelo reales, parcela precalculada, semaforo verde con `zona=zona_2`), `/recintos?bbox=` y CORS para `http://localhost:5173`.
 - Pendiente: `FRONTEND_ORIGIN` con el origen publico del frontend de jaime (CORS), descargar Cartagena y Fuente Alamo, enchufar el motor de enrique (`ENGINE_JSON`).
+
+## Empaquetado: GIT_SHA y JSON del motor (2026-11-14, hallazgos de arturo #162)
+- `cloudbuild.yaml` pasa `--build-arg GIT_SHA=${_GIT_SHA}`: construir con `--substitutions _GIT_SHA=$(git rev-parse --short HEAD),_IMAGE=<imagen>` para que `/health` devuelva el commit real.
+- Contrato de montaje del motor: la API no lleva el codigo del motor, solo su JSON publicado. Copia ese JSON a `app/backend/api/engine_data/engine.json` antes de construir (ignorado por git; puede llevar precios CARM, D-010) o monta un volumen / fija `ENGINE_JSON`. Ver `engine_data/README.md`.

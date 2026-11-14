@@ -38,6 +38,8 @@ COPY app/data/contract/adapt_enrique.py ./app/data/contract/
 COPY app/data/cache/pipeline/clima_suelo ./app/data/cache/pipeline/clima_suelo
 # Recintos SIGPAC (ATOM del FEGA): no estan en git, hay que dejarlos en app/backend/api/atom_build antes de construir
 COPY app/backend/api/atom_build /data/atom
+# JSON del motor (opcional): ver app/backend/api/engine_data/README.md
+COPY app/backend/api/engine_data ./app/backend/api/engine_data
 
 ARG GIT_SHA=dev
 ENV GIT_SHA=${GIT_SHA} \

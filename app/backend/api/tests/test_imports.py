@@ -28,3 +28,16 @@ def test_rutas_por_defecto_existen():
 
 def test_adaptador_v11_importable():
     assert hasattr(engine_adapter._adaptador(), "adapt_enrique")
+
+
+def test_engine_json_por_defecto_desde_engine_data(tmp_path, monkeypatch):
+    """Contrato de montaje: sin ENGINE_JSON, la API usa engine_data/engine.json si existe (T-017)."""
+    from app.backend.api import settings as st
+    monkeypatch.delenv("ENGINE_JSON", raising=False)
+    falso = tmp_path / "engine.json"
+    monkeypatch.setattr(st, "ENGINE_DATA_JSON", falso)
+    assert st.get_settings().engine_json == ""
+    falso.write_text("{}")
+    assert st.get_settings().engine_json == str(falso)
+    monkeypatch.setenv("ENGINE_JSON", "/otra/ruta.json")
+    assert st.get_settings().engine_json == "/otra/ruta.json"

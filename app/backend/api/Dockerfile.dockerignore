@@ -21,3 +21,4 @@
 !app/data/cache/pipeline/clima_suelo
 **/__pycache__
 **/*.pyc
+!app/backend/api/engine_data
