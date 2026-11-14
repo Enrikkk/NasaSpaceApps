@@ -18,6 +18,9 @@
 > **Money-only results (no climate thresholds yet):** limón fino 89 %, alcachofa 78 %, brócoli 62 %, melón piel de sapo 56 %,
 > lechuga iceberg 39 % (0.21 €/pieza vs 0.24 cost), little gem 24 %; haba/cebada not evaluable.
 > **Open:** does CARM "s/finca" include harvest? (default: farmer pays; UI toggle).
+> **⚠️ Licence:** CARM yearbook prices = personal non-commercial use only, no modification (esam.carm.es/legal). Permission
+> requested (Enrique emails agri-estadistica@carm.es). Engine uses them only with `--interno` / `allow_restricted=True`
+> (branch @ 2f8b3b9, 16 tests); anything PUBLISHED uses open data only (Eurostat) until written permission.
 
 # Field Shift (challenge 06): data brainstorm
 
