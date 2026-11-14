@@ -30,3 +30,5 @@ Acceptance for this preparation increment:
 - 2026-11-14 | arturo: evidenciaDesktop393ef24: npmci/build exit0,63módulos,navegación pasa. HallazgosJaime254/257 workerMapLibre ausente/respuestaHTML ysuperficieMVT unidadesincorrectas; bloqueanvalidaciónrecintos. SinUIAPI/comparador/prioridades/fallback. Esperar hashcorregido+APIbase/CORS, coordinar QA nuevo sinrepetirbuildidéntica.
 
 - 2026-11-14 19:02 | arturo: added reusable scripts/t017_frontend_gate.py on t017-frontend-gate (new script only; existing API smoke untouched). Six tests pass; real public API/CORS confirmed, worker missing in393ef24 correctly fails. See coordination/deploy/frontend-gate.md. UI/API/comparator and labelled fallback still pending; no publication authorization.
+
+- 2026-11-14 | arturo: LiveEngine gate prepared read-only from integracion3c3abb4/main1e046b3; requires por_parcela marker plus fallback checks, input/image manifest and open-data approval. JSON smoke not LiveEngine evidence. Dockerignore restrictedCSV concern sent Gonzalo; no producer green suite repeated, no deploy/frontend/H002 edit. See coordination/deploy/live-engine-gate.md.
