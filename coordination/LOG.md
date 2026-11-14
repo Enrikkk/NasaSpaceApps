@@ -18,3 +18,4 @@ Format: `- YYYY-MM-DD HH:MM | seat=<name> | <task or -> | <what happened> | next
 - 2026-11-14 13:40 | seat=gonzalo | T-008 | laptop ready (team_join.sh): providers claude, antigravity; hub registered (hub saw providers: none, probably still loading) | next: restart Claude Code to load team-bus, then smoke test
 - 2026-11-14 | seat=enrique | T-003 | challenge picked: 06 Field Shift (D-002). Resources tab captured + data access checks over Murcia → brainstorm/field-shift-data.md | next: pick demo region + strategy (Murcia-only vs US-calibrated), split 4 seats
 - 2026-11-14 12:30 | seat=enrique | T-008 | laptop ready (team_join.sh): providers claude, opencode, team-bus OK | next: waiting for dispatch
+- 2026-11-14 12:44 | seat=enrique | T-008 | added live inbox for interactive sessions: scripts/bus_listen.sh as a background Monitor (coordination/BUS-LISTEN.md), SessionStart hook reminds every Claude session | next: all seats start it
