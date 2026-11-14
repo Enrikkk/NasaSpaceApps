@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#2B2F2B"/>
+<style>text{font-family:Inter,Helvetica,Arial,sans-serif}</style>
+<text x="60" y="80" font-size="34" font-weight="700" fill="#F0EDE4">Agrockham · paleta</text>
+<rect x="60" y="120" width="352" height="420" rx="24" fill="#F0EDE4" stroke="#4B4F4A"/>
+<text x="88" y="470" font-size="30" font-weight="700" fill="#1E3626">Crema</text>
+<text x="88" y="510" font-size="24" fill="#1E3626" opacity="0.85">Primario · #F0EDE4</text>
+<rect x="436" y="120" width="352" height="420" rx="24" fill="#297847" stroke="#4B4F4A"/>
+<text x="464" y="470" font-size="30" font-weight="700" fill="#F0EDE4">Verde AGRO</text>
+<text x="464" y="510" font-size="24" fill="#F0EDE4" opacity="0.85">Secundario · #297847</text>
+<rect x="812" y="120" width="352" height="420" rx="24" fill="#1E3626" stroke="#4B4F4A"/>
+<text x="840" y="470" font-size="30" font-weight="700" fill="#F0EDE4">Verde oscuro</text>
+<text x="840" y="510" font-size="24" fill="#F0EDE4" opacity="0.85">Terciario · #1E3626</text>
+<rect x="1188" y="120" width="352" height="420" rx="24" fill="#2B2F2B" stroke="#4B4F4A"/>
+<text x="1216" y="470" font-size="30" font-weight="700" fill="#F0EDE4">Gris carbón</text>
+<text x="1216" y="510" font-size="24" fill="#F0EDE4" opacity="0.85">Fondo · #2B2F2B</text>
+<rect x="60" y="600" width="134" height="150" rx="16" fill="#373C36" stroke="#4B4F4A"/>
+<text x="60" y="785" font-size="17" fill="#F0EDE4">Superficie</text>
+<text x="60" y="810" font-size="16" fill="#B9BDB2">#373C36</text>
+<rect x="210" y="600" width="134" height="150" rx="16" fill="#3D423C" stroke="#4B4F4A"/>
+<text x="210" y="785" font-size="17" fill="#F0EDE4">Superficie hover</text>
+<text x="210" y="810" font-size="16" fill="#B9BDB2">#3D423C</text>
+<rect x="359" y="600" width="134" height="150" rx="16" fill="#4B4F4A" stroke="#4B4F4A"/>
+<text x="359" y="785" font-size="17" fill="#F0EDE4">Borde</text>
+<text x="359" y="810" font-size="16" fill="#B9BDB2">#4B4F4A</text>
+<rect x="509" y="600" width="134" height="150" rx="16" fill="#B9BDB2" stroke="#4B4F4A"/>
+<text x="509" y="785" font-size="17" fill="#F0EDE4">Texto secundario</text>
+<text x="509" y="810" font-size="16" fill="#B9BDB2">#B9BDB2</text>
+<rect x="658" y="600" width="134" height="150" rx="16" fill="#6BB383" stroke="#4B4F4A"/>
+<text x="658" y="785" font-size="17" fill="#F0EDE4">Verde claro</text>
+<text x="658" y="810" font-size="16" fill="#B9BDB2">#6BB383</text>
+<rect x="808" y="600" width="134" height="150" rx="16" fill="#E0B04A" stroke="#4B4F4A"/>
+<text x="808" y="785" font-size="17" fill="#F0EDE4">Ámbar (aviso)</text>
+<text x="808" y="810" font-size="16" fill="#B9BDB2">#E0B04A</text>
+<rect x="958" y="600" width="134" height="150" rx="16" fill="#E07A5F" stroke="#4B4F4A"/>
+<text x="958" y="785" font-size="17" fill="#F0EDE4">Rojo (alerta)</text>
+<text x="958" y="810" font-size="16" fill="#B9BDB2">#E07A5F</text>
+<rect x="1107" y="600" width="134" height="150" rx="16" fill="#05070A" stroke="#4B4F4A"/>
+<text x="1107" y="785" font-size="17" fill="#F0EDE4">Espacio</text>
+<text x="1107" y="810" font-size="16" fill="#B9BDB2">#05070A</text>
+<rect x="1257" y="600" width="134" height="150" rx="16" fill="#8EC5FF" stroke="#4B4F4A"/>
+<text x="1257" y="785" font-size="17" fill="#F0EDE4">Atmósfera</text>
+<text x="1257" y="810" font-size="16" fill="#B9BDB2">#8EC5FF</text>
+<rect x="1406" y="600" width="134" height="150" rx="16" fill="#1F4A86" stroke="#4B4F4A"/>
+<text x="1406" y="785" font-size="17" fill="#F0EDE4">Mar (satélite)</text>
+<text x="1406" y="810" font-size="16" fill="#B9BDB2">#1F4A86</text>
+</svg>

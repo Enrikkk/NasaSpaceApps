@@ -42,3 +42,12 @@ Status: `ok` = stated scope checked on an official source; `verify` = unresolved
 | ESA Sentinel-2 / CDSE, HRL Croplands | not reviewed | | verify |
 
 Open items for the team: confirm upstream IMERG collection; resolve daily personalised SIAM report terms; confirm actual frontend imagery layers and NDVI/DEM products. Other existing `verify` rows remain unresolved, including FEGA declared-crop scope/access method, CREM, OSM and ESA/HRL. This review does not authorise publication or change D-010.
+
+## Brand assets (jaime's agent, 2026-11-14) — `brand/`
+
+| Item | Where used | License | Status |
+|---|---|---|---|
+| Agrockham logo, icon and palette (`brand/logo/`, `brand/color/`) | Slides, video, project page, app | Original team work | ok |
+| Brunson / Brunson Rough fonts (copied in `brand/fonts/`), The Branded Quotes | Logo and display titles | "All Rights Reserved", no licence file | **PENDING** (same as the frontend row above) |
+| opentype.js 2.0.0, https://opentype.js.org/ | Tool: converted the logo text to SVG outlines (not shipped) | MIT | ok |
+| librsvg `rsvg-convert`, https://gitlab.gnome.org/GNOME/librsvg | Tool: SVG to PNG export (not shipped) | LGPL-2.1+ | ok |

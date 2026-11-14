@@ -1,0 +1,57 @@
+/* Agrockham design tokens. See app/frontend/DESIGN.md for usage and contrast rules. */
+
+/* Brunson (c) The Branded Quotes 2025, "All Rights Reserved". Licence check pending: see DESIGN.md. */
+@font-face {
+  font-family: "Brunson";
+  src: url("./fonts/Brunson.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brunson Rough";
+  src: url("./fonts/Brunson-Rough.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  /* Brand palette (decided by jaime, 2026-11-14) */
+  --cream: #F0EDE4;       /* primary */
+  --green: #297847;       /* secondary: logo AGRO, primary button fill. Never text on dark. */
+  --brand-dark: #1E3626;  /* tertiary: header, brand bands */
+  --bg: #2B2F2B;          /* page background */
+
+  /* Monochrome map: white/cream (IGN detail greyed on top) */
+  --water: #E3E3DC;       /* light grey */
+  --land: #F0EDE4;        /* = --cream */
+  --ocean: #1F4A86;       /* satellite view: open sea while Blue Marble tiles load */
+  --ocean-deep: #201A26;  /* satellite view: sea colour of PNOA tiles, shown around Spain at high zoom */
+  --space: #05070A;       /* behind the home globe */
+  --atmosphere: #8EC5FF;  /* globe halo */
+
+  /* Derived */
+  --surface-1: #373C36;
+  --surface-2: #3D423C;
+  --border: #4B4F4A;
+  --text: var(--cream);
+  --text-muted: #B9BDB2;
+  --green-light: #6BB383; /* green text/icons on dark */
+  --warn: #E0B04A;
+  --danger: #E07A5F;
+
+  /* Type. PENDING: Brunson licence ("All Rights Reserved"); Anton (OFL) is the fallback. */
+  --font-display: "Brunson", "Anton", "Arial Narrow", sans-serif;
+  --font-display-rough: "Brunson Rough", "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px;
+  --fs-xl: 28px; --fs-2xl: 40px; --fs-display: 64px;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px;
+
+  --radius-control: 6px;
+  --radius-card: 12px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
