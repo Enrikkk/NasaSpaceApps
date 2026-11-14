@@ -51,7 +51,7 @@
 
 .views {
   right: var(--space-4);
-  bottom: var(--space-8);
+  bottom: var(--space-4);
   animation: rise 600ms var(--ease) 2000ms both;
 }
 
