@@ -1,10 +1,15 @@
-> ## 🎯 RESUME HERE (2026-11-14 ~13:00, Sat)
-> - **Superseded by the team plan + research:** the old (a) Murcia-only vs (b) California question is settled. Rules + FAO-56 in Murcia; no California training.
->   Product = RotaSat (`app/README.md`, `brainstorm/pizarra-2026-11-14.md`, `brainstorm/field-shift-plan.md`).
-> - **Model design:** see `research/predictive-model-research.md`. It covers 7 rule/physics submodels, the decision layer, ML only for NDVI bare soil, and the MVP plan on T-011..T-014.
->   Notes are in `research_notes/field-shift-predictive-models/`.
-> - **Next:** the team claims T-012 (split a/b/c) and T-013, and humans decide whether to reword D-005.
-> - Not yet committed: this file, the report, the notes, `research/prior-art-2026.md`, DECISIONS (ACCEPTED D-002), T-003. Push with `/handoff`.
+> ## 🎯 RESUME HERE (2026-11-14 ~14:40, Sat): enrique's engine data
+> - **Official data for the engine is on branch `origin/t012-datos-oficiales`** (not merged to main), in `app/backend/engine/data/official/` (README.md there):
+>   - Eurostat prices/areas 2000–2024
+>   - NASA POWER daily 2005–2024 at the demo parcel
+>   - FAO-56 Kc/stages and FAO-29 salinity for the 8 crops
+>   - IMIDA/MAPA official costs, yields and irrigation for lechuga, brócoli, melón, alcachofa, limón
+>
+>   Every value carries `source_id` + `conf`; `sources.csv` lists URL and licence.
+> - **Frost:** POWER/ERA5 show 0–1 frost years at the parcel, so frost risk comes from SIAM TP91 (station sees −0.45 °C on 4 Dec 2010). Enrique owns all SIAM; the series is being added to the branch (`sources/siam.py`).
+> - **Split:** arturo builds `app/data/tables/` (T-021) from the branch, finds the missing haba/cebada/veza costs, and does ESP32 + T-017.
+> - **Next for enrique:** engine core T-012 (submodels A–D) in `app/backend/engine/core/`. Decisions: D-008 PROPOSED (success %), haba = dry, alcachofa price/salinity = SUPUESTO.
+> - Gaps: haba/cebada/veza costs; alcachofa price series; lemon first-harvest year; 2018 € update factor.
 
 # Field Shift (challenge 06): data brainstorm
 
