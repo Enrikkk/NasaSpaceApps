@@ -80,3 +80,25 @@ Para el smoke completo del productor, ejecutar su entorno de desarrollo con vers
 Hallazgos iniciales enviados a Gonzalo (#161/#162), corregidos por él en main2ec59e1 (#163/#164): `gcloud run deploy --source .` no encuentra este Dockerfile si solo está en `app/backend/api/`; su alternativa con cloudbuild.yaml ya pasa --build-arg GIT_SHA=${_GIT_SHA}; queda verificar el manifiesto subido (ATOM está ignorado) para cada paquete. No se modifica ese YAML desde Arturo. CORS permite localhost:5173 y `FRONTEND_ORIGIN`, sin credenciales; falta origen real de producción.
 
 La autorización actual no incluye ejecutar comandos GCP ni elegir licencia global. No hay comando cloud en `scripts/deploy.sh`. Derechos/fuentes se revisan sobre el artefacto concreto; un JSON sin precios CARM no demuestra automáticamente que todas las demás fuentes sean abiertas.
+
+
+## Frontend publicado — revisión en lectura, 2026-11-14
+
+`origin/integracion@393ef24` ya contiene React/Vite/MapLibre, package-lock,
+comandos build/preview y Vite base `./`. Sustituye la dependencia anterior de
+«solo design/assets»: existe un candidato de código para empaquetado estático.
+Desktop realiza build y QA en copia aislada; Arturo no los repite ni acredita su
+resultado antes de recibir evidencia.
+
+Lectura de ese snapshot: no cliente `/analyze`, variable `VITE_API_*` ni API base
+detectados en src/configuración. MapView consulta el estilo IGN y los mapas usan
+GIBS, IGN/PNOA y SIGPAC vector tiles en vivo. Natural Earth local y base relativa
+permiten recursos estáticos, pero no prueban ficha de parcela/rotaciones ni mapa
+detallado sin red. No se detectó service worker o JSON demo consumido por UI.
+
+Dependencia ahora exacta: Jaime confirma commit/cliente API, nombre de variable y
+URL base, origen previsto del frontend para CORS y fallback demo precargado con
+etiqueta honesta. Vite dev declara `127.0.0.1:5173`; API permite `localhost:5173`:
+son orígenes diferentes. Elegir host coherente o pedir configuración a Gonzalo,
+no asumir CORS ni modificar frontend desde T017. No interfaces H002 modificadas.
+La build y QA de Desktop se añadirán como evidencia recibida, no ejecución propia.
