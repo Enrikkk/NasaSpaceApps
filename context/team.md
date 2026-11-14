@@ -7,7 +7,7 @@ files and logs; set it in your shell with `export SEAT=<seat>`.
 | seat | name | strengths (languages, frameworks, ML, GIS, design, pitching…) | agent / tool | laptop OS | role this weekend |
 |---|---|---|---|---|---|
 | enrique | Enrique | AI/agents, LLM tooling (fill in) | Claude Code | Linux | (tbd) |
-| (seat2) | | | | | |
+| gonzalo | Gonzalo Morte | (fill in) | Claude Code | Linux | (tbd) |
 | (seat3) | | | | | |
 | (seat4) | | | | | |
 

@@ -1,0 +1,67 @@
+{
+  "_status": "MOCK: illustrative values for UI development. Not measured data. Replace with pipeline output.",
+  "parcela": {
+    "id": "30-0-0-0-0-0-demo (SIGPAC 18/426/1)",
+    "lat": 37.7383, "lon": -0.98838,
+    "ha": 4.1, "pendiente_pct": 1.2, "regadio": true,
+    "zonas": ["zona_vulnerable_nitratos", "mar_menor_zona_2"]
+  },
+  "historia": [
+    {"anio": 2023, "cultivo": "lechuga", "fuente": "FEGA"},
+    {"anio": 2024, "cultivo": "brocoli", "fuente": "FEGA"},
+    {"anio": 2025, "cultivo": "melon", "fuente": "FEGA"},
+    {"anio": 2026, "cultivo": "barbecho", "fuente": "FEGA"}
+  ],
+  "ndvi": {
+    "fuente": "HLS-VI (mock)",
+    "meses_desnudo": ["2025-10", "2025-11", "2025-12", "2026-01", "2026-02"],
+    "meses_vulnerable": ["2025-08"]
+  },
+  "clima": {
+    "lluvia_anual_mm": {"valor": 285, "horquilla": [240, 330], "fuentes": ["IMERG", "POWER", "SIAM"]},
+    "dias_calor_gt_38": {"valor": 6, "tendencia": "+2 por decada"},
+    "dias_helada": {"valor": 1},
+    "escenario_2050": {"lluvia_pct": -12, "temp_c": 1.8}
+  },
+  "suelo": {"textura": "franco-arcilloso", "materia_organica_pct": 1.1, "agua_disponible_mm": 120, "fuente": "SoilGrids"},
+  "prioridades_defecto": {"rentabilidad": 0.4, "agua": 0.25, "suelo": 0.2, "riesgo": 0.15},
+  "rotaciones": [
+    {
+      "id": "actual", "nombre": "Lo que haces hoy: melon, barbecho, lechuga", "es_actual": true,
+      "ciclos": ["melon", "barbecho", "lechuga"],
+      "exito_pct": {"valor": 58, "horquilla": [48, 66]},
+      "margen_eur_ha": {"valor": 2900, "horquilla": [1200, 4600]},
+      "agua_m3_ha": 5200, "sobreoferta": 0.35,
+      "semaforo_legal": {"color": "amarillo", "motivo": "Hoja repetida en zona 2 y suelo desnudo > 2 meses en invierno", "articulo": "Ley 3/2020 (comprobar articulo exacto)"},
+      "por_que": "Es tu rotacion actual, sirve de referencia.",
+      "evidencia": [{"dato": "5 meses de suelo desnudo", "dataset": "HLS-VI NDVI", "url": "https://lpdaac.usgs.gov/products/hlsl30v002/"}],
+      "huecos": ["Sin rendimientos reales de tu parcela"],
+      "riesgos": ["Arrastre de nitrato con lluvia fuerte en otono"]
+    },
+    {
+      "id": "alt-a", "nombre": "Brocoli, haba (leguminosa), alcachofa",
+      "ciclos": ["brocoli", "haba", "alcachofa"],
+      "exito_pct": {"valor": 71, "horquilla": [62, 78]},
+      "margen_eur_ha": {"valor": 3300, "horquilla": [1900, 4400]},
+      "agua_m3_ha": 4300, "sobreoferta": 0.2,
+      "semaforo_legal": {"color": "verde", "motivo": "Cubierta en otono-invierno y leguminosa que reduce abono N", "articulo": "Ley 3/2020 (comprobar articulo exacto)"},
+      "por_que": "La haba fija nitrogeno y cubre el suelo en invierno; menos agua y menos riesgo de nitrato.",
+      "evidencia": [{"dato": "Lluvia anual 285 mm (240-330)", "dataset": "NASA POWER / IMERG", "url": "https://power.larc.nasa.gov/"}],
+      "huecos": ["Precio de la alcachofa muy variable"],
+      "riesgos": ["Mercado de la alcachofa saturado si todos la plantan"]
+    },
+    {
+      "id": "alt-b", "nombre": "Cebada, vezas (cubierta), alcaparra",
+      "ciclos": ["cebada", "vezas", "alcaparra"],
+      "exito_pct": {"valor": 76, "horquilla": [68, 83]},
+      "margen_eur_ha": {"valor": 1800, "horquilla": [1100, 2500]},
+      "agua_m3_ha": 2100, "sobreoferta": 0.1,
+      "semaforo_legal": {"color": "verde", "motivo": "Bajo consumo de agua y suelo cubierto", "articulo": "Ley 3/2020 (comprobar articulo exacto)"},
+      "por_que": "Aguanta calor y sequia; margen menor pero muy estable bajo clima 2050.",
+      "evidencia": [{"dato": "Dias de calor > 38 C: 6 al ano, subiendo", "dataset": "NASA POWER", "url": "https://power.larc.nasa.gov/"}],
+      "huecos": ["Demanda local de alcaparra"],
+      "riesgos": ["Ingresos bajos si tu prioridad es maximizar margen"]
+    }
+  ],
+  "no_sustituye": "Herramienta de apoyo. Consulta a tu tecnico agricola antes de decidir."
+}

@@ -25,3 +25,11 @@ Rejected alternatives: Tailscale + central MCP task server (duplicate source of 
 Why: avoid duplicate work by having one orchestrator start and follow every agent live, while each laptop runs its own daemon with its own subscription (0 API spend). Paseo agents run on the daemon's machine, so the hub dispatches to each laptop's daemon over Tailscale (`scripts/paseo_team.sh`) instead of running everyone's agents itself. Token rules (one planner, free `paseo wait`, right-sized models, one-line RESULT) in coordination/PASEO.md.
 Rejected alternatives: git-only coordination (D-001, no live view); all agents on the hub (would bill only jaime's account or need shared logins); D-003 watcher as the primary path (kept as the offline fallback).
 D-003: superseded by D-004 (scripts/agent_watcher.py stays as the fallback when the hub is down).
+
+## D-002 | 2026-11-14 | PROPOSED: take Field Shift: Adapting Farms with NASA Data; product = rotation comparator that maximises parcel profitability for non-technical farmers, region Murcia, demo parcel Torre-Pacheco 18/426/1 | proposed by: gonzalo (agent)
+Why: team whiteboard (brainstorm/pizarra-2026-11-14.md) and field-shift-plan.md already converge here; 4 Murcia teams share the challenge, so differentiation is profitability + legal traffic light + honest uncertainty.
+Rejected alternatives: see brainstorm/shortlist.md.
+
+## D-005 | 2026-11-14 | PROPOSED: hackathon scope: one real end-to-end parcel, rest simulated or roadmap, always labelled | proposed by: gonzalo (agent)
+Why: 2 days. We may "sell a bit of vision" if it is feasible and honest. The table in app/README.md says what is real, simulated or roadmap; the pitch and submission copy it. "Success %" is defined as climate-threshold exceedance over 20 years x price >= breakeven, not a yield prediction (no open yield labels exist).
+Rejected alternatives: building a general multi-region system; claiming predictive accuracy we cannot validate.
