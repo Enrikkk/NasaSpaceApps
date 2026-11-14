@@ -1,15 +1,23 @@
-> ## 🎯 RESUME HERE (2026-11-14 ~14:40, Sat): enrique's engine data
-> - **Official data for the engine is on branch `origin/t012-datos-oficiales`** (not merged to main), in `app/backend/engine/data/official/` (README.md there):
->   - Eurostat prices/areas 2000–2024
->   - NASA POWER daily 2005–2024 at the demo parcel
->   - FAO-56 Kc/stages and FAO-29 salinity for the 8 crops
->   - IMIDA/MAPA official costs, yields and irrigation for lechuga, brócoli, melón, alcachofa, limón
+> ## 🎯 RESUME HERE (2026-11-14 ~15:45, Sat): enrique's engine (T-012 core + T-018 price/costs)
 >
->   Every value carries `source_id` + `conf`; `sources.csv` lists URL and licence.
-> - **Frost:** POWER/ERA5 show 0–1 frost years at the parcel, so frost risk comes from SIAM TP91 (station sees −0.45 °C on 4 Dec 2010). Enrique owns all SIAM; the series is being added to the branch (`sources/siam.py`).
-> - **Split:** arturo builds `app/data/tables/` (T-021) from the branch, finds the missing haba/cebada/veza costs, and does ESP32 + T-017.
-> - **Next for enrique:** engine core T-012 (submodels A–D) in `app/backend/engine/core/`. Decisions: D-008 PROPOSED (success %), haba = dry, alcachofa price/salinity = SUPUESTO.
-> - Gaps: haba/cebada/veza costs; alcachofa price series; lemon first-harvest year; 2018 € update factor.
+> **State.** Engine runs end-to-end on real data per crop TYPE, branch `t012-motor-nucleo` @ 27d51d9 (not merged; 15 tests:
+> `python3 -m pytest app/backend/engine/core/tests -q`; demo table: `python3 -m app.backend.engine.core.evaluate`).
+> Climate = SIAM TP91 station 2005-07..2024 (frost from station; POWER only fills gaps). Prices = CARM yearbook monthly quotes
+> by variety 2002-2023 (`engine/data/official/carm_precios_mensuales.csv`, orientative), priced on each cycle's harvest months,
+> tier CARM type → CARM crop → Eurostat national. Costs/kilos per type from IMIDA (net kg = coste_total/coste_unitario).
+> Money in 2025 euros (HICP). Farmer can override the price in the UI (options in `precio.opciones_usuario`; per-year
+> `cantidad_ha`, `coste_eur_ha`, `coste_recoleccion_eur_ha`, `clima_malo` exported for live recompute).
+>
+> **Next.** (1) Integrate arturo's tables `origin/arturo-inbox-followup` @ d3b1abf (frost_t0/t100, heat_t0/t100, ECREA proxies)
+> — careful: when `app/data/tables/crop_params.csv` exists the engine reads only it, so it must carry the product rows too.
+> (2) T-020 decision layer → `app/data/torre-pacheco.json` (contract v1). D-009 accepted: live backend later.
+>
+> **Decided by Enrique (don't reopen):** 2025 euros · artichoke on Murcia calendar · UI shows only FAO-calculated water ·
+> no ML price/yield regressor (walk-forward backtest: loses to the median in 5/6 crops) · products per type + farmer's own price.
+>
+> **Money-only results (no climate thresholds yet):** limón fino 89 %, alcachofa 78 %, brócoli 62 %, melón piel de sapo 56 %,
+> lechuga iceberg 39 % (0.21 €/pieza vs 0.24 cost), little gem 24 %; haba/cebada not evaluable.
+> **Open:** does CARM "s/finca" include harvest? (default: farmer pays; UI toggle).
 
 # Field Shift (challenge 06): data brainstorm
 
