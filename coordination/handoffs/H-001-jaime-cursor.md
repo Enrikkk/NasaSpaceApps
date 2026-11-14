@@ -1,0 +1,59 @@
+# H-001 — Encargo de Enrique (kike) al Cursor de Jaime
+
+Autor: enrique (agente Claude). Rama de partida: `t012-motor-nucleo` (leer el último commit, `git log -1`).
+**Trabaja en una rama nueva `t020-jaime` creada desde ella. NO unas a `main`: solo los humanos unen.**
+
+Este fichero es autosuficiente: no tienes la conversación. Si algo no está claro, pregunta por el bus (seat `enrique`) en vez de suponer.
+
+## Reglas de trabajo (valen para los tres pasos)
+
+- Haz los pasos **en orden A → B → C**, un commit por paso, y avisa por el bus al terminar cada uno (hash + salida de tests).
+- Prueba siempre con: `python3 -m pytest -q app/backend/engine app/backend/ndvi` (en la rama de partida pasan 99).
+  **Mira el código de salida real** (`echo $?`), no encadenes `&&` detrás de `pytest | tail`: ya se coló un test roto por eso.
+- No cambies pesos de estrategias, el DP ni las reglas agronómicas (`rules.allowed`), salvo lo que pida un paso.
+- No hagas descargas de la red ni pongas claves o tokens en ningún fichero. No publiques nada fuera del repo.
+- No ejecutes `validate_v1_1.py` de Gonzalo (Enrique no lo ha autorizado). Copiar ficheros de `origin/main` con `git show` sí está permitido.
+- Mantén el rigor: números sin fuente se etiquetan «supuesto»; nada de afirmar cumplimiento legal ("herramienta de apoyo, no asesoría").
+- Si un test falla o un número cambia mucho, **no lo arregles tapándolo**: descríbelo en el informe.
+
+## Paso A — Revisar el trabajo de los subagentes y regenerar JSON
+
+Contexto: dos piezas las escribieron subagentes Sonnet y nadie las ha revisado.
+1. `app/backend/engine/decision/texts.py` (+ `tests/test_texts.py`): genera `texto{por_que, evidencia_resumen, no_sabemos, riesgos_texto, consulta}` por rotación, con plantillas. Hay un validador (`check`) que exige que cada número del texto salga del JSON de esa rotación; se le escapan los números escritos en letra («tres»).
+2. `app/backend/ndvi/` (`bare_soil.py`, `appeears_request.py`, `appeears_csv.py`, `README.md`, tests con 50 casos sintéticos): prepara el cálculo de suelo desnudo con NDVI.
+
+Qué hacer:
+- Lee `texts.py` y muestrea el `texto` de **todas** las rotaciones de `app/data/torre-pacheco.json` tras regenerar (paso siguiente). Busca: afirmaciones que el JSON no respalda, tono de promesa («garantiza», «seguro»), falta de «no sabemos», números en letra que el validador no ve (mejora el validador para detectarlos si es sencillo), texto en castellano llano.
+- Revisa `ndvi/`: productos `HLSL30.020` / `HLSS30.020`; los umbrales NDVI 0,20 y 0,35 son **supuestos** (0,35 sin fuente) y deben estar etiquetados como tales en código y README; que los tests no hagan red.
+- Regenera ambos JSON: `python3 -m app.backend.engine.build torre-pacheco` y `python3 -m app.backend.engine.build torre-pacheco --abierto`. Comprueba que `torre-pacheco.abierto.json` **no contiene** las cadenas `CARM-ANUARIO` ni `anuarios`.
+- Corrige lo mínimo necesario; commit «A: revisión textos+ndvi, JSON regenerados».
+
+## Paso B — Dos cambios de método que pide Gonzalo (#133)
+
+Archivos: `app/backend/engine/decision/strategies.py` (`simulate`, `draws`) y `app/backend/engine/build.py` (`rotation()`, bloque `exito_pct` y `escenarios*`). Léelos antes.
+
+**B1. `exito_pct` sobre años históricos, no sobre 52 años-plan mezclados.**
+Hoy `k_malos`/`n` cuentan cada (año-plan × año histórico) como una muestra: no son independientes y el intervalo de Wilson sale demasiado estrecho.
+Nuevo cálculo: sea Y el conjunto de años históricos para los que **todos** los años-plan de la rotación tienen dinero (precio). Un año histórico y es «malo» si, evaluando bajo y el plan completo, algún año-plan tiene `clima_malo` **o** el margen medio del plan en y es < 0 (margen medio = media, sobre los años-plan, del margen de ese año-plan bajo y). Entonces `exito = 1 − k/n` con `n = |Y|`, `k` = nº de años malos, y el intervalo de Wilson con ese n.
+En el JSON: `exito_pct.valor` y la horquilla salen de eso; añade `n_anios_historicos` (= |Y|; **dime el valor real: Gonzalo dice 20, el motor ha usado 19; averigua por qué y repórtalo, no lo fuerces**), `n_efectivo` (= |Y|) y conserva el actual 52 como `n_muestras` (informativo). Actualiza `exito_pct.definicion` para explicar el conteo. `peores_anios` se mantiene.
+
+**B2. El índice i de `escenarios` debe ser la MISMA muestra en todas las rotaciones** (mismo año de clima, de precio y mismo factor de coste), porque «B gana al X %» se calcula comparando escenario a escenario.
+Hoy solo se comparten los números aleatorios `u` y el multiplicador de coste; el año real lo elige cada rotación de su propia lista (`pools[t][int(u*len)]`), y esas listas difieren, así que i apunta a años distintos.
+Nuevo: para cada variante (base, lluvia_-30, …, 2050), calcula el conjunto común C = intersección de los años con dinero de las rotaciones evaluables de esa variante; el escenario i usa en el año-plan t el año `C[int(u_t*len(C))]` en **todas** las rotaciones. Requiere calcular C antes de simular: reestructura `build()` en consecuencia. Las rotaciones no evaluables siguen con `escenarios: null`. Reporta |C| por variante (si C se encoge mucho, dilo).
+Test nuevo obligatorio: en el JSON construido, `escenarios_meta.anio_clima[i]` y `factor_coste[i]` son idénticos para todas las rotaciones evaluables, para todo i.
+
+Informe obligatorio de este paso: tabla antes/después de `exito_pct.valor`, horquilla y P50 de margen para S0, S1, S2, S3 en `torre-pacheco.json`, y el |C| por variante. Commit «B: éxito sobre años históricos + escenarios emparejados».
+(Gonzalo espera mi respuesta sobre B1 y B2 para congelar el contrato; no le contestes tú, dime los números.)
+
+## Paso C — Reglas legales de Gonzalo en lugar de mis reglas provisionales
+
+Hoy `app/backend/engine/decision/rules.py::semaforo()` es provisional. Gonzalo tiene `research/prototypes/legal_rules/{legal.py,rules.csv,grupos_cultivo.csv,test_legal.py}` y un puente `research/prototypes/integration/legal_blocks.py` en `origin/main` (léelos con `git show origin/main:<ruta>`; no están en nuestra rama).
+- Copia `legal.py`, `rules.csv`, `grupos_cultivo.csv` a `app/backend/engine/decision/vendor/` (con una línea en un README: origen + commit de `origin/main`) y su test si funciona sin red.
+- `semaforo()` pasa a llamar `legal.check(entrada, parcela, zona, contrato=True)` (mira `legal_blocks.entrada_legal` para construir la entrada; nombres de cultivo con su `canon_cultivo`). Conserva en la salida `_status: "simulado"`, `provisional: True`, y que las reglas siguen `por_verificar`.
+- **No toques `rules.allowed`** (filtro agronómico del DP): los resultados del motor (márgenes, éxito, rotaciones elegidas) **no deben cambiar** por este paso; solo cambia `semaforo_legal`. Comprueba que el diff de los JSON fuera de `semaforo_legal` es vacío.
+- La zona de la parcela (1 o 2 del Mar Menor) está **sin confirmar**: pásala como en `legal_blocks.aplicar` con `zona_2` o la que use Gonzalo por defecto, y deja visible en la salida que es un supuesto.
+- Commit «C: semáforo legal con legal.py de Gonzalo».
+
+## Entrega
+
+Al acabar cada paso: mensaje por el bus a `enrique` con (1) hash del commit, (2) salida de pytest con su código de salida, (3) lo que cambió y lo que NO pudiste verificar. Empuja `t020-jaime` a origin. Enrique revisa el diff antes de que nadie una nada.
