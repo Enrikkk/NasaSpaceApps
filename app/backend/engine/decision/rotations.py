@@ -12,7 +12,7 @@ import dataclasses
 import datetime as dt
 import itertools
 
-from ..core import evaluate as ev, stats, submodels as sm
+from ..core import evaluate as ev, stage_risk, stats, submodels as sm
 from . import rules
 
 GAP_DAYS = 14
@@ -62,6 +62,7 @@ def run_cycles(products, climate, prices, hicp, area, carm, base_year, allow_res
                 "product": pid, "crop": pm.get("crop_id") or crop.crop_id, "label": pm.get("label", pid),
                 "start_doy": doy(m, d), "days": r["ciclo_dias"], "first_harvest_day": first_harvest,
                 "caja": caja * k_cost if (caja is not None and k_cost) else None,
+                "riesgo_etapas": stage_risk.assess(pm.get("crop_id") or crop.crop_id, lengths, m, d, climate),
                 "years": {int(a["siembra"][:4]): a for a in r["anios"]},
                 "report": {"huecos": r["huecos"], "evidencia": r["evidencia"], "precio": r["precio"],
                            "licencia": r["licencia"], "exito": r["exito_pct"]},

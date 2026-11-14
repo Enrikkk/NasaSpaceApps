@@ -58,6 +58,37 @@ def plan_text(path, run_static):
     return years[0] if len(set(years)) == 1 else " → ".join(f"año {i + 1}: {y}" for i, y in enumerate(years))
 
 
+def stage_summary(path, static, compact=False):
+    """Stage-risk blocks of the cycles in the rotation (each product/sowing once)."""
+    seen, out = set(), []
+    for o in path:
+        for k in o.keys:
+            if k in seen:
+                continue
+            seen.add(k)
+            etapas = static[k]["riesgo_etapas"]["etapas"]
+            if compact:
+                etapas = [{"id": e["id"], "anios_con_episodio": e["anios_con_episodio"], "n": e["n"], "nivel": e["nivel"]}
+                          for e in etapas if e["nivel"] != "sin evidencia"]
+            out.append({"producto": static[k]["label"], "siembra": k[1], "n_ciclos": static[k]["riesgo_etapas"]["n_ciclos"],
+                        "etapas": etapas})
+    return out
+
+
+def stage_risk_texts(path, static):
+    out = []
+    for blk in stage_summary(path, static):
+        for e in blk["etapas"]:
+            if e["nivel"] in ("medio", "alto"):
+                out.append(f"{blk['producto']}, {e['organo']} ({e['desde']} a {e['hasta']}): {e['anios_con_episodio']} de {e['n']} años con "
+                           f"{e['condicion']} → riesgo {e['nivel']} ({e['gravedad']}; {e['fuente']}, confianza {e['conf']})")
+        sin = [e for e in blk["etapas"] if e["nivel"] == "sin evidencia"]
+        if sin:
+            out.append(f"{blk['producto']}: sin evidencia térmica documentada en {len(sin)} etapa(s) ({', '.join(e['etapas_fao'][0] for e in sin)}): "
+                       "no es lo mismo que riesgo bajo")
+    return out
+
+
 def evidence_for(keys_used, static, extra):
     seen, out = set(), []
     for k in keys_used:
@@ -98,7 +129,8 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
     waters = [sum(v["agua"] for v in rt.year_values(o, runs).values()) / len(rt.year_values(o, runs)) for o in path]
     gaps = [f"{static[k]['label']}: {h}" for k in keys_used for h in static[k]["report"]["huecos"]
             if "umbral de" not in h and "CE del agua" not in h]
-    gaps += ["umbrales de helada y calor sin evidencia primaria validada (T-021 en curso): el clima NO resta rendimiento todavía",
+    gaps += ["ningún cultivo tiene un par t0/t100 de daño por frío o calor validado (T-021): el clima NO resta kilos; "
+             "se avisa por etapa con riesgo_etapas (frecuencia en 19 años)",
              "CE del agua de riego de la parcela desconocida: no se aplica la pérdida por sal",
              "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar",
              "alcachofa se trata como cultivo de un año (en realidad dura varios)",
@@ -109,6 +141,7 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
     risks = []
     if sim:
         risks.append(f"peores años del histórico para el primer año del plan: {', '.join(map(str, sim['peores_anios']))}")
+    risks += stage_risk_texts(path, static)
     risks += price_notes(keys_used, static)
     risks.append("clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico")
     out = {"id": rid, "nombre": name, "es_actual": actual, "estrategias": list(strategies),
@@ -117,6 +150,7 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                            "siembras": {static[k]["label"]: k[1] for k in o.keys}} for i, (o, s) in enumerate(zip(path, sts))],
            "horizonte_anios": len(path),
            "semaforo_legal": legal,
+           "riesgo_etapas": stage_summary(path, static),
            "inversion": {"pico_caja_negativa_eur_ha": r0(max(caja)) if caja else None,
                          "meses_hasta_primer_ingreso": round(first["first_harvest_day"] / 30.4, 1)},
            "agua_m3_ha": r0(statistics.median(sim["agua"])) if sim else r0(statistics.mean(waters)),
@@ -219,12 +253,13 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
         variants[vid] = {"lluvia_pct": rain, "temp_c": temp,
                          "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)",
                          "rotaciones": {r["id"]: {"exito_pct": r["exito_pct"]["valor"], "margen_p50": (r["margen_eur_ha"] or {}).get("p50"),
-                                                  "agua_m3_ha": r["agua_m3_ha"], "criterios": r["criterios"], "escenarios": r["escenarios"]}
-                                        for r in vr}}
+                                                  "agua_m3_ha": r["agua_m3_ha"], "criterios": r["criterios"], "escenarios": r["escenarios"],
+                                                  "riesgo_etapas": stage_summary(merged[i]["path"], vs, compact=True)}
+                                        for i, r in enumerate(vr)}}
     for r in rots:
         r["variantes"] = {vid: {"exito_pct": v["rotaciones"][r["id"]]["exito_pct"], "margen_p50": v["rotaciones"][r["id"]]["margen_p50"],
                                 "agua_m3_ha": v["rotaciones"][r["id"]]["agua_m3_ha"], "criterios": v["rotaciones"][r["id"]]["criterios"],
-                                "escenarios": v["rotaciones"][r["id"]]["escenarios"], "lluvia_pct": v["lluvia_pct"], "temp_c": v["temp_c"],
+                                "escenarios": v["rotaciones"][r["id"]]["escenarios"], "riesgo_etapas": v["rotaciones"][r["id"]]["riesgo_etapas"], "lluvia_pct": v["lluvia_pct"], "temp_c": v["temp_c"],
                                 "_status": v["_status"]} for vid, v in variants.items()}
         r.pop("_raw"), r.pop("_sim")
         why = {"actual": "Es lo que haces hoy; sirve de referencia para comparar."}

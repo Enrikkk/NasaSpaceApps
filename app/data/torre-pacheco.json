@@ -192,6 +192,142 @@
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
    },
+   "riesgo_etapas": [
+    {
+     "producto": "Melón piel de sapo",
+     "siembra": "05-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "melon_helada_germinacion",
+       "peligro": "frío",
+       "organo": "germinación y plántula",
+       "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
+       "gravedad": "aviso",
+       "condicion": "mínima ≤ -0,5 °C",
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-01",
+       "hasta": "05-25",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "FAO-FROST-PROTECTION-T4.5",
+       "conf": "B",
+       "ventana_nota": "germinación = etapa inicial",
+       "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
+      },
+      {
+       "id": "melon_helada_floracion",
+       "peligro": "frío",
+       "organo": "floración y fructificación",
+       "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
+       "gravedad": "aviso",
+       "condicion": "mínima ≤ -1,0 °C",
+       "etapas_fao": [
+        "dev",
+        "mid"
+       ],
+       "desde": "05-26",
+       "hasta": "08-08",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "FAO-FROST-PROTECTION-T4.5",
+       "conf": "B",
+       "ventana_nota": "floración = desarrollo; fructificación = etapa media",
+       "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
+      },
+      {
+       "id": "melon_late_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-09",
+       "hasta": "08-28",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    },
+    {
+     "producto": "Lechuga iceberg",
+     "siembra": "11-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "lechuga_calor_espigado",
+       "peligro": "calor",
+       "organo": "meristemo",
+       "efecto": "aviso: el meristemo cambia (compatible con inicio de espigado); sin % de pérdida",
+       "gravedad": "aviso",
+       "condicion": "máxima ≥ 35,0 °C durante 3 días seguidos",
+       "etapas_fao": [
+        "dev",
+        "late",
+        "mid"
+       ],
+       "desde": "12-01",
+       "hasta": "02-13",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "LEE-2023",
+       "conf": "C",
+       "ventana_nota": "supuesto: fases tras el establecimiento",
+       "transferencia": "cámara 35/25 °C 72 h, variedad Detenicka atrakce; no validado en iceberg de Murcia"
+      },
+      {
+       "id": "lechuga_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "11-01",
+       "hasta": "11-30",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    }
+   ],
    "inversion": {
     "pico_caja_negativa_eur_ha": 9046,
     "meses_hasta_primer_ingreso": 3.3
@@ -219,7 +355,7 @@
     "Melón piel de sapo: costes tomados de 'melon': no hay estudio IMIDA propio de este tipo",
     "Melón piel de sapo: precio = cotización orientativa CARM (anuarios), no el precio pactado de esta finca",
     "Melón piel de sapo: 1 de 19 años sin precio: fuera del % de éxito",
-    "umbrales de helada y calor sin evidencia primaria validada (T-021 en curso): el clima NO resta rendimiento todavía",
+    "ningún cultivo tiene un par t0/t100 de daño por frío o calor validado (T-021): el clima NO resta kilos; se avisa por etapa con riesgo_etapas (frecuencia en 19 años)",
     "CE del agua de riego de la parcela desconocida: no se aplica la pérdida por sal",
     "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar",
     "alcachofa se trata como cultivo de un año (en realidad dura varios)",
@@ -228,6 +364,8 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2017, 2011, 2012",
+    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
+    "Lechuga iceberg: sin evidencia térmica documentada en 1 etapa(s) (ini): no es lo mismo que riesgo bajo",
     "Lechuga iceberg: precio de referencia = CARM anuarios, lechuga iceberg (nivel 1)",
     "Melón piel de sapo: precio de referencia = CARM anuarios, melon piel_de_sapo (nivel 1)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -811,6 +949,40 @@
       2928,
       7610
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -30,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -1026,6 +1198,40 @@
       13807,
       2928,
       7610
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": -15,
      "temp_c": 0.0,
@@ -1243,6 +1449,40 @@
       2928,
       7610
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 10,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -1458,6 +1698,40 @@
       13807,
       2928,
       7610
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": 0,
      "temp_c": 1.0,
@@ -1675,6 +1949,40 @@
       2928,
       7610
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 0,
      "temp_c": 2.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -1891,6 +2199,40 @@
       2928,
       7610
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Lechuga iceberg",
+       "siembra": "11-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "lechuga_calor_espigado",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -12,
      "temp_c": 1.8,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -1979,6 +2321,178 @@
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
    },
+   "riesgo_etapas": [
+    {
+     "producto": "Alcachofa (gorda)",
+     "siembra": "08-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "alcachofa_capitulo_helada",
+       "peligro": "frío",
+       "organo": "capítulos (brácteas)",
+       "efecto": "lesiones en brácteas (escala 0-5); no es pérdida de rendimiento",
+       "gravedad": "daño",
+       "condicion": "mínima ≤ -1,3 °C",
+       "etapas_fao": [
+        "late",
+        "mid"
+       ],
+       "desde": "10-08",
+       "hasta": "05-31",
+       "anios_con_episodio": 3,
+       "n": 19,
+       "frecuencia": 0.158,
+       "intervalo_95": [
+        0.055,
+        0.376
+       ],
+       "nivel": "medio",
+       "fuente": "GIMENEZ-BERENGUER-2023",
+       "conf": "A",
+       "ventana_nota": "supuesto: capítulos presentes durante la cosecha (etapas media y final)",
+       "transferencia": "Orihuela, Blanca de Tudela, invierno 2022-23: misma zona; un solo episodio observado"
+      },
+      {
+       "id": "alcachofa_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "08-01",
+       "hasta": "09-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "alcachofa_dev_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "09-04",
+       "hasta": "10-07",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    },
+    {
+     "producto": "Brócoli",
+     "siembra": "09-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "brocoli_calor_iniciacion",
+       "peligro": "calor",
+       "organo": "meristemo en iniciación floral",
+       "efecto": "cabezas deformes",
+       "gravedad": "daño",
+       "condicion": "máxima > 35,0 °C durante 5 días seguidos",
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "11-20",
+       "hasta": "12-09",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "BJORKMAN-PEARSON-1998",
+       "conf": "M",
+       "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
+       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+      },
+      {
+       "id": "brocoli_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-01",
+       "hasta": "10-05",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_dev_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-06",
+       "hasta": "11-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_late_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "12-30",
+       "hasta": "01-13",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    }
+   ],
    "inversion": {
     "pico_caja_negativa_eur_ha": 7925,
     "meses_hasta_primer_ingreso": 2.2
@@ -2004,7 +2518,7 @@
     "Alcachofa (gorda): 1 de 19 años sin precio: fuera del % de éxito",
     "Brócoli: precio = cotización orientativa CARM (anuarios), no el precio pactado de esta finca",
     "Brócoli: 3 de 19 años sin precio: fuera del % de éxito",
-    "umbrales de helada y calor sin evidencia primaria validada (T-021 en curso): el clima NO resta rendimiento todavía",
+    "ningún cultivo tiene un par t0/t100 de daño por frío o calor validado (T-021): el clima NO resta kilos; se avisa por etapa con riesgo_etapas (frecuencia en 19 años)",
     "CE del agua de riego de la parcela desconocida: no se aplica la pérdida por sal",
     "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar",
     "alcachofa se trata como cultivo de un año (en realidad dura varios)",
@@ -2013,6 +2527,9 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2019, 2012, 2011",
+    "Alcachofa (gorda), capítulos (brácteas) (10-08 a 05-31): 3 de 19 años con mínima ≤ -1,3 °C → riesgo medio (daño; GIMENEZ-BERENGUER-2023, confianza A)",
+    "Alcachofa (gorda): sin evidencia térmica documentada en 2 etapa(s) (ini, dev): no es lo mismo que riesgo bajo",
+    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
     "Alcachofa (gorda): precio de referencia = CARM anuarios, alcachofa gorda/blanca_gorda (nivel 1)",
     "Brócoli: precio de referencia = CARM anuarios, brocoli (nivel 1)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -2580,6 +3097,34 @@
       10615,
       6677
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -30,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -2795,6 +3340,34 @@
       15061,
       10615,
       6677
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": -15,
      "temp_c": 0.0,
@@ -3012,6 +3585,34 @@
       10615,
       6677
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 10,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -3227,6 +3828,34 @@
       15061,
       10615,
       6677
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": 0,
      "temp_c": 1.0,
@@ -3444,6 +4073,34 @@
       10615,
       6677
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 0,
      "temp_c": 2.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -3660,6 +4317,34 @@
       10615,
       6677
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -12,
      "temp_c": 1.8,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -3746,6 +4431,182 @@
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
    },
+   "riesgo_etapas": [
+    {
+     "producto": "Brócoli",
+     "siembra": "09-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "brocoli_calor_iniciacion",
+       "peligro": "calor",
+       "organo": "meristemo en iniciación floral",
+       "efecto": "cabezas deformes",
+       "gravedad": "daño",
+       "condicion": "máxima > 35,0 °C durante 5 días seguidos",
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "11-20",
+       "hasta": "12-09",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "BJORKMAN-PEARSON-1998",
+       "conf": "M",
+       "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
+       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+      },
+      {
+       "id": "brocoli_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-01",
+       "hasta": "10-05",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_dev_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-06",
+       "hasta": "11-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_late_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "12-30",
+       "hasta": "01-13",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    },
+    {
+     "producto": "Melón piel de sapo",
+     "siembra": "05-15",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "melon_helada_germinacion",
+       "peligro": "frío",
+       "organo": "germinación y plántula",
+       "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
+       "gravedad": "aviso",
+       "condicion": "mínima ≤ -0,5 °C",
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-15",
+       "hasta": "06-08",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "FAO-FROST-PROTECTION-T4.5",
+       "conf": "B",
+       "ventana_nota": "germinación = etapa inicial",
+       "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
+      },
+      {
+       "id": "melon_helada_floracion",
+       "peligro": "frío",
+       "organo": "floración y fructificación",
+       "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
+       "gravedad": "aviso",
+       "condicion": "mínima ≤ -1,0 °C",
+       "etapas_fao": [
+        "dev",
+        "mid"
+       ],
+       "desde": "06-09",
+       "hasta": "08-22",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "FAO-FROST-PROTECTION-T4.5",
+       "conf": "B",
+       "ventana_nota": "floración = desarrollo; fructificación = etapa media",
+       "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
+      },
+      {
+       "id": "melon_late_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-23",
+       "hasta": "09-11",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    }
+   ],
    "inversion": {
     "pico_caja_negativa_eur_ha": 9026,
     "meses_hasta_primer_ingreso": 3.9
@@ -3772,7 +4633,7 @@
     "Melón piel de sapo: costes tomados de 'melon': no hay estudio IMIDA propio de este tipo",
     "Melón piel de sapo: precio = cotización orientativa CARM (anuarios), no el precio pactado de esta finca",
     "Melón piel de sapo: 1 de 19 años sin precio: fuera del % de éxito",
-    "umbrales de helada y calor sin evidencia primaria validada (T-021 en curso): el clima NO resta rendimiento todavía",
+    "ningún cultivo tiene un par t0/t100 de daño por frío o calor validado (T-021): el clima NO resta kilos; se avisa por etapa con riesgo_etapas (frecuencia en 19 años)",
     "CE del agua de riego de la parcela desconocida: no se aplica la pérdida por sal",
     "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar",
     "alcachofa se trata como cultivo de un año (en realidad dura varios)",
@@ -3781,6 +4642,8 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2011, 2015, 2006",
+    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
+    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
     "Brócoli: precio de referencia = CARM anuarios, brocoli (nivel 1)",
     "Melón piel de sapo: precio de referencia = CARM anuarios, melon piel_de_sapo (nivel 1)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -4356,6 +5219,40 @@
       1732,
       2846
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -30,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -4571,6 +5468,40 @@
       3715,
       1732,
       2846
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": -15,
      "temp_c": 0.0,
@@ -4788,6 +5719,40 @@
       1732,
       2846
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 10,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -5003,6 +5968,40 @@
       3715,
       1732,
       2846
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": 0,
      "temp_c": 1.0,
@@ -5220,6 +6219,40 @@
       1732,
       2846
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 0,
      "temp_c": 2.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -5436,6 +6469,40 @@
       1732,
       2846
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Melón piel de sapo",
+       "siembra": "05-15",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "melon_helada_germinacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        },
+        {
+         "id": "melon_helada_floracion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -12,
      "temp_c": 1.8,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -5525,6 +6592,178 @@
     ],
     "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"
    },
+   "riesgo_etapas": [
+    {
+     "producto": "Alcachofa (gorda)",
+     "siembra": "08-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "alcachofa_capitulo_helada",
+       "peligro": "frío",
+       "organo": "capítulos (brácteas)",
+       "efecto": "lesiones en brácteas (escala 0-5); no es pérdida de rendimiento",
+       "gravedad": "daño",
+       "condicion": "mínima ≤ -1,3 °C",
+       "etapas_fao": [
+        "late",
+        "mid"
+       ],
+       "desde": "10-08",
+       "hasta": "05-31",
+       "anios_con_episodio": 3,
+       "n": 19,
+       "frecuencia": 0.158,
+       "intervalo_95": [
+        0.055,
+        0.376
+       ],
+       "nivel": "medio",
+       "fuente": "GIMENEZ-BERENGUER-2023",
+       "conf": "A",
+       "ventana_nota": "supuesto: capítulos presentes durante la cosecha (etapas media y final)",
+       "transferencia": "Orihuela, Blanca de Tudela, invierno 2022-23: misma zona; un solo episodio observado"
+      },
+      {
+       "id": "alcachofa_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "08-01",
+       "hasta": "09-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "alcachofa_dev_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "09-04",
+       "hasta": "10-07",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    },
+    {
+     "producto": "Brócoli",
+     "siembra": "09-01",
+     "n_ciclos": 19,
+     "etapas": [
+      {
+       "id": "brocoli_calor_iniciacion",
+       "peligro": "calor",
+       "organo": "meristemo en iniciación floral",
+       "efecto": "cabezas deformes",
+       "gravedad": "daño",
+       "condicion": "máxima > 35,0 °C durante 5 días seguidos",
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "11-20",
+       "hasta": "12-09",
+       "anios_con_episodio": 0,
+       "n": 19,
+       "frecuencia": 0.0,
+       "intervalo_95": [
+        0.0,
+        0.168
+       ],
+       "nivel": "bajo",
+       "fuente": "BJORKMAN-PEARSON-1998",
+       "conf": "M",
+       "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
+       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+      },
+      {
+       "id": "brocoli_ini_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-01",
+       "hasta": "10-05",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_dev_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-06",
+       "hasta": "11-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      },
+      {
+       "id": "brocoli_late_sin_evidencia",
+       "peligro": "frío y calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "12-30",
+       "hasta": "01-13",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null
+      }
+     ]
+    }
+   ],
    "inversion": {
     "pico_caja_negativa_eur_ha": 7925,
     "meses_hasta_primer_ingreso": 2.2
@@ -5550,7 +6789,7 @@
     "Alcachofa (gorda): 1 de 19 años sin precio: fuera del % de éxito",
     "Brócoli: precio = cotización orientativa CARM (anuarios), no el precio pactado de esta finca",
     "Brócoli: 3 de 19 años sin precio: fuera del % de éxito",
-    "umbrales de helada y calor sin evidencia primaria validada (T-021 en curso): el clima NO resta rendimiento todavía",
+    "ningún cultivo tiene un par t0/t100 de daño por frío o calor validado (T-021): el clima NO resta kilos; se avisa por etapa con riesgo_etapas (frecuencia en 19 años)",
     "CE del agua de riego de la parcela desconocida: no se aplica la pérdida por sal",
     "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar",
     "alcachofa se trata como cultivo de un año (en realidad dura varios)",
@@ -5559,6 +6798,9 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2019, 2012, 2011",
+    "Alcachofa (gorda), capítulos (brácteas) (10-08 a 05-31): 3 de 19 años con mínima ≤ -1,3 °C → riesgo medio (daño; GIMENEZ-BERENGUER-2023, confianza A)",
+    "Alcachofa (gorda): sin evidencia térmica documentada en 2 etapa(s) (ini, dev): no es lo mismo que riesgo bajo",
+    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
     "Alcachofa (gorda): precio de referencia = CARM anuarios, alcachofa gorda/blanca_gorda (nivel 1)",
     "Brócoli: precio de referencia = CARM anuarios, brocoli (nivel 1)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -6126,6 +7368,34 @@
       10573,
       6643
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": -30,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -6341,6 +7611,34 @@
       15019,
       10573,
       6643
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": -15,
      "temp_c": 0.0,
@@ -6558,6 +7856,34 @@
       10573,
       6643
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 3,
+         "n": 19,
+         "nivel": "medio"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 10,
      "temp_c": 0.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -6773,6 +8099,34 @@
       15019,
       10573,
       6643
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": 0,
      "temp_c": 1.0,
@@ -6990,6 +8344,34 @@
       10573,
       6643
      ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
+     ],
      "lluvia_pct": 0,
      "temp_c": 2.0,
      "_status": "simulado: lluvia/temperatura desplazadas sobre el histórico; ET0 +4 %/°C (supuesto)"
@@ -7205,6 +8587,34 @@
       15019,
       10573,
       6643
+     ],
+     "riesgo_etapas": [
+      {
+       "producto": "Alcachofa (gorda)",
+       "siembra": "08-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "alcachofa_capitulo_helada",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      },
+      {
+       "producto": "Brócoli",
+       "siembra": "09-01",
+       "n_ciclos": 19,
+       "etapas": [
+        {
+         "id": "brocoli_calor_iniciacion",
+         "anios_con_episodio": 0,
+         "n": 19,
+         "nivel": "bajo"
+        }
+       ]
+      }
      ],
      "lluvia_pct": -12,
      "temp_c": 1.8,
