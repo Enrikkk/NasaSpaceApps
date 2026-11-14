@@ -9,6 +9,7 @@ import { useAppState } from '../state/AppState.jsx'
 import styles from './MapView.module.css'
 import Starfield from './Starfield.jsx'
 import { sigpacUseLabel } from '../config/sigpacUses.js'
+import { haFromSquareMetres } from './parcel/helpers.js'
 import { addIgnOverlay, IGN_OVERLAY_IDS } from './ignOverlay.js'
 import { recintoFromProps } from '../api/client.js'
 
@@ -311,7 +312,7 @@ export default function MapView() {
 function parcelCard(p) {
   const ref = ['provincia', 'municipio', 'agregado', 'zona', 'poligono', 'parcela', 'recinto']
     .map((k) => p[k]).filter((v) => v !== undefined && v !== null).join(':')
-  const ha = p.superficie !== undefined ? `${(Number(p.superficie) / (p.superficie > 1000 ? 10000 : 1)).toFixed(2)} ha` : null
+  const ha = haFromSquareMetres(p.superficie)
   const div = document.createElement('div')
   const rows = [
     ['Referencia SIGPAC', ref || '—'],

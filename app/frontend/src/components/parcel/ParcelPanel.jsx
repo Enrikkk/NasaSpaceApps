@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import GlyphIcon from './icons.jsx'
 import { Summary, YourParcel, Influence, Rotations, Footer } from './sections.jsx'
 import { useAnalysis } from './hooks.js'
-import { refFromRecinto } from './helpers.js'
+import { refFromRecinto, isNum } from './helpers.js'
 import { useAppState } from '../../state/AppState.jsx'
 import styles from './ParcelPanel.module.css'
 
@@ -39,6 +39,8 @@ function Body({ parcel, onClose }) {
   const reference = refFromRecinto(parcel.recinto)
   const data = full
   const parcela = data?.parcela ?? quick?.parcela ?? null
+  const quickOk = Boolean(quick?.parcela && !quick.parcela.sin_cobertura
+    && (isNum(quick.parcela.ha) || quick.parcela.referencia))
   const coverage = data?._meta?.cobertura
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: 0 }) }, [parcel])
@@ -66,7 +68,7 @@ function Body({ parcel, onClose }) {
 
         {error && (
           <div className={styles.error} role="alert">
-            <p>{errorText(error)} {parcela ? 'Los datos de la parcela de arriba sí los tenemos; las rotaciones no.' : 'No hemos podido leer ni la parcela ni las rotaciones.'}</p>
+            <p>{errorText(error)} {quickOk ? 'Los datos de la parcela de arriba sí los tenemos; las rotaciones no.' : 'No hemos podido leer ni la parcela ni las rotaciones.'}</p>
             <button type="button" className={styles.retry} onClick={retry}>
               <GlyphIcon name="retry" size={16} />Reintentar
             </button>

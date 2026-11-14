@@ -11,6 +11,16 @@ export const fmtInt = (v) => (isNum(v) ? int.format(Math.round(v)) : null)
 export const fmtOne = (v) => (isNum(v) ? one.format(v) : null)
 export const fmtHa = (v) => (isNum(v) ? two.format(v) : null)
 
+/** SIGPAC MVT `superficie` is square metres. 1.000 m² is 0,10 ha; do not guess the unit from the size. */
+export function haFromSquareMetres(m2) {
+  const n = Number(m2)
+  if (!Number.isFinite(n)) return null
+  const ha = new Intl.NumberFormat('es-ES', {
+    minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: 'always',
+  }).format(n / 10000)
+  return `${ha} ha`
+}
+
 /** "1.234 €" or "-1.234 €" */
 export const fmtEur = (v) => (isNum(v) ? `${int.format(Math.round(v))} €` : null)
 
