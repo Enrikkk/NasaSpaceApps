@@ -120,3 +120,29 @@ Next QA targets an agreed combined candidate containing worker fix, the no-recin
 metadata correction62746d4, and Enrique's approved open-price figures. No duplicate
 producer suite, no claim of three UI parcels or final demo, and no deployment of
 the currently blocked candidate. Servers preserved for Desktop as requested.
+
+## Public v7 / integration3c45f63 delta
+
+Producer LOG1f6838f records API-only v7a082305, revision00009-pkq, live engine,
+no frontend/fonts, open-price lettuce without a price (not evaluable), alignment
+true, no-network image evidence and v6revision00008-vcv retained for rollback.
+Desktop independently supplied health200/a082305/170265recintos7municipalities.
+Neither observation means a frontend is deployed or figures have human approval.
+
+Exact next combined source candidate fromEnrique309: integracion3c45f63.
+Compared with7403fe6 frontend changes only error copy in ParcelPanel; no worker
+fix. Root/local QA servers were not changed automatically. Worker emission and
+Brunson permission/licensed fallback remain publication dependencies; Jaime311
+asked for explicit ownership/solution, not assumed an edit authorisation.
+
+Missing public no-recinto evidence was checked once byArturo: POST/analyze with
+bloques=parcela,rotaciones at40.4168/-3.7038 returned200 in2.512s, parcela cargando,
+sin_cobertura=true,idnull, reference.aplica=false, no true por_parcela and the
+reference warning. Three affected assertions pass. Rawreport outsidegit:
+/tmp/agrockham-t017-v7-sin-recinto/report.json. No producer smoke/suite repeated.
+The configured class name still says LiveEngine; reference metadata correctly
+prevents treating it as a calculation for an identified parcel.
+
+Human review of proxy figures remains distinct from agent integration/build/test
+results. Do not treat #309 as approval of economic accuracy or fonts. Next gate
+and browser delta need an agreed corrected candidate, not another unchanged build.
