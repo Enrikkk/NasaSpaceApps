@@ -81,3 +81,17 @@ Decisión de Enrique: la rotación actual debe ser evaluable en el build abierto
 - Etiquetado visible en el JSON: `precio.tipo = "proxy"`, la nota de Arturo (nacional genérico, no Murcia, recolección sin verificar), `conf B`, y las `MAPA-PER-*` en `fuentes[]` con su aviso legal («reutilización citando la fuente, Ley 37/2007; no es CC»). Todo texto de tarjeta que use ese precio debe decir que es un proxy nacional.
 - Reporta antes/después de la rotación actual y de S1/S3 en el build abierto (hoy S1 y S3 salen 100 % de éxito por el melón Eurostat 0,42 €/kg, optimista frente al de Murcia 0,29). Si MAPA cambia mucho esos números, no lo escondas: descríbelo.
 - Tests: carga del CSV (60 claves, sin red), el build abierto no contiene precios CARM, el build con CARM no cambia.
+
+## REPARTO EN 3 SUBTRABAJOS PARALELOS (decisión de Enrique, 14 nov ~17:30; sustituye al orden A→E de arriba)
+
+Haz tres subtrabajos independientes, **cada uno en su rama y su `git worktree`** (si tu Cursor puede lanzar agentes en paralelo, uno por subtrabajo; si no, en este orden: J1, J2, J3). Todos parten de `origin/t020-jaime` @ 91ba395 (A+B hechos).
+**Regla común:** no pongas los JSON de `app/data/` en conflicto a mano. Si al integrar chocan, **regénéralos** con `python3 -m app.backend.engine.build torre-pacheco` y `--abierto`. `pytest` con código de salida real. Nada se une a `main`: lo hace Enrique.
+
+**J1 — «AB listo para main»** (rama `t020-ab`, la más urgente)
+1. Bug que ha visto Gonzalo (#186): en `exito_pct.definicion` queda un texto sin formatear, `n_muestras = {sim['n_muestras']} conserva...` (f-string sin evaluar). Arréglalo y añade un test que impida cualquier `{` o `}` en los textos exportados.
+2. `alineados` hoy solo está por rotación (`rotaciones[i].escenarios_meta.alineados`). Exporta además `escenarios_meta.alineados` en la **raíz**: `true` solo si es `true` en todas las rotaciones con escenarios; test.
+3. Rebase sobre `origin/main` (hoy fe60c82 o más nuevo), pytest exit 0, JSON regenerados. Avísame con el hash. Sin push a `main`.
+
+**J2 — «C y luego E»** (rama `t020-c`): paso C (legal.py de Gonzalo) y a continuación paso E (MAPA como proxy en el build abierto), en este orden y en la misma rama porque ambos tocan `build.py`. Un commit por paso y aviso a Enrique por paso.
+
+**J3 — «D reescritor LLM»** (rama `t020-d`): paso D tal como está escrito, con `FakeBackend` y todos los tests. **No elijas modelo todavía**: Enrique te mandará cómo conectarlo. Los JSON solo se tocan al final, regenerando.
