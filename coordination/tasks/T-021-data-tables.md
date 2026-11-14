@@ -1,8 +1,8 @@
 ---
 id: T-021
 title: Data tables: crops.csv (8 crops), Eurostat prices, IMIDA/MAPA costs (human transcription)
-status: todo
-owner:
+status: doing
+owner: arturo
 branch: t021-data-tables
 paths: app/data/tables/
 depends: 
