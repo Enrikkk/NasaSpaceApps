@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import {
   SOURCES, SPAIN_BOUNDS, REGIONS, FIRST_SCROLL_REGION, ENTRY_VIEW, DEMO_PARCEL, NARROW_MAX,
 } from '../config/map.js'
-import { homeCamera, refineHome } from './homeGlobe.js'
+import { homeCamera, refineHome, playHomeIntro } from './homeGlobe.js'
 import { COARSE_LAND, loadWorldFine } from '../config/worldData.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './MapView.module.css'
@@ -182,6 +182,7 @@ export default function MapView() {
   const selectParcelRef = useRef(setSelectedParcel)
   const firstScrollDone = useRef(false)
   const enteredAt = useRef(0)
+  const freshHome = useRef(false) // the map was just created at the home camera: nothing to fly to yet
   const [zoom, setZoom] = useState(0)
   const [ready, setReady] = useState(false)
   const [overlay, setOverlay] = useState(0)
@@ -269,8 +270,12 @@ export default function MapView() {
       map.getSource('borders').setData(fine.borders)
     })
     mapRef.current = map
+    freshHome.current = true
+    // Intro spin (once per page load; skipped with reduced motion). It ends or is cancelled by any user input.
+    const stopIntro = playHomeIntro(map, () => savedHome.center, () => screenRef.current === 'home')
     if (import.meta.env.DEV) window.__agroMap = map // debugging from the browser console
     return () => {
+      stopIntro()
       map.getCanvasContainer().removeEventListener('wheel', onWheel)
       map.remove()
       mapRef.current = null
@@ -281,6 +286,9 @@ export default function MapView() {
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
+    // First run: the map was just placed on the home globe (the intro spin may be running): leave it alone.
+    if (screen === 'home' && freshHome.current) { freshHome.current = false; return }
+    freshHome.current = false
     map.stop()
     if (screen === 'map') {
       map.dragPan.enable()
