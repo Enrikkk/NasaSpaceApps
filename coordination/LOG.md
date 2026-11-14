@@ -33,3 +33,5 @@ Format: `- YYYY-MM-DD HH:MM | seat=<name> | <task or -> | <what happened> | next
 - 2026-11-14 15:20 | seat=arturo | T-021 | review: regenerated 8b3a214 with sowing_month, Murcia artichoke stages, HICP; exact frost/heat t0/t100 gaps; ECREA B candidates isolated by regime/native year. Six tests + engine loader/submodels pass; full engine evaluation needs Enrique dependencies. | next: Enrique reviews compatibility and monetary-base support; no merge
 
 - 2026-11-14 15:38 | seat=arturo | T-021 | thermal evidence: primary cold/heat search for all 8 crops, first delivery 530857b to Enrique #105, second findings #108; organ/exposure/endpoints prevent unsupported daily t100. Canonical P notes now crop/hazard-specific; 7 tests pass. | next: Enrique reviews episode/partial-damage model; no main merge
+
+- 2026-11-14 17:28 | seat=arturo | T-025 | done: independent contract suite 14 PASS on both JSONs at 91ba395; v1.1 status suffixes/legacy map and non-evaluable n handled per #193; engine and JSON unchanged | next: Enrique review, T-017 frontend dependency
