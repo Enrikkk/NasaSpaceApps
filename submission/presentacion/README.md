@@ -22,12 +22,12 @@ En la última diapositiva, las dos primeras aparecen como «Lo siguiente».
 
 ## Regenerar
 
-`build_deck.js` (pptxgenjs). Necesita `pptxgenjs`, `react`, `react-dom`, `react-icons` y `sharp` en `NODE_PATH`, y el `apply_theme.js` del skill de pptx en `PPTX_SKILL_DIR`.
+`build_deck.js` (pptxgenjs). Necesita `pptxgenjs` en `NODE_PATH` y el `apply_theme.js` del skill de pptx en `PPTX_SKILL_DIR`.
 
 ## Recursos y licencias
 
 - **Logo y paleta:** `brand/` del equipo. La licencia de la fuente Brunson del logo está pendiente (ver `brand/README.md`).
 - **Texto:** Inter (SIL OFL 1.1). Hay que instalarla en el portátil de la presentación.
-- **Iconos:** Font Awesome Free vía react-icons (CC BY 4.0).
+- **Gráfico de precios:** Eurostat `apri_ap_crpouta`, precio de venta en España, 2005-2024 (copia en `app/data/tables/source_snapshot/eurostat_prices_es.csv`, rama t020-jaime).
 - **Capturas:** de nuestra app. Créditos de los mapas: Blue Marble (NASA GIBS / NASA Earth Observatory), IGN (CC BY 4.0 scne.es) y SIGPAC © FEGA (CC BY 4.0).
 - **IA:** maquetación y redacción hechas con Claude (Anthropic) a partir del guion del equipo. Hay que declararlo en `submission/ai-use.md`.
