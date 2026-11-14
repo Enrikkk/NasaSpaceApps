@@ -54,3 +54,4 @@ Rejected alternatives: keep the D-005 product; climate-only success % (a crop co
 Why: el flujo "busco mi parcela, hago clic, se calcula" no cabe en un JSON precalculado por parcela. Detalle, pruebas y reparto: coordination/briefs/gonzalo-2026-11-14-backend-vivo-globo.md.
 Rejected alternatives: demo solo estatica (no permite clic libre); cuentas reales en SQLite (gonzalo: no hace falta); modo offline (gonzalo: se requiere internet).
 Open risk: licencia SIGPAC, el FEGA podria no permitir acceso desde codigo a su API; alternativa: descarga oficial ATOM por municipio.
+ACCEPTED D-009 | 2026-11-14 | jaime (in chat with his agent): live backend (FastAPI on Cloud Run) + SIGPAC globe; amends D-007. Verify FEGA terms for programmatic SIGPAC access before depending on it; demo parcel stays preloaded as fallback.
