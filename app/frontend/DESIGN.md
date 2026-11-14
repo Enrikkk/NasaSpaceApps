@@ -58,12 +58,16 @@ Reglas:
 | Display | Brunson | "CKHAM" del logo y titulares grandes (≥ 28 px), en mayúsculas |
 | Texto | Inter (propuesta, OFL) | Todo lo demás: tarjetas, cifras, etiquetas |
 
-**⚠️ PENDIENTE (bloquea el uso de Brunson):** los ficheros `Brunson.ttf` y `Brunson Rough.ttf`
-dicen "© The Branded Quotes 2025. All Rights Reserved" (tienda: thebrandedquotes.sellfy.store) y no
-traen licencia. Las reglas de Space Apps (`context/official-rules.md` §2) exigen que el material de
-terceros sea libre o de licencia abierta e identificada. Hasta que jaime decida, los ficheros de fuente
-**no se suben al repo** y `tokens.css` usa **Anton** (OFL, Google Fonts) como respaldo. Si la licencia
-no lo permite, la alternativa es Anton + un filtro SVG propio para el efecto *rough* de "AGRO".
+Ficheros: `design/fonts/Brunson.ttf` y `design/fonts/Brunson-Rough.ttf`, declarados con `@font-face`
+en `tokens.css`. Si no cargan, el respaldo es **Anton** (OFL, Google Fonts).
+
+**⚠️ PENDIENTE antes del deploy público y de la entrega:** los ficheros dicen
+"© The Branded Quotes 2025. All Rights Reserved" (tienda: thebrandedquotes.sellfy.store) y no traen
+licencia. jaime decidió usarlos ya en desarrollo mientras revisa la licencia. Las reglas de Space Apps
+(`context/official-rules.md` §2) exigen que el material de terceros sea libre o de licencia abierta e
+identificada, así que antes del deploy (T-017) y del envío (T-015) hay que: (a) tener una licencia que
+permita uso público + webfont + redistribución y citarla en `submission/`, o (b) cambiar a Anton +
+filtro SVG propio para el efecto *rough* (dos líneas de `tokens.css`) y borrar `design/fonts/`.
 
 ## Escala
 

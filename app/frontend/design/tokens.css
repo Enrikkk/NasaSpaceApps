@@ -1,4 +1,19 @@
 /* Agrockham design tokens. See app/frontend/DESIGN.md for usage and contrast rules. */
+
+/* Brunson (c) The Branded Quotes 2025, "All Rights Reserved". Licence check pending: see DESIGN.md. */
+@font-face {
+  font-family: "Brunson";
+  src: url("./fonts/Brunson.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brunson Rough";
+  src: url("./fonts/Brunson-Rough.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   /* Brand palette (decided by jaime, 2026-11-14) */
   --cream: #F0EDE4;       /* primary */
