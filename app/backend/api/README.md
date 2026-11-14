@@ -205,3 +205,6 @@ Citas completas y estado de licencia: `app/backend/pipeline/README.md`.
 ## Empaquetado: GIT_SHA y JSON del motor (2026-11-14, hallazgos de arturo #162)
 - `cloudbuild.yaml` pasa `--build-arg GIT_SHA=${_GIT_SHA}`: construir con `--substitutions _GIT_SHA=$(git rev-parse --short HEAD),_IMAGE=<imagen>` para que `/health` devuelva el commit real.
 - Contrato de montaje del motor: la API no lleva el codigo del motor, solo su JSON publicado. Copia ese JSON a `app/backend/api/engine_data/engine.json` antes de construir (ignorado por git; puede llevar precios CARM, D-010) o monta un volumen / fija `ENGINE_JSON`. Ver `engine_data/README.md`.
+
+## Cobertura v4 (2026-11-14, 17:16 hora de Madrid)
+Imagen v4 (commit c281ac1): 7 municipios del ATOM del FEGA, **170 265 recintos** (Cartagena 76 231, Fuente Alamo 43 666, Torre-Pacheco 29 859, San Javier 13 254, San Pedro del Pinatar 2 925, La Union 2 515, Los Alcazares 1 815; ~30 MB comprimidos), servicio con 2 GiB de memoria (carga ~11 s al arrancar en frio). Probados puntos de Cartagena y Fuente Alamo: `parcela` precalculada y cobertura completa. Descarga hecha con el permiso explicito de gonzalo a las 17:15 (el ATOM pide descargas grandes fuera de 8:00-18:00).
