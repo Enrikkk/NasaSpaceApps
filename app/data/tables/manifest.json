@@ -1,0 +1,327 @@
+{
+  "source_revision": "519849b",
+  "input_sha256": {
+    "eurostat_area_es.csv": "8288d222c55edad533d29bcbbcc62f48e98d36af4a7118492396377176b6c894",
+    "eurostat_prices_es.csv": "d484a0c19cbdbcbc85c052307653348f4c247d729401124ee07452df8aab0f80",
+    "fao_crop_params.csv": "d203d3709b375f538feb715c1588ade988bd9a4b16b87b193bc8ab2c8417bba4",
+    "imida_costs.csv": "816c4fdef380a49debb2726f0e4c5bf2d670def4d6fec2fd99680decf6cb1423",
+    "sources.csv": "1f61e3f681ec98b61df214055d84dabbffaacf352053b50db36faa447f1b1115"
+  },
+  "crops": [
+    "lechuga",
+    "brocoli",
+    "melon",
+    "alcachofa",
+    "haba",
+    "cebada",
+    "veza",
+    "limon"
+  ],
+  "source_parameter_rows": 136,
+  "prices": 150,
+  "missing_required_values": [
+    {
+      "crop_id": "lechuga",
+      "param": "family"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "legume"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "family"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "legume"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "melon",
+      "param": "family"
+    },
+    {
+      "crop_id": "melon",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "melon",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "melon",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "melon",
+      "param": "legume"
+    },
+    {
+      "crop_id": "melon",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "melon",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "melon",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "ece_slope"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "ece_threshold"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "family"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "legume"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "haba",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "haba",
+      "param": "family"
+    },
+    {
+      "crop_id": "haba",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "haba",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "haba",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "haba",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "haba",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "haba",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "haba",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "family"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "legume"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "veza",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "veza",
+      "param": "family"
+    },
+    {
+      "crop_id": "veza",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "veza",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "veza",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "veza",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "veza",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "veza",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "veza",
+      "param": "root_depth"
+    },
+    {
+      "crop_id": "veza",
+      "param": "stages_days"
+    },
+    {
+      "crop_id": "limon",
+      "param": "family"
+    },
+    {
+      "crop_id": "limon",
+      "param": "frost_threshold"
+    },
+    {
+      "crop_id": "limon",
+      "param": "heat_threshold"
+    },
+    {
+      "crop_id": "limon",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "limon",
+      "param": "legume"
+    },
+    {
+      "crop_id": "limon",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "limon",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "limon",
+      "param": "root_depth"
+    }
+  ],
+  "price_missing_crops": [
+    "alcachofa",
+    "veza"
+  ],
+  "limitations": [
+    "National annual prices are not local farm forecasts.",
+    "No inflation alignment: real2015 prices must not be mixed with historical nominal costs.",
+    "Cover vetch is not harvested forage: forage costs require an explicit proxy decision.",
+    "No missing value has been replaced by zero."
+  ],
+  "license_review": {
+    "F56-T11": "pending_review",
+    "F56-T12": "pending_review",
+    "F29-T4": "pending_review",
+    "F29-T6": "pending_review",
+    "RES-F29": "pending_review",
+    "IMIDA-HORT2020": "pending_review",
+    "IMIDA-CIT2018": "pending_review"
+  }
+}

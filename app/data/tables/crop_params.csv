@@ -1,0 +1,257 @@
+crop_id,param,value,unit,source_id,conf,status,nota
+lechuga,agua_riego_eur,853,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,caja_antes_de_venta,7390,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+lechuga,coste_circulante,6786,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,coste_inmovilizado,4187,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+lechuga,coste_total,10973,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"lechuga Iceberg (Little Gem: 3.300 m3, 28.000 kg/ha); Tablas 3, 22, 28; € de ~2018 (encuestas 2017-19)"
+lechuga,coste_unitario,0.41,EUR/kg,IMIDA-HORT2020,A,sourced,
+lechuga,ece_slope,13.0,%/(dS/m),F29-T4,A,derived,100/(9.0-1.3)
+lechuga,ece_threshold,1.3,dS/m,F29-T4,A,sourced,ECe at 100 % yield potential
+lechuga,ece_zero_yield,9.0,dS/m,F29-T4,A,sourced,ECe at 0 % yield
+lechuga,energia_electrica,135,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,family,,,,P,placeholder,No verified value in source snapshot
+lechuga,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+lechuga,h_max,0.3,m,F56-T12,A,sourced,
+lechuga,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+lechuga,inversion_inicial,22460,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+lechuga,kc_end,0.95,-,F56-T12,A,sourced,
+lechuga,kc_ini,0.7,-,F56-T12,A,sourced,group a. Small Vegetables row (lettuce row leaves Kc ini blank)
+lechuga,kc_mid,1.00,-,F56-T12,A,sourced,
+lechuga,legal_group,,,,P,placeholder,No verified value in source snapshot
+lechuga,legume,,,,P,placeholder,No verified value in source snapshot
+lechuga,n_credit,,,,P,placeholder,No verified value in source snapshot
+lechuga,n_need,,,,P,placeholder,No verified value in source snapshot
+lechuga,preparacion_plantacion,3664,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,produccion_media,30000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,recoleccion,3060,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,riego_dosis,3500,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+lechuga,root_depth,,,,P,placeholder,No verified value in source snapshot
+lechuga,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+lechuga,stages_days,30/40/25/10,d,F56-T11,A,sourced,Nov/Jan Mediterranean = 105 d (default for Murcia autumn-winter)
+lechuga,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+lechuga,stages_days_feb,35/50/45/10,d,F56-T11,A,sourced,Feb Mediterranean = 140 d
+lechuga,stages_days_spring,20/30/15/10,d,F56-T11,A,sourced,April Mediterranean = 75 d
+brocoli,agua_riego_eur,780,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,caja_antes_de_venta,6073,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+brocoli,coste_circulante,4603,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,coste_inmovilizado,3271,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+brocoli,coste_total,7874,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"bróculi aire libre, acolchado; Tablas 3, 22, 27; € de ~2018 (encuestas 2017-19)"
+brocoli,coste_unitario,0.45,EUR/kg,IMIDA-HORT2020,A,sourced,
+brocoli,ece_slope,8.9,%/(dS/m),F29-T4,A,derived,100/(14-2.8)
+brocoli,ece_threshold,2.8,dS/m,F29-T4,A,sourced,
+brocoli,ece_zero_yield,14,dS/m,F29-T4,A,sourced,
+brocoli,energia_electrica,103,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,family,,,,P,placeholder,No verified value in source snapshot
+brocoli,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+brocoli,h_max,0.3,m,F56-T12,A,sourced,
+brocoli,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+brocoli,inversion_inicial,20259,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+brocoli,kc_end,0.95,-,F56-T12,A,sourced,
+brocoli,kc_ini,0.7,-,F56-T12,A,sourced,group a. Small Vegetables row
+brocoli,kc_mid,1.05,-,F56-T12,A,sourced,
+brocoli,legal_group,,,,P,placeholder,No verified value in source snapshot
+brocoli,legume,,,,P,placeholder,No verified value in source snapshot
+brocoli,n_credit,,,,P,placeholder,No verified value in source snapshot
+brocoli,n_need,,,,P,placeholder,No verified value in source snapshot
+brocoli,preparacion_plantacion,2825,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,produccion_media,18500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,recoleccion,1355,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,riego_dosis,3200,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+brocoli,root_depth,,,,P,placeholder,No verified value in source snapshot
+brocoli,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+brocoli,stages_days,35/45/40/15,d,F56-T11,M,sourced,Sept California desert = 135 d; FAO-56 has no Mediterranean broccoli row
+brocoli,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+brocoli,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+brocoli,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+melon,agua_riego_eur,877,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,caja_antes_de_venta,7373,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+melon,coste_circulante,5393,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,coste_inmovilizado,3846,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+melon,coste_total,9240,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"melón piel de sapo; Tablas 3, 22, 30; € de ~2018 (encuestas 2017-19)"
+melon,coste_unitario,0.23,EUR/kg,IMIDA-HORT2020,A,sourced,
+melon,ece_slope,8.4,%/(dS/m),RES-F29,B,secondary,same as above
+melon,ece_threshold,1.0,dS/m,RES-F29,B,secondary,not in FAO-29 Table 4 (only classed moderately sensitive); value from research notes (Maas & Hoffman via secondary source)
+melon,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
+melon,energia_electrica,118,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,family,,,,P,placeholder,No verified value in source snapshot
+melon,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+melon,h_max,0.4,m,F56-T12,A,sourced,
+melon,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+melon,inversion_inicial,18124,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+melon,kc_end,0.75,-,F56-T12,A,sourced,Sweet Melons row
+melon,kc_ini,0.5,-,F56-T12,A,sourced,group c. Cucurbitaceae row
+melon,kc_mid,1.05,-,F56-T12,A,sourced,Sweet Melons row (piel de sapo type assumed; cantaloupe would be lower)
+melon,legal_group,,,,P,placeholder,No verified value in source snapshot
+melon,legume,,,,P,placeholder,No verified value in source snapshot
+melon,n_credit,,,,P,placeholder,No verified value in source snapshot
+melon,n_need,,,,P,placeholder,No verified value in source snapshot
+melon,preparacion_plantacion,3487,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,produccion_media,42000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,recoleccion,1507,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,riego_dosis,3600,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+melon,root_depth,,,,P,placeholder,No verified value in source snapshot
+melon,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+melon,stages_days,25/35/40/20,d,F56-T11,A,sourced,May Mediterranean = 120 d
+melon,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+melon,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+melon,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+alcachofa,agua_riego_eur,1279,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,caja_antes_de_venta,6474,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+alcachofa,coste_circulante,6907,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,coste_inmovilizado,2656,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+alcachofa,coste_total,9563,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"alcachofa (sistema mayoritario); Tablas 3, 22, 25; € de ~2018 (encuestas 2017-19)"
+alcachofa,coste_unitario,0.56,EUR/kg,IMIDA-HORT2020,A,sourced,
+alcachofa,ece_slope,,,,P,placeholder,No verified value in source snapshot
+alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows are Helianthus tuberosus (Jerusalem artichoke) not Cynara scolymus; no sourced value
+alcachofa,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
+alcachofa,energia_electrica,169,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,family,,,,P,placeholder,No verified value in source snapshot
+alcachofa,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+alcachofa,h_max,0.7,m,F56-T12,A,sourced,
+alcachofa,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+alcachofa,inversion_inicial,18308,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+alcachofa,kc_end,0.95,-,F56-T12,A,sourced,
+alcachofa,kc_ini,0.5,-,F56-T12,A,sourced,Artichokes row (perennial vegetables)
+alcachofa,kc_mid,1.00,-,F56-T12,A,sourced,
+alcachofa,legal_group,,,,P,placeholder,No verified value in source snapshot
+alcachofa,legume,,,,P,placeholder,No verified value in source snapshot
+alcachofa,n_credit,,,,P,placeholder,No verified value in source snapshot
+alcachofa,n_need,,,,P,placeholder,No verified value in source snapshot
+alcachofa,preparacion_plantacion,1881,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,produccion_media,18000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,recoleccion,2314,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,riego_dosis,5250,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+alcachofa,root_depth,,,,P,placeholder,No verified value in source snapshot
+alcachofa,salt_class,,-,,P,placeholder,SUPUESTO: see above
+alcachofa,stages_days,40/40/250/30,d,F56-T11,B,sourced,Apr 1st year California = 360 d; Murcia plants Jul-Aug and cuts Nov-May (CARM): calendar differs
+alcachofa,stages_days_2nd_year,20/25/250/30,d,F56-T11,B,sourced,May 2nd year California = 325 d
+alcachofa,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+alcachofa,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+haba,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
+haba,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
+haba,coste_circulante,,,,P,placeholder,No verified value in source snapshot
+haba,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
+haba,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+haba,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+haba,ece_slope,9.5,%/(dS/m),F29-T4,A,derived,100/(12-1.5)
+haba,ece_threshold,1.5,dS/m,F29-T4,A,sourced,Broadbean (Vicia faba)
+haba,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
+haba,energia_electrica,,,,P,placeholder,No verified value in source snapshot
+haba,family,,,,P,placeholder,No verified value in source snapshot
+haba,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+haba,h_max,0.8,m,F56-T12,A,sourced,
+haba,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+haba,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
+haba,kc_end,0.30,-,F56-T12,A,sourced,
+haba,kc_ini,0.5,-,F56-T12,A,sourced,Fababean Dry/Seed row (decision 14 Nov: dry broad bean)
+haba,kc_mid,1.15,-,F56-T12,A,sourced,
+haba,legal_group,,,,P,placeholder,No verified value in source snapshot
+haba,legume,yes,-,F56-T12,A,sourced,fixes N (credit from research notes 90-130 kg N/ha)
+haba,n_credit,,,,P,placeholder,No verified value in source snapshot
+haba,n_need,,,,P,placeholder,No verified value in source snapshot
+haba,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
+haba,produccion_media,,,,P,placeholder,No verified value in source snapshot
+haba,recoleccion,,,,P,placeholder,No verified value in source snapshot
+haba,riego_dosis,,,,P,placeholder,No verified value in source snapshot
+haba,root_depth,,,,P,placeholder,No verified value in source snapshot
+haba,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+haba,stages_days,90/45/40/60,d,F56-T11,A,sourced,dry; Nov Europe = 235 d
+haba,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+haba,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+haba,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+cebada,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
+cebada,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
+cebada,coste_circulante,,,,P,placeholder,No verified value in source snapshot
+cebada,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
+cebada,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+cebada,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+cebada,ece_slope,5.0,%/(dS/m),F29-T4,A,derived,100/(28-8.0)
+cebada,ece_threshold,8.0,dS/m,F29-T4,A,sourced,
+cebada,ece_zero_yield,28,dS/m,F29-T4,A,sourced,
+cebada,energia_electrica,,,,P,placeholder,No verified value in source snapshot
+cebada,family,,,,P,placeholder,No verified value in source snapshot
+cebada,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+cebada,h_max,1,m,F56-T12,A,sourced,
+cebada,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+cebada,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
+cebada,kc_end,0.25,-,F56-T12,A,sourced,
+cebada,kc_ini,0.3,-,F56-T12,A,sourced,group i. Cereals row
+cebada,kc_mid,1.15,-,F56-T12,A,sourced,
+cebada,legal_group,,,,P,placeholder,No verified value in source snapshot
+cebada,legume,,,,P,placeholder,No verified value in source snapshot
+cebada,n_credit,,,,P,placeholder,No verified value in source snapshot
+cebada,n_need,,,,P,placeholder,No verified value in source snapshot
+cebada,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
+cebada,produccion_media,,,,P,placeholder,No verified value in source snapshot
+cebada,recoleccion,,,,P,placeholder,No verified value in source snapshot
+cebada,riego_dosis,,,,P,placeholder,No verified value in source snapshot
+cebada,root_depth,,,,P,placeholder,No verified value in source snapshot
+cebada,salt_class,tolerant,-,F29-T6,A,sourced,
+cebada,stages_days,40/60/60/40,d,F56-T11,M,sourced,Nov = 200 d; region cell blank in the HTML table (likely 35-45 deg latitude like Murcia: not confirmed)
+cebada,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+cebada,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+cebada,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+veza,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
+veza,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
+veza,coste_circulante,,,,P,placeholder,No verified value in source snapshot
+veza,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
+veza,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+veza,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+veza,ece_slope,11.1,%/(dS/m),F29-T4,A,derived,100/(12-3.0)
+veza,ece_threshold,3.0,dS/m,F29-T4,A,sourced,Vetch common (Vicia angustifolia)
+veza,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
+veza,energia_electrica,,,,P,placeholder,No verified value in source snapshot
+veza,family,,,,P,placeholder,No verified value in source snapshot
+veza,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+veza,h_max,,,,P,placeholder,No verified value in source snapshot
+veza,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+veza,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
+veza,kc_end,0.55,-,F56-T12,B,derived,group e. Legumes
+veza,kc_ini,0.4,-,F56-T12,B,derived,no vetch row in FAO-56: group e. Legumes row
+veza,kc_mid,1.15,-,F56-T12,B,derived,group e. Legumes
+veza,legal_group,,,,P,placeholder,No verified value in source snapshot
+veza,legume,yes,-,F29-T6,A,sourced,Vicia; N credit 100-120 kg N/ha in research notes
+veza,n_credit,,,,P,placeholder,No verified value in source snapshot
+veza,n_need,,,,P,placeholder,No verified value in source snapshot
+veza,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
+veza,produccion_media,,,,P,placeholder,No verified value in source snapshot
+veza,recoleccion,,,,P,placeholder,No verified value in source snapshot
+veza,riego_dosis,,,,P,placeholder,No verified value in source snapshot
+veza,root_depth,,,,P,placeholder,No verified value in source snapshot
+veza,salt_class,moderately sensitive,-,F29-T6,A,sourced,
+veza,stages_days,,d,,P,placeholder,cover crop: engine fills the bare window; no FAO stage lengths
+veza,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+veza,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+veza,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+limon,agua_riego_eur,1424,EUR/ha·año,IMIDA-CIT2018,A,sourced,tabla 27 lo llama 'Riego'; energía eléctrica va aparte (167)
+limon,caja_antes_de_venta,,EUR/ha,IMIDA-CIT2018,M,derived,perenne: usar inversión + años sin cosecha (año 1.º venta pendiente de fuente)
+limon,coste_circulante,6736,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,coste_inmovilizado,600,EUR/ha·año,IMIDA-CIT2018,A,sourced,amortizaciones + preparación y plantación
+limon,coste_total,7336,EUR/ha·año,IMIDA-CIT2018,A,sourced,"limonero Fino 7x5 m, plena producción; recolección a cargo del comprador (con recolección 11.447 €/ha, 0,09 €/kg); Tablas 4, 10, 15, 27; € de ~2018 (encuestas 2017-19)"
+limon,coste_unitario,0.18,EUR/kg,IMIDA-CIT2018,A,sourced,
+limon,ece_slope,15.9,%/(dS/m),F29-T4,M,derived,100/(8.0-1.7)
+limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange (Citrus sinensis) row used
+limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
+limon,energia_electrica,167,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,family,,,,P,placeholder,No verified value in source snapshot
+limon,frost_threshold,,,,P,placeholder,No verified value in source snapshot
+limon,h_max,4,m,F56-T12,A,sourced,
+limon,heat_threshold,,,,P,placeholder,No verified value in source snapshot
+limon,inversion_inicial,12145,EUR/ha,IMIDA-CIT2018,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+limon,kc_end,0.70,-,F56-T12,A,sourced,
+limon,kc_ini,0.70,-,F56-T12,A,sourced,Citrus no ground cover 70 % canopy
+limon,kc_mid,0.65,-,F56-T12,A,sourced,
+limon,legal_group,,,,P,placeholder,No verified value in source snapshot
+limon,legume,,,,P,placeholder,No verified value in source snapshot
+limon,n_credit,,,,P,placeholder,No verified value in source snapshot
+limon,n_need,,,,P,placeholder,No verified value in source snapshot
+limon,preparacion_plantacion,89,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,produccion_media,45000,kg/ha·año,IMIDA-CIT2018,A,sourced,
+limon,recoleccion,0,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,riego_dosis,6378,m3/ha·año,IMIDA-CIT2018,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+limon,root_depth,,,,P,placeholder,No verified value in source snapshot
+limon,salt_class,sensitive,-,F29-T6,A,sourced,Lemon (Citrus limon) listed as sensitive
+limon,stages_days,60/90/120/95,d,F56-T11,A,sourced,Citrus Jan Mediterranean = 365 d
+limon,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
+limon,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
+limon,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
