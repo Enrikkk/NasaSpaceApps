@@ -28,3 +28,5 @@ Acceptance for this preparation increment:
 - 2026-11-14 | arturo: lectura frontend publicado integracion393ef24 (React/Vite/base relativo). Desbloquea candidato estático; build/QA los realiza Desktop, no repetidos aquí. Pendientes precisos clienteAPIbase/origen CORS coherente127vs localhost y fallbackdemoficha etiquetado; solicitado Jaime/Gonzalo porbus. T017 sigue en curso, demo no acreditada.
 
 - 2026-11-14 | arturo: evidenciaDesktop393ef24: npmci/build exit0,63módulos,navegación pasa. HallazgosJaime254/257 workerMapLibre ausente/respuestaHTML ysuperficieMVT unidadesincorrectas; bloqueanvalidaciónrecintos. SinUIAPI/comparador/prioridades/fallback. Esperar hashcorregido+APIbase/CORS, coordinar QA nuevo sinrepetirbuildidéntica.
+
+- 2026-11-14 19:02 | arturo: added reusable scripts/t017_frontend_gate.py on t017-frontend-gate (new script only; existing API smoke untouched). Six tests pass; real public API/CORS confirmed, worker missing in393ef24 correctly fails. See coordination/deploy/frontend-gate.md. UI/API/comparator and labelled fallback still pending; no publication authorization.
