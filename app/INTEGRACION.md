@@ -157,11 +157,13 @@ Léelos antes de enseñar la app. No están suavizados.
 3. **La idoneidad nunca cambia euros, kilos ni porcentajes de éxito.** Pero los escenarios se alinean sobre los años
    comunes a todas las rotaciones mostradas (decisión D-011, `coordination/DECISIONS.md`). Por eso las cifras de una
    rotación pueden moverse un poco cuando cambia la rotación de referencia.
-4. **Con datos abiertos, la rotación de referencia (melón + lechuga) sale con pérdidas.** Mediana (p50) de −1.041 €/ha y
-   33,3 % de años buenos. Motivo: la lechuga se valora por kilo al precio genérico nacional. Con precios CARM sale
-   +1.067 €/ha y 41,2 %. Las alternativas salen muy bien en modo abierto (S1: 100 % de años buenos), en parte porque el
-   precio nacional del melón es más alto que el de Murcia. Los precios CARM solo se usan con `ENGINE_PRECIOS=carm`
-   explícito; el permiso de la CARM sigue pendiente.
+4. **Con datos abiertos, la lechuga no tiene precio y sus rotaciones salen «sin precio: no se puede calcular».** Decisión de
+   Enrique (14-nov-2026). Motivo: la única serie abierta de lechuga es la media nacional del MAPA, que mezcla todos los
+   tipos y queda ~35 % por debajo de la iceberg de Murcia; con ella la misma parcela con lechuga tres años seguidos daba
+   −7.677 €/ha y 0 % de años buenos (con precios CARM, +1.440 €/ha y 38,9 %). No encontramos ninguna fuente abierta de
+   iceberg en origen. Esas rotaciones siguen mostrando agua, semáforo legal y medio ambiente, y no se compara su dinero
+   con el de las demás. Melón, brócoli y alcachofa mantienen el precio nacional del MAPA como proxy etiquetado.
+   Los precios CARM solo se usan con `ENGINE_PRECIOS=carm` explícito; el permiso de la CARM sigue pendiente.
 5. **Todos los porcentajes de idoneidad y los umbrales de la etiqueta ambiental son supuestos del proyecto** (confianza
    C), no mediciones.
 6. **El modelo de lenguaje previsto no se ha probado.** Sí se probó el reescritor con un modelo pequeño,

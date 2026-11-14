@@ -101,13 +101,16 @@ def test_unpriced_rotation_is_not_evaluable_not_optimistic(monkeypatch):
     assert any("NO evaluables" in h for h in actual["huecos"])
 
 
-def test_open_build_prices_lettuce_with_the_mapa_proxy_and_says_so():
-    """Step E: open build values lettuce by the kilo at the MAPA national generic price, labelled as a proxy."""
+def test_open_build_uses_the_mapa_proxy_for_melon_but_not_for_lettuce():
+    """Step E + decision 2026-11-14: the MAPA national 'lechuga' mixes lettuce types and sits ~35 % under the Murcia
+    iceberg, so the open build leaves lettuce WITHOUT a money figure; melon etc. keep the labelled MAPA proxy."""
     out = bd.build("torre-pacheco", allow_restricted=False)
-    actual = out["rotaciones"][0]
-    assert actual["margen_eur_ha"] is not None and actual["exito_pct"]["valor"] is not None
-    assert any("MAPA" in x and "proxy" in x for x in actual["riesgos"])
-    assert any("Ministerio de Agricultura" in x and "aproximación" in x for x in actual["texto"]["no_sabemos"])
+    actual = out["rotaciones"][0]                                      # reference rotation holds lettuce
+    assert actual["margen_eur_ha"] is None and actual["exito_pct"]["valor"] is None
+    assert any("NO evaluables" in h for h in actual["huecos"])
+    con_dinero = [r for r in out["rotaciones"] if r["margen_eur_ha"] is not None]
+    assert con_dinero and all("lechuga" not in [c for y in r["anios"] for c in y] for r in con_dinero)
+    assert any("MAPA" in x and "proxy" in x for r in con_dinero for x in r["riesgos"])
     ids = {f["id"] for f in out["fuentes"]}
     assert {"MAPA-PER-2005", "MAPA-PER-2024"} <= ids
     assert all(e["fuente_id"] in ids for r in out["rotaciones"] for e in r["evidencia"])

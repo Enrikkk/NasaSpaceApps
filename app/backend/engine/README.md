@@ -100,7 +100,7 @@ del MAPA ("cultivo en general") como precio de proxy. Está marcado así, con la
 
 - Carga: `core/data.py`, función `load_mapa_prices()`. Lee `app/data/tables/mapa_prices.csv` (instantánea de Arturo, T-021;
   ver `app/data/tables/MAPA-SNAPSHOT.md`).
-- La lechuga se valora por kilo a ese precio genérico nacional.
+- La lechuga NO se valora con él (decisión del 14-nov-2026): el MAPA mezcla tipos y queda ~35 % bajo la iceberg de Murcia. En modo abierto las rotaciones con lechuga salen «sin precio». Se controla con `kg_fallback=False` en `build.py`.
 - Las fuentes MAPA salen en `fuentes[]` con su licencia, su aviso legal y la nota "proxy nacional genérico (conf. X)".
 - Con `allow_restricted=True` (precios CARM) no se usa.
 

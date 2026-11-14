@@ -253,7 +253,7 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025, parcel
         prices = {**prices, **mapa}
         national = {c: MAPA_LABEL for c in mapa}
     cycles = lambda clim: rt.run_cycles(products, clim, prices, hicp, area, carm, base_year, allow_restricted,
-                                        kg_fallback=bool(national), national=national)
+                                        kg_fallback=False, national=national)   # lechuga: el MAPA nacional mezcla tipos y queda ~35 % bajo el iceberg de Murcia -> sin precio abierto (decision Enrique 2026-11-14)
     static = cycles(climate)
     suit = pc.evaluar(parcel_input, static) if parcel_input is not None else None
     keep = (lambda s_: {k: v for k, v in s_.items() if k[0] not in suit["excluidos_ids"]}) if suit else (lambda s_: s_)
