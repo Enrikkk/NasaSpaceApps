@@ -1,11 +1,11 @@
 # T-021: tablas de Agrockham
 
-Datos integrados desde `origin/t012-datos-oficiales`, commit `519849b`, preparados por Enrique. No se altera el formato largo original. `source_snapshot/` conserva las entradas y `manifest.json` sus SHA-256 y huecos.
+Datos integrados desde `origin/t012-datos-oficiales`, commit `6cd6d8e`, preparados por Enrique. No se altera el formato largo original. `source_snapshot/` conserva las entradas y `manifest.json` sus SHA-256 y huecos.
 
 Desde la raíz del repo:
 
 ```sh
-python3 app/data/tables/build_tables.py --input app/data/tables/source_snapshot --output app/data/tables --revision 519849b
+python3 app/data/tables/build_tables.py --input app/data/tables/source_snapshot --output app/data/tables --revision 6cd6d8e --supplement app/data/tables/supplement
 python3 app/data/tables/test_build_tables.py
 ```
 
@@ -21,12 +21,14 @@ python3 app/data/tables/test_build_tables.py
 
 ## Integración y límites
 
-La ausencia de un parámetro se representa por celda vacía, `conf=P`, `status=placeholder`; el consumidor debe comprobarla antes de calcular. No rellenar huecos con cero ni usar supuestos como mediciones. Las familias botánicas, grupo legal, profundidad radicular, umbrales de helada/calor y N aún necesitan fuentes o una tabla explícita del motor. T-019 es de Gonzalo.
+La ausencia de un parámetro se representa por celda vacía, `conf=P`, `status=placeholder`; el consumidor debe comprobarla antes de calcular. No rellenar huecos con cero ni usar supuestos como mediciones. Familias botánicas documentadas en supplement/. Profundidad radicular: zr_min/zr_max; agotamiento: p_depletion (FAO-56 T22). Grupo legal, umbrales de helada/calor y N aún necesitan fuentes o una tabla explícita del motor. T-019 es de Gonzalo.
 
 Alcachofa no es el topinambur (`Helianthus tuberosus`) de FAO-29. Veza se plantea como cubierta: un coste de veza forrajera cosechada no es automáticamente un coste de cubierta. No se añade el precio supuesto de alcachofa (~60 EUR/100 kg): no es una observación Eurostat.
 
 Precios nacionales anuales no son precios de la parcela. No mezclar directamente precios reales base 2015 y costes nominales 2018: Enrique hará la armonización monetaria con HICP antes de calcular márgenes.
 
-Costes de haba seca, cebada y veza: permanecen vacíos. Candidatos oficiales para revisión: MAPA ECREA 2021 Cereales y ECREA 2020 Cultivos proteaginosos y forrajeros. Localizados, pero PDF no leído por fallo TLS; no se incorporan cifras de resultados de buscador. Los valores históricos de IMIDA, parámetros FAO y secundarios tienen licencia pendiente de verificación; su presencia en la tabla no acredita permiso de redistribución pública. Revisar antes de publicar la demo y declarar en `submission/data-citations.md`.
+Costes de haba seca, cebada y veza: permanecen vacíos. Candidatos oficiales para revisión: MAPA ECREA 2021 Cereales y ECREA 2020 Cultivos proteaginosos y forrajeros. El PDF de proteaginosas ya se ha leído: agrupa cultivos y no permite asignar costes específicos sin un proxy explícito; véase REVIEWED-SOURCES.md. Cereales sigue pendiente. Los valores históricos de IMIDA, parámetros FAO y secundarios tienen licencia pendiente de verificación; su presencia en la tabla no acredita permiso de redistribución pública. Revisar antes de publicar la demo y declarar en `submission/data-citations.md`.
 
 No se incorpora SIAM aquí: Enrique asume serie histórica y colector completo (bus #49). El borrador local de Arturo no se integra para evitar duplicación.
+
+Los suplementos propios de Arturo viven en `supplement/`, separados del snapshot original; el generador rechaza parámetros duplicados y conserva el hash de ambas entradas.

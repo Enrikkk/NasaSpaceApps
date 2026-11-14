@@ -34,8 +34,9 @@ class TablesTests(unittest.TestCase):
         crops = {r['crop_id']: r for r in tables.read(self.out / 'crops.csv')}
         self.assertEqual(len(crops), 8)
         self.assertEqual(crops['lechuga']['kc_ini__source_id'], 'F56-T12')
-        self.assertEqual(crops['haba']['root_depth'], '')
-        self.assertEqual(crops['haba']['root_depth__conf'], 'P')
+        self.assertEqual(crops['haba']['zr_min'], '')
+        self.assertEqual(crops['haba']['zr_min__conf'], 'P')
+        self.assertNotIn('root_depth', crops['haba'])
         price = tables.read(self.out / 'prices.csv')[0]
         self.assertEqual(price['eur_kg'], '0.3207')
         self.assertEqual(price['eur_100kg'], '32.07')

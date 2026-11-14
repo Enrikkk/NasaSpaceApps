@@ -9,7 +9,7 @@ from pathlib import Path
 
 CROPS = ('lechuga', 'brocoli', 'melon', 'alcachofa', 'haba', 'cebada', 'veza', 'limon')
 REQUIRED = ('family', 'legal_group', 'kc_ini', 'kc_mid', 'kc_end', 'stages_days',
-            'root_depth', 'ece_threshold', 'ece_slope', 'frost_threshold', 'heat_threshold',
+            'zr_min', 'zr_max', 'p_depletion', 'ece_threshold', 'ece_slope', 'frost_threshold', 'heat_threshold',
             'produccion_media', 'n_need', 'n_credit', 'legume')
 META = ('unit', 'source_id', 'conf', 'status', 'nota')
 
@@ -26,13 +26,17 @@ def write(path, rows, fields):
         writer.writerows(rows)
 
 
-def build(source, dest, revision):
+def build(source, dest, revision, supplement=None):
     dest.mkdir(parents=True, exist_ok=True)
     source_rows = read(source / 'sources.csv')
+    if supplement:
+        source_rows += read(supplement / 'sources.csv')
     sources = {r['source_id']: r for r in source_rows}
     if len(sources) != len(source_rows):
         raise ValueError('Duplicate source ID')
     params = read(source / 'fao_crop_params.csv') + read(source / 'imida_costs.csv')
+    if supplement:
+        params += read(supplement / 'crop_params.csv')
     indexed = {}
     for row in params:
         key = row['crop_id'], row['param']
@@ -99,6 +103,9 @@ def build(source, dest, revision):
     write(dest / 'sources.csv', source_rows, list(source_rows[0]))
     hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(source.glob('*.csv'))}
+    if supplement:
+        hashes.update({'supplement/' + p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                       for p in sorted(supplement.glob('*.csv'))})
     manifest = {'source_revision': revision, 'input_sha256': hashes,
                 'crops': list(CROPS), 'source_parameter_rows': len(params),
                 'prices': len(prices), 'missing_required_values': missing,
@@ -108,7 +115,7 @@ def build(source, dest, revision):
                                 'Cover vetch is not harvested forage: forage costs require an explicit proxy decision.',
                                 'No missing value has been replaced by zero.'],
                 'license_review': {k: 'pending_review' for k in sources
-                                   if k.startswith(('F56', 'F29', 'IMIDA', 'RES'))}}
+                                   if k.startswith(('F56', 'F29', 'IMIDA', 'RES', 'UC-', 'ECO-', 'KEW-', 'SIAM'))}}
     (dest / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     return manifest
 
@@ -118,6 +125,7 @@ if __name__ == '__main__':
     ap.add_argument('--input', type=Path, required=True)
     ap.add_argument('--output', type=Path, required=True)
     ap.add_argument('--revision', required=True)
+    ap.add_argument('--supplement', type=Path)
     args = ap.parse_args()
-    result = build(args.input, args.output, args.revision)
+    result = build(args.input, args.output, args.revision, args.supplement)
     print(json.dumps({k: result[k] for k in ('source_revision', 'source_parameter_rows', 'prices')}))

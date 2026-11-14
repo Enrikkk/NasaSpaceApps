@@ -9,7 +9,7 @@ lechuga,ece_slope,13.0,%/(dS/m),F29-T4,A,derived,100/(9.0-1.3)
 lechuga,ece_threshold,1.3,dS/m,F29-T4,A,sourced,ECe at 100 % yield potential
 lechuga,ece_zero_yield,9.0,dS/m,F29-T4,A,sourced,ECe at 0 % yield
 lechuga,energia_electrica,135,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
-lechuga,family,,,,P,placeholder,No verified value in source snapshot
+lechuga,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 lechuga,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 lechuga,h_max,0.3,m,F56-T12,A,sourced,
 lechuga,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -21,16 +21,18 @@ lechuga,legal_group,,,,P,placeholder,No verified value in source snapshot
 lechuga,legume,,,,P,placeholder,No verified value in source snapshot
 lechuga,n_credit,,,,P,placeholder,No verified value in source snapshot
 lechuga,n_need,,,,P,placeholder,No verified value in source snapshot
+lechuga,p_depletion,0.30,-,F56-T22,A,sourced,Lettuce row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 lechuga,preparacion_plantacion,3664,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,produccion_media,30000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,recoleccion,3060,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,riego_dosis,3500,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
-lechuga,root_depth,,,,P,placeholder,No verified value in source snapshot
 lechuga,salt_class,moderately sensitive,-,F29-T6,A,sourced,
 lechuga,stages_days,30/40/25/10,d,F56-T11,A,sourced,Nov/Jan Mediterranean = 105 d (default for Murcia autumn-winter)
 lechuga,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 lechuga,stages_days_feb,35/50/45/10,d,F56-T11,A,sourced,Feb Mediterranean = 140 d
 lechuga,stages_days_spring,20/30/15/10,d,F56-T11,A,sourced,April Mediterranean = 75 d
+lechuga,zr_max,0.5,m,F56-T22,A,sourced,Lettuce row; larger value: modelling water stress / rainfed
+lechuga,zr_min,0.3,m,F56-T22,A,sourced,Lettuce row; smaller value: irrigation scheduling
 brocoli,agua_riego_eur,780,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,caja_antes_de_venta,6073,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
 brocoli,coste_circulante,4603,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -41,7 +43,7 @@ brocoli,ece_slope,8.9,%/(dS/m),F29-T4,A,derived,100/(14-2.8)
 brocoli,ece_threshold,2.8,dS/m,F29-T4,A,sourced,
 brocoli,ece_zero_yield,14,dS/m,F29-T4,A,sourced,
 brocoli,energia_electrica,103,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
-brocoli,family,,,,P,placeholder,No verified value in source snapshot
+brocoli,family,Brassicaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 brocoli,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 brocoli,h_max,0.3,m,F56-T12,A,sourced,
 brocoli,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -53,16 +55,18 @@ brocoli,legal_group,,,,P,placeholder,No verified value in source snapshot
 brocoli,legume,,,,P,placeholder,No verified value in source snapshot
 brocoli,n_credit,,,,P,placeholder,No verified value in source snapshot
 brocoli,n_need,,,,P,placeholder,No verified value in source snapshot
+brocoli,p_depletion,0.45,-,F56-T22,A,sourced,Broccoli row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 brocoli,preparacion_plantacion,2825,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,produccion_media,18500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,recoleccion,1355,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,riego_dosis,3200,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
-brocoli,root_depth,,,,P,placeholder,No verified value in source snapshot
 brocoli,salt_class,moderately sensitive,-,F29-T6,A,sourced,
 brocoli,stages_days,35/45/40/15,d,F56-T11,M,sourced,Sept California desert = 135 d; FAO-56 has no Mediterranean broccoli row
 brocoli,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 brocoli,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 brocoli,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+brocoli,zr_max,0.6,m,F56-T22,A,sourced,Broccoli row; larger value: modelling water stress / rainfed
+brocoli,zr_min,0.4,m,F56-T22,A,sourced,Broccoli row; smaller value: irrigation scheduling
 melon,agua_riego_eur,877,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,caja_antes_de_venta,7373,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
 melon,coste_circulante,5393,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -73,7 +77,7 @@ melon,ece_slope,8.4,%/(dS/m),RES-F29,B,secondary,same as above
 melon,ece_threshold,1.0,dS/m,RES-F29,B,secondary,not in FAO-29 Table 4 (only classed moderately sensitive); value from research notes (Maas & Hoffman via secondary source)
 melon,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
 melon,energia_electrica,118,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
-melon,family,,,,P,placeholder,No verified value in source snapshot
+melon,family,Cucurbitaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 melon,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 melon,h_max,0.4,m,F56-T12,A,sourced,
 melon,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -85,16 +89,18 @@ melon,legal_group,,,,P,placeholder,No verified value in source snapshot
 melon,legume,,,,P,placeholder,No verified value in source snapshot
 melon,n_credit,,,,P,placeholder,No verified value in source snapshot
 melon,n_need,,,,P,placeholder,No verified value in source snapshot
+melon,p_depletion,0.40,-,F56-T22,A,sourced,Sweet Melons row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 melon,preparacion_plantacion,3487,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,produccion_media,42000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,recoleccion,1507,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,riego_dosis,3600,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
-melon,root_depth,,,,P,placeholder,No verified value in source snapshot
 melon,salt_class,moderately sensitive,-,F29-T6,A,sourced,
 melon,stages_days,25/35/40/20,d,F56-T11,A,sourced,May Mediterranean = 120 d
 melon,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 melon,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 melon,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+melon,zr_max,1.5,m,F56-T22,A,sourced,Sweet Melons row; larger value: modelling water stress / rainfed
+melon,zr_min,0.8,m,F56-T22,A,sourced,Sweet Melons row; smaller value: irrigation scheduling
 alcachofa,agua_riego_eur,1279,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,caja_antes_de_venta,6474,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
 alcachofa,coste_circulante,6907,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -105,7 +111,7 @@ alcachofa,ece_slope,,,,P,placeholder,No verified value in source snapshot
 alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows are Helianthus tuberosus (Jerusalem artichoke) not Cynara scolymus; no sourced value
 alcachofa,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
 alcachofa,energia_electrica,169,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
-alcachofa,family,,,,P,placeholder,No verified value in source snapshot
+alcachofa,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 alcachofa,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 alcachofa,h_max,0.7,m,F56-T12,A,sourced,
 alcachofa,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -117,16 +123,18 @@ alcachofa,legal_group,,,,P,placeholder,No verified value in source snapshot
 alcachofa,legume,,,,P,placeholder,No verified value in source snapshot
 alcachofa,n_credit,,,,P,placeholder,No verified value in source snapshot
 alcachofa,n_need,,,,P,placeholder,No verified value in source snapshot
+alcachofa,p_depletion,0.45,-,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
 alcachofa,preparacion_plantacion,1881,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,produccion_media,18000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,recoleccion,2314,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,riego_dosis,5250,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
-alcachofa,root_depth,,,,P,placeholder,No verified value in source snapshot
 alcachofa,salt_class,,-,,P,placeholder,SUPUESTO: see above
 alcachofa,stages_days,40/40/250/30,d,F56-T11,B,sourced,Apr 1st year California = 360 d; Murcia plants Jul-Aug and cuts Nov-May (CARM): calendar differs
 alcachofa,stages_days_2nd_year,20/25/250/30,d,F56-T11,B,sourced,May 2nd year California = 325 d
 alcachofa,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 alcachofa,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+alcachofa,zr_max,0.9,m,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); larger value: modelling water stress / rainfed"
+alcachofa,zr_min,0.6,m,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); smaller value: irrigation scheduling"
 haba,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
 haba,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
 haba,coste_circulante,,,,P,placeholder,No verified value in source snapshot
@@ -137,7 +145,7 @@ haba,ece_slope,9.5,%/(dS/m),F29-T4,A,derived,100/(12-1.5)
 haba,ece_threshold,1.5,dS/m,F29-T4,A,sourced,Broadbean (Vicia faba)
 haba,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
 haba,energia_electrica,,,,P,placeholder,No verified value in source snapshot
-haba,family,,,,P,placeholder,No verified value in source snapshot
+haba,family,Fabaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 haba,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 haba,h_max,0.8,m,F56-T12,A,sourced,
 haba,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -149,16 +157,18 @@ haba,legal_group,,,,P,placeholder,No verified value in source snapshot
 haba,legume,yes,-,F56-T12,A,sourced,fixes N (credit from research notes 90-130 kg N/ha)
 haba,n_credit,,,,P,placeholder,No verified value in source snapshot
 haba,n_need,,,,P,placeholder,No verified value in source snapshot
+haba,p_depletion,0.45,-,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 haba,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 haba,produccion_media,,,,P,placeholder,No verified value in source snapshot
 haba,recoleccion,,,,P,placeholder,No verified value in source snapshot
 haba,riego_dosis,,,,P,placeholder,No verified value in source snapshot
-haba,root_depth,,,,P,placeholder,No verified value in source snapshot
 haba,salt_class,moderately sensitive,-,F29-T6,A,sourced,
 haba,stages_days,90/45/40/60,d,F56-T11,A,sourced,dry; Nov Europe = 235 d
 haba,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 haba,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 haba,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+haba,zr_max,0.7,m,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; larger value: modelling water stress / rainfed
+haba,zr_min,0.5,m,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; smaller value: irrigation scheduling
 cebada,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
 cebada,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
 cebada,coste_circulante,,,,P,placeholder,No verified value in source snapshot
@@ -169,7 +179,7 @@ cebada,ece_slope,5.0,%/(dS/m),F29-T4,A,derived,100/(28-8.0)
 cebada,ece_threshold,8.0,dS/m,F29-T4,A,sourced,
 cebada,ece_zero_yield,28,dS/m,F29-T4,A,sourced,
 cebada,energia_electrica,,,,P,placeholder,No verified value in source snapshot
-cebada,family,,,,P,placeholder,No verified value in source snapshot
+cebada,family,Poaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
 cebada,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 cebada,h_max,1,m,F56-T12,A,sourced,
 cebada,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -181,16 +191,18 @@ cebada,legal_group,,,,P,placeholder,No verified value in source snapshot
 cebada,legume,,,,P,placeholder,No verified value in source snapshot
 cebada,n_credit,,,,P,placeholder,No verified value in source snapshot
 cebada,n_need,,,,P,placeholder,No verified value in source snapshot
+cebada,p_depletion,0.55,-,F56-T22,A,sourced,Barley row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 cebada,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 cebada,produccion_media,,,,P,placeholder,No verified value in source snapshot
 cebada,recoleccion,,,,P,placeholder,No verified value in source snapshot
 cebada,riego_dosis,,,,P,placeholder,No verified value in source snapshot
-cebada,root_depth,,,,P,placeholder,No verified value in source snapshot
 cebada,salt_class,tolerant,-,F29-T6,A,sourced,
 cebada,stages_days,40/60/60/40,d,F56-T11,M,sourced,Nov = 200 d; region cell blank in the HTML table (likely 35-45 deg latitude like Murcia: not confirmed)
 cebada,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 cebada,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 cebada,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+cebada,zr_max,1.5,m,F56-T22,A,sourced,Barley row; larger value: modelling water stress / rainfed
+cebada,zr_min,1.0,m,F56-T22,A,sourced,Barley row; smaller value: irrigation scheduling
 veza,agua_riego_eur,,,,P,placeholder,No verified value in source snapshot
 veza,caja_antes_de_venta,,,,P,placeholder,No verified value in source snapshot
 veza,coste_circulante,,,,P,placeholder,No verified value in source snapshot
@@ -201,7 +213,7 @@ veza,ece_slope,11.1,%/(dS/m),F29-T4,A,derived,100/(12-3.0)
 veza,ece_threshold,3.0,dS/m,F29-T4,A,sourced,Vetch common (Vicia angustifolia)
 veza,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
 veza,energia_electrica,,,,P,placeholder,No verified value in source snapshot
-veza,family,,,,P,placeholder,No verified value in source snapshot
+veza,family,Fabaceae,-,ECO-VETCH,M,derived,FAO records Leguminosae; normalized synonym Fabaceae; assumes cover species Vicia sativa
 veza,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 veza,h_max,,,,P,placeholder,No verified value in source snapshot
 veza,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -213,16 +225,18 @@ veza,legal_group,,,,P,placeholder,No verified value in source snapshot
 veza,legume,yes,-,F29-T6,A,sourced,Vicia; N credit 100-120 kg N/ha in research notes
 veza,n_credit,,,,P,placeholder,No verified value in source snapshot
 veza,n_need,,,,P,placeholder,No verified value in source snapshot
+veza,p_depletion,0.45,-,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
 veza,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 veza,produccion_media,,,,P,placeholder,No verified value in source snapshot
 veza,recoleccion,,,,P,placeholder,No verified value in source snapshot
 veza,riego_dosis,,,,P,placeholder,No verified value in source snapshot
-veza,root_depth,,,,P,placeholder,No verified value in source snapshot
 veza,salt_class,moderately sensitive,-,F29-T6,A,sourced,
 veza,stages_days,,d,,P,placeholder,cover crop: engine fills the bare window; no FAO stage lengths
 veza,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 veza,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 veza,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+veza,zr_max,0.9,m,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; larger value: modelling water stress / rainfed"
+veza,zr_min,0.6,m,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; smaller value: irrigation scheduling"
 limon,agua_riego_eur,1424,EUR/ha·año,IMIDA-CIT2018,A,sourced,tabla 27 lo llama 'Riego'; energía eléctrica va aparte (167)
 limon,caja_antes_de_venta,,EUR/ha,IMIDA-CIT2018,M,derived,perenne: usar inversión + años sin cosecha (año 1.º venta pendiente de fuente)
 limon,coste_circulante,6736,EUR/ha·año,IMIDA-CIT2018,A,sourced,
@@ -233,7 +247,7 @@ limon,ece_slope,15.9,%/(dS/m),F29-T4,M,derived,100/(8.0-1.7)
 limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange (Citrus sinensis) row used
 limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
 limon,energia_electrica,167,EUR/ha·año,IMIDA-CIT2018,A,sourced,
-limon,family,,,,P,placeholder,No verified value in source snapshot
+limon,family,Rutaceae,-,ECO-LEMON,A,sourced,FAO Ecocrop Citrus limon family
 limon,frost_threshold,,,,P,placeholder,No verified value in source snapshot
 limon,h_max,4,m,F56-T12,A,sourced,
 limon,heat_threshold,,,,P,placeholder,No verified value in source snapshot
@@ -245,13 +259,15 @@ limon,legal_group,,,,P,placeholder,No verified value in source snapshot
 limon,legume,,,,P,placeholder,No verified value in source snapshot
 limon,n_credit,,,,P,placeholder,No verified value in source snapshot
 limon,n_need,,,,P,placeholder,No verified value in source snapshot
+limon,p_depletion,0.50,-,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
 limon,preparacion_plantacion,89,EUR/ha·año,IMIDA-CIT2018,A,sourced,
 limon,produccion_media,45000,kg/ha·año,IMIDA-CIT2018,A,sourced,
 limon,recoleccion,0,EUR/ha·año,IMIDA-CIT2018,A,sourced,
 limon,riego_dosis,6378,m3/ha·año,IMIDA-CIT2018,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
-limon,root_depth,,,,P,placeholder,No verified value in source snapshot
 limon,salt_class,sensitive,-,F29-T6,A,sourced,Lemon (Citrus limon) listed as sensitive
 limon,stages_days,60/90/120/95,d,F56-T11,A,sourced,Citrus Jan Mediterranean = 365 d
 limon,stages_days_2nd_year,,,,P,placeholder,No verified value in source snapshot
 limon,stages_days_feb,,,,P,placeholder,No verified value in source snapshot
 limon,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
+limon,zr_max,1.5,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); larger value: modelling water stress / rainfed
+limon,zr_min,1.2,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); smaller value: irrigation scheduling

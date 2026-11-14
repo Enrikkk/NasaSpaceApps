@@ -1,0 +1,9 @@
+crop_id,param,value,unit,source_id,conf,status,nota
+lechuga,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+brocoli,family,Brassicaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+melon,family,Cucurbitaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+alcachofa,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+haba,family,Fabaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+cebada,family,Poaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
+veza,family,Fabaceae,-,ECO-VETCH,M,derived,FAO records Leguminosae; normalized synonym Fabaceae; assumes cover species Vicia sativa
+limon,family,Rutaceae,-,ECO-LEMON,A,sourced,FAO Ecocrop Citrus limon family

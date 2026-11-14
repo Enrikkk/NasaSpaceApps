@@ -1,11 +1,13 @@
 {
-  "source_revision": "519849b",
+  "source_revision": "6cd6d8e",
   "input_sha256": {
     "eurostat_area_es.csv": "8288d222c55edad533d29bcbbcc62f48e98d36af4a7118492396377176b6c894",
     "eurostat_prices_es.csv": "d484a0c19cbdbcbc85c052307653348f4c247d729401124ee07452df8aab0f80",
-    "fao_crop_params.csv": "d203d3709b375f538feb715c1588ade988bd9a4b16b87b193bc8ab2c8417bba4",
+    "fao_crop_params.csv": "c2253317c9713ece3138981f9a0607712f04bc1bba7078a2ebb2c60cca68b44a",
     "imida_costs.csv": "816c4fdef380a49debb2726f0e4c5bf2d670def4d6fec2fd99680decf6cb1423",
-    "sources.csv": "1f61e3f681ec98b61df214055d84dabbffaacf352053b50db36faa447f1b1115"
+    "sources.csv": "12f303a55bef0f1e11163848a709eafcd87b9a337f4293bf8a3fd01f4f3134d4",
+    "supplement/crop_params.csv": "c972093aac7c0d8b8aaa2a9def9380392b8c08b94d481667229d5dff1d20dd6d",
+    "supplement/sources.csv": "293bfb61bd394ef6c1d15347fad53fb93b1ee790666d08e114aab472680c0973"
   },
   "crops": [
     "lechuga",
@@ -17,15 +19,11 @@
     "veza",
     "limon"
   ],
-  "source_parameter_rows": 136,
+  "source_parameter_rows": 168,
   "prices": 150,
   "missing_required_values": [
     {
       "crop_id": "lechuga",
-      "param": "family"
-    },
-    {
-      "crop_id": "lechuga",
       "param": "frost_threshold"
     },
     {
@@ -47,14 +45,6 @@
     {
       "crop_id": "lechuga",
       "param": "n_need"
-    },
-    {
-      "crop_id": "lechuga",
-      "param": "root_depth"
-    },
-    {
-      "crop_id": "brocoli",
-      "param": "family"
     },
     {
       "crop_id": "brocoli",
@@ -81,14 +71,6 @@
       "param": "n_need"
     },
     {
-      "crop_id": "brocoli",
-      "param": "root_depth"
-    },
-    {
-      "crop_id": "melon",
-      "param": "family"
-    },
-    {
       "crop_id": "melon",
       "param": "frost_threshold"
     },
@@ -111,10 +93,6 @@
     {
       "crop_id": "melon",
       "param": "n_need"
-    },
-    {
-      "crop_id": "melon",
-      "param": "root_depth"
     },
     {
       "crop_id": "alcachofa",
@@ -126,10 +104,6 @@
     },
     {
       "crop_id": "alcachofa",
-      "param": "family"
-    },
-    {
-      "crop_id": "alcachofa",
       "param": "frost_threshold"
     },
     {
@@ -153,16 +127,8 @@
       "param": "n_need"
     },
     {
-      "crop_id": "alcachofa",
-      "param": "root_depth"
-    },
-    {
       "crop_id": "haba",
       "param": "coste_total"
-    },
-    {
-      "crop_id": "haba",
-      "param": "family"
     },
     {
       "crop_id": "haba",
@@ -189,16 +155,8 @@
       "param": "produccion_media"
     },
     {
-      "crop_id": "haba",
-      "param": "root_depth"
-    },
-    {
       "crop_id": "cebada",
       "param": "coste_total"
-    },
-    {
-      "crop_id": "cebada",
-      "param": "family"
     },
     {
       "crop_id": "cebada",
@@ -229,16 +187,8 @@
       "param": "produccion_media"
     },
     {
-      "crop_id": "cebada",
-      "param": "root_depth"
-    },
-    {
       "crop_id": "veza",
       "param": "coste_total"
-    },
-    {
-      "crop_id": "veza",
-      "param": "family"
     },
     {
       "crop_id": "veza",
@@ -263,10 +213,6 @@
     {
       "crop_id": "veza",
       "param": "produccion_media"
-    },
-    {
-      "crop_id": "veza",
-      "param": "root_depth"
     },
     {
       "crop_id": "veza",
@@ -274,10 +220,6 @@
     },
     {
       "crop_id": "limon",
-      "param": "family"
-    },
-    {
-      "crop_id": "limon",
       "param": "frost_threshold"
     },
     {
@@ -299,10 +241,6 @@
     {
       "crop_id": "limon",
       "param": "n_need"
-    },
-    {
-      "crop_id": "limon",
-      "param": "root_depth"
     }
   ],
   "price_missing_crops": [
@@ -322,6 +260,11 @@
     "F29-T6": "pending_review",
     "RES-F29": "pending_review",
     "IMIDA-HORT2020": "pending_review",
-    "IMIDA-CIT2018": "pending_review"
+    "IMIDA-CIT2018": "pending_review",
+    "SIAM-TP91": "pending_review",
+    "F56-T22": "pending_review",
+    "UC-FAMILIES": "pending_review",
+    "ECO-VETCH": "pending_review",
+    "ECO-LEMON": "pending_review"
   }
 }
