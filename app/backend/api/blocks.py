@@ -15,6 +15,7 @@ from typing import Iterable, Optional
 from . import engine_adapter as EA
 from . import legal_blocks, live, settings, store
 
+PARCELA_REFERENCIA = "30-37-0-0-18-426-1"   # id de parcela del bloque parcela (ATOM) para la que el motor calcula hoy
 BLOQUES = ("parcela", "historia", "ndvi", "clima", "suelo", "rotaciones")
 LISTAS = ("historia", "rotaciones")   # bloques que son lista en v1.1: su estado va en _meta.estado_bloques / en cada rotacion
 ACOMPANANTES = {"rotaciones": ("escenarios_meta",)}   # viajan con el bloque (la UI los necesita juntos)
@@ -129,6 +130,7 @@ class Servicio:
                 doc[n] = {"_status": "cargando"}
 
         motor_aviso = ""
+        ref_info = None
         fuentes_motor: list = []
         doc["rotaciones"] = []
         if "rotaciones" in pedidos:
@@ -141,6 +143,17 @@ class Servicio:
                 doc["escenarios_meta"] = out.escenarios_meta
             motor_aviso = out.aviso
             fuentes_motor = out.fuentes
+            # Hasta que exista un motor por punto, las rotaciones y sus cifras son las de la parcela de referencia (D-009/T-020).
+            es_ref = bool(tiene_parcela and str(parcela.get("id", "")) == PARCELA_REFERENCIA)
+            ref_info = {
+                "parcela_referencia": PARCELA_REFERENCIA,
+                "aplica_a_esta_parcela": es_ref,
+                "nota": ("Rotaciones calculadas para la parcela de referencia del Campo de Cartagena (Torre-Pacheco, SIGPAC "
+                         "18/426/1); no son un calculo especifico de esta parcela. Cambian con el clic: parcela, clima, suelo y "
+                         "semaforo legal por zona."),
+            }
+            if not es_ref:
+                avisos.append("Las rotaciones son las de la parcela de referencia (Torre-Pacheco 18/426/1), no un calculo de esta parcela.")
             lat_ms["rotaciones"] = (time.perf_counter() - t) * 1000
         doc["prioridades_defecto"] = base["prioridades_defecto"]
         doc["fuentes"] = self._fuentes(base, fuentes_motor)
@@ -158,6 +171,8 @@ class Servicio:
         meta["aviso_legal"] = legal_blocks.L.NOTA
         meta["consulta"] = {"lat": lat, "lon": lon, "zona_legal": zona, **self._consulta_recinto(recinto, info)}
         meta["consulta_id"] = consulta_id(lat, lon)
+        if ref_info:
+            meta["rotaciones_referencia"] = ref_info
         meta["generado_en"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
         meta["motor"] = getattr(self.engine, "nombre", "?")
         meta["latencia_ms"] = {**{k: round(v, 1) for k, v in lat_ms.items()},
