@@ -1,0 +1,12 @@
+# T-011 pipeline de parcela. Probado con Python 3.11 (venv fuera del repo, nunca en el sistema).
+# Instalar:  python3 -m venv /ruta/venv && /ruta/venv/bin/pip install -r app/backend/pipeline/requirements.txt
+#
+# clima_suelo/ (POWER, IMERG, Open-Meteo, SoilGrids): solo libreria estandar de Python, sin dependencias.
+#
+# atom/ (SIGPAC desde el ATOM del FEGA):
+pyogrio==0.13.0      # MIT (incluye GDAL 3.12.4, MIT/X). Solo build_recintos.py
+shapely==2.2.0       # BSD-3-Clause (incluye GEOS 3.14.1, LGPL-2.1, biblioteca dinamica de la rueda)
+numpy==2.4.6         # BSD-3-Clause (y 0BSD, MIT, Zlib, CC0 de componentes)
+#
+# Solo para validar bloques contra el esquema (tests y validate_blocks.py; los tests se omiten si falta):
+jsonschema==4.26.0   # MIT
