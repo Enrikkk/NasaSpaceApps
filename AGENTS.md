@@ -103,6 +103,19 @@ Claude Code users: `/handoff` writes the log line, updates the task file and pus
   in `submission/`. Using the challenge's own data well matters to judges.
 - **Respect the official rules** in `context/official-rules.md` (AI-use disclosure, NASA logo/name rules,
   what must be created during the event). If unsure, ask your human, don't guess.
+- **⚠️ ORIGINALITY AND SOURCES: READ BEFORE ADDING ANY EXTERNAL MATERIAL.** The submission form makes the team confirm that:
+  1. The project is the team's **original work**.
+  2. **Every external resource** used (code, text, images, data) is **listed** in the *NASA Data* and
+     *Space Agency Partner & Other Data* fields of the submission form. Open source counts too: cite everything.
+  3. **No copyrighted material** (music, images, text, etc.) is used without permission to use it.
+  
+  Practical consequences for agents:
+  - Before adding a dependency, dataset, image, icon, font, sound, or snippet copied from anywhere, check its
+    license and record it in `submission/` (name, URL, license). Third-party materials need an open license
+    identified in the documentation (see `context/official-rules.md` §2).
+  - Never paste code, text, or images from the web, papers or AI outputs without knowing their origin and license.
+  - Do not use NASA or agency logos or branding without checking the brand rules first.
+  - If you are not sure whether something is allowed, **stop and ask your human**. Do not assume.
 - **Optimise for the demo.** Something that works end-to-end on one convincing example beats a half-built
   general system. Cache/precompute data so the demo never depends on venue Wi-Fi.
 - Secrets (Earthdata tokens, API keys) go in `.env` (git-ignored). Never commit them; never paste them in LOG.
