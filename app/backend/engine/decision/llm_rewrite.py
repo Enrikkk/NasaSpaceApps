@@ -27,7 +27,7 @@ from . import texts
 
 HERE = pathlib.Path(__file__).resolve().parent
 PROMPT_PATH = HERE / "prompts" / "rewrite_system_es.md"
-LOG_DIR = HERE.parents[3] / "data" / "cache" / "llm_log"
+LOG_DIR = HERE.parents[2] / "data" / "cache" / "llm_log"   # app/data/cache/llm_log (git-ignored)
 MAX_TRIES = 3
 MAX_LEN_RATIO = 1.0          # "más corto que la plantilla, nunca más largo"
 CAMPOS = ("por_que", "evidencia_resumen", "no_sabemos", "riesgos_texto", "consulta")

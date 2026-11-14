@@ -1,6 +1,8 @@
 """Run: python3 -m pytest app/backend/engine/core/tests -q"""
 import datetime as dt
 
+import pytest
+
 from app.backend.engine.core import data, stats, submodels as sm
 from app.backend.engine.core.evaluate import evaluate
 
