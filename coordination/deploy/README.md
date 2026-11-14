@@ -102,3 +102,25 @@ etiqueta honesta. Vite dev declara `127.0.0.1:5173`; API permite `localhost:5173
 son orígenes diferentes. Elegir host coherente o pedir configuración a Gonzalo,
 no asumir CORS ni modificar frontend desde T017. No interfaces H002 modificadas.
 La build y QA de Desktop se añadirán como evidencia recibida, no ejecución propia.
+
+
+### Evidencia Desktop recibida para 393ef24
+
+Desktop comunica `npm ci` con lock y `npm run build` exit0,63 módulos; navegación
+inicio/parcelas/filtros pasa en navegador. Informe `outputs/frontend-revision.md`
+y captura `outputs/frontend-revision.jpg` están en su workspace, no inspeccionados
+por el receptor. Preview detenido tras QA. No es ejecución propia ni prueba E2E.
+
+Dos hallazgos enviados por Desktop a Jaime (#254/#257): worker MapLibre ausente
+en dist; assets/maplibre-gl-worker.mjs devuelve HTML y consola informa Worker
+failed to load, lo que impide validar recintos. Además la heurística de superficie
+MVT muestra como hectáreas superficies <=1000m². No corregidos por Arturo.
+
+Gate para próximo candidato: Jaime entrega hash corregido y evidencia de ruta
+worker con contenido JS/MIME correcto y carga en navegador; conversión de
+superficie usa unidades explícitas del proveedor y casos pequeños; cliente API
+con variable/base acordada y origen CORS coherente; fallback demo etiquetado.
+La corrección frontend se valida sobre el nuevo hash, coordinando qué comprueba
+Desktop para no duplicar build/QA. Solo entonces se prepara prueba UI→API y
+pérdida de red. En393ef24 aún faltan /analyze,VITE_API,comparador y consumo de
+prioridades: navegación/build no demuestran integración ni demo terminada.
