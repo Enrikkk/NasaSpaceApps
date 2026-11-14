@@ -9,7 +9,7 @@
     "products.csv": "f0e48c9452ba25591a36f4e098557380a7e101eb838692333fa5f92293b96383",
     "sources.csv": "132590505b2a6bc1bbeeef41fcb984393466f6dde5e4a199f5624c2cf53c8fb5",
     "supplement/cost_candidates.csv": "4a2f67c8d38e7473e6795ff54c1bba41826dca06866d4884343557c0655ede2b",
-    "supplement/crop_params.csv": "c972093aac7c0d8b8aaa2a9def9380392b8c08b94d481667229d5dff1d20dd6d",
+    "supplement/crop_params.csv": "bf10c3d307dc20fed6053d25fb58bc3ce7b9f99bf427b816fad53049cbc50b69",
     "supplement/sources.csv": "1578d505945c4e2ace92ed0857370a037c3ba3617b66c84ed1433e3ec31be853"
   },
   "crops": [
@@ -22,7 +22,7 @@
     "veza",
     "limon"
   ],
-  "source_parameter_rows": 192,
+  "source_parameter_rows": 224,
   "products": 13,
   "excluded_inputs": {
     "carm_precios_mensuales.csv": "Not imported: CARM legal notice restricts use to personal non-commercial and disallows modification; human clearance or applicable permission needed."

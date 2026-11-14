@@ -11,12 +11,12 @@ lechuga,ece_threshold,1.3,dS/m,F29-T4,A,sourced,ECe at 100 % yield potential
 lechuga,ece_zero_yield,9.0,dS/m,F29-T4,A,sourced,ECe at 0 % yield
 lechuga,energia_electrica,135,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-lechuga,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-lechuga,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+lechuga,frost_t0,,degC,,P,placeholder,"ECOCROP1313 rest=-1/early=0 lacks duration and damage denominator; UC IPM reports acclimation dependence; old -6 not verified; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+lechuga,frost_t100,,degC,,P,placeholder,"ECOCROP1313 rest=-1/early=0 lacks duration and damage denominator; UC IPM reports acclimation dependence; old -6 not verified; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 lechuga,frost_window,,,,P,placeholder,No verified value in source snapshot
 lechuga,h_max,0.3,m,F56-T12,A,sourced,
-lechuga,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-lechuga,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+lechuga,heat_t0,,degC,,P,placeholder,"Lee2023 Detenicka atrakce 35/25 degC for 72h changes meristem; no crop-loss percent or total endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+lechuga,heat_t100,,degC,,P,placeholder,"Lee2023 Detenicka atrakce 35/25 degC for 72h changes meristem; no crop-loss percent or total endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 lechuga,heat_window,,,,P,placeholder,No verified value in source snapshot
 lechuga,inversion_inicial,22460,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
 lechuga,kc_end,0.95,-,F56-T12,A,sourced,
@@ -53,12 +53,12 @@ brocoli,ece_threshold,2.8,dS/m,F29-T4,A,sourced,
 brocoli,ece_zero_yield,14,dS/m,F29-T4,A,sourced,
 brocoli,energia_electrica,103,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,family,Brassicaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-brocoli,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-brocoli,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+brocoli,frost_t0,,degC,,P,placeholder,"FAO frost chapter describes sensitive florets; numeric storage freezing limits are not field crop-loss curves; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+brocoli,frost_t100,,degC,,P,placeholder,"FAO frost chapter describes sensitive florets; numeric storage freezing limits are not field crop-loss curves; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 brocoli,frost_window,,,,P,placeholder,No verified value in source snapshot
 brocoli,h_max,0.3,m,F56-T12,A,sourced,
-brocoli,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-brocoli,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+brocoli,heat_t0,,degC,,P,placeholder,"Bjorkman1998 Galaxy 35 degC daytime one week at floral initiation; no complete crop-loss percent in original abstract; episode not single daily Tmax; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+brocoli,heat_t100,,degC,,P,placeholder,"Bjorkman1998 Galaxy 35 degC daytime one week at floral initiation; no complete crop-loss percent in original abstract; episode not single daily Tmax; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 brocoli,heat_window,,,,P,placeholder,No verified value in source snapshot
 brocoli,inversion_inicial,20259,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
 brocoli,kc_end,0.95,-,F56-T12,A,sourced,
@@ -95,12 +95,12 @@ melon,ece_threshold,1.0,dS/m,RES-F29,B,secondary,not in FAO-29 Table 4 (only cla
 melon,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
 melon,energia_electrica,118,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,family,Cucurbitaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-melon,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-melon,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+melon,frost_t0,,degC,,P,placeholder,"ECOCROP815 has no killing temperature; FAO Table4.5 critical ranges lack duration, variable and loss percentage; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+melon,frost_t100,,degC,,P,placeholder,"ECOCROP815 has no killing temperature; FAO Table4.5 critical ranges lack duration, variable and loss percentage; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 melon,frost_window,,,,P,placeholder,No verified value in source snapshot
 melon,h_max,0.4,m,F56-T12,A,sourced,
-melon,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-melon,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+melon,heat_t0,,degC,,P,placeholder,"MaestroAlvarez1988 Piel de Sapo pollen/excised flowers 40 degC irregular germination; no field yield loss or total endpoint; full text inaccessible; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+melon,heat_t100,,degC,,P,placeholder,"MaestroAlvarez1988 Piel de Sapo pollen/excised flowers 40 degC irregular germination; no field yield loss or total endpoint; full text inaccessible; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 melon,heat_window,,,,P,placeholder,No verified value in source snapshot
 melon,inversion_inicial,18124,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
 melon,kc_end,0.75,-,F56-T12,A,sourced,Sweet Melons row
@@ -137,12 +137,12 @@ alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows a
 alcachofa,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
 alcachofa,energia_electrica,169,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,family,Asteraceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-alcachofa,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-alcachofa,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+alcachofa,frost_t0,,degC,,P,placeholder,"UMH2023 Blanca de Tudela Orihuela air station minimum -1.3 degC; bract injury scale0-5, head order matters; hourly supplement not verified; not percent crop loss; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+alcachofa,frost_t100,,degC,,P,placeholder,"UMH2023 Blanca de Tudela Orihuela air station minimum -1.3 degC; bract injury scale0-5, head order matters; hourly supplement not verified; not percent crop loss; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 alcachofa,frost_window,,,,P,placeholder,No verified value in source snapshot
 alcachofa,h_max,0.7,m,F56-T12,A,sourced,
-alcachofa,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-alcachofa,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+alcachofa,heat_t0,,degC,,P,placeholder,"Schrader2005 primary abstract reports warm-autumn yield/bud-size effects without numeric temperature or duration; no endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+alcachofa,heat_t100,,degC,,P,placeholder,"Schrader2005 primary abstract reports warm-autumn yield/bud-size effects without numeric temperature or duration; no endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 alcachofa,heat_window,,,,P,placeholder,No verified value in source snapshot
 alcachofa,inversion_inicial,18308,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
 alcachofa,kc_end,0.95,-,F56-T12,A,sourced,
@@ -179,12 +179,12 @@ haba,ece_threshold,1.5,dS/m,F29-T4,A,sourced,Broadbean (Vicia faba)
 haba,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
 haba,energia_electrica,,,,P,placeholder,No verified value in source snapshot
 haba,family,Fabaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-haba,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-haba,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+haba,frost_t0,,degC,,P,placeholder,"Alharbi2021 -4.19 degC aborted tagged flowers, plants survived; no Dirab yield; duration unspecified, not total crop loss; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+haba,frost_t100,,degC,,P,placeholder,"Alharbi2021 -4.19 degC aborted tagged flowers, plants survived; no Dirab yield; duration unspecified, not total crop loss; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 haba,frost_window,,,,P,placeholder,No verified value in source snapshot
 haba,h_max,0.8,m,F56-T12,A,sourced,
-haba,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-haba,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+haba,heat_t0,,degC,,P,placeholder,"Bishop2016 Wizard 5-day day/night treatments yield/pollen t50 approx28/32 degC; partial organ response and compensation, not daily crop t100; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+haba,heat_t100,,degC,,P,placeholder,"Bishop2016 Wizard 5-day day/night treatments yield/pollen t50 approx28/32 degC; partial organ response and compensation, not daily crop t100; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 haba,heat_window,,,,P,placeholder,No verified value in source snapshot
 haba,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
 haba,kc_end,0.30,-,F56-T12,A,sourced,
@@ -221,12 +221,12 @@ cebada,ece_threshold,8.0,dS/m,F29-T4,A,sourced,
 cebada,ece_zero_yield,28,dS/m,F29-T4,A,sourced,
 cebada,energia_electrica,,,,P,placeholder,No verified value in source snapshot
 cebada,family,Poaceae,-,UC-FAMILIES,A,sourced,"UC Cooperative Extension handbook p.13, vegetable families table"
-cebada,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-cebada,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+cebada,frost_t0,,degC,,P,placeholder,"Chen2009 reproductive tissues -3.5 degC 2h with ice nucleator; genotype effects and no loss percentage in abstract; not station Tmin endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+cebada,frost_t100,,degC,,P,placeholder,"Chen2009 reproductive tissues -3.5 degC 2h with ice nucleator; genotype effects and no loss percentage in abstract; not station Tmin endpoint; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 cebada,frost_window,,,,P,placeholder,No verified value in source snapshot
 cebada,h_max,1,m,F56-T12,A,sourced,
-cebada,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-cebada,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+cebada,heat_t0,,degC,,P,placeholder,"Shirdelmoghanloo2022 157 genotypes and 8 field environments, days>=30 degC during grain filling; no isolated dose or universal loss curve; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+cebada,heat_t100,,degC,,P,placeholder,"Shirdelmoghanloo2022 157 genotypes and 8 field environments, days>=30 degC during grain filling; no isolated dose or universal loss curve; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 cebada,heat_window,,,,P,placeholder,No verified value in source snapshot
 cebada,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
 cebada,kc_end,0.25,-,F56-T12,A,sourced,
@@ -263,12 +263,12 @@ veza,ece_threshold,3.0,dS/m,F29-T4,A,sourced,Vetch common (Vicia angustifolia)
 veza,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
 veza,energia_electrica,,,,P,placeholder,No verified value in source snapshot
 veza,family,Fabaceae,-,ECO-VETCH,M,derived,FAO records Leguminosae; normalized synonym Fabaceae; assumes cover species Vicia sativa
-veza,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-veza,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+veza,frost_t0,,degC,,P,placeholder,"ECOCROP238003 killing=-1 lacks exposure/%; Dong2022 plants at +4 degC, negative temperature assay is yeast not vetch; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+veza,frost_t100,,degC,,P,placeholder,"ECOCROP238003 killing=-1 lacks exposure/%; Dong2022 plants at +4 degC, negative temperature assay is yeast not vetch; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 veza,frost_window,,,,P,placeholder,No verified value in source snapshot
 veza,h_max,,,,P,placeholder,No verified value in source snapshot
-veza,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-veza,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+veza,heat_t0,,degC,,P,placeholder,"Okumus2025 only 12/18/24 degC for14d germination plus PEG; no extreme heat/crop biomass loss test; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+veza,heat_t100,,degC,,P,placeholder,"Okumus2025 only 12/18/24 degC for14d germination plus PEG; no extreme heat/crop biomass loss test; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 veza,heat_window,,,,P,placeholder,No verified value in source snapshot
 veza,inversion_inicial,,,,P,placeholder,No verified value in source snapshot
 veza,kc_end,0.55,-,F56-T12,B,derived,group e. Legumes
@@ -305,12 +305,12 @@ limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange 
 limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
 limon,energia_electrica,167,EUR/ha·año,IMIDA-CIT2018,A,sourced,
 limon,family,Rutaceae,-,ECO-LEMON,A,sourced,FAO Ecocrop Citrus limon family
-limon,frost_t0,,degC,,P,placeholder,No verified value in source snapshot
-limon,frost_t100,,degC,,P,placeholder,No verified value in source snapshot
+limon,frost_t0,,degC,,P,placeholder,"UC8100p2 critical fruit/bud temperature by maturity, humidity/duration dependent; no100% or Fino/Verna calibration; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+limon,frost_t100,,degC,,P,placeholder,"UC8100p2 critical fruit/bud temperature by maturity, humidity/duration dependent; no100% or Fino/Verna calibration; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 limon,frost_window,,,,P,placeholder,No verified value in source snapshot
 limon,h_max,4,m,F56-T12,A,sourced,
-limon,heat_t0,,degC,,P,placeholder,No verified value in source snapshot
-limon,heat_t100,,degC,,P,placeholder,No verified value in source snapshot
+limon,heat_t0,,degC,,P,placeholder,"NSW1729p2 EurekaSL >40 degC12days burns/desiccation, no damage fraction; no Fino/Verna field dose-response; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
+limon,heat_t100,,degC,,P,placeholder,"NSW1729p2 EurekaSL >40 degC12days burns/desiccation, no damage fraction; no Fino/Verna field dose-response; see threshold-evidence.md (primary search 2026-11-14); incompatible evidence retained, no imputation"
 limon,heat_window,,,,P,placeholder,No verified value in source snapshot
 limon,inversion_inicial,12145,EUR/ha,IMIDA-CIT2018,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
 limon,kc_end,0.70,-,F56-T12,A,sourced,
