@@ -19,7 +19,7 @@ import statistics
 import sys
 
 from .core import data, market as mk_mod, stage_risk, stats
-from .decision import rotations as rt, rules, strategies as st
+from .decision import rotations as rt, rules, strategies as st, texts
 
 DATA = pathlib.Path(__file__).resolve().parents[2] / "data"
 VARIANTS = {"lluvia_-30": (-30, 0.0), "lluvia_-15": (-15, 0.0), "lluvia_+10": (10, 0.0), "temp_+1": (0, 1.0),
@@ -322,6 +322,7 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
                         "licencia": stage_risk.SOURCES[i][2]} for i in thermal]
     for r in rots:
         r["_status"] = "real"
+    texts.apply(out)
     return out
 
 
