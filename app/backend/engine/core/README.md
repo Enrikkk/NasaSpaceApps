@@ -1,7 +1,7 @@
 # Engine core (T-012): submodels A-D over 19 real years
 
 ```sh
-python3 -m app.backend.engine.core.evaluate [base_year]      # table for the demo crops, money in euros of base_year (default 2024)
+python3 -m app.backend.engine.core.evaluate [base_year]      # table for the demo crops, money in euros of base_year (default 2025)
 python3 -m pytest app/backend/engine/core/tests -q           # 10 tests
 ```
 

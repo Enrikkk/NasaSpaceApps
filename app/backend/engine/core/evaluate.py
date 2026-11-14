@@ -19,8 +19,10 @@ def money(hicp, base_year):
     return {"from_real2015": hicp[base_year] / 100, "from_2018": hicp[base_year] / hicp[COST_BASE_YEAR]}
 
 
-def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2024, ecw=None, stage_key="stages_days"):
+def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025, ecw=None, stage_key="stages_days"):
     gaps, evidence = [], []
+    if stage_key == "stages_days" and sm.stages(crop, "stages_days_murcia"):
+        stage_key = "stages_days_murcia"  # local calendar beats a foreign FAO example row when we have one
     lengths = sm.stages(crop, stage_key)
     salt = sm.salt_factor(crop, ecw)
     why_not = sm.aptitude(crop, salt)
@@ -109,7 +111,7 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2024
     return out
 
 
-def demo(base_year=2024):
+def demo(base_year=2025):
     crops = data.load_crops()
     climate, meta = data.load_climate()
     prices, hicp, area = data.load_prices(), data.load_hicp(), data.load_area()
@@ -135,4 +137,4 @@ def demo(base_year=2024):
 
 
 if __name__ == "__main__":
-    demo(int(sys.argv[1]) if len(sys.argv) > 1 else 2024)
+    demo(int(sys.argv[1]) if len(sys.argv) > 1 else 2025)

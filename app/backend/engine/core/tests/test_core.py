@@ -51,14 +51,14 @@ def test_frost_year_is_bad_and_counted():
               sowing_month=1.0)
     clim = _climate()
     clim[dt.date(2010, 1, 15)] = data.Day(-1.0, 10.0, 0.0, 1.0)  # one night: 50 % damage in 2010
-    r = evaluate(c, clim, {}, {2018: 100.0, 2024: 120.0})
+    r = evaluate(c, clim, {}, {2018: 100.0, 2025: 120.0})
     assert r["exito_pct"]["n"] == 3 and r["exito_pct"]["k_malos"] == 1  # cycles from Jan 2010, 2011, 2012
     assert abs(r["anios"][0]["perdida_helada"] - 0.5) < 1e-9
 
 
 def test_nothing_tested_is_not_shown_as_100():
     c = _crop(stages_days="10/10/10/10", kc_ini=0.5, kc_mid=1.0, kc_end=0.8, sowing_month=1.0)
-    r = evaluate(c, _climate(), {}, {2018: 100.0, 2024: 120.0})
+    r = evaluate(c, _climate(), {}, {2018: 100.0, 2025: 120.0})
     assert r["exito_pct"]["valor"] is None
 
 
@@ -78,4 +78,4 @@ def test_real_data_runs():
     crops = data.load_crops()
     clim, meta = data.load_climate()
     r = evaluate(crops["brocoli"], clim, data.load_prices(), data.load_hicp(), data.load_area())
-    assert r["exito_pct"]["n"] >= 19 and r["margen_eur_ha"]["euros_de"] == 2024
+    assert r["exito_pct"]["n"] >= 19 and r["margen_eur_ha"]["euros_de"] == 2025
