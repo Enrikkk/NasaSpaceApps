@@ -96,3 +96,10 @@ veza,p_depletion,0.45,-,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry 
 limon,zr_min,1.2,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); smaller value: irrigation scheduling
 limon,zr_max,1.5,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); larger value: modelling water stress / rainfed
 limon,p_depletion,0.50,-,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+lechuga,sowing_month,11,month,F56-T11,A,sourced,"planting month of the stages_days row (Nov/Jan Mediterranean); spring row = 4, feb row = 2"
+brocoli,sowing_month,9,month,F56-T11,M,sourced,planting month of the stages_days row (Sept California desert)
+melon,sowing_month,5,month,F56-T11,A,sourced,planting month of the stages_days row (May Mediterranean)
+alcachofa,sowing_month,8,month,,P,placeholder,"SUPUESTO: Murcia plants Jul-Aug and cuts Nov-May (CARM note in research, URL not yet in sources); FAO row is April California"
+haba,sowing_month,11,month,F56-T11,A,sourced,planting month of the stages_days row (Nov Europe)
+cebada,sowing_month,11,month,F56-T11,M,sourced,planting month of the stages_days row (Nov; region cell blank)
+limon,sowing_month,1,month,F56-T11,A,sourced,Citrus row starts Jan (perennial: one cycle = one calendar year)

@@ -4,7 +4,9 @@ Run:  python3 -m app.backend.engine.sources.eurostat      (from the repo root)
 Writes app/backend/engine/data/official/:
   eurostat_prices_es.csv   crop_id, year, eur_100kg (nominal), eur_100kg_real (deflated to 2015 by HICP), code
   eurostat_area_es.csv     crop_id, year, area_kha, prod_kt, yield_t_ha, code
-  sources.csv              one row per API call: source_id, dataset, url, retrieved, licence, note
+  eurostat_hicp_es.csv     year, hicp_2015_100 (Spain HICP all items, annual average): the engine's money deflator
+  sources.csv              one row per API call (merged by source_id: rows from other sources are kept)
+Run with --hicp to refresh only the deflator.
 Nothing here is invented: a crop without an official series gets no rows and a note in sources.csv.
 """
 import csv
@@ -59,15 +61,36 @@ def cells(d):
     return ids, out
 
 
-def main():
-    OUT.mkdir(parents=True, exist_ok=True)
-    today = dt.date.today().isoformat()
-    sources = []
+def merge_sources(new_rows):
+    """Write sources.csv replacing rows whose source_id is in new_rows and keeping every other source's row."""
+    path = OUT / "sources.csv"
+    head = ["source_id", "dataset", "url", "retrieved", "licence", "note"]
+    old = list(csv.reader(open(path))) if path.exists() else [head]
+    ids = {r[0] for r in new_rows}
+    kept = [r for r in old[1:] if r and r[0] not in ids]
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(old[0] if old else head)
+        w.writerows(kept + new_rows)
 
+
+def hicp_series(today):
     url, d = fetch("prc_hicp_aind", "coicop=CP00&unit=INX_A_AVG&sinceTimePeriod=1999")
     ids, c = cells(d)
     hicp = {k[ids.index("time")]: v for k, v in c.items()}  # 2015 = 100
-    sources.append(["EUR-HICP", "prc_hicp_aind", url, today, LICENCE, "Spain HICP all items, 2015=100, deflator"])
+    with open(OUT / "eurostat_hicp_es.csv", "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "hicp_2015_100"])
+        w.writerows([int(y), hicp[y]] for y in sorted(hicp))
+    return hicp, ["EUR-HICP", "prc_hicp_aind", url, today, LICENCE,
+                  "Spain HICP all items, annual average, 2015=100, deflator (eurostat_hicp_es.csv)"]
+
+
+def main():
+    OUT.mkdir(parents=True, exist_ok=True)
+    today = dt.date.today().isoformat()
+    hicp, row = hicp_series(today)
+    sources = [row]
 
     url, d = fetch("apri_ap_crpouta", "sinceTimePeriod=2000&currency=EUR")
     ids, c = cells(d)
@@ -105,12 +128,16 @@ def main():
 
     for crop, why in NO_PRICE.items():
         sources.append([f"GAP-PRICE-{crop}", "", "", today, "", why])
-    with open(OUT / "sources.csv", "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["source_id", "dataset", "url", "retrieved", "licence", "note"])
-        w.writerows(sources)
+    merge_sources(sources)
     print(f"prices: {len(rows)} rows, area: {len(area)} rows -> {OUT}")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--hicp" in sys.argv:
+        OUT.mkdir(parents=True, exist_ok=True)
+        h, r = hicp_series(dt.date.today().isoformat())
+        merge_sources([r])
+        print(f"hicp: {len(h)} years -> {OUT / 'eurostat_hicp_es.csv'}")
+    else:
+        main()
