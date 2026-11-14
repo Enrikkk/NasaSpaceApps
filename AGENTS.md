@@ -107,11 +107,15 @@ Claude Code users: `/handoff` writes the log line, updates the task file and pus
 
 ## 7. Talking to other agents
 
-There is no live channel between laptops, by design: Claude Code's agent teams and cross-session messaging only
-work inside one machine / one account, and the third-party "agent mesh" tools are localhost/LAN-only or
-untested (see `research/multi-agent-collaboration.md`). You talk through files: task notes, `LOG.md`,
-`DECISIONS.md`, and `coordination/questions.md` (append `@seat: question`; the addressed seat's agent answers on
-its next `/sync`). Humans talk in their group chat.
+**Live layer (D-004): Paseo over Tailscale, jaime's Mac is the hub.** Every laptop runs a Paseo daemon with its
+own CLI logins. The hub's orchestrator starts work on a laptop with `scripts/paseo_team.sh dispatch <seat> T-NNN`.
+Runbook and token rules: `coordination/PASEO.md`. If you were started by `dispatch`: read only AGENTS.md §3–6 and
+your task file, stay in its paths, push your branch, never merge into main, and end with one line
+`RESULT: done|blocked | ...`. Don't start agents on other laptops yourself: ask the hub in your RESULT line.
+
+**Git stays the durable record** and the fallback when the hub or the Wi-Fi is down. You also talk through files:
+task notes, `LOG.md`, `DECISIONS.md`, and `coordination/questions.md` (append `@seat: question`; the addressed
+seat's agent answers on its next `/sync`). Humans talk in their group chat.
 
 Inside ONE laptop you may use subagents / agent teams freely for parallel work, as long as they follow this file.
 

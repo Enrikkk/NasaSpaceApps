@@ -1,7 +1,7 @@
 ---
 id: T-007
 title: Paseo orchestrator over Tailscale (jaime's Mac = hub, one daemon per laptop)
-status: doing
+status: review
 owner: jaime
 branch: main
 paths: coordination/PASEO.md, scripts/paseo_join.sh, AGENTS.md (section 7), coordination/DECISIONS.md, coordination/AUTOPILOT.md
@@ -14,3 +14,10 @@ orchestrator agent launches work on them. Git (coordination/tasks, LOG) stays th
 
 Acceptance: coordination/PASEO.md runbook; scripts/paseo_join.sh joins a laptop in one command; hub reaches itself via
 its Tailscale IP; D-004 recorded.
+
+- 2026-11-14 10:35 | jaime | done on the hub side; waiting for teammates. Claude Code CLI 2.1.325 installed on jaime's Mac
+  (~/.local/bin, PATH added to ~/.bash_profile so the Paseo daemon finds claude and cursor-agent). Paseo 0.15.4 Desktop
+  already installed; `paseo` CLI linked into ~/.local/bin. Verified with throwaway daemons: Tailscale listen + set-password
+  auth (missing/wrong password rejected), host add -> online, dispatch run flags (worktree, branch, wait, logs).
+  Left: jaime runs `bash scripts/paseo_join.sh` (password prompt), invites 3 teammates to the tailnet, each runs
+  paseo_join.sh, hub runs `paseo_team.sh add` per seat. Cursor on jaime's Mac needs `cursor-agent login`.

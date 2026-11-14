@@ -1,5 +1,8 @@
 # Autopilot: agents that hand tasks to each other across laptops (T-006)
 
+> **Since D-004 (2026-11-14) this is the FALLBACK.** The primary live layer is Paseo over Tailscale, with jaime's
+> Mac as the hub: see `coordination/PASEO.md`. Use this watcher when the hub or Tailscale is down.
+
 **What it is.** `scripts/agent_watcher.py` runs on each laptop that wants an unattended agent. Every 60 s it does
 `git fetch` (costs 0 tokens) and looks at the task board on `origin/main`. Only when a task is handed to its
 seat does it launch that laptop's agent CLI headless, on the person's flat subscription (Claude Pro, ChatGPT
