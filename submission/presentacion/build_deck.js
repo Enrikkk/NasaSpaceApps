@@ -53,7 +53,7 @@ const MELON = [25.84, 31.01, 34.64, 42.06, 30.09, 37.02, 25.99, 27.35, 33.54, 27
   text(s, 'Qué sembrar, cuándo y con qué riesgo', { x: 0.7, y: 3.75, w: 6.0, h: 0.6, fontSize: 22, objectName: 'Lema' });
   text(s, 'NASA Space Apps Challenge 2026 · Murcia', { x: 0.7, y: 6.6, w: 7, h: 0.3, fontSize: 12, objectName: 'Evento' });
   credit(s, 'Imagen: Blue Marble, NASA GIBS / NASA Earth Observatory · IGN (CC BY 4.0 scne.es)', 0.7, 6.95, 9);
-  s.addNotes('[0:00-0:06]\nGUION: «Esto es Agrockham: te ayuda a decidir qué sembrar, cuándo y con qué riesgo.»');
+  s.addNotes('[0:00-0:06]\nGUION: «Agrockham te ayuda a decidir qué sembrar, cuándo y con qué riesgo.» (Entra justo después de «Así nace Agrockham».)');
 
   // 2. Mapa
   pres.addSection({ title: 'Producto' });
@@ -66,7 +66,7 @@ const MELON = [25.84, 31.01, 34.64, 42.06, 30.09, 37.02, 25.99, 27.35, 33.54, 27
   text(s, 'En el mapa se ven los recintos SIGPAC de toda España. Un clic abre la ficha de la parcela.',
     { x: 9.6, y: 3.5, w: 3.03, h: 1.2, fontSize: 14, color: C.background2, objectName: 'Detalle' });
   s.addNotes(`[0:06-0:23]
-GUION: «Para ordenar tantos datos hemos creado un mapa con todas las parcelas oficiales de España. Haces clic en la tuya y ves su superficie, su riego y su pendiente. El análisis completo ya funciona en el Campo de Cartagena: más de ciento setenta mil parcelas.»
+GUION: «Empieza en un mapa con todas las parcelas oficiales de España. Haces clic en la tuya y ves su superficie, su riego y su pendiente. El análisis completo ya funciona en el Campo de Cartagena: más de ciento setenta mil parcelas.»
 
 GIF 1 (opcional, sustituye a la captura): «Ir a mis parcelas» → zoom del globo → clic en un recinto → se abre la ficha. 16:9, 6-8 s, 15 fps.
 Clic derecho en la imagen → Cambiar imagen → Desde un archivo.`);
@@ -123,14 +123,14 @@ GIF 2 (opcional, sustituye a la captura): abrir FILTROS → mover «Ahorro de ag
   pres.addSection({ title: 'Cierre' });
   s = pres.addSlide({ masterName: 'Cierre', sectionTitle: 'Cierre' });
   s.addImage({ path: A('agrockham-logo-on-dark.png'), x: 0.7, y: 0.8, w: 4.0, h: 4.0 * 461 / 2400, objectName: 'Logo' });
-  s.addText('Haciendo fácil lo difícil', { placeholder: 'title' });
+  s.addText('Para el agricultor y su técnico', { placeholder: 'title' });
   const col = (x, h, items) => text(s, [{ text: h, options: { bold: true, color: C.accent1, breakLine: true } }]
     .concat(items.map((t, i) => ({ text: t, options: { breakLine: i < items.length - 1 } }))),
     { x, y: 3.6, w: 5.6, h: 2.2, fontSize: 18, paraSpaceAfter: 8, objectName: h });
   col(0.7, 'Ya funciona', ['Mapa con los recintos SIGPAC de España', 'Clima, lluvia y suelo de cada parcela', 'Rotaciones con incertidumbre y semáforo legal']);
   col(7.0, 'Lo siguiente', ['Registro de parcelas', 'Capacidad de inversión en el modelo', 'Análisis completo en toda España']);
   s.addNotes(`[1:14-1:30]
-GUION: «Lo siguiente: tu registro de parcelas y tu capacidad de inversión. Agrockham es una herramienta para ti y para tu técnico. Haciendo fácil lo difícil.»`);
+GUION: «Lo siguiente: tu registro de parcelas y tu capacidad de inversión. Agrockham es una herramienta para el agricultor y para su técnico. Gracias.»`);
 
   await pres.writeFile({ fileName: OUT });
   await applyTheme(OUT, THEME);
