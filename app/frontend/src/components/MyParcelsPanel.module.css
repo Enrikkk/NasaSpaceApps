@@ -42,12 +42,13 @@
 
 .empty { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.5; }
 .list { list-style: none; display: grid; gap: var(--space-2); }
-.item { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.item { display: grid; gap: var(--space-1); }
 .who { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
 .swatch { flex: none; width: 12px; height: 12px; border-radius: 3px; border: 2px solid var(--own-parcel); }
-.ref { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
-.fine { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.5; }
-.actions { display: flex; gap: var(--space-2); flex: none; }
+.names { min-width: 0; }
+.pname { font-size: var(--fs-md); font-weight: 600; line-height: 1.25; }
+.fine { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.4; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.actions { display: flex; gap: var(--space-2); padding-left: calc(12px + var(--space-2)); }
 .see, .del {
   padding: 2px var(--space-3);
   border: 1px solid var(--border);

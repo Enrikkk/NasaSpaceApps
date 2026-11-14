@@ -43,3 +43,14 @@
 @media (max-width: 760px) {
   .card { padding: var(--space-3); }
 }
+
+/* Minimal text: one quiet line instead of boxes. */
+.hint { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.5; padding: 0 var(--space-1); }
+.tiny { font-size: 11px; color: var(--text-muted); line-height: 1.4; padding: 0 var(--space-1); }
+.chip { margin-left: var(--space-2); padding: 1px var(--space-2); border: 1px solid var(--warn); border-radius: 999px; color: var(--warn); font-size: 11px; font-weight: 600; vertical-align: middle; }
+.rotations > .h { padding: 0 var(--space-1); }
+.sources > summary { cursor: pointer; font-size: 11px; color: var(--text-muted); list-style: none; }
+.sources > summary::-webkit-details-marker { display: none; }
+.sources > summary::before { content: '+ '; }
+.sources[open] > summary::before { content: '– '; }
+.sourcesBody { display: grid; gap: var(--space-2); padding-top: var(--space-2); }

@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import Panel from './ui/Panel.jsx'
+import EditableName from './ui/EditableName.jsx'
 import { useAppState } from '../state/AppState.jsx'
 import { useMyParcels } from '../state/useMyParcels.js'
 import { RECINTO_KEYS } from '../state/myParcels.js'
@@ -14,7 +15,7 @@ const recintoOf = (p) => Object.fromEntries(RECINTO_KEYS.filter((k) => Number.is
  */
 export default function MyParcelsPanel() {
   const { myParcelsOpen, setMyParcelsOpen, setSelectedParcel, setFlyTarget } = useAppState()
-  const { list, guarda, remove } = useMyParcels()
+  const { list, guarda, remove, rename } = useMyParcels()
   const bodyId = useId()
   const go = (p) => {
     setSelectedParcel({ lat: p.lat, lon: p.lon, recinto: recintoOf(p) })
@@ -39,21 +40,21 @@ export default function MyParcelsPanel() {
       </h2>
       <div id={bodyId} className={styles.body}>
         {list.length === 0 ? (
-          <p className={styles.empty}>Aún no has añadido parcelas. Haz clic en un recinto del mapa y pulsa «Añadir a mis parcelas».</p>
+          <p className={styles.empty}>Aún no hay parcelas. Haz clic en un recinto y pulsa Guardar.</p>
         ) : (
           <ul className={styles.list}>
             {list.map((p) => (
               <li key={p.ref} className={styles.item}>
                 <div className={styles.who}>
                   <span className={styles.swatch} aria-hidden="true" />
-                  <div>
-                    <p className={styles.ref} title={p.ref}>{p.ref.replaceAll('/', '/​')}</p>
-                    {p.ha ? <p className={styles.fine}>{fmtHa(p.ha)} ha</p> : null}
+                  <div className={styles.names}>
+                    <EditableName value={p.nombre} onSave={(n) => rename(p.ref, n)} className={styles.pname} />
+                    <p className={styles.fine}>{[p.ref, p.ha ? `${fmtHa(p.ha)} ha` : null].filter(Boolean).join(' · ')}</p>
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <button type="button" className={styles.see} onClick={() => go(p)} aria-label={`Ver la parcela ${p.ref}`}>Ver</button>
-                  <button type="button" className={styles.del} onClick={() => remove(p.ref)} aria-label={`Quitar la parcela ${p.ref}`}>Quitar</button>
+                  <button type="button" className={styles.see} onClick={() => go(p)} aria-label={`Ver ${p.nombre}`}>Ver</button>
+                  <button type="button" className={styles.del} onClick={() => remove(p.ref)} aria-label={`Quitar ${p.nombre}`}>Quitar</button>
                 </div>
               </li>
             ))}
@@ -61,8 +62,8 @@ export default function MyParcelsPanel() {
         )}
         <p className={styles.fine}>
           {guarda
-            ? 'Se guardan solo en este navegador: no se envían a ningún servidor.'
-            : 'Tu navegador no deja guardar datos: las parcelas se perderán al recargar la página.'}
+            ? 'Se guardan solo en este navegador.'
+            : 'Tu navegador no deja guardar: se perderán al recargar.'}
         </p>
       </div>
     </Panel>

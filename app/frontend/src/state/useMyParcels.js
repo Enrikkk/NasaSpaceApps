@@ -9,8 +9,8 @@ if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => { if (e.key === null || e.key === STORAGE_KEY) myParcels.reload() })
 }
 
-/** { list, guarda, add(input) -> status, remove(ref) }; re-renders when the list changes. */
+/** { list, guarda, add(input) -> status, remove(ref), rename(ref, nombre) -> bool }; re-renders when the list changes. */
 export function useMyParcels() {
   const snap = useSyncExternalStore(myParcels.subscribe, myParcels.getSnapshot)
-  return { list: snap.list, guarda: snap.guarda, add: myParcels.add, remove: myParcels.remove }
+  return { list: snap.list, guarda: snap.guarda, add: myParcels.add, remove: myParcels.remove, rename: myParcels.rename }
 }

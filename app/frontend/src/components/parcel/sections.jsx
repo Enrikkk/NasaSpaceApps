@@ -9,27 +9,18 @@ import {
 } from './helpers.js'
 import styles from './sections.module.css'
 
-/** Header facts: hectares, irrigation, slope, region. Works with only the instant parcel block. */
-export function Summary({ parcela, loading }) {
-  if (!parcela) {
-    return <Panel as="section" className={styles.card}><p className={styles.muted} role="status">{loading ? 'Leyendo la parcela…' : 'Sin datos de la parcela.'}</p></Panel>
-  }
-  if (parcela.sin_cobertura) {
-    return (
-      <Panel as="section" className={`${styles.card} ${styles.notice}`}>
-        <h3 className={styles.h}>No hemos encontrado un recinto aquí</h3>
-        <p>{parcela.aviso || 'Este punto está fuera de los recintos que tenemos cargados.'}</p>
-        <p className={styles.muted}>Lo que ves abajo es una estimación orientativa para la zona, no para una parcela concreta.</p>
-      </Panel>
-    )
-  }
-  // One line, so the ranked list starts right under the reference; the full grid lives in "Más sobre tu parcela".
-  const line = [
-    isNum(parcela.ha) ? `${fmtHa(parcela.ha)} ha` : 'superficie: no la sabemos',
-    parcela.regadio === true ? 'regadío' : parcela.regadio === false ? 'secano' : 'riego: no lo sabemos',
-    isNum(parcela.pendiente_pct) ? `pendiente ${fmtOne(parcela.pendiente_pct)} %` : null,
-  ].filter(Boolean).join(' · ')
-  return <p className={styles.line} aria-label="Datos de la parcela">{capitalize(line)}</p>
+/**
+ * A small quiet line (never a big box) when the server has no data for the recinto, or the click was outside any recinto.
+ * The numbers still come from the zone; the title and the header line already show what the click itself knew.
+ */
+export function Notice({ parcela, parcel }) {
+  if (!parcela?.sin_cobertura) return null
+  const known = parcel?.recinto && Object.keys(parcel.recinto).length > 0
+  return (
+    <p className={styles.hint} role="status" title={parcela.aviso || undefined}>
+      {known ? 'Estimación de la zona: aún no tenemos los datos de este recinto.' : 'Aquí no hay un recinto: estimación de la zona.'}
+    </p>
+  )
 }
 
 /** The full facts grid (surface, irrigation, slope, region, SIGPAC use), for the folded section. */
@@ -122,7 +113,7 @@ export function MoreAboutParcel({ data }) {
 }
 
 /** The options as a ranked list (best first, score 1-100, Eco and Riesgo flags); the reference to compare goes last. */
-export function Rotations({ data, priorities }) {
+export function Rotations({ data, priorities, orientativo = false }) {
   const rotaciones = data.rotaciones ?? []
   const noEval = data.idoneidad?.no_evaluable?.motivo
   const ranked = rankRotations(rotaciones, priorities)
@@ -133,23 +124,16 @@ export function Rotations({ data, priorities }) {
 
   if (noEval || !rotaciones.length) {
     return (
-      <Panel as="section" className={`${styles.card} ${styles.notice}`} aria-labelledby="sec-rot">
-        <h3 id="sec-rot" className={styles.h}>Rotaciones</h3>
-        <p>{noEval || 'No hemos podido calcular rotaciones para esta parcela.'}</p>
-        <p className={styles.muted}>Por eso no te proponemos ninguna: preferimos decirte que no lo sabemos.</p>
-      </Panel>
+      <p className={styles.hint} role="status">
+        {noEval ? `No recomendamos cultivos aquí: ${noEval}` : 'No hemos podido calcular cultivos para esta parcela.'}
+      </p>
     )
   }
-  const years = rotaciones[0]?.horizonte_anios
   return (
     <section className={styles.rotations} aria-labelledby="sec-rot">
-      <div>
-        <h3 id="sec-rot" className={styles.h}>Qué te conviene{isNum(years) ? ` · a ${years} años` : ''}</h3>
-        <p className={styles.fine}>
-          De más a menos recomendada. La puntuación (1 a 100) compara estas opciones entre sí según tus
-          prioridades (Filtros). No es una garantía.
-        </p>
-      </div>
+      <h3 id="sec-rot" className={styles.h}>
+        Recomendado{orientativo && <span className={styles.chip} title="Cálculo con datos de la zona, no de esta parcela">orientativo</span>}
+      </h3>
       {ranked.map(({ rot, best, rank, score }) => (
         <RotationCard
           key={rot.id}
@@ -164,13 +148,14 @@ export function Rotations({ data, priorities }) {
           globalFrases={data.idoneidad?.frases ?? []}
         />
       ))}
+      <p className={styles.tiny}>Puntuación de 1 a 100, relativa entre estas opciones. No es una garantía.</p>
     </section>
   )
 }
 
 const FEGA_FALLBACK = 'Fuente de los datos de los recintos: Fondo Español de Garantía Agraria O.A. (FEGA), licencia CC BY 4.0. Sin respaldo ni patrocinio del FEGA.'
 
-/** Warnings, attributions (licence requirement), simulated blocks and the support-tool sentence. */
+/** Warnings, attributions (licence requirement), simulated blocks: folded; one tiny line stays visible. */
 export function Footer({ data }) {
   const meta = data?._meta ?? {}
   const avisos = (meta.avisos ?? []).filter((s) => typeof s === 'string' && s.trim())
@@ -178,12 +163,18 @@ export function Footer({ data }) {
   const simulated = Object.entries(meta.estado_bloques ?? {}).filter(([, st]) => st === 'simulado').map(([k]) => k)
   return (
     <footer className={styles.footer}>
-      {avisos.map((s, i) => <p key={i}><b>Aviso:</b> {s}</p>)}
-      {simulated.map((k) => (
-        <p key={k}><b>Dato simulado:</b> {capitalize(BLOCK_LABELS[k] ?? k)} son datos de ejemplo, no medidos en tu parcela.</p>
-      ))}
-      {(atribs.length ? atribs : [FEGA_FALLBACK]).map((s, i) => <p key={i}>{s}</p>)}
-      <p>Herramienta de apoyo, no es asesoría legal ni agronómica: consulta a tu técnico antes de decidir.</p>
+      <p>Herramienta de apoyo: consulta a tu técnico antes de decidir.</p>
+      <details className={styles.sources}>
+        <summary>Fuentes y avisos</summary>
+        <div className={styles.sourcesBody}>
+          {avisos.map((s, i) => <p key={i}><b>Aviso:</b> {s}</p>)}
+          {simulated.map((k) => (
+            <p key={k}><b>Dato simulado:</b> {capitalize(BLOCK_LABELS[k] ?? k)} son datos de ejemplo, no medidos en tu parcela.</p>
+          ))}
+          {(atribs.length ? atribs : [FEGA_FALLBACK]).map((s, i) => <p key={i}>{s}</p>)}
+          <p>No es asesoría legal ni agronómica.</p>
+        </div>
+      </details>
     </footer>
   )
 }

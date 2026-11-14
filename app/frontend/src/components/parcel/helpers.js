@@ -111,3 +111,16 @@ export const ENV_LEVELS = {
   medio: { word: 'Medio', n: 2 },
   bajo: { word: 'Bajo', n: 1 },
 }
+
+/**
+ * One short line under the parcel title: size, irrigation, slope. Works with only what the click gave (the vector
+ * tile knows the area in m²) when the server has no data for the recinto.
+ */
+export function factsLine(parcela, parcel) {
+  const ok = parcela && !parcela.sin_cobertura
+  const tileHa = parcel?.tile?.superficie != null ? haFromSquareMetres(parcel.tile.superficie) : null
+  const ha = ok && isNum(parcela.ha) ? `${fmtHa(parcela.ha)} ha` : tileHa
+  const riego = ok ? (parcela.regadio === true ? 'regadío' : parcela.regadio === false ? 'secano' : null) : null
+  const slope = ok && isNum(parcela.pendiente_pct) ? `pendiente ${fmtOne(parcela.pendiente_pct)} %` : null
+  return [ha, riego, slope].filter(Boolean).join(' · ')
+}

@@ -1,20 +1,22 @@
 /* Desktop: a column on the left, under the logo and above the map controls (the filters and the view switcher
    live on the right). It scrolls inside. Phones: bottom sheet above the view switcher. */
-/* "Añadir a mis parcelas" under the SIGPAC reference. */
-.saveRow { display: grid; gap: var(--space-1); justify-items: start; margin-top: var(--space-2); }
+/* Header actions: a short "Guardar" pill and the close button. */
+.actions { display: flex; align-items: center; gap: var(--space-2); flex: none; }
 .save {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 2px var(--space-3);
+  padding: 4px var(--space-3);
   border: 1px solid var(--green-light);
   border-radius: 999px;
   font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--green-light);
+  white-space: nowrap;
 }
 .save:hover { background: color-mix(in srgb, var(--green-light) 16%, transparent); }
-.save.saved { border-color: var(--own-parcel); color: var(--text); background: color-mix(in srgb, var(--own-parcel) 22%, transparent); }
+.save.saved { border-color: var(--own-parcel); color: var(--text); background: color-mix(in srgb, var(--own-parcel) 28%, transparent); }
+.facts { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
 
 .root {
   position: absolute;
@@ -36,23 +38,23 @@
 
 .top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border);
 }
-.titles { min-width: 0; }
+.titles { min-width: 0; flex: 1; }
 .eyebrow { font-size: var(--fs-xs); color: var(--text-muted); }
-.ref { font-size: var(--fs-lg); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.ref { font-size: var(--fs-lg); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; min-width: 0; }
 .close {
   flex: none;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-control);
+  border-radius: 50%;
   color: var(--text);
 }
 .close:hover { background: var(--surface-2); }
@@ -63,6 +65,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: var(--space-3);
   padding: var(--space-3);

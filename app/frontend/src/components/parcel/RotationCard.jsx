@@ -1,132 +1,70 @@
 import { useEffect, useId, useState } from 'react'
 import Panel from '../ui/Panel.jsx'
 import GlyphIcon from './icons.jsx'
-import {
-  isNum, fmtInt, fmtPlain, fmtHa, splitName, legalOf, ENV_LEVELS,
-} from './helpers.js'
+import { isNum, fmtInt, fmtPlain, fmtHa, splitName, legalOf } from './helpers.js'
 import { cropsOf, subtitleOf, ecoInfo, riskInfo } from './ranking.js'
 import styles from './RotationCard.module.css'
-
-// "una pérdida de 1.041 €" / "1.041 €": losses are always said as losses.
-const eurWord = (v) => (v < 0 ? `una pérdida de ${fmtPlain(Math.abs(v))} €` : `${fmtPlain(v)} €`)
-
-function MoneyRange({ lo, hi }) {
-  if (!isNum(lo) || !isNum(hi)) return <span className={styles.range}>Sin rango disponible</span>
-  return <span className={styles.range}>Entre {eurWord(lo)} en un mal año y {eurWord(hi)} en un buen año</span>
-}
-
-function Money({ margen }) {
-  const p50 = isNum(margen?.p50) ? margen.p50 : margen?.valor
-  if (!isNum(p50)) {
-    return (
-      <div className={`${styles.metric} ${styles.wide}`}>
-        <dt>En un año normal</dt>
-        <dd><span className={styles.noData}>Sin precio: no se puede calcular</span></dd>
-      </div>
-    )
-  }
-  const loss = p50 < 0
-  return (
-    <div className={`${styles.metric} ${styles.wide}`}>
-      <dt>En un año normal</dt>
-      <dd>
-        <span className={`${styles.big} ${loss ? styles.loss : ''}`}>
-          {loss && <GlyphIcon name="down" size={20} />}
-          {loss ? `Pérdida de ${fmtPlain(Math.abs(p50))} €` : `${fmtPlain(p50)} €`}
-          <small> por hectárea y año</small>
-        </span>
-        <MoneyRange lo={margen.p10} hi={margen.p90} />
-      </dd>
-    </div>
-  )
-}
-
-function GoodYears({ exito }) {
-  const v = exito?.valor
-  const [lo, hi] = Array.isArray(exito?.horquilla) ? exito.horquilla : []
-  return (
-    <div className={styles.metric}>
-      <dt>Años buenos</dt>
-      <dd>
-        {isNum(v)
-          ? <span className={styles.big}>{fmtInt(v)} %</span>
-          : <span className={styles.noData}>No se puede calcular</span>}
-        {isNum(v) && isNum(lo) && isNum(hi) && <span className={styles.range}>Entre {fmtInt(lo)} % y {fmtInt(hi)} %</span>}
-        {isNum(v) && <span className={styles.range}>en años históricos simulados</span>}
-      </dd>
-    </div>
-  )
-}
-
-function Water({ agua }) {
-  return (
-    <div className={styles.metric}>
-      <dt>Agua</dt>
-      <dd>
-        {isNum(agua)
-          ? <span className={styles.big}>{fmtInt(agua)}<small> m³/ha al año</small></span>
-          : <span className={styles.noData}>No lo sabemos</span>}
-      </dd>
-    </div>
-  )
-}
 
 export function LegalBadge({ semaforo }) {
   const l = legalOf(semaforo?.color)
   return (
     <span className={`${styles.legal} ${styles[`legal_${l.icon}`]}`}>
-      <GlyphIcon name={l.icon} size={20} />
+      <GlyphIcon name={l.icon} size={18} />
       <span>{l.word}</span>
     </span>
   )
 }
 
-function Legal({ semaforo }) {
+/** One big figure with its unit underneath. */
+function Stat({ label, note, note2, bad, children }) {
   return (
-    <div className={styles.metric}>
-      <dt>Semáforo legal</dt>
-      <dd><LegalBadge semaforo={semaforo} /></dd>
-    </div>
-  )
-}
-
-function Environment({ ambiente }) {
-  const lvl = ENV_LEVELS[ambiente?.nivel]
-  return (
-    <div className={styles.metric}>
-      <dt>Medio ambiente</dt>
+    <div className={styles.stat}>
+      <dt>{label}</dt>
       <dd>
-        {lvl ? (
-          <span className={styles.env}>
-            <span className={styles.meter} aria-hidden="true">
-              {[1, 2, 3].map((i) => <i key={i} className={i <= lvl.n ? styles.on : ''} />)}
-            </span>
-            {lvl.word}
-          </span>
-        ) : <span className={styles.noData}>Sin evaluar</span>}
+        <span className={`${styles.statBig} ${bad ? styles.loss : ''}`}>{children}</span>
+        {note && <small>{note}</small>}
+        {note2 && <small>{note2}</small>}
       </dd>
     </div>
   )
 }
 
-function Totals({ totales }) {
-  if (!totales) return null
-  const m = totales.margen_eur
-  const p50 = isNum(m?.p50) ? m.p50 : null
+/** The four figures that matter, big and short. Losses are said as losses (sign and colour). */
+function Stats({ rot }) {
+  const m = rot.margen_eur_ha
+  const p50 = isNum(m?.p50) ? m.p50 : m?.valor
+  const e = rot.exito_pct
+  const [lo, hi] = Array.isArray(e?.horquilla) ? e.horquilla : []
   return (
-    <div className={`${styles.metric} ${styles.wide} ${styles.totals}`}>
-      <dt>En toda tu parcela{isNum(totales.area_ha) ? ` (${fmtHa(totales.area_ha)} ha)` : ''}, cada año</dt>
-      <dd>
-        {p50 !== null
-          ? <span className={styles.medium}>{eurWord(p50)} en un año normal</span>
-          : <span className={styles.noData}>Sin precio: no se puede calcular</span>}
-        {p50 !== null && isNum(m.p10) && isNum(m.p90) && (
-          <span className={styles.range}>Entre {eurWord(m.p10)} en un mal año y {eurWord(m.p90)} en un buen año</span>
-        )}
-        {isNum(totales.agua_m3) && <span className={styles.range}>Agua: {fmtInt(totales.agua_m3)} m³ al año</span>}
-      </dd>
-    </div>
+    <dl className={styles.stats}>
+      <Stat
+        label="Beneficio"
+        bad={isNum(p50) && p50 < 0}
+        note={isNum(p50) ? 'por ha y año' : 'sin precio'}
+        note2={isNum(m?.p10) && isNum(m?.p90) ? `de ${fmtPlain(m.p10)} a ${fmtPlain(m.p90)} €` : null}
+      >
+        {isNum(p50) ? `${p50 < 0 ? '−' : ''}${fmtPlain(Math.abs(p50))} €` : '—'}
+      </Stat>
+      <Stat
+        label="Años buenos"
+        note={isNum(e?.valor) ? 'en años simulados' : 'sin dato'}
+        note2={isNum(e?.valor) && isNum(lo) && isNum(hi) ? `entre ${fmtInt(lo)} y ${fmtInt(hi)} %` : null}
+      >
+        {isNum(e?.valor) ? `${fmtInt(e.valor)} %` : '—'}
+      </Stat>
+      <Stat label="Agua" note={isNum(rot.agua_m3_ha) ? 'm³ por ha y año' : 'sin dato'}>
+        {isNum(rot.agua_m3_ha) ? fmtInt(rot.agua_m3_ha) : '—'}
+      </Stat>
+      <Stat label="Legal"><LegalBadge semaforo={rot.semaforo_legal} /></Stat>
+    </dl>
   )
+}
+
+function WholeParcel({ totales }) {
+  const m = totales?.margen_eur
+  if (!isNum(m?.p50)) return null
+  const word = m.p50 < 0 ? `pérdida de ${fmtPlain(Math.abs(m.p50))} €` : `${fmtPlain(m.p50)} €`
+  return <p className={styles.small}>Tu parcela entera{isNum(totales.area_ha) ? ` (${fmtHa(totales.area_ha)} ha)` : ''}: {word} al año</p>
 }
 
 function TextList({ title, items }) {
@@ -140,32 +78,37 @@ function TextList({ title, items }) {
   )
 }
 
-/** The "por qué" paragraph: original text now, replaced by the local model's version if one arrives and is valid. */
+/** The "por qué" paragraph: the template text, or the local model's version if it arrives and is valid. Three lines, then "más". */
 function Why({ original, narr }) {
   const [showOriginal, setShowOriginal] = useState(false)
+  const [more, setMore] = useState(false)
   const ai = narr?.status === 'done' ? narr.texto : null
   const shown = ai && !showOriginal ? ai : original
   if (!shown && narr?.status !== 'loading') return null
+  const long = (shown ?? '').length > 170
   return (
-    <section className={styles.block}>
-      <h4>Por qué</h4>
-      {shown && <p>{shown}</p>}
+    <section className={styles.why}>
+      {shown && <p className={more || !long ? '' : styles.clamp}>{shown}</p>}
       {narr?.status === 'loading' && <p className={styles.wait} role="status">Preparando una explicación más sencilla…</p>}
-      {ai && original && (
-        <p className={styles.aiTag}>
-          <span>{showOriginal ? 'Texto original' : 'Explicado por un modelo de IA local · cifras comprobadas'}</span>
+      <p className={styles.aiTag}>
+        {long && (
+          <button type="button" className={styles.link} onClick={() => setMore((m) => !m)}>{more ? 'menos' : 'más'}</button>
+        )}
+        {ai && <span>{showOriginal ? 'Texto original' : 'IA local · cifras comprobadas'}</span>}
+        {ai && original && (
           <button type="button" className={styles.link} onClick={() => setShowOriginal((s) => !s)}>
-            {showOriginal ? 'ver la explicación sencilla' : 'ver texto original'}
+            {showOriginal ? 'ver la sencilla' : 'ver el original'}
           </button>
-        </p>
-      )}
+        )}
+      </p>
     </section>
   )
 }
 
 /**
- * One rotation. Metrics are always visible; the details open on click (one card open at a time, the parent decides).
- * Opening a card asks for the plain-language "por qué" (once per rotation, cached by the parent).
+ * One option as a single line (rank, crops, score, Eco and Riesgo flags); clicking the line opens its detail: four
+ * figures, a short explanation and, folded, the notes and assumptions. The parent decides which one is open.
+ * Opening asks for the plain-language "por qué" (once per rotation, cached by the parent).
  */
 export default function RotationCard({ rot, rank, score, best, open, onToggle, narr, onNeedNarrative, globalFrases }) {
   const bodyId = useId()
@@ -218,52 +161,38 @@ export default function RotationCard({ rot, rank, score, best, open, onToggle, n
 
       {open && (
         <div id={bodyId} className={styles.details}>
-          <p className={styles.sub}>{rot.es_actual ? label : subtitleOf(rot)}</p>
-          {(rot.es_actual || best) && (
-            <span className={styles.badges}>
-              {rot.es_actual && <span className={`${styles.badge} ${styles.badgeRef}`}>Referencia para comparar</span>}
-              {best && (
-                <span className={`${styles.badge} ${styles.badgeBest}`}>
-                  <GlyphIcon name="star" size={16} />La que mejor encaja con tus prioridades
-                </span>
-              )}
-            </span>
-          )}
-          <dl className={styles.metrics}>
-            <Money margen={rot.margen_eur_ha} />
-            <GoodYears exito={rot.exito_pct} />
-            <Water agua={rot.agua_m3_ha} />
-            <Legal semaforo={legal} />
-            <Environment ambiente={rot.ambiente} />
-            <Totals totales={rot.totales_parcela} />
-          </dl>
-          {steps.length > 0 && (
-            <section className={styles.block}>
-              <h4>Plan año a año</h4>
-              <ul>{steps.map((s, i) => <li key={i}>{s}</li>)}</ul>
-            </section>
-          )}
+          <p className={styles.sub}>
+            {rot.es_actual ? `Referencia para comparar · ${label}` : subtitleOf(rot)}
+            {best && <span className={styles.bestTag}><GlyphIcon name="star" size={14} filled /> la que mejor encaja</span>}
+          </p>
+          <Stats rot={rot} />
+          <WholeParcel totales={rot.totales_parcela} />
           <Why original={t.por_que} narr={narr} />
-          {legal && (legal.motivo || legal.provisional) && (
-            <section className={styles.block}>
-              <h4>Semáforo legal: {legalOf(legal.color).word}</h4>
-              {legal.motivo && <p className={styles.small}>{legal.motivo}</p>}
-              {(legal.provisional || legal._status === 'simulado') && (
-                <p className={styles.small}>Provisional: las reglas legales aún están por verificar.</p>
+          <details className={styles.notes}>
+            <summary>Notas y supuestos</summary>
+            <div className={styles.notesBody}>
+              {steps.length > 0 && (
+                <section className={styles.block}>
+                  <h4>Plan año a año</h4>
+                  <ul>{steps.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                </section>
               )}
-            </section>
-          )}
-          {rot.ambiente?.frase && (
-            <section className={styles.block}>
-              <h4>Medio ambiente</h4>
-              <p className={styles.small}>{rot.ambiente.frase}</p>
-            </section>
-          )}
-          <TextList title="Riesgos" items={t.riesgos_texto} />
-          <TextList title="Lo que no sabemos" items={t.no_sabemos} />
-          <TextList title="Cómo influye tu parcela" items={frases} />
-          <TextList title="En qué nos basamos" items={t.evidencia_resumen} />
-          {t.consulta && <p className={styles.small}>{t.consulta}</p>}
+              {legal && (legal.motivo || legal.provisional) && (
+                <section className={styles.block}>
+                  <h4>Semáforo legal: {legalOf(legal.color).word}</h4>
+                  {legal.motivo && <p className={styles.small}>{legal.motivo}</p>}
+                  {(legal.provisional || legal._status === 'simulado') && (
+                    <p className={styles.small}>Provisional: las reglas legales aún están por verificar.</p>
+                  )}
+                </section>
+              )}
+              <TextList title="Riesgos" items={t.riesgos_texto} />
+              <TextList title="Lo que no sabemos" items={t.no_sabemos} />
+              <TextList title="Cómo influye tu parcela" items={frases} />
+              <TextList title="En qué nos basamos" items={t.evidencia_resumen} />
+              {t.consulta && <p className={styles.small}>{t.consulta}</p>}
+            </div>
+          </details>
         </div>
       )}
     </Panel>

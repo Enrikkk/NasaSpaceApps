@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
-  STORAGE_KEY, MAX_PARCELS, NO_MATCH, refOf, isRegistrable, makeParcel, parseStored, addTo, removeFrom, mapFilter, boundsOf, createStore,
+  STORAGE_KEY, MAX_PARCELS, MAX_NAME, NO_MATCH, cleanName, defaultName, renameIn, refOf, isRegistrable, makeParcel, parseStored, addTo, removeFrom, mapFilter, boundsOf, createStore,
 } from './myParcels.js'
 
 const R = { provincia: 30, municipio: 37, agregado: 0, zona: 0, poligono: 18, parcela: 426, recinto: 1 }
@@ -95,4 +95,34 @@ test('store: saves to storage, notifies, reloads, survives a storage that throws
   assert.equal(blocked.add(input()), 'added')                               // works in memory
   assert.equal(blocked.getSnapshot().list.length, 1)
   assert.equal(blocked.getSnapshot().guarda, false)                         // and says it is not saved
+})
+
+test('names: cleaned, capped, default "Parcela N" reuses the smallest free number', () => {
+  assert.equal(cleanName('  Huerta   del  abuelo '), 'Huerta del abuelo')
+  assert.equal(cleanName('   '), null)
+  assert.equal(cleanName(5), null)
+  assert.equal(cleanName('x'.repeat(100)).length, MAX_NAME)
+  assert.equal(defaultName([]), 'Parcela 1')
+  assert.equal(defaultName([{ nombre: 'Parcela 1' }, { nombre: 'Parcela 3' }]), 'Parcela 2')
+})
+
+test('store gives each new parcel a default name, can rename it, and keeps it after a reload', () => {
+  const st = fakeStorage()
+  const store = createStore(() => st)
+  store.add(input())
+  store.add(input({ recinto: { ...R, recinto: 2 } }))
+  assert.deepEqual(store.getSnapshot().list.map((p) => p.nombre), ['Parcela 1', 'Parcela 2'])
+  assert.equal(store.rename('30/37/0/0/18/426/1', '  La huerta  '), true)
+  assert.equal(store.rename('30/37/0/0/18/426/1', '   '), false)       // empty: unchanged
+  assert.equal(store.rename('no/existe', 'X'), false)
+  assert.equal(createStore(() => st).getSnapshot().list[0].nombre, 'La huerta')
+  store.remove('30/37/0/0/18/426/2')
+  store.add(input({ recinto: { ...R, recinto: 3 } }))
+  assert.equal(store.getSnapshot().list[1].nombre, 'Parcela 1')        // the first one was renamed, so "Parcela 1" is free again
+})
+
+test('parcels saved before names existed get one when read', () => {
+  const old = JSON.stringify([makeParcel(input()), makeParcel(input({ recinto: { ...R, recinto: 2 } }))])
+  assert.deepEqual(parseStored(old).map((p) => p.nombre), ['Parcela 1', 'Parcela 2'])
+  assert.equal(renameIn([{ ref: 'a', nombre: 'x' }], 'a', 'y')[0].nombre, 'y')
 })

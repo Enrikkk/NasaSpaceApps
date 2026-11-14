@@ -9,12 +9,14 @@ const PATHS = {
   down: <path d="M4 6l5 5 3-3 4 4M16 8v4h-4" />,
   star: <path d="M10 2.8l2.1 4.5 4.9.6-3.6 3.4.9 4.9L10 13.8l-4.3 2.4.9-4.9L3 7.9l4.9-.6z" />,
   leaf: <><path d="M4 16C4 8 9 4 16 4c0 7-4 12-12 12z" /><path d="M4 16l7-7" /></>,
+  pencil: <><path d="M13 4l3 3L7.5 15.5 4 16l.5-3.5z" /><path d="M11.5 5.5l3 3" /></>,
+  bookmark: <path d="M6 3.5h8V17l-4-3.2L6 17z" />,
   retry: <><path d="M16 10a6 6 0 1 1-2-4.5" /><path d="M16 3v3.5h-3.5" /></>,
 }
 
-export default function GlyphIcon({ name, size = 20 }) {
+export default function GlyphIcon({ name, size = 20, filled = false }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor"
+    <svg width={size} height={size} viewBox="0 0 20 20" fill={filled ? 'currentColor' : 'none'} stroke="currentColor"
       strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" focusable="false">
       {PATHS[name]}
     </svg>

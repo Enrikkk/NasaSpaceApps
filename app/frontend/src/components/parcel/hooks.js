@@ -12,15 +12,23 @@ export function useAnalysis(parcel) {
   useEffect(() => {
     if (!parcel) return undefined
     const ac = new AbortController()
+    let retryTimer = null
     const mine = (patch) => { if (!ac.signal.aborted) setRes((r) => ({ ...r, ...patch })) }
     setRes({ parcel, attempt, quick: null, full: null, error: null })
     analyze(parcel, { bloques: 'parcela', signal: ac.signal })
-      .then((d) => mine({ quick: d }))
+      .then((d) => {
+        mine({ quick: d })
+        // The server may still be loading the SIGPAC recintos (first request after a cold start): ask once more shortly.
+        const p = d?.parcela
+        if (attempt === 0 && p?.sin_cobertura && p._status === 'cargando' && parcel?.recinto && Object.keys(parcel.recinto).length) {
+          retryTimer = setTimeout(() => { if (!ac.signal.aborted) setAttempt((n) => n + 1) }, 4000)
+        }
+      })
       .catch(() => { /* the header is optional: the full call reports real errors */ })
     analyze(parcel, { signal: ac.signal })
       .then((d) => mine({ full: d }))
       .catch((err) => { if (!isAbort(err)) mine({ error: err }) })
-    return () => ac.abort()
+    return () => { ac.abort(); clearTimeout(retryTimer) }
   }, [parcel, attempt])
 
   const retry = useCallback(() => setAttempt((n) => n + 1), [])

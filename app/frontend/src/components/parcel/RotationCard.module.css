@@ -127,3 +127,19 @@
   .card { padding: var(--space-3); }
   .metrics { gap: var(--space-3); }
 }
+
+/* Detail of an opened option: four big figures, a short explanation, notes folded. */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); }
+.stat { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.stat dt { font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+.stat dd { display: grid; gap: 1px; }
+.statBig { font-size: var(--fs-xl); font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat small { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.35; }
+.why { display: grid; gap: var(--space-1); font-size: var(--fs-sm); line-height: 1.5; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.bestTag { display: inline-flex; align-items: center; gap: 4px; margin-left: var(--space-2); color: var(--green-light); font-weight: 600; }
+.notes > summary { cursor: pointer; font-size: var(--fs-xs); color: var(--text-muted); list-style: none; }
+.notes > summary::-webkit-details-marker { display: none; }
+.notes > summary::before { content: '+ '; }
+.notes[open] > summary::before { content: '– '; }
+.notesBody { display: grid; gap: var(--space-3); padding-top: var(--space-3); }

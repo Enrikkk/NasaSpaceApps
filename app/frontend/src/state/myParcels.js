@@ -16,14 +16,34 @@ export const refOf = (recinto) => RECINTO_KEYS.map((k) => recinto?.[k]).filter(i
 /** Only recintos that SIGPAC identifies can be saved (a click outside any recinto has no reference). */
 export const isRegistrable = (recinto) => REQUIRED.every((k) => isInt(recinto?.[k]))
 
-/** The record that is stored: reference, its parts, where it is and (if known) its size. No names, no personal data. */
-export function makeParcel({ recinto, lat, lon, ha }, now = new Date()) {
+export const MAX_NAME = 40
+
+/** A name the farmer typed: spaces collapsed, at most MAX_NAME characters; null if nothing is left. */
+export function cleanName(raw) {
+  if (typeof raw !== 'string') return null
+  const t = raw.replace(/\s+/g, ' ').trim().slice(0, MAX_NAME).trim()
+  return t || null
+}
+
+/** "Parcela 1", "Parcela 2"…: the smallest number not used yet, so a removed name is reused and no two defaults clash. */
+export function defaultName(list) {
+  const used = new Set(list.map((p) => p.nombre))
+  let n = 1
+  while (used.has(`Parcela ${n}`)) n += 1
+  return `Parcela ${n}`
+}
+
+/** The record that is stored: reference, its parts, where it is, its size and the name the farmer gave it (editable).
+ *  No personal data. */
+export function makeParcel({ recinto, lat, lon, ha, nombre }, now = new Date()) {
   if (!isRegistrable(recinto) || !isCoord(lat) || !isCoord(lon)) return null
   const out = { ref: refOf(recinto) }
   for (const k of RECINTO_KEYS) if (isInt(recinto[k])) out[k] = recinto[k]
   out.lat = lat
   out.lon = lon
   if (typeof ha === 'number' && Number.isFinite(ha) && ha > 0) out.ha = ha
+  const name = cleanName(nombre)
+  if (name) out.nombre = name
   out.fecha = now.toISOString().slice(0, 10)
   return out
 }
@@ -36,10 +56,11 @@ export function parseStored(raw) {
   const seen = new Set()
   const out = []
   for (const it of data) {
-    const p = it && typeof it === 'object' ? makeParcel({ recinto: it, lat: it.lat, lon: it.lon, ha: it.ha }, new Date(0)) : null
+    const p = it && typeof it === 'object' ? makeParcel({ recinto: it, lat: it.lat, lon: it.lon, ha: it.ha, nombre: it.nombre }, new Date(0)) : null
     if (!p || seen.has(p.ref)) continue
     seen.add(p.ref)
     p.fecha = typeof it.fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(it.fecha) ? it.fecha : p.fecha
+    if (!p.nombre) p.nombre = defaultName(out)   // entries saved before names existed
     out.push(p)
     if (out.length >= MAX_PARCELS) break
   }
@@ -54,6 +75,12 @@ export function addTo(list, parcel) {
   return { list: [...list, parcel], status: 'added' }
 }
 export const removeFrom = (list, ref) => list.filter((p) => p.ref !== ref)
+/** Renames one parcel; an empty or invalid name leaves the list as it was. */
+export function renameIn(list, ref, nombre) {
+  const name = cleanName(nombre)
+  if (!name || !list.some((p) => p.ref === ref)) return list
+  return list.map((p) => (p.ref === ref ? { ...p, nombre: name } : p))
+}
 export const hasRef = (list, ref) => list.some((p) => p.ref === ref)
 
 /** A filter that matches nothing. Written with a `literal` so MapLibre reads it as an EXPRESSION (a bare ['==', 1, 0]
@@ -101,9 +128,18 @@ export function createStore(getStorage) {
     /** Re-read after another tab changed the list. */
     reload() { snap = load(); emit() },
     add(input) {
-      const { list, status } = addTo(snap.list, makeParcel(input))
+      const parcel = makeParcel(input)
+      if (parcel && !parcel.nombre) parcel.nombre = defaultName(snap.list)
+      const { list, status } = addTo(snap.list, parcel)
       if (status === 'added') persist(list)
       return status
+    },
+    /** Gives a saved parcel a new name. Returns false when nothing changed. */
+    rename(ref, nombre) {
+      const list = renameIn(snap.list, ref, nombre)
+      if (list === snap.list) return false
+      persist(list)
+      return true
     },
     remove(ref) {
       if (hasRef(snap.list, ref)) persist(removeFrom(snap.list, ref))

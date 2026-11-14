@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import GlyphIcon from './icons.jsx'
-import { Summary, MoreAboutParcel, Rotations, Footer } from './sections.jsx'
+import EditableName from '../ui/EditableName.jsx'
+import { Notice, MoreAboutParcel, Rotations, Footer } from './sections.jsx'
 import { useAnalysis } from './hooks.js'
-import { refFromRecinto, isNum } from './helpers.js'
+import { refFromRecinto, isNum, factsLine } from './helpers.js'
 import { useAppState } from '../../state/AppState.jsx'
 import { useMyParcels } from '../../state/useMyParcels.js'
-import { isRegistrable, refOf, hasRef, MAX_PARCELS } from '../../state/myParcels.js'
+import { isRegistrable, refOf, MAX_PARCELS } from '../../state/myParcels.js'
 import styles from './ParcelPanel.module.css'
 
 const SLOW_AFTER_MS = 8000
 
 function errorText(err) {
-  if (err?.timeout) return 'El cálculo está tardando demasiado.'
+  if (err?.timeout) return 'Está tardando demasiado.'
   if (err?.status === 422) return 'No hemos podido leer esta parcela.'
-  if (err?.status >= 500) return 'El servidor ha tenido un problema al calcular esta parcela.'
+  if (err?.status >= 500) return 'El servidor ha fallado.'
   return 'No hemos podido conectar con el servidor.'
 }
 
@@ -26,40 +27,43 @@ function Loading() {
   return (
     <div className={styles.loading} role="status">
       <span className={styles.spinner} aria-hidden="true" />
-      <div>
-        <p>Calculando las rotaciones para esta parcela…</p>
-        {slow && <p className={styles.fine}>Si es la primera vez que miramos esta zona puede tardar hasta un minuto.</p>}
-      </div>
+      <span>Calculando{slow ? ' · la primera vez tarda un poco más' : ''}</span>
     </div>
   )
 }
 
-/** Save / remove this recinto in "Tus parcelas" (kept only in this browser; outlined in red on the map). */
-function SaveButton({ parcel, ha }) {
-  const { list, guarda, add, remove } = useMyParcels()
+/** Save / remove this recinto in "Tus parcelas" (only in this browser; outlined and shaded in red on the map). */
+function SaveButton({ parcel, saved, ha }) {
+  const { guarda, add, remove } = useMyParcels()
   const [msg, setMsg] = useState('')
   if (!isRegistrable(parcel.recinto)) return null
   const ref = refOf(parcel.recinto)
-  const saved = hasRef(list, ref)
   const toggle = () => {
     if (saved) { remove(ref); setMsg(''); return }
     const status = add({ recinto: parcel.recinto, lat: parcel.lat, lon: parcel.lon, ha })
-    setMsg(status === 'full' ? `Ya tienes ${MAX_PARCELS} parcelas: quita alguna para añadir otra.` : '')
+    setMsg(status === 'full' ? `Máximo ${MAX_PARCELS} parcelas` : '')
   }
   return (
-    <div className={styles.saveRow}>
-      <button type="button" className={`${styles.save} ${saved ? styles.saved : ''}`} aria-pressed={saved} onClick={toggle}>
-        <GlyphIcon name={saved ? 'ok' : 'star'} size={16} />
-        {saved ? 'En tus parcelas · Quitar' : 'Añadir a mis parcelas'}
+    <>
+      <button
+        type="button"
+        className={`${styles.save} ${saved ? styles.saved : ''}`}
+        aria-pressed={saved}
+        title={saved ? 'Quitar de Tus parcelas' : 'Añadir a Tus parcelas (se guarda solo en este navegador)'}
+        onClick={toggle}
+      >
+        <GlyphIcon name="bookmark" size={16} filled={saved} />
+        {saved ? 'Guardada' : 'Guardar'}
       </button>
-      {msg && <p className={styles.fine} role="status">{msg}</p>}
-      {saved && !guarda && <p className={styles.fine} role="status">Tu navegador no deja guardar: se perderá al recargar.</p>}
-    </div>
+      {msg && <span className={styles.fine} role="status">{msg}</span>}
+      {saved && !guarda && <span className={styles.fine} role="status">No se puede guardar en este navegador</span>}
+    </>
   )
 }
 
 function Body({ parcel, onClose }) {
   const { priorities } = useAppState()
+  const { list, rename } = useMyParcels()
   const { quick, full, error, loading, retry } = useAnalysis(parcel)
   const scrollRef = useRef(null)
   const reference = refFromRecinto(parcel.recinto)
@@ -68,6 +72,10 @@ function Body({ parcel, onClose }) {
   const quickOk = Boolean(quick?.parcela && !quick.parcela.sin_cobertura
     && (isNum(quick.parcela.ha) || quick.parcela.referencia))
   const coverage = data?._meta?.cobertura
+  const orientativo = Boolean(coverage?.nivel && coverage.nivel !== 'completo')
+  const ref = isRegistrable(parcel.recinto) ? refOf(parcel.recinto) : null
+  const saved = ref ? list.find((p) => p.ref === ref) : null
+  const facts = factsLine(parcela, parcel)
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: 0 }) }, [parcel])
 
@@ -79,38 +87,36 @@ function Body({ parcel, onClose }) {
     >
       <header className={styles.top}>
         <div className={styles.titles}>
-          <p className={styles.eyebrow}>Recinto SIGPAC</p>
-          <h2 className={styles.ref}>{reference || 'Sin referencia SIGPAC'}</h2>
-          <SaveButton parcel={parcel} ha={isNum(parcela?.ha) ? parcela.ha : undefined} />
+          {saved
+            ? <EditableName as="h2" className={styles.ref} value={saved.nombre} onSave={(n) => rename(saved.ref, n)} />
+            : <h2 className={styles.ref}>{reference || 'Sin referencia SIGPAC'}</h2>}
+          <p className={styles.facts}>{[saved ? reference : null, facts].filter(Boolean).join(' · ') || ' '}</p>
         </div>
-        <button type="button" className={styles.close} onClick={onClose} aria-label="Cerrar la ficha de la parcela">
-          <GlyphIcon name="close" />
-        </button>
+        <div className={styles.actions}>
+          <SaveButton parcel={parcel} saved={Boolean(saved)} ha={isNum(parcela?.ha) ? parcela.ha : undefined} />
+          <button type="button" className={styles.close} onClick={onClose} aria-label="Cerrar la ficha de la parcela">
+            <GlyphIcon name="close" />
+          </button>
+        </div>
       </header>
 
       <div className={styles.scroll} ref={scrollRef}>
-        <Summary parcela={parcela} loading={loading && !error} />
+        <Notice parcela={parcela} parcel={parcel} />
 
         {loading && !error && <Loading />}
 
         {error && (
           <div className={styles.error} role="alert">
-            <p>{errorText(error)} {quickOk ? 'Los datos de la parcela de arriba sí los tenemos; las rotaciones no.' : 'No hemos podido leer ni la parcela ni las rotaciones.'}</p>
+            <p>{errorText(error)}{quickOk ? ' Las rotaciones no se han podido calcular.' : ''}</p>
             <button type="button" className={styles.retry} onClick={retry}>
               <GlyphIcon name="retry" size={16} />Reintentar
             </button>
           </div>
         )}
 
-        {data && coverage && coverage.nivel && coverage.nivel !== 'completo' && (
-          <p className={styles.coverage}>
-            <b>Resultado orientativo.</b> {coverage.ambito || 'Cobertura básica: sin datos de parcela SIGPAC.'}
-          </p>
-        )}
-
         {data && (
           <>
-            <Rotations key={data._meta?.consulta_id ?? 'x'} data={data} priorities={priorities} />
+            <Rotations key={data._meta?.consulta_id ?? 'x'} data={data} priorities={priorities} orientativo={orientativo} />
             <MoreAboutParcel data={data} />
           </>
         )}
