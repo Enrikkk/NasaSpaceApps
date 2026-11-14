@@ -18,7 +18,7 @@ import pathlib
 import statistics
 import sys
 
-from .core import data, market as mk_mod, stats
+from .core import data, market as mk_mod, stage_risk, stats
 from .decision import rotations as rt, rules, strategies as st
 
 DATA = pathlib.Path(__file__).resolve().parents[2] / "data"
@@ -81,11 +81,12 @@ def stage_risk_texts(path, static):
         for e in blk["etapas"]:
             if e["nivel"] in ("medio", "alto"):
                 out.append(f"{blk['producto']}, {e['organo']} ({e['desde']} a {e['hasta']}): {e['anios_con_episodio']} de {e['n']} años con "
-                           f"{e['condicion']} → riesgo {e['nivel']} ({e['gravedad']}; {e['fuente']}, confianza {e['conf']})")
+                           f"exposición ({e['condicion']}; proxy de estación, no daño observado) → riesgo {e['nivel']} "
+                           f"({e['gravedad']}; {e['fuente']}, confianza {e['conf']})")
         sin = [e for e in blk["etapas"] if e["nivel"] == "sin evidencia"]
         if sin:
-            out.append(f"{blk['producto']}: sin evidencia térmica documentada en {len(sin)} etapa(s) ({', '.join(e['etapas_fao'][0] for e in sin)}): "
-                       "no es lo mismo que riesgo bajo")
+            out.append(f"{blk['producto']}: sin evidencia documentada en " + "; ".join(
+                f"{e['etapas_fao'][0]} ({e['peligro']})" for e in sin) + ": no es lo mismo que riesgo bajo")
     return out
 
 
@@ -302,6 +303,9 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     used = sorted({e["fuente_id"] for r in rots for e in r["evidencia"]} | {"SIAM-TP91", "EUR-HICP"})
     out["fuentes"] = [{"id": i, "nombre": SOURCES[i]["dataset"], "url": SOURCES[i]["url"], "licencia": SOURCES[i]["licence"]}
                       for i in used if i in SOURCES]
+    thermal = sorted({e["fuente"] for r in rots for b in r["riesgo_etapas"] for e in b["etapas"] if e["fuente"]})
+    out["fuentes"] += [{"id": i, "nombre": stage_risk.SOURCES[i][0], "url": stage_risk.SOURCES[i][1],
+                        "licencia": stage_risk.SOURCES[i][2]} for i in thermal]
     for r in rots:
         r["_status"] = "real"
     return out

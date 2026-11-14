@@ -261,6 +261,7 @@
        "organo": "germinación y plántula",
        "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -0,5 °C",
        "etapas_fao": [
         "ini"
@@ -286,6 +287,7 @@
        "organo": "floración y fructificación",
        "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -1,0 °C",
        "etapas_fao": [
         "dev",
@@ -307,10 +309,76 @@
        "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
       },
       {
-       "id": "melon_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "melon_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-01",
+       "hasta": "05-25",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_dev_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "05-26",
+       "hasta": "06-29",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_mid_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "06-30",
+       "hasta": "08-08",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -325,7 +393,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-09",
+       "hasta": "08-28",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     },
@@ -340,6 +431,7 @@
        "organo": "meristemo",
        "efecto": "aviso: el meristemo cambia (compatible con inicio de espigado); sin % de pérdida",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "máxima ≥ 35,0 °C durante 3 días seguidos",
        "etapas_fao": [
         "dev",
@@ -362,10 +454,10 @@
        "transferencia": "cámara 35/25 °C 72 h, variedad Detenicka atrakce; no validado en iceberg de Murcia"
       },
       {
-       "id": "lechuga_ini_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "lechuga_ini_frio_sin_evidencia",
+       "peligro": "frío",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "ini"
@@ -380,7 +472,96 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "lechuga_ini_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "11-01",
+       "hasta": "11-30",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "lechuga_dev_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "12-01",
+       "hasta": "01-09",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "lechuga_mid_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "01-10",
+       "hasta": "02-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "lechuga_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "02-04",
+       "hasta": "02-13",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     }
@@ -416,8 +597,8 @@
     "semáforo legal provisional: tabla T-019 pendiente y Zona 1/2 de la parcela sin confirmar"
    ],
    "riesgos": [
-    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
-    "Lechuga iceberg: sin evidencia térmica documentada en 1 etapa(s) (ini): no es lo mismo que riesgo bajo",
+    "Melón piel de sapo: sin evidencia documentada en ini (calor); dev (calor); mid (calor); late (frío); late (calor): no es lo mismo que riesgo bajo",
+    "Lechuga iceberg: sin evidencia documentada en ini (frío); ini (calor); dev (frío); mid (frío); late (frío): no es lo mismo que riesgo bajo",
     "Lechuga iceberg: SIN precio de referencia abierto (el agricultor debe introducir el suyo)",
     "Melón piel de sapo: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -1006,6 +1187,7 @@
        "organo": "germinación y plántula",
        "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -0,5 °C",
        "etapas_fao": [
         "ini"
@@ -1031,6 +1213,7 @@
        "organo": "floración y fructificación",
        "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -1,0 °C",
        "etapas_fao": [
         "dev",
@@ -1052,10 +1235,76 @@
        "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
       },
       {
-       "id": "melon_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "melon_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-01",
+       "hasta": "05-25",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_dev_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "05-26",
+       "hasta": "06-29",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_mid_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "06-30",
+       "hasta": "08-08",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -1070,7 +1319,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-09",
+       "hasta": "08-28",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     },
@@ -1085,6 +1357,7 @@
        "organo": "meristemo en iniciación floral",
        "efecto": "cabezas deformes",
        "gravedad": "daño",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "máxima > 35,0 °C durante 5 días seguidos",
        "etapas_fao": [
         "mid"
@@ -1099,16 +1372,16 @@
         0.168
        ],
        "nivel": "bajo",
-       "fuente": "BJORKMAN-PEARSON-1998",
+       "fuente": "UMASS-EXT-BROCOLI-CALOR",
        "conf": "M",
        "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
-       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+       "transferencia": "UMass resume un ensayo Cornell con la variedad Galaxy (> 35 °C más de 4 días); el original (Björkman y Pearson 1998) usa 35 °C diurnos durante una semana. Tmax consecutivos de estación son un proxy, no la misma dosis; sin % de cabezas dañadas"
       },
       {
-       "id": "brocoli_ini_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_frio_sin_evidencia",
+       "peligro": "frío",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "ini"
@@ -1123,13 +1396,36 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_dev_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-15",
+       "hasta": "10-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_dev_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "dev"
@@ -1144,13 +1440,58 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_dev_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-20",
+       "hasta": "12-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_mid_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "12-04",
+       "hasta": "01-12",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -1165,7 +1506,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "01-13",
+       "hasta": "01-27",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     }
@@ -1203,8 +1567,8 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2014, 2011, 2021",
-    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
-    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
+    "Melón piel de sapo: sin evidencia documentada en ini (calor); dev (calor); mid (calor); late (frío); late (calor): no es lo mismo que riesgo bajo",
+    "Brócoli: sin evidencia documentada en ini (frío); ini (calor); dev (frío); dev (calor); mid (frío); late (frío); late (calor): no es lo mismo que riesgo bajo",
     "Brócoli: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "Melón piel de sapo: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -3188,6 +3552,7 @@
        "organo": "meristemo en iniciación floral",
        "efecto": "cabezas deformes",
        "gravedad": "daño",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "máxima > 35,0 °C durante 5 días seguidos",
        "etapas_fao": [
         "mid"
@@ -3202,16 +3567,16 @@
         0.168
        ],
        "nivel": "bajo",
-       "fuente": "BJORKMAN-PEARSON-1998",
+       "fuente": "UMASS-EXT-BROCOLI-CALOR",
        "conf": "M",
        "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
-       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+       "transferencia": "UMass resume un ensayo Cornell con la variedad Galaxy (> 35 °C más de 4 días); el original (Björkman y Pearson 1998) usa 35 °C diurnos durante una semana. Tmax consecutivos de estación son un proxy, no la misma dosis; sin % de cabezas dañadas"
       },
       {
-       "id": "brocoli_ini_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_frio_sin_evidencia",
+       "peligro": "frío",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "ini"
@@ -3226,13 +3591,36 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_dev_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-15",
+       "hasta": "10-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_dev_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "dev"
@@ -3247,13 +3635,58 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_dev_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-20",
+       "hasta": "12-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_mid_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "12-04",
+       "hasta": "01-12",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -3268,7 +3701,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "01-13",
+       "hasta": "01-27",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     },
@@ -3283,6 +3739,7 @@
        "organo": "germinación y plántula",
        "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -0,5 °C",
        "etapas_fao": [
         "ini"
@@ -3308,6 +3765,7 @@
        "organo": "floración y fructificación",
        "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -1,0 °C",
        "etapas_fao": [
         "dev",
@@ -3329,10 +3787,76 @@
        "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
       },
       {
-       "id": "melon_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "melon_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-15",
+       "hasta": "06-08",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_dev_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "06-09",
+       "hasta": "07-13",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_mid_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "07-14",
+       "hasta": "08-22",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -3347,7 +3871,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-23",
+       "hasta": "09-11",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     }
@@ -3385,8 +3932,8 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2010, 2013, 2014",
-    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
-    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
+    "Brócoli: sin evidencia documentada en ini (frío); ini (calor); dev (frío); dev (calor); mid (frío); late (frío); late (calor): no es lo mismo que riesgo bajo",
+    "Melón piel de sapo: sin evidencia documentada en ini (calor); dev (calor); mid (calor); late (frío); late (calor): no es lo mismo que riesgo bajo",
     "Brócoli: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "Melón piel de sapo: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -5398,6 +5945,7 @@
        "organo": "germinación y plántula",
        "efecto": "aviso: temperatura crítica de germinación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -0,5 °C",
        "etapas_fao": [
         "ini"
@@ -5423,6 +5971,7 @@
        "organo": "floración y fructificación",
        "efecto": "aviso: temperatura crítica en floración y fructificación (FAO, sin duración)",
        "gravedad": "aviso",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "mínima ≤ -1,0 °C",
        "etapas_fao": [
         "dev",
@@ -5444,10 +5993,76 @@
        "transferencia": "tabla de rangos críticos de síntesis FAO, sin duración ni %"
       },
       {
-       "id": "melon_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "melon_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "05-01",
+       "hasta": "05-25",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_dev_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "05-26",
+       "hasta": "06-29",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_mid_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "06-30",
+       "hasta": "08-08",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -5462,7 +6077,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "melon_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "08-09",
+       "hasta": "08-28",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     },
@@ -5477,6 +6115,7 @@
        "organo": "meristemo en iniciación floral",
        "efecto": "cabezas deformes",
        "gravedad": "daño",
+       "lectura": "exposición: temperatura diaria de la estación como proxy; no es daño observado ese año ni pérdida de cosecha",
        "condicion": "máxima > 35,0 °C durante 5 días seguidos",
        "etapas_fao": [
         "mid"
@@ -5491,16 +6130,16 @@
         0.168
        ],
        "nivel": "bajo",
-       "fuente": "BJORKMAN-PEARSON-1998",
+       "fuente": "UMASS-EXT-BROCOLI-CALOR",
        "conf": "M",
        "ventana_nota": "supuesto: iniciación floral ≈ 20 primeros días de la etapa media FAO",
-       "transferencia": "ensayo con la variedad Galaxy; sin % de cabezas dañadas"
+       "transferencia": "UMass resume un ensayo Cornell con la variedad Galaxy (> 35 °C más de 4 días); el original (Björkman y Pearson 1998) usa 35 °C diurnos durante una semana. Tmax consecutivos de estación son un proxy, no la misma dosis; sin % de cabezas dañadas"
       },
       {
-       "id": "brocoli_ini_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_frio_sin_evidencia",
+       "peligro": "frío",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "ini"
@@ -5515,13 +6154,36 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_dev_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_ini_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "ini"
+       ],
+       "desde": "09-15",
+       "hasta": "10-19",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_dev_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "dev"
@@ -5536,13 +6198,58 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
       },
       {
-       "id": "brocoli_late_sin_evidencia",
-       "peligro": "frío y calor",
+       "id": "brocoli_dev_calor_sin_evidencia",
+       "peligro": "calor",
        "organo": null,
-       "efecto": "sin evidencia documentada de daño térmico en esta etapa",
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "dev"
+       ],
+       "desde": "10-20",
+       "hasta": "12-03",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_mid_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "mid"
+       ],
+       "desde": "12-04",
+       "hasta": "01-12",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_frio_sin_evidencia",
+       "peligro": "frío",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por frío en esta etapa",
        "condicion": null,
        "etapas_fao": [
         "late"
@@ -5557,7 +6264,30 @@
        "fuente": null,
        "conf": null,
        "ventana_nota": null,
-       "transferencia": null
+       "transferencia": null,
+       "lectura": null
+      },
+      {
+       "id": "brocoli_late_calor_sin_evidencia",
+       "peligro": "calor",
+       "organo": null,
+       "efecto": "sin evidencia documentada de daño por calor en esta etapa",
+       "condicion": null,
+       "etapas_fao": [
+        "late"
+       ],
+       "desde": "01-13",
+       "hasta": "01-27",
+       "anios_con_episodio": null,
+       "n": 19,
+       "frecuencia": null,
+       "intervalo_95": null,
+       "nivel": "sin evidencia",
+       "fuente": null,
+       "conf": null,
+       "ventana_nota": null,
+       "transferencia": null,
+       "lectura": null
       }
      ]
     }
@@ -5595,8 +6325,8 @@
    ],
    "riesgos": [
     "peores años del histórico para el primer año del plan: 2014, 2011, 2021",
-    "Melón piel de sapo: sin evidencia térmica documentada en 1 etapa(s) (late): no es lo mismo que riesgo bajo",
-    "Brócoli: sin evidencia térmica documentada en 3 etapa(s) (ini, dev, late): no es lo mismo que riesgo bajo",
+    "Melón piel de sapo: sin evidencia documentada en ini (calor); dev (calor); mid (calor); late (frío); late (calor): no es lo mismo que riesgo bajo",
+    "Brócoli: sin evidencia documentada en ini (frío); ini (calor); dev (frío); dev (calor); mid (frío); late (frío); late (calor): no es lo mismo que riesgo bajo",
     "Brócoli: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "Melón piel de sapo: precio de referencia = Eurostat, media nacional anual (nivel 3)",
     "clima: la rotación se evalúa con 19 años de SIAM, no con un pronóstico"
@@ -7515,6 +8245,24 @@
    "nombre": "SIAM-IMIDA Informe Agrometeorologico Personalizado (diario)",
    "url": "http://siam.imida.es/apex/f?p=101:46",
    "licencia": "SIAM-IMIDA, CARM: cite source (no explicit open licence found)"
+  },
+  {
+   "id": "FAO-FROST-PROTECTION-T4.5",
+   "nombre": "FAO, Frost Protection vol. 1, cap. 4, tabla 4.5",
+   "url": "https://www.fao.org/4/y7223e/y7223e0a.htm",
+   "licencia": "derechos FAO por comprobar"
+  },
+  {
+   "id": "LEE-2023",
+   "nombre": "Lee et al. 2023, BMC Plant Biology 23:106 (lechuga, calor)",
+   "url": "https://doi.org/10.1186/s12870-023-04101-5",
+   "licencia": "CC BY 4.0"
+  },
+  {
+   "id": "UMASS-EXT-BROCOLI-CALOR",
+   "nombre": "UMass Extension, broccoli summer heat",
+   "url": "https://www.umass.edu/agriculture-food-environment/ht/vegetable/fact-sheets/broccoli-summer-heat",
+   "licencia": "sin licencia abierta identificada: solo síntesis"
   }
  ]
 }

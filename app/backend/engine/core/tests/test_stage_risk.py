@@ -42,9 +42,16 @@ def test_calendar_window_with_wrap_and_levels():
 def test_stages_without_documented_alert_say_no_evidence_not_low_risk():
     r = sr.assess("brocoli", (35, 45, 40, 15), 9, 1, climate(2))
     sin = [e for e in r["etapas"] if e["nivel"] == "sin evidencia"]
-    assert {e["etapas_fao"][0] for e in sin} == {"ini", "dev", "late"} and all(e["frecuencia"] is None for e in sin)
+    got = {(e["etapas_fao"][0], e["peligro"]) for e in sin}
+    # heat has an alert only in 'mid'; cold has no alert anywhere: coverage is per (stage, hazard), not per stage
+    assert got == {(s, "frío") for s in ("ini", "dev", "mid", "late")} | {(s, "calor") for s in ("ini", "dev", "late")}
+    assert all(e["frecuencia"] is None for e in sin)
     assert all(e["nivel"] != "bajo" for e in sin)
 
 
 def test_every_alert_has_source_confidence_and_transfer_note():
     assert all(a["fuente"] and a["conf"] and a["transfer"] and a["ventana_nota"] for a in sr.ALERTS)
+
+
+def test_every_alert_source_has_a_citation_record():
+    assert {a["fuente"] for a in sr.ALERTS} <= set(sr.SOURCES)
