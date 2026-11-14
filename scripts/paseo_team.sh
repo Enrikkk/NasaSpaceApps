@@ -84,7 +84,7 @@ End with exactly one line: RESULT: done|blocked | <1-2 line result, how to run i
   orchestrator)
     prov="${1:-claude}"
     [ -f "$DIR/bus/tokens/orchestrator.token" ] || { echo "first: python3 scripts/team_bus.py token orchestrator"; exit 1; }
-    out="$(paseo run --no-wait --quiet --title orchestrator --provider "$prov" --cwd "$ROOT" $(bus_env orchestrator) \
+    out="$(paseo run --no-wait --quiet --title orchestrator --provider "$prov" --cwd "${TEAM_BUS_REPO:-$ROOT}" $(bus_env orchestrator) \
       "You are the team ORCHESTRATOR on the hub. Read coordination/ORCHESTRATOR.md and follow it. Start with team_status." 2>/dev/null)"
     id="$(printf '%s\n' "$out" | grep -E -o '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' | tail -1)"
     [ -n "$id" ] || { echo "could not start the orchestrator:"; printf '%s\n' "$out"; exit 1; }
