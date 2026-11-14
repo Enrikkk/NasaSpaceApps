@@ -27,9 +27,10 @@
   --warn: #E0B04A;
   --danger: #E07A5F;
 
-  /* Display type is a system stack. Brunson stays out of the build until there is a licence. */
-  --font-display: "Arial Narrow", "Impact", system-ui, sans-serif;
-  --font-display-rough: "Arial Narrow", "Impact", system-ui, sans-serif;
+  /* Display type is a system stack. Brunson is NOT bundled (no licence yet): it is used only where it is installed.
+     Fallback Impact (all caps, on almost every device), then Anton / Arial Narrow. */
+  --font-display: "Brunson", Impact, "Anton", "Arial Narrow", sans-serif;
+  --font-display-rough: "Brunson", Impact, "Anton", "Arial Narrow", sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px;

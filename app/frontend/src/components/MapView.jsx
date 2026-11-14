@@ -168,6 +168,8 @@ export default function MapView() {
       ...homeCamera(),
       maxZoom: 18,
       scrollZoom: false, // home: wheel enters the map; map: enabled after the first-scroll jump
+      dragPan: false, // home: the globe does not move; any touch or press opens the map (enabled on the map screen)
+      touchZoomRotate: false, // idem (pinch)
       attributionControl: false,
       dragRotate: false,
       pitchWithRotate: false,
@@ -196,6 +198,10 @@ export default function MapView() {
     map.getCanvasContainer().addEventListener('wheel', onWheel, { passive: false })
 
     map.on('click', () => { if (screenRef.current === 'home') setScreen('map') })
+    // On the home globe ANY interaction (tap, press, swipe, pinch) opens the map; the globe itself never pans or scrolls.
+    const openFromHome = () => { if (screenRef.current === 'home') setScreen('map') }
+    map.getCanvasContainer().addEventListener('touchstart', openFromHome, { passive: true })
+    map.getCanvasContainer().addEventListener('mousedown', openFromHome)
 
     // Hover highlight + card on SIGPAC parcels.
     let hoveredId = null
@@ -248,6 +254,8 @@ export default function MapView() {
     if (!map) return
     map.stop()
     if (screen === 'map') {
+      map.dragPan.enable()
+      map.touchZoomRotate.enable()
       enteredAt.current = performance.now()
       map.getCanvas().style.cursor = ''
       // Deep zoom from the globe: onto the farmer's parcel, or into Campo de Cartagena. Either way the wheel then
@@ -266,6 +274,8 @@ export default function MapView() {
       setRegionId('espana')
       setEntry('cartagena')
       map.scrollZoom.disable()
+      map.dragPan.disable()
+      map.touchZoomRotate.disable()
       map.setMaxBounds(null)
       map.setMinZoom(0)
       const same = savedHome?.size === `${window.innerWidth}x${window.innerHeight}`
