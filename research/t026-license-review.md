@@ -38,3 +38,12 @@ no citation was marked verified from an inaccessible page alone.
 Existing FEGA declared-crop/access-method, CREM, OSM and ESA/HRL rows are outside
 this handoff's enumerated checks and remain explicit verify items. D-010 and
 CARM permission status are preserved. No contact emails were sent.
+
+## Producer clarification #211
+
+Gonzalo confirms no upstream IMERG collection/version is returned or retained;
+this cannot be reconstructed from the saved cache. Service citation is POWER
+Daily API v2.10.3, downloaded 2026-11-14T14:36Z; IMERG upstream remains partial.
+Gonzalo observed SoilGrids responding today (34s direct, 27s via API), with seeded
+demo cache and cargando fallback. This producer observation is not a receiver
+measurement and does not cancel the official no-uptime-guarantee notice.
