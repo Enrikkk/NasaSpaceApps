@@ -40,6 +40,7 @@ En el JSON: `exito_pct.valor` y la horquilla salen de eso; añade `n_anios_histo
 **B2. El índice i de `escenarios` debe ser la MISMA muestra en todas las rotaciones** (mismo año de clima, de precio y mismo factor de coste), porque «B gana al X %» se calcula comparando escenario a escenario.
 Hoy solo se comparten los números aleatorios `u` y el multiplicador de coste; el año real lo elige cada rotación de su propia lista (`pools[t][int(u*len)]`), y esas listas difieren, así que i apunta a años distintos.
 Nuevo: para cada variante (base, lluvia_-30, …, 2050), calcula el conjunto común C = intersección de los años con dinero de las rotaciones evaluables de esa variante; el escenario i usa en el año-plan t el año `C[int(u_t*len(C))]` en **todas** las rotaciones. Requiere calcular C antes de simular: reestructura `build()` en consecuencia. Las rotaciones no evaluables siguen con `escenarios: null`. Reporta |C| por variante (si C se encoge mucho, dilo).
+Al terminar, el build debe exportar `escenarios_meta.alineados = true` (campo nuevo del contrato v1.1 de Gonzalo, en main 18e8275; `false` hasta que esto esté arreglado).
 Test nuevo obligatorio: en el JSON construido, `escenarios_meta.anio_clima[i]` y `factor_coste[i]` son idénticos para todas las rotaciones evaluables, para todo i.
 
 Informe obligatorio de este paso: tabla antes/después de `exito_pct.valor`, horquilla y P50 de margen para S0, S1, S2, S3 en `torre-pacheco.json`, y el |C| por variante. Commit «B: éxito sobre años históricos + escenarios emparejados».
