@@ -1,0 +1,215 @@
+{
+  "dataset": "MAPA Indices y Precios Percibidos Agrarios, PrePer3 / Anual",
+  "downloaded_at": "2026-11-14",
+  "years": [
+    2005,
+    2024
+  ],
+  "rows": 60,
+  "selection": "Latest workbook modification date wins for overlapping crop/year; never average overlapping editions.",
+  "workbooks": [
+    {
+      "file": "2005.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosenero2005-diciembre2014.xlsx",
+      "source_id": "MAPA-PER-2005",
+      "sha256": "f00bb1f2c9af497c20348ddeab38e4016f1b9da2d266c9fe8d0f5917761c116f",
+      "workbook_dates": {
+        "lastPrinted": "2015-04-30T09:19:17Z",
+        "created": "2002-03-04T09:57:10Z",
+        "modified": "2017-07-17T14:07:18Z"
+      },
+      "sheet": "PrePer3",
+      "source_notes": [
+        "Nota: precio a granel, sobre almacén comprador, excepto ajo seco que es salida explotación",
+        "Nota 2: La matriz de ponderación provincial para el cálculo del precio nacionales la correspondiente a la del cálculo de los índices de precios 2005=100"
+      ]
+    },
+    {
+      "file": "2015.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosagrariosenero2015-diciembre2023.xlsx",
+      "source_id": "MAPA-PER-2015",
+      "sha256": "c5a6df1ac7354f79069645277025fc355777596c3ece77df685f413294ad38c4",
+      "workbook_dates": {
+        "lastPrinted": "2021-05-06T10:10:47Z",
+        "created": "2002-03-04T09:57:10Z",
+        "modified": "2024-05-17T11:46:47Z"
+      },
+      "sheet": "PrePer3",
+      "source_notes": [
+        "Nota 1: precio a granel, sobre almacén comprador, excepto ajo seco que es salida explotación",
+        "Nota 2: Los datos mensuales de XXXX han de considerarse provisionales",
+        "Nota 2: La matriz de ponderación provincial para el cálculo del precio nacional se ha actualizado a la del cálculo de los índices de precios 2015=100"
+      ]
+    },
+    {
+      "file": "2020.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosagrariosenero2020-diciembre2022.xlsx",
+      "source_id": "MAPA-PER-2020",
+      "sha256": "3eb04acaf77403d500a9ece88e6c14e0f9b3d526e10d7be853f71d3339deed75",
+      "workbook_dates": {
+        "lastPrinted": "2020-01-27T11:45:18Z",
+        "created": "2002-03-04T09:57:10Z",
+        "modified": "2026-04-28T07:15:34Z"
+      },
+      "sheet": "PrePer3",
+      "source_notes": [
+        "Nota 1: precio a granel, sobre almacén comprador, excepto ajo seco que es salida explotación",
+        "Nota 2: Los datos mensuales de XXXX han de considerarse provisionales",
+        "Nota 2: La matriz de ponderación provincial para el cálculo del precio nacional se ha actualizado a la del cálculo de los índices de precios 2020=100"
+      ]
+    },
+    {
+      "file": "2024.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices-y-precios-agrarios/indices-y-precios-percibidos-agrarios/indices-y-precios-percibidos-agrarios--enero-2023-septiembre-2025-.xlsx",
+      "source_id": "MAPA-PER-2024",
+      "sha256": "848b647bae104876f53880d6f4822c27c8befbd3511f029cdc47662a725a8331",
+      "workbook_dates": {
+        "lastPrinted": "2024-09-02T08:07:47Z",
+        "created": "2002-03-04T09:57:10Z",
+        "modified": "2026-10-27T13:00:43Z"
+      },
+      "sheet": "PrePer3",
+      "source_notes": [
+        "Nota 1: precio a granel, sobre almacén comprador, excepto ajo seco que es salida explotación",
+        "Nota 2: Los datos mensuales de XXXX han de considerarse provisionales",
+        "Nota 2: La matriz de ponderación provincial para el cálculo del precio nacional se ha actualizado a la del cálculo de los índices de precios 2020=100",
+        "Nota 3: Los datos del último año han de considerarse provisionales."
+      ]
+    }
+  ],
+  "overlaps": [
+    {
+      "crop_id": "lechuga",
+      "year": 2020,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "24.73",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "25.17"
+    },
+    {
+      "crop_id": "lechuga",
+      "year": 2021,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "27.49",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "27.27"
+    },
+    {
+      "crop_id": "lechuga",
+      "year": 2022,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "27.41",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "27.85"
+    },
+    {
+      "crop_id": "lechuga",
+      "year": 2023,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "34.22",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "34.49"
+    },
+    {
+      "crop_id": "alcachofa",
+      "year": 2020,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "68.70",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "68.51"
+    },
+    {
+      "crop_id": "alcachofa",
+      "year": 2021,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "76.61",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "78.62"
+    },
+    {
+      "crop_id": "alcachofa",
+      "year": 2022,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "70.13",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "69.16"
+    },
+    {
+      "crop_id": "alcachofa",
+      "year": 2023,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "105.95",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "107.79"
+    },
+    {
+      "crop_id": "melon",
+      "year": 2020,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "33.69",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "34.43"
+    },
+    {
+      "crop_id": "melon",
+      "year": 2021,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "29.13",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "29.96"
+    },
+    {
+      "crop_id": "melon",
+      "year": 2022,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "45.50",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "46.92"
+    },
+    {
+      "crop_id": "melon",
+      "year": 2023,
+      "previous_source": "MAPA-PER-2015",
+      "previous_value": "58.52",
+      "selected_source": "MAPA-PER-2020",
+      "selected_value": "60.15"
+    },
+    {
+      "crop_id": "lechuga",
+      "year": 2024,
+      "previous_source": "MAPA-PER-2020",
+      "previous_value": "31.42",
+      "selected_source": "MAPA-PER-2024",
+      "selected_value": "31.42"
+    },
+    {
+      "crop_id": "alcachofa",
+      "year": 2024,
+      "previous_source": "MAPA-PER-2020",
+      "previous_value": "96.42",
+      "selected_source": "MAPA-PER-2024",
+      "selected_value": "96.42"
+    },
+    {
+      "crop_id": "melon",
+      "year": 2024,
+      "previous_source": "MAPA-PER-2020",
+      "previous_value": "47.57",
+      "selected_source": "MAPA-PER-2024",
+      "selected_value": "47.57"
+    }
+  ],
+  "hicp_sha256": "d7b924964e667d530636254b12d1418c279b681b36c331ee591112b8bc497e31",
+  "legal_url": "https://www.mapa.gob.es/es/atencion-al-ciudadano/aviso-legal",
+  "licence": "MAPA legal notice: reuse with source attribution under Ley 37/2007; retain update/reuse metadata; third-party rights excluded; not a CC licence",
+  "legal_html_sha256": "2259502465cd263941928a1a41bb768a088d7cc3419533a6cf46115d4acffd73",
+  "output_sha256": "5e1483b3f51dba2cc58b31033acc53db1a5ac827082979ae95ff6b04b570edd6",
+  "limitations": [
+    "Generic national crop proxy, not regional or cultivar-specific.",
+    "No monthly average computed: source Anual column only.",
+    "Years after 2024 excluded, including incomplete/provisional 2026.",
+    "Horticulture source note: bulk price at buyer warehouse; harvest-cost treatment remains unknown.",
+    "Eurostat/FAOSTAT may redistribute MAPA: not independent validation.",
+    "No engine default changed; prices.csv left unchanged."
+  ]
+}

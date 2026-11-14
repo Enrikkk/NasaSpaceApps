@@ -33,3 +33,5 @@ Format: `- YYYY-MM-DD HH:MM | seat=<name> | <task or -> | <what happened> | next
 - 2026-11-14 15:20 | seat=arturo | T-021 | review: regenerated 8b3a214 with sowing_month, Murcia artichoke stages, HICP; exact frost/heat t0/t100 gaps; ECREA B candidates isolated by regime/native year. Six tests + engine loader/submodels pass; full engine evaluation needs Enrique dependencies. | next: Enrique reviews compatibility and monetary-base support; no merge
 
 - 2026-11-14 15:38 | seat=arturo | T-021 | thermal evidence: primary cold/heat search for all 8 crops, first delivery 530857b to Enrique #105, second findings #108; organ/exposure/endpoints prevent unsupported daily t100. Canonical P notes now crop/hazard-specific; 7 tests pass. | next: Enrique reviews episode/partial-damage model; no main merge
+
+- 2026-11-14 16:36 | seat=arturo | T-021 | review: MAPA Anual snapshot 2005-2024 for generic national lettuce/melon/artichoke,60rows,sourcecell/URL/nativeprice/HICP-derivedreal2015/metadata/licence; TLSverified.2extraction+7tabletests,hashes,units,reproducibilityOK; canonicalprices.csv unchanged. | next: Enrique integrates explicit proxy; no defaults/JSON changed

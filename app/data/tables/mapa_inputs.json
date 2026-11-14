@@ -1,0 +1,27 @@
+{
+  "downloaded_at": "2026-11-14",
+  "download_date_note": "Actual download date in Europe/Madrid; no precise request timestamp recorded. Workbook modification dates retained separately.",
+  "tls": "curl --cacert /tmp/t021-mapa-fnmt.pem; certificate bytes from origin/t012-motor-nucleo app/backend/engine/sources/certs/fnmt_g2r_root.pem; verification enabled",
+  "workbooks": [
+    {
+      "file": "2005.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosenero2005-diciembre2014.xlsx",
+      "source_id": "MAPA-PER-2005"
+    },
+    {
+      "file": "2015.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosagrariosenero2015-diciembre2023.xlsx",
+      "source_id": "MAPA-PER-2015"
+    },
+    {
+      "file": "2020.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices--precios-y-salarios-agrarios/indices-y-precios-percibidos-agrarios/indicesypreciospercibidosagrariosenero2020-diciembre2022.xlsx",
+      "source_id": "MAPA-PER-2020"
+    },
+    {
+      "file": "2024.xlsx",
+      "url": "https://www.mapa.gob.es/dam/mapa/contenido/estadisticas/temas/estadisticas-agrarias/1.economicas/indices-y-precios-agrarios/indices-y-precios-percibidos-agrarios/indices-y-precios-percibidos-agrarios--enero-2023-septiembre-2025-.xlsx",
+      "source_id": "MAPA-PER-2024"
+    }
+  ]
+}
