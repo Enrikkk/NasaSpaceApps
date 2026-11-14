@@ -177,9 +177,9 @@ def test_parcel_404(client_mini):
 def test_cors_localhost_y_frontend_origin(monkeypatch):
     from app.backend.api.settings import Settings
     monkeypatch.setenv("FRONTEND_ORIGIN", "https://agrockham.example/, *, http://localhost:5173")
-    assert Settings().cors_origins == ["http://localhost:5173", "https://agrockham.example"]   # sin '/' final, sin '*', sin duplicados
+    assert Settings().cors_origins == ["http://localhost:5173", "http://127.0.0.1:5173", "https://agrockham.example"]   # sin '/' final, sin '*', sin duplicados
     monkeypatch.delenv("FRONTEND_ORIGIN")
-    assert Settings().cors_origins == ["http://localhost:5173"]
+    assert Settings().cors_origins == ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 
 def test_cors_cabeceras(client_mini):

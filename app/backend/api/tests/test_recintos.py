@@ -72,3 +72,12 @@ def test_municipio_completo_trunca_a_3000_y_5km(client, atom_real):
     fc = client.get("/recintos", params={"bbox": bbox_alrededor(37.77, -0.95, 5.0)}).json()
     assert fc["n"] <= 3000 and fc["n_total"] >= fc["n"] and len(fc["features"]) == fc["n"]
     assert fc["features"][0]["geometry"]["type"] in ("Polygon", "MultiPolygon")
+
+
+def test_cors_acepta_vite_en_127_0_0_1(client_mini):
+    """http://127.0.0.1:5173 y http://localhost:5173 son origenes distintos: la API admite los dos (arturo #250)."""
+    for origen in ("http://127.0.0.1:5173", "http://localhost:5173"):
+        r = client_mini.get("/health", headers={"Origin": origen})
+        assert r.headers["access-control-allow-origin"] == origen
+    r = client_mini.get("/health", headers={"Origin": "http://evil.example"})
+    assert "access-control-allow-origin" not in r.headers

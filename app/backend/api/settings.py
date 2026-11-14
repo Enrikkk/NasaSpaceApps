@@ -10,6 +10,7 @@ DATA_DIR = REPO_ROOT / "app" / "data"
 
 # Origen del frontend en desarrollo (Vite). El de produccion llega por FRONTEND_ORIGIN.
 ORIGEN_DEV = "http://localhost:5173"
+ORIGEN_DEV_IP = "http://127.0.0.1:5173"   # Vite en 127.0.0.1 es OTRO origen que localhost (arturo #250)
 
 # Directorio por defecto de los GeoJSON de ATOM (salida de app/backend/pipeline/atom/build_recintos.py; ver README.md).
 # Ignorado por git. Si no existe, la API arranca sin recintos y lo avisa. En Docker se fija con ENV ATOM_BUILD_DIR=/data/atom.
@@ -26,9 +27,9 @@ ZONAS_LEGALES = ("zona_1", "zona_2", "por_verificar")
 
 
 def _origenes() -> list[str]:
-    """localhost:5173 + FRONTEND_ORIGIN (varios separados por comas, sin '/' final). Nunca '*'."""
+    """localhost:5173 y 127.0.0.1:5173 + FRONTEND_ORIGIN (varios separados por comas, sin '/' final). Nunca '*'."""
     extra = os.getenv("FRONTEND_ORIGIN", "")
-    lista = [ORIGEN_DEV] + [o.strip().rstrip("/") for o in extra.split(",")]
+    lista = [ORIGEN_DEV, ORIGEN_DEV_IP] + [o.strip().rstrip("/") for o in extra.split(",")]
     vistos: list[str] = []
     for o in lista:
         if o and o != "*" and o not in vistos:
