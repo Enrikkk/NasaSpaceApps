@@ -41,7 +41,7 @@ def quantities(crop):
 
 
 def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025, ecw=None, stage_key="stages_days",
-             meta=None, carm=None, allow_restricted=False, kg_fallback=False):
+             meta=None, carm=None, allow_restricted=False, kg_fallback=False, national=None):
     meta = {**DEFAULT_META, **(meta or {})}
     gaps, evidence = [], []
     if stage_key == "stages_days" and sm.stages(crop, "stages_days_murcia"):
@@ -70,8 +70,9 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
 
     # --- market -----------------------------------------------------------------------------------------------------
     unit = meta["price_unit"] or "eur_kg"
-    m = mk.Market(carm or {}, prices, hicp, base_year, allow_restricted)
+    m = mk.Market(carm or {}, prices, hicp, base_year, allow_restricted, national)
     base_crop = meta.get("crop_id") or crop.crop_id
+    proxy = base_crop in (national or {})   # national series = MAPA generic crop price, an explicit proxy (step E)
     tier, tier_label, series, keys, dropped = m.series_for(base_crop, meta["variety"], meta["quality"], unit)
     euro, euro_info = (m.eurostat_series(base_crop) if unit == "eur_kg" else (None, None))
     if kg_fallback and unit == "eur_ud" and tier == 3 and kg_ref is not None:
@@ -80,7 +81,8 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
         euro, euro_info = m.eurostat_series(base_crop)
         if euro:
             unit = "eur_kg"
-            gaps.append("sin cotización por pieza: se valoran los kilos netos al precio nacional Eurostat (EUR/kg)")
+            gaps.append("sin cotización por pieza: se valoran los kilos netos al precio nacional "
+                        + ("del MAPA para la lechuga en general (EUR/kg), un proxy" if proxy else "Eurostat (EUR/kg)"))
     if tier == 3 and not euro:
         tier, tier_label = None, "sin precio"
     qty_ref = ud_ref if unit == "eur_ud" else kg_ref
@@ -89,7 +91,9 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
     if tier in (1, 2):
         gaps.append("precio = cotización orientativa CARM (anuarios), no el precio pactado de esta finca")
     elif tier == 3:
-        gaps.append("precio = media nacional anual Eurostat (primera venta), no el precio de Murcia ni de este tipo")
+        gaps.append("precio = media nacional anual del MAPA para el cultivo en general (proxy): no es el precio de Murcia "
+                    "ni de este tipo, y no está verificado si incluye la recolección" if proxy else
+                    "precio = media nacional anual Eurostat (primera venta), no el precio de Murcia ni de este tipo")
     if dropped:
         gaps.append(f"{len(dropped)} cotizaciones CARM excluidas por atípicas (> {mk.OUTLIER_X:.0f}x la mediana; "
                     f"p. ej. {dropped[0][0]}-{dropped[0][1]:02d}: {dropped[0][2]})")
@@ -121,7 +125,7 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
         if tier in (1, 2):
             p_year, p_how = m.cycle_price(series, months)
         elif tier == 3:
-            p_year, p_how = euro.get(harvest_year), "año de cosecha (Eurostat)"
+            p_year, p_how = euro.get(harvest_year), "año de cosecha (MAPA, proxy)" if proxy else "año de cosecha (Eurostat)"
         cost = cost_harvest = None
         if cost_total is not None:
             cost_harvest = harvest * keep * k_cost  # harvest cost scales with what is picked
@@ -170,6 +174,7 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
                                               "p90": stats.quantile(gross, 0.9)},
         "_validacion_agua_imida_m3_ha": crop.get("riego_dosis"),  # internal check only, not shown (Enrique)
         "precio": {"nivel": tier, "fuente": tier_label, "unidad": unit, "euros_de": base_year,
+                   "tipo": "proxy" if (proxy and tier == 3) else ("orientativo" if tier else None),
                    "precio_minimo_p50": stats.quantile(mins, 0.5) if mins else None,
                    "canales": [c["id"] for c in channel_list], "nacional_eurostat_info": euro_info,
                    "opciones_usuario": mk.USER_PRICE_OPTIONS,

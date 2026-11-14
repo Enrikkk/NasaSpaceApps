@@ -54,8 +54,9 @@ def _clean(series):
 
 
 class Market:
-    def __init__(self, carm, eurostat, hicp, base_year, allow_restricted=False):
+    def __init__(self, carm, eurostat, hicp, base_year, allow_restricted=False, national=None):
         self.carm = carm if allow_restricted else {}  # CARM quotes only for internal runs until permission arrives
+        self.national = national or {}   # {crop_id: label} when the national series of that crop is not Eurostat (MAPA proxy)
         self.eurostat, self.hicp, self.base = eurostat, hicp, base_year
         self.restricted_used = bool(allow_restricted and carm)
 
@@ -88,7 +89,7 @@ class Market:
             merged = {y: {m: (sum(v) / len(v), unit) for m, v in ms.items()} for y, ms in merged.items()}
             s, drop = _clean(merged)
             return 2, f"CARM anuarios, {crop_id} (media de todas las variedades)", s, same, drop
-        return 3, "Eurostat, media nacional anual", None, [], []
+        return 3, self.national.get(crop_id, "Eurostat, media nacional anual"), None, [], []
 
     def cycle_price(self, series, months):
         """Mean real price over the quotes in this cycle's harvest months; else mean of that harvest year's quotes."""

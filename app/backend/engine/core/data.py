@@ -123,6 +123,19 @@ def load_prices():
     return out
 
 
+def load_mapa_prices():
+    """MAPA national generic-crop annual prices (Arturo's T-021 snapshot, app/data/tables/mapa_prices.csv): an OPEN proxy
+    used only when CARM quotes are not allowed. Returns ({crop_id: {year: eur_kg_real2015}}, {source_id: {...}})."""
+    path = pathlib.Path(__file__).resolve().parents[3] / "data" / "tables" / "mapa_prices.csv"
+    out, src = {}, {}
+    for r in csv.DictReader(open(path, encoding="utf-8")):
+        if r["eur_kg_real2015"]:
+            out.setdefault(r["crop_id"], {})[int(r["year"])] = float(r["eur_kg_real2015"])
+            src.setdefault(r["source_id"], {"id": r["source_id"], "url": r["source_url"], "licencia": r["licence"],
+                                            "aviso_legal": r["legal_url"], "nota": r["nota"], "conf": r["conf"]})
+    return out, src
+
+
 def load_area():
     out = {}
     for r in csv.DictReader(open(OFFICIAL / "eurostat_area_es.csv")):

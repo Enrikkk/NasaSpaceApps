@@ -39,7 +39,8 @@ def perturb(climate, rain_pct=0.0, temp_c=0.0):
                                    et0=v.et0 * (1 + ET0_PER_DEGC * temp_c)) for d, v in climate.items()}
 
 
-def run_cycles(products, climate, prices, hicp, area, carm, base_year, allow_restricted, catalog=None):
+def run_cycles(products, climate, prices, hicp, area, carm, base_year, allow_restricted, catalog=None,
+               kg_fallback=False, national=None):
     """Evaluate every catalog product at every sowing option. Returns {key: {static..., "years": {y0: rec}}} where
     key = (product_id, 'MM-DD'). Static info does not depend on the climate; years do."""
     out = {}
@@ -50,7 +51,7 @@ def run_cycles(products, climate, prices, hicp, area, carm, base_year, allow_res
         base = int(crop.get("sowing_month", 1))
         for (m, d) in sowing_options(base):
             r = ev.evaluate(crop, climate, prices, hicp, area, sowing=(m, d), base_year=base_year, meta=pm, carm=carm,
-                            allow_restricted=allow_restricted)
+                            allow_restricted=allow_restricted, kg_fallback=kg_fallback, national=national)
             if "anios" not in r or not r["anios"]:
                 continue
             lengths = sm.stages(crop, "stages_days_murcia") or sm.stages(crop, "stages_days")

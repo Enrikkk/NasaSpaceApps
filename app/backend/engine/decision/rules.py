@@ -54,14 +54,16 @@ def _canon(legal, nombre):
     return nombre
 
 
-def semaforo(plan_years, zone_confirmed=False):
+def semaforo(plan_years, zone_confirmed=False, zona=None, regadio=None):
     """Traffic light via Gonzalo's legal.check. The agronomic DP filter is allowed(), not this.
 
-    The parcel's Mar Menor zone is unconfirmed, so the call uses Gonzalo's default `por_verificar`
-    (not zona_1 or zona_2). That assumption is written on the result. Every rule stays por_verificar.
+    Without a zone the call uses Gonzalo's default `por_verificar` (not zona_1 or zona_2). A per-parcel run (H-002)
+    passes the zone the client sent and whether the parcel is irrigated; unknown irrigation is treated as irrigated
+    (the stricter case). The assumption is written on the result. Every rule stays por_verificar.
     """
     from .vendor import legal as L
-    zona = "por_verificar"
+    zona_dada = zona if zona in ("zona_1", "zona_2") else None
+    zona = zona_dada or "por_verificar"
     anios, ciclo_dias = [], {}
     for p in plan_years:
         year = []
@@ -73,10 +75,14 @@ def semaforo(plan_years, zone_confirmed=False):
         anios.append(year)
     rot = {"anios": anios, "ciclos": [c for a in anios for c in a], "ciclo_dias": ciclo_dias,
            "cobertera_invierno": any(p.get("covered") for p in plan_years)}
-    sem = L.check(rot, {"regadio": True}, zona, contrato=True)
+    sem = L.check(rot, {"regadio": True if regadio is None else bool(regadio)}, zona, contrato=True)
     sem["_status"] = "simulado"
     sem["provisional"] = True
     sem["motor_legal"] = f"legal.check (reglas {L.VERSION_REGLAS}, todas por_verificar)"
-    sem["supuestos"] = ["Zona del Mar Menor sin confirmar: se evalúa como por_verificar "
+    sem["supuestos"] = [f"Zona del Mar Menor indicada en la consulta: {zona}. Esta herramienta no la verifica."
+                        if zona_dada else
+                        "Zona del Mar Menor sin confirmar: se evalúa como por_verificar "
                         "(defecto de Gonzalo), no como Zona 1 ni Zona 2."]
+    if regadio is None:
+        sem["supuestos"].append("Regadío de la parcela no indicado: se evalúa como regadío (el caso más exigente).")
     return sem

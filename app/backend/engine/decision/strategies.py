@@ -51,12 +51,15 @@ def _first_last(o, static):
     return (seq[0], seq[-1]) if seq else (None, None)
 
 
-def dp(scores, static, crops, weights, ruinous_filter, prev_crop=None, horizon=rt.HORIZON):
-    """Best path of `horizon` year options. Returns list of Option or None."""
+def dp(scores, static, crops, weights, ruinous_filter, prev_crop=None, horizon=rt.HORIZON, factor=None):
+    """Best path of `horizon` year options. Returns list of Option or None.
+
+    `factor(option) -> 0..1` (H-002, parcel suitability) multiplies the option's score: a crop that suits the parcel
+    worse is recommended less. It never changes the margin, the water or the success figures."""
     opts = [o for o, m in scores.items() if not (ruinous_filter and m["margen"] < 0)]
     if not opts:
         return None
-    sc = {o: sum(weights[c] * scores[o]["crit"][c] for c in weights) for o in opts}
+    sc = {o: sum(weights[c] * scores[o]["crit"][c] for c in weights) * (factor(o) if factor else 1.0) for o in opts}
     fl = {o: _first_last(o, static) for o in opts}
     nxt = {i: [j for j in opts if rules.allowed(crops, fl[i][1], fl[j][0])] for i in opts}
     V = [dict() for _ in range(horizon)]

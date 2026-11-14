@@ -18,6 +18,7 @@ import pathlib
 import statistics
 import sys
 
+from . import parcela as pc
 from .core import data, market as mk_mod, stage_risk, stats
 from .decision import rotations as rt, rules, strategies as st, texts
 
@@ -26,6 +27,7 @@ VARIANTS = {"lluvia_-30": (-30, 0.0), "lluvia_-15": (-15, 0.0), "lluvia_+10": (1
             "temp_+2": (0, 2.0), "2050": (-12, 1.8)}   # 2050 = deltas of the contract mock, SIMULATED (no NEX-GDDP yet)
 ACTUAL = (("melon_piel_de_sapo", "05-01"), ("lechuga_iceberg", "11-01"))   # melon, fallow, lettuce (the parcel's habit)
 mk_restricted = mk_mod.RESTRICTED_SOURCES
+MAPA_LABEL = "MAPA, media nacional anual del cultivo en general (proxy)"
 SOURCES = {r["source_id"]: r for r in csv.DictReader(open(data.OFFICIAL / "sources.csv", encoding="utf-8"))}
 
 
@@ -107,6 +109,15 @@ def evidence_for(keys_used, static, extra):
         out.append({"dato": "Precios mensuales percibidos por el agricultor, por variedad (orientativos)", "dataset": c["dataset"],
                     "fuente_id": "CARM-ANUARIO", "url": c["url"], "escala": "Región de Murcia, 2002-2023",
                     "confianza": "M", "aviso": "uso bajo permiso pendiente de la CARM; cotización orientativa, no precio pactado"})
+    proxies = [static[k]["label"] for k in keys_used if static[k]["report"]["precio"].get("tipo") == "proxy"]
+    if proxies:
+        out.append({"dato": "Precio medio nacional anual percibido por el agricultor, cultivo en general (PROXY): "
+                            + ", ".join(sorted(set(proxies))),
+                    "dataset": "MAPA, Índices y Precios Percibidos Agrarios (anual)", "fuente_id": "MAPA-PER-2024",
+                    "url": data.load_mapa_prices()[1]["MAPA-PER-2024"]["url"],
+                    "escala": "España, 2005-2024 (no Murcia, no la variedad)", "confianza": "B",
+                    "aviso": "proxy nacional genérico; reutilización citando la fuente (Ley 37/2007), no es licencia CC; "
+                             "no verificado si el precio incluye la recolección"})
     return extra + out
 
 
@@ -119,13 +130,14 @@ def price_notes(keys_used, static):
     return sorted(notes)
 
 
-def rotation(rid, name, path, static, runs, shared, crops, actual=False, strategies=(), common=None):
+def rotation(rid, name, path, static, runs, shared, crops, actual=False, strategies=(), common=None, zona=None, regadio=True):
     sim = st.simulate(path, runs, shared, common=common)
     water_draws = sim["agua"] if sim else st.simulate_water(path, runs, shared)
     raw = st.raw_criteria(path, static, runs, sim, None)
     sts = [rt.option_static(o, static) for o in path]
     keys_used = sorted({k for o in path for k in o.keys})
-    legal = rules.semaforo([{"cycles": s["cycles"], "bare_run": s["bare_run"], "covered": s["covered"]} for s in sts])
+    legal = rules.semaforo([{"cycles": s["cycles"], "bare_run": s["bare_run"], "covered": s["covered"]} for s in sts],
+                           zona=zona, regadio=regadio)
     first = sorted(sts[0]["cycles"], key=lambda c: c["start_doy"])[0]
     caja = [c["caja"] for s in sts for c in s["cycles"] if c["caja"] is not None]
     waters = [sum(v["agua"] for v in rt.year_values(o, runs).values()) / len(rt.year_values(o, runs)) for o in path]
@@ -182,7 +194,7 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                             "peores_anios": [{"anio": y, "margen_eur_ha": r0(m)} for y, m in sim["peores_anios_margen"]],
                             "definicion": f"n = n_anios_historicos = {sim['n']}: años del histórico en los que todos los años del plan "
                                           "tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio "
-                                          "del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} "
+                                          "del plan en ese año es negativo. El intervalo de Wilson usa ese n. " + f"n_muestras = {sim['n_muestras']} "
                                           "conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."}
         out["exito_pct"]["valor"] = round(out["exito_pct"]["valor"] * 100, 1)
         out["exito_pct"]["horquilla"] = [round(x * 100, 1) for x in out["exito_pct"]["horquilla"]]
@@ -202,6 +214,9 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                             "definicion": "NO EVALUABLE: falta el precio de algún cultivo con datos abiertos"}
         out["margen_eur_ha"] = None
         out["escenarios"] = None
+    out["suelo_desnudo_dias"] = round(statistics.mean(s["bare_days"] for s in sts))
+    out["ambiente"] = pc.ambiente(out["agua_m3_ha"], statistics.mean(s["bare_days"] for s in sts),
+                                  statistics.mean(s["n_credit"] for s in sts), legal)
     return out
 
 
@@ -222,21 +237,41 @@ def climate_block(climate):
             "escenario_2050": {"lluvia_pct": -12, "temp_c": 1.8, "_status": "simulado (deltas del contrato, no NEX-GDDP)"}}
 
 
-def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
+def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025, parcel_input=None):
+    """Engine output for the demo parcel (parcel_input None: same figures as always) or for ANY parcel (H-002).
+
+    parcel_input = dict ParcelInput (see run_parcel). The parcel changes: which crops are in the catalog (exclusions),
+    the DP score of each year option (suitability factor), the reference rotation, the legal zone and the labels.
+    It does NOT change euros, kilos or success figures of a given rotation: the climate is the same station."""
     crops = data.load_crops()
     products = data.load_products(crops)
     climate, cmeta = data.load_climate()
     prices, hicp, area, carm = data.load_prices(), data.load_hicp(), data.load_area(), data.load_carm_monthly()
-    static = rt.run_cycles(products, climate, prices, hicp, area, carm, base_year, allow_restricted)
+    national, mapa_src = {}, {}
+    if not allow_restricted:   # step E: open build -> MAPA generic national price as an explicit proxy (lettuce by the kilo)
+        mapa, mapa_src = data.load_mapa_prices()
+        prices = {**prices, **mapa}
+        national = {c: MAPA_LABEL for c in mapa}
+    cycles = lambda clim: rt.run_cycles(products, clim, prices, hicp, area, carm, base_year, allow_restricted,
+                                        kg_fallback=bool(national), national=national)
+    static = cycles(climate)
+    suit = pc.evaluar(parcel_input, static) if parcel_input is not None else None
+    keep = (lambda s_: {k: v for k, v in s_.items() if k[0] not in suit["excluidos_ids"]}) if suit else (lambda s_: s_)
+    static = keep(static)
+    zona = (parcel_input or {}).get("zona_legal")
+    regadio = parcel_input.get("regadio") if parcel_input is not None else True
+    regadio = regadio if isinstance(regadio, bool) else None
+    factor = (lambda o: pc.option_factor(o, suit["factores"])) if suit else None
     shared = st.draws()
-    opts = rt.build_options(static, crops)
-    scores = st.option_scores(opts, static, static)
-    paths = {}
-    actual_opt = rt.Option(ACTUAL)
-    actual_path = [actual_opt] * rt.HORIZON
-    named = [("actual", None, actual_path)]
+    opts = rt.build_options(static, crops) if static else []
+    scores = st.option_scores(opts, static, static) if opts else {}
+    if parcel_input is None:
+        actual_keys, actual_origen, actual_info = ACTUAL, "habito_parcela_demo", {}
+    else:
+        actual_keys, actual_origen, actual_info = pc.actual(parcel_input, static, ACTUAL)
+    named = [("actual", None, [rt.Option(actual_keys)] * rt.HORIZON)] if actual_keys else []
     for sid, cfg in st.STRATEGIES.items():
-        p = st.dp(scores, static, crops, cfg["w"], cfg["ruinosa"])
+        p = st.dp(scores, static, crops, cfg["w"], cfg["ruinosa"], factor=factor) if scores else None
         if p:
             named.append((sid, cfg["nombre"], p))
     merged = []   # one rotation per distinct path
@@ -251,7 +286,9 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
 
     def names(m, run_static):
         if m["strategies"] == ["actual"]:
-            return "actual", "Lo que haces hoy: " + plan_text(m["path"], run_static)
+            head = {"supuesto_zona": "Referencia de la zona (supuesto): ",
+                    "declaracion_fega": "Lo que haces hoy (según tu declaración a FEGA): "}.get(actual_origen, "Lo que haces hoy: ")
+            return "actual", head + plan_text(m["path"], run_static)
         sid = m["strategies"][0].lower()
         return f"{sid}-{'-'.join(m['strategies'][1:]).lower()}".rstrip("-") if len(m["strategies"]) > 1 else sid, \
             " / ".join(labels[s] for s in m["strategies"]) + ": " + plan_text(m["path"], run_static)
@@ -272,7 +309,12 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
             own = st.money_years(m["path"], runs)
             rid, nm = names(m, static)
             rots.append(rotation(rid, nm, m["path"], static, runs, shared, crops, actual=m["strategies"] == ["actual"],
-                                 strategies=m["strategies"], common=common if own else None))
+                                 strategies=m["strategies"], common=common if own else None, zona=zona, regadio=regadio))
+            if suit:
+                rots[-1]["idoneidad"] = pc.idoneidad_rotacion(m["path"], suit)
+                tot = pc.totales_parcela(rots[-1], parcel_input.get("area_ha"))
+                if tot:
+                    rots[-1]["totales_parcela"] = tot
         crit = st.normalise_rotations([r["_raw"] for r in rots])
         for r, c in zip(rots, crit):
             r["criterios"] = c
@@ -284,7 +326,7 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     variants = {}
     common_by_variant = {"base": n_common}
     for vid, (rain, temp) in VARIANTS.items():
-        vs = rt.run_cycles(products, rt.perturb(climate, rain, temp), prices, hicp, area, carm, base_year, allow_restricted)
+        vs = keep(cycles(rt.perturb(climate, rain, temp)))
         vr, n_var = assemble(vs, vs)
         common_by_variant[vid] = n_var
         variants[vid] = {"lluvia_pct": rain, "temp_c": temp, "n_anios_comunes": n_var,
@@ -312,7 +354,7 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     out["clima"]["_status"] = "real"
     out["_status"] = ("Bloque `rotaciones` y `clima`: calculados por el motor. Precios: "
                       + ("CARM (anuarios) con Eurostat de respaldo; permiso de la CARM pendiente" if allow_restricted else
-                         "sin precios CARM; solo Eurostat")
+                         "sin precios CARM; MAPA nacional como proxy (lechuga, melón, alcachofa) y Eurostat")
                       + ". Derechos del resto de fuentes (IMIDA, SIAM, FAO) según el registro de fuentes, sin verificar. "
                         "Bloques parcela, historia, ndvi, suelo: MOCK hasta T-011/T-013.")
     out["_estado_bloques"] = {"rotaciones": "real", "clima": "real", "escenario_2050": "simulado", "variantes": "simulado",
@@ -323,6 +365,21 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
                                   if allow_restricted else "sin precios CARM"),
                        "fuentes_restringidas": mk_restricted if allow_restricted else {}}
     out["rotaciones"] = rots
+    con = [r for r in rots if isinstance(r.get("escenarios"), list)]
+    out["escenarios_meta"] = {"alineados": bool(con) and all((r.get("escenarios_meta") or {}).get("alineados") is True for r in con),
+                              "n": st.N_SAMPLES, "semilla": 2026, "n_anios_comunes": n_common,
+                              "nota": "alineados = true solo si lo es en todas las rotaciones con escenarios (D-011)"}
+    out["actual_origen"] = actual_origen
+    if parcel_input is not None:
+        out["parcela_input"] = parcel_input
+        out["idoneidad"] = pc.resumen(parcel_input, suit, actual_origen, actual_info)
+        out["clima_origen"] = pc.clima_origen(parcel_input, cmeta)
+        if not rots:
+            out["no_evaluable"] = {
+                "motivo": ("No podemos evaluar esta parcela: consta como secano y solo tenemos datos de coste y de "
+                           "rendimiento de cultivos de regadío." if suit["excluidos_ids"] and not static else
+                           "No hemos encontrado ninguna rotación que se pueda evaluar en esta parcela."),
+                "_status": "real"}
     out["criterios_sentido"] = "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas"
     out["supuestos_decision"] = {"horizonte_anios": rt.HORIZON, "muestras": st.N_SAMPLES,
                                  "coste_banda": list(st.COST_BAND), "dias_entre_ciclos": rt.GAP_DAYS,
@@ -336,6 +393,10 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     used = sorted({e["fuente_id"] for r in rots for e in r["evidencia"]} | {"SIAM-TP91", "EUR-HICP"})
     out["fuentes"] = [{"id": i, "nombre": SOURCES[i]["dataset"], "url": SOURCES[i]["url"], "licencia": SOURCES[i]["licence"]}
                       for i in used if i in SOURCES]
+    if any(e["fuente_id"].startswith("MAPA-PER") for r in rots for e in r["evidencia"]):
+        out["fuentes"] += [{"id": i, "nombre": "MAPA, Índices y Precios Percibidos Agrarios (anual), libro " + i[-4:],
+                            "url": m["url"], "licencia": m["licencia"], "aviso_legal": m["aviso_legal"],
+                            "nota": "proxy nacional genérico (conf. " + m["conf"] + ")"} for i, m in sorted(mapa_src.items())]
     thermal = sorted({e["fuente"] for r in rots for b in r["riesgo_etapas"] for e in b["etapas"] if e["fuente"]})
     out["fuentes"] += [{"id": i, "nombre": stage_risk.SOURCES[i][0], "url": stage_risk.SOURCES[i][1],
                         "licencia": stage_risk.SOURCES[i][2]} for i in thermal]
@@ -343,6 +404,19 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
         r["_status"] = "real"
     texts.apply(out)
     return out
+
+
+def run_parcel(parcel_input, allow_restricted=False, base_year=2025):
+    """Engine for ANY parcel (H-002). parcel_input: dict with any of
+        parcel_id, lat, lon, area_ha, regadio (bool|None), pendiente_pct, zona_legal ('zona_1'|'zona_2'|other),
+        suelo {textura, ph, materia_organica_pct, salinidad_ce_dsm, profundidad_cm, drenaje},
+        cultivos_declarados [str | {cultivo|producto, ...}]
+    Every field may be missing or None ("sin dato": never invented). Returns the same JSON as build() plus, per
+    rotation, `idoneidad`; and at the root `idoneidad`, `clima_origen`, `parcela_input` and, when nothing can be
+    evaluated (e.g. a rainfed parcel: the catalog only has irrigated crops), `no_evaluable` with `rotaciones: []`."""
+    if not isinstance(parcel_input, dict):
+        raise TypeError("parcel_input debe ser un dict")
+    return build("parcela", allow_restricted=allow_restricted, base_year=base_year, parcel_input=parcel_input)
 
 
 def main(argv):

@@ -1006,7 +1006,7 @@
       "margen_eur_ha": -6068
      }
     ],
-    "definicion": "n = n_anios_historicos = 17: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 17: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 51 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 1067,
@@ -2635,6 +2635,30 @@
     "alineados": true,
     "n_anios_comunes": 14,
     "nota": "misma semilla y mismos números aleatorios en todas las rotaciones. Si alineados, el escenario i usa en cada año del plan el mismo año histórico (clima y precio emparejados) en todas las rotaciones evaluables: el conjunto común de años con precio."
+   },
+   "suelo_desnudo_dias": 140,
+   "ambiente": {
+    "nivel": "bajo",
+    "motivos": [
+     "agua >=6000 m3/ha: umbral supuesto"
+    ],
+    "estado": "supuesto",
+    "sin_dato": [],
+    "umbrales": {
+     "agua_alto_max_m3_ha": 3000,
+     "agua_bajo_min_m3_ha": 6000,
+     "desnudo_alto_max_dias": 60,
+     "desnudo_bajo_min_dias": 180,
+     "credito_n_alto_min_kg_ha": 30
+    },
+    "nota": "Etiqueta heuristica; alto significa mas amigable bajo estos supuestos, no certificacion ambiental/legal.",
+    "metricas": {
+     "agua_m3_ha": 7192,
+     "suelo_desnudo_dias": 140,
+     "credito_n_kg_ha": 0,
+     "color_legal": "amarillo"
+    },
+    "frase": "Trato al medio ambiente: bajo. Gasta mucha agua, deja el suelo desnudo mucho tiempo o no pasa el semáforo legal. Es una etiqueta orientativa nuestra, no una certificación."
    },
    "criterios": {
     "margen": 0.0,
@@ -4910,7 +4934,7 @@
       "margen_eur_ha": -1206
      }
     ],
-    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 52 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 3045,
@@ -6539,6 +6563,30 @@
     "alineados": true,
     "n_anios_comunes": 14,
     "nota": "misma semilla y mismos números aleatorios en todas las rotaciones. Si alineados, el escenario i usa en cada año del plan el mismo año histórico (clima y precio emparejados) en todas las rotaciones evaluables: el conjunto común de años con precio."
+   },
+   "suelo_desnudo_dias": 117,
+   "ambiente": {
+    "nivel": "bajo",
+    "motivos": [
+     "agua >=6000 m3/ha: umbral supuesto"
+    ],
+    "estado": "supuesto",
+    "sin_dato": [],
+    "umbrales": {
+     "agua_alto_max_m3_ha": 3000,
+     "agua_bajo_min_m3_ha": 6000,
+     "desnudo_alto_max_dias": 60,
+     "desnudo_bajo_min_dias": 180,
+     "credito_n_alto_min_kg_ha": 30
+    },
+    "nota": "Etiqueta heuristica; alto significa mas amigable bajo estos supuestos, no certificacion ambiental/legal.",
+    "metricas": {
+     "agua_m3_ha": 6029,
+     "suelo_desnudo_dias": 117,
+     "credito_n_kg_ha": 0,
+     "color_legal": "amarillo"
+    },
+    "frase": "Trato al medio ambiente: bajo. Gasta mucha agua, deja el suelo desnudo mucho tiempo o no pasa el semáforo legal. Es una etiqueta orientativa nuestra, no una certificación."
    },
    "criterios": {
     "margen": 1.0,
@@ -8794,7 +8842,7 @@
       "margen_eur_ha": -2657
      }
     ],
-    "definicion": "n = n_anios_historicos = 15: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 15: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 50 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 1313,
@@ -10423,6 +10471,30 @@
     "alineados": true,
     "n_anios_comunes": 14,
     "nota": "misma semilla y mismos números aleatorios en todas las rotaciones. Si alineados, el escenario i usa en cada año del plan el mismo año histórico (clima y precio emparejados) en todas las rotaciones evaluables: el conjunto común de años con precio."
+   },
+   "suelo_desnudo_dias": 123,
+   "ambiente": {
+    "nivel": "medio",
+    "motivos": [
+     "sin evidencia suficiente para alto/bajo segun esta politica supuesta"
+    ],
+    "estado": "supuesto",
+    "sin_dato": [],
+    "umbrales": {
+     "agua_alto_max_m3_ha": 3000,
+     "agua_bajo_min_m3_ha": 6000,
+     "desnudo_alto_max_dias": 60,
+     "desnudo_bajo_min_dias": 180,
+     "credito_n_alto_min_kg_ha": 30
+    },
+    "nota": "Etiqueta heuristica; alto significa mas amigable bajo estos supuestos, no certificacion ambiental/legal.",
+    "metricas": {
+     "agua_m3_ha": 3547,
+     "suelo_desnudo_dias": 123,
+     "credito_n_kg_ha": 110,
+     "color_legal": "amarillo"
+    },
+    "frase": "Trato al medio ambiente: medio. No destaca ni para bien ni para mal con lo que sabemos. Es una etiqueta orientativa nuestra, no una certificación."
    },
    "criterios": {
     "margen": 0.295,
@@ -12700,7 +12772,7 @@
       "margen_eur_ha": -1206
      }
     ],
-    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 52 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 3004,
@@ -14330,6 +14402,30 @@
     "n_anios_comunes": 14,
     "nota": "misma semilla y mismos números aleatorios en todas las rotaciones. Si alineados, el escenario i usa en cada año del plan el mismo año histórico (clima y precio emparejados) en todas las rotaciones evaluables: el conjunto común de años con precio."
    },
+   "suelo_desnudo_dias": 92,
+   "ambiente": {
+    "nivel": "bajo",
+    "motivos": [
+     "agua >=6000 m3/ha: umbral supuesto"
+    ],
+    "estado": "supuesto",
+    "sin_dato": [],
+    "umbrales": {
+     "agua_alto_max_m3_ha": 3000,
+     "agua_bajo_min_m3_ha": 6000,
+     "desnudo_alto_max_dias": 60,
+     "desnudo_bajo_min_dias": 180,
+     "credito_n_alto_min_kg_ha": 30
+    },
+    "nota": "Etiqueta heuristica; alto significa mas amigable bajo estos supuestos, no certificacion ambiental/legal.",
+    "metricas": {
+     "agua_m3_ha": 6029,
+     "suelo_desnudo_dias": 92,
+     "credito_n_kg_ha": 37,
+     "color_legal": "amarillo"
+    },
+    "frase": "Trato al medio ambiente: bajo. Gasta mucha agua, deja el suelo desnudo mucho tiempo o no pasa el semáforo legal. Es una etiqueta orientativa nuestra, no una certificación."
+   },
    "criterios": {
     "margen": 0.986,
     "agua": 0.331,
@@ -15842,6 +15938,14 @@
    }
   }
  ],
+ "escenarios_meta": {
+  "alineados": true,
+  "n": 200,
+  "semilla": 2026,
+  "n_anios_comunes": 14,
+  "nota": "alineados = true solo si lo es en todas las rotaciones con escenarios (D-011)"
+ },
+ "actual_origen": "habito_parcela_demo",
  "criterios_sentido": "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas",
  "supuestos_decision": {
   "horizonte_anios": 3,

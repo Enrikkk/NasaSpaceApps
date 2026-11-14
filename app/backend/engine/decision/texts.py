@@ -211,6 +211,10 @@ def _crops_with(r, marker):
     return [x.split(":")[0] for x in r.get("riesgos", []) if "precio de referencia = " + marker in x]
 
 
+def _national(r):
+    return _crops_with(r, "Eurostat") + _crops_with(r, "MAPA")
+
+
 def _stage_levels(r):
     """(medium/high findings, products with 'sin evidencia' stages)."""
     found, blind, seen = [], [], set()
@@ -261,7 +265,7 @@ def _money_sentence(r, ref):
     a = r["margen_eur_ha"]["p50"]
     if not _has_margin(ref):
         crops = _join(_crops_without_price(ref)) or "algún cultivo"
-        src = ("con el precio medio nacional, que puede ser optimista para Murcia" if _crops_with(r, "Eurostat") else
+        src = ("con el precio medio nacional, que puede ser optimista para Murcia" if _national(r) else
                "con precios orientativos, no con los de tu finca")
         return (f"No podemos comparar el dinero con lo que haces hoy: a tu rotación actual le falta el precio abierto de "
                 f"{crops}, y sin precio no hay margen. Para esta opción, un año típico saldría en {_eur(a)} por hectárea "
@@ -294,7 +298,7 @@ def _water_success_sentence(r, ref):
             tail = f"en años simulados, sale bien el {a} % de las veces, frente al {_n(ref['exito_pct']['valor'])} % de hoy"
         else:
             tail = (f"en años simulados, sale bien el {a} % de las veces"
-                    + (" con el precio medio nacional" if _crops_with(r, "Eurostat") else "")
+                    + (" con el precio medio nacional" if _national(r) else "")
                     + " (no hay porcentaje comparable de lo de hoy)")
         parts.append(tail if parts else tail[0].upper() + tail[1:])
     if not parts:
@@ -358,6 +362,11 @@ def _no_sabemos(r):
     if euro:
         out.append(f"Para {_join(euro)} el precio es la media nacional de Eurostat, que suele ser optimista para Murcia: "
                    "el margen puede salir más alto de lo real.")
+    mapa = _crops_with(r, "MAPA")
+    if mapa:
+        out.append(f"Para {_join(mapa)} usamos el precio medio de toda España del Ministerio de Agricultura para el cultivo "
+                   "en general. No es el precio de Murcia ni el de tu variedad: es una aproximación y el margen real puede "
+                   "ser otro.")
     for c in _crops_without_price(r):
         out.append(f"Para {c} no hay precio abierto: tendrías que poner el tuyo.")
     if _has_exito(r):
@@ -416,12 +425,37 @@ def build_texto(r, ref):
             "riesgos_texto": _riesgos(r), "consulta": CONSULTA}
 
 
+_REFERENCE_WORDING = (
+    ("Es lo que haces hoy y sirve de referencia para comparar las demás.",
+     "No sabemos qué cultivas hoy en esta parcela. Esta es la rotación típica de la zona y sirve de referencia para "
+     "comparar las demás."),
+    ("a tu rotación actual le falta", "a la rotación de referencia le falta"),
+    ("lo que haces hoy", "la rotación de referencia"),
+    ("% de hoy", "% de la referencia"),
+    ("lo de hoy", "la referencia"),
+    ("No hay una rotación actual con la que comparar.", "No hay una rotación de referencia con la que comparar."),
+)
+
+
+def _reword_reference(texto):
+    """Per-parcel run where the reference rotation is NOT what the farmer grows (H-002: typical rotation of the area,
+    an assumption): the sentences must not say "lo que haces hoy". Only words change, never a number."""
+    def fix(s):
+        for old, new in _REFERENCE_WORDING:
+            s = s.replace(old, new)
+        return s
+    return {k: fix(v) if isinstance(v, str) else [fix(x) if isinstance(x, str) else x for x in v] if isinstance(v, list) else v
+            for k, v in texto.items()}
+
+
 def apply(out):
     """Write `texto` into every rotation, replace the generic `por_que`, and refuse to ship a text with an unbacked number."""
     rots = out["rotaciones"]
     ref = next((r for r in rots if r.get("es_actual")), None)
     for r in rots:
         r["texto"] = build_texto(r, ref)
+        if out.get("actual_origen") == "supuesto_zona":
+            r["texto"] = _reword_reference(r["texto"])
         r["por_que"] = r["texto"]["por_que"]
     bad = check(out)
     assert not bad, "texts.py: números no respaldados por el JSON: " + "; ".join(f"{i}: {n} en «{s}»" for i, n, s in bad[:5])

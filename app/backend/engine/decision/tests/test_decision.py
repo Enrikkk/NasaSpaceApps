@@ -92,11 +92,27 @@ def test_open_build_is_publishable():
         assert all(a != b for a, b in zip(seq, seq[1:]))
 
 
-def test_unpriced_rotation_is_not_evaluable_not_optimistic():
+def test_unpriced_rotation_is_not_evaluable_not_optimistic(monkeypatch):
+    """Without the MAPA proxy (step E) lettuce has no open price: the rotation must say so, not print a margin."""
+    monkeypatch.setattr(data, "load_mapa_prices", lambda: ({}, {}))
     out = bd.build("torre-pacheco", allow_restricted=False)
     actual = out["rotaciones"][0]
     assert actual["exito_pct"]["valor"] is None and actual["margen_eur_ha"] is None
     assert any("NO evaluables" in h for h in actual["huecos"])
+
+
+def test_open_build_prices_lettuce_with_the_mapa_proxy_and_says_so():
+    """Step E: open build values lettuce by the kilo at the MAPA national generic price, labelled as a proxy."""
+    out = bd.build("torre-pacheco", allow_restricted=False)
+    actual = out["rotaciones"][0]
+    assert actual["margen_eur_ha"] is not None and actual["exito_pct"]["valor"] is not None
+    assert any("MAPA" in x and "proxy" in x for x in actual["riesgos"])
+    assert any("Ministerio de Agricultura" in x and "aproximación" in x for x in actual["texto"]["no_sabemos"])
+    ids = {f["id"] for f in out["fuentes"]}
+    assert {"MAPA-PER-2005", "MAPA-PER-2024"} <= ids
+    assert all(e["fuente_id"] in ids for r in out["rotaciones"] for e in r["evidencia"])
+    carm = bd.build("torre-pacheco", allow_restricted=True)
+    assert not any(f["id"].startswith("MAPA") for f in carm["fuentes"])
 
 
 def test_default_build_cites_carm_and_states_permission_pending():
