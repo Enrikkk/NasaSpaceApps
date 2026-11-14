@@ -15,6 +15,7 @@ from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.gzip import GZipMiddleware
 
@@ -170,6 +171,9 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
         cuerpo, total, n = atom.index.bbox_geojson((minx, miny, maxx, maxy), cfg.recintos_max)
         return Response(cuerpo, media_type="application/geo+json", headers={**cab, "X-Recintos-Total": str(total)})
 
+    # La app estatica va AL FINAL: las rutas de la API (/health, /analyze, /parcel, /recintos, /docs) tienen prioridad.
+    if (cfg.frontend_dir / "index.html").is_file():
+        app.mount("/", StaticFiles(directory=str(cfg.frontend_dir), html=True), name="frontend")
     return app
 
 
