@@ -1,7 +1,6 @@
 import Logo from './components/Logo.jsx'
 import RegionsBar from './components/RegionsBar.jsx'
 import FiltersPanel from './components/FiltersPanel.jsx'
-import ViewSwitcher from './components/ViewSwitcher.jsx'
 import MapView from './components/MapView.jsx'
 import { useAppState } from './state/AppState.jsx'
 import styles from './App.module.css'
@@ -12,7 +11,7 @@ import styles from './App.module.css'
  *  - map:  zoomed into Spain; regions, filters and the view switcher appear.
  */
 export default function App() {
-  const { screen, setScreen, setEntry, view } = useAppState()
+  const { screen, setScreen, setEntry } = useAppState()
   const onMap = screen === 'map'
   // Both zoom in from the globe: onto the farmer's parcel, or into Campo de Cartagena.
   const goToMyParcels = () => { setEntry('parcel'); setScreen('map') }
@@ -23,7 +22,7 @@ export default function App() {
       <MapView />
 
       <header className={styles.brand}>
-        <Logo size={onMap ? 'sm' : 'lg'} onLight={onMap && view === 'mono'} onClick={() => setScreen('home')} />
+        <Logo size={onMap ? 'sm' : 'lg'} onClick={() => setScreen('home')} />
       </header>
 
       {!onMap && (
@@ -40,7 +39,6 @@ export default function App() {
             <RegionsBar />
             <FiltersPanel />
           </div>
-          <ViewSwitcher className={styles.views} />
         </>
       )}
     </div>

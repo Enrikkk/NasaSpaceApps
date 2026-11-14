@@ -5,9 +5,17 @@
   padding: var(--space-3) var(--space-4);
   border-radius: 24px;
 }
-.title { font-size: clamp(28px, 3.8vw, 76px); color: var(--green-light); }
+.title { font-size: clamp(26px, 2.4vw, 40px); color: var(--green-light); }
 
-.list { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); }
+.list {
+  list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2);
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height 400ms var(--ease), opacity 250ms, margin 400ms var(--ease);
+}
+/* Folded by default; unfolds on hover, or when something inside has focus (keyboard, tap on phones). */
+.bar:hover .list, .bar:focus-within .list { max-height: 160px; opacity: 1; margin-top: var(--space-2); }
+.bar { gap: 0; cursor: default; outline: none; }
+.bar:focus-visible { box-shadow: 0 0 0 2px var(--green-light); }
 
 .chip {
   padding: var(--space-1) var(--space-3);

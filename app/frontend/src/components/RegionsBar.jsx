@@ -3,7 +3,7 @@ import { REGIONS } from '../config/map.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './RegionsBar.module.css'
 
-/** Top-right bar: title + one chip per region. Picking a region opens the map focused on it. */
+/** Top-right: folded to its title; hover (or tap/focus) unfolds one chip per region. */
 export default function RegionsBar() {
   const { screen, setScreen, regionId, setRegionId } = useAppState()
 
@@ -13,7 +13,7 @@ export default function RegionsBar() {
   }
 
   return (
-    <Panel as="nav" variant="bar" className={styles.bar} aria-label="Regiones">
+    <Panel as="nav" variant="bar" className={styles.bar} aria-label="Regiones" tabIndex={0}>
       <h2 className={`display ${styles.title}`}>Regiones</h2>
       <ul className={styles.list}>
         {REGIONS.map((r) => {

@@ -3,7 +3,8 @@
 .logo {
   font-size: clamp(40px, 7.6vw, 150px);
   text-align: left;
-  text-shadow: 0 2px 18px rgb(0 0 0 / 0.55), 0 1px 3px rgb(0 0 0 / 0.6);
+  /* a small green glow under the word, plus a dark one so it reads over bright imagery */
+  text-shadow: 0 6px 22px rgb(41 120 71 / 0.6), 0 2px 6px rgb(0 0 0 / 0.55);
   transform-origin: 0 0;
   transition: transform 900ms var(--ease);
 }
