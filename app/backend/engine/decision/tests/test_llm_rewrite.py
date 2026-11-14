@@ -30,7 +30,7 @@ def test_checker_accepts_a_valid_rewrite_and_the_template_itself():
     (GOOD.replace("Sale bien el 73 % de los años simulados.", "Sale bien el 73 % de los años, tres de cada cuatro."), "«tres»"),
     (GOOD.replace("Ojo: precios orientativos.", "Ojo con los precios."), "«orientativ»"),
     (GOOD.replace("Sale bien", "Seguro que sale bien"), "«seguro que»"),
-    (GOOD + " Además conviene que lo hables con calma con tu familia antes de decidir nada este año.", "debe ser igual de corto"),
+    (GOOD + " Además conviene que lo hables con calma con tu familia antes de decidir nada este año.", "largo parecido"),
     ("- " + GOOD, "formato"),
     ("", "vacío"),
     (GOOD.replace("el 73 %", "la mitad, el 73 %"), "«la mitad»"),

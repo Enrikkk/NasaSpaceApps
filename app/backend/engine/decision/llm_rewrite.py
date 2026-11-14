@@ -29,7 +29,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 PROMPT_PATH = HERE / "prompts" / "rewrite_system_es.md"
 LOG_DIR = HERE.parents[2] / "data" / "cache" / "llm_log"   # app/data/cache/llm_log (git-ignored)
 MAX_TRIES = 3
-MAX_LEN_RATIO = 1.0          # "más corto que la plantilla, nunca más largo"
+MAX_LEN_RATIO = 1.15         # "largo parecido: hasta un 15 % más" (con 1.0 el modelo solo borraba palabras sueltas y rompía frases)
 CAMPOS = ("por_que", "evidencia_resumen", "no_sabemos", "riesgos_texto", "consulta")
 CAMPOS_DEFECTO = ("por_que",)
 FORBIDDEN = ("garantizado", "garantizada", "seguro que", "sin riesgo", "asegura", "sin duda", "te hará ganar",
@@ -98,7 +98,7 @@ def check(template, answer):
         if c in low_t and c not in low_a:
             errs.append(f"falta una salvedad de la plantilla (la palabra que empieza por «{c}»): el texto nuevo debe conservarla")
     if len(a) > len(template) * MAX_LEN_RATIO:
-        errs.append(f"el texto tiene {len(a)} caracteres y la plantilla {len(template)}: debe ser igual de corto o más corto")
+        errs.append(f"el texto tiene {len(a)} caracteres y la plantilla {len(template)}: debe tener un largo parecido (como mucho un 15 % más)")
     if _MARKUP.search(a):
         errs.append("hay listas, títulos o formato (asteriscos, guiones, almohadillas): devuelve solo frases seguidas")
     if texts._BAD_WORD.search(a):

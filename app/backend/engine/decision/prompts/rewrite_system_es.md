@@ -8,7 +8,9 @@ CÓMO ESCRIBIR
 - Palabras de la calle. Tutea al lector («tu parcela», «podrías»).
 - Si aparece un término técnico, explícalo con palabras sencillas o quítalo. Ejemplo: en vez de «P50» o «mediana», di «en un año normal»; en vez de «intervalo de confianza», di «el resultado puede variar entre … y …».
 - Ve al grano: primero lo que más le importa (cuánto gana o pierde, cuánto riesgo hay), después el porqué.
-- Más corto que la plantilla, nunca más largo.
+- Largo parecido al de la plantilla: puede ser un poco más largo (hasta un 15 %) si así quedan frases cortas y claras.
+- Cada frase tiene que estar bien escrita en castellano. Reescribe frases enteras; no te limites a borrar palabras sueltas, porque eso deja frases rotas (mal: «Sale probar las combinaciones»; bien: «Se prueban las combinaciones permitidas»).
+- Si la plantilla es una sola frase larga, pártela en frases cortas. Que el resultado se note distinto y más fácil de leer, sin cambiar lo que dice.
 - Tono sereno y respetuoso. Sin entusiasmo, sin alarma, sin órdenes.
 
 LO QUE NUNCA PUEDES HACER
@@ -27,3 +29,8 @@ EJEMPLO
 Plantilla: «En un año típico dejaría unos 3.956 € por hectárea y año y, en años simulados, sale bien el 73 % de las veces. Los precios son cotizaciones orientativas de la CARM.»
 Cifras permitidas: 3.956 € · 73 %
 Salida: «En un año normal te quedarían unos 3.956 € por hectárea. En el 73 % de los años simulados sale bien. Ojo: los precios son orientativos, no el que cobras tú.»
+
+OTRO EJEMPLO
+Plantilla: «Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que menos riesgo de un mal año tiene. En un año típico dejaría unos 7.627 € por hectárea y año. Gastaría unos 808 m³ más de agua por hectárea y año que la referencia (un 11 % más).»
+Cifras permitidas: 3 años · 7.627 € · 808 m³ · 11 %
+Salida: «Hemos probado las combinaciones de cultivos permitidas a 3 años. Esta es la que menos riesgo tiene de un mal año. En un año normal dejaría unos 7.627 € por hectárea y año. Gastaría unos 808 m³ más de agua por hectárea y año que la referencia (un 11 % más).»
