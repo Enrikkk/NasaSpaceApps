@@ -70,6 +70,28 @@ def test_scenarios_share_the_same_year_and_cost():
         assert r["exito_pct"]["n_muestras"] > r["exito_pct"]["n"]
 
 
+def _strings(node):
+    if isinstance(node, str):
+        yield node
+    elif isinstance(node, dict):
+        for v in node.values():
+            yield from _strings(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _strings(v)
+
+
+def test_exported_texts_have_no_format_braces_and_root_alignment():
+    out = bd.build("torre-pacheco", allow_restricted=True)
+    bad = [s for s in _strings(out) if "{" in s or "}" in s]
+    assert bad == []
+    ev = [r for r in out["rotaciones"] if r.get("escenarios")]
+    assert out["escenarios_meta"]["alineados"] is True
+    assert out["escenarios_meta"]["alineados"] is all(r["escenarios_meta"]["alineados"] for r in ev)
+    assert "n_muestras = " in out["rotaciones"][0]["exito_pct"]["definicion"]
+    assert "{sim" not in out["rotaciones"][0]["exito_pct"]["definicion"]
+
+
 def test_shared_draws_deterministic():
     assert st.draws()[:3] == st.draws()[:3] and len(st.draws()) == st.N_SAMPLES
 

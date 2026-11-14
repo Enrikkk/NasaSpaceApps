@@ -180,10 +180,11 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
         out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()},
                             "n_anios_historicos": sim["n"], "n_efectivo": sim["n"], "n_muestras": sim["n_muestras"],
                             "peores_anios": [{"anio": y, "margen_eur_ha": r0(m)} for y, m in sim["peores_anios_margen"]],
-                            "definicion": f"n = n_anios_historicos = {sim['n']}: años del histórico en los que todos los años del plan "
-                                          "tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio "
-                                          "del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} "
-                                          "conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."}
+                            "definicion": (
+                                f"n = n_anios_historicos = {sim['n']}: años del histórico en los que todos los años del plan "
+                                "tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio "
+                                f"del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} "
+                                "conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes.")}
         out["exito_pct"]["valor"] = round(out["exito_pct"]["valor"] * 100, 1)
         out["exito_pct"]["horquilla"] = [round(x * 100, 1) for x in out["exito_pct"]["horquilla"]]
         out["margen_eur_ha"] = {"valor": r0(q(.5)), "horquilla": [r0(q(.1)), r0(q(.9))], "p10": r0(q(.1)), "p50": r0(q(.5)),
@@ -323,6 +324,8 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
                                   if allow_restricted else "sin precios CARM"),
                        "fuentes_restringidas": mk_restricted if allow_restricted else {}}
     out["rotaciones"] = rots
+    flags = [bool(r["escenarios_meta"]["alineados"]) for r in rots if r.get("escenarios")]
+    out["escenarios_meta"] = {"alineados": bool(flags) and all(flags)}
     out["criterios_sentido"] = "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas"
     out["supuestos_decision"] = {"horizonte_anios": rt.HORIZON, "muestras": st.N_SAMPLES,
                                  "coste_banda": list(st.COST_BAND), "dias_entre_ciclos": rt.GAP_DAYS,

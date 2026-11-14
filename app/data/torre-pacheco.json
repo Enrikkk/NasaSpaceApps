@@ -944,7 +944,7 @@
       "margen_eur_ha": -6068
      }
     ],
-    "definicion": "n = n_anios_historicos = 17: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 17: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 51 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 1067,
@@ -4793,7 +4793,7 @@
       "margen_eur_ha": -1206
      }
     ],
-    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 52 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 3045,
@@ -8615,7 +8615,7 @@
       "margen_eur_ha": -2657
      }
     ],
-    "definicion": "n = n_anios_historicos = 15: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 15: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 50 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 1313,
@@ -12467,7 +12467,7 @@
       "margen_eur_ha": -1206
      }
     ],
-    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = {sim['n_muestras']} conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
+    "definicion": "n = n_anios_historicos = 16: años del histórico en los que todos los años del plan tienen precio. Un año es malo si algún año del plan tiene pérdida de clima, o si el margen medio del plan en ese año es negativo. El intervalo de Wilson usa ese n. n_muestras = 52 conserva el conteo antiguo (año del plan x año del histórico), que no son observaciones independientes."
    },
    "margen_eur_ha": {
     "valor": 3004,
@@ -15609,6 +15609,9 @@
    }
   }
  ],
+ "escenarios_meta": {
+  "alineados": true
+ },
  "criterios_sentido": "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas",
  "supuestos_decision": {
   "horizonte_anios": 3,
