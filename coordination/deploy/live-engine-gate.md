@@ -94,3 +94,29 @@ revision and live-marker evidence; Arturo/Desktop validate published URL.
 Gonzalo owns API/image/GCP, Arturo QA/scripts/deploydocs. Same-origin frontend
 serving is available on mainf1b2ffa but is not proof of deployment/integration.
 No main merge by agents; no new project/billing/spend expansion authorised.
+
+## Desktop browser evidence7403fe6 — recovery completed
+
+Desktop reports two covered parcels verified in real browser (18/429/1 and
+18/426/1): selection, parcel panel and full rotations. Setting priorities to
+100profit/0others moves Máximo margen first. Outside sample coverage (18/440/1)
+shows a zone-estimate warning. These are two covered UI parcels, not three.
+Receiver independently exercised three API parcels; do not conflate coverage.
+
+Network-error test was coordinated on this exact candidate: receiver stopped only
+its uvicorn PID108862, confirmed TCP18080 closed; Desktop saw visible error and
+Reintentar. On explicit Desktop request the same API was restarted asPID110872,
+health200/version7403fe6 confirmed. Desktop then verified Reintentar restores
+429/1 panel and full rotations. Frontend remained running on5173 throughout.
+This is recovery evidence, not proof of a complete offline preloaded fallback.
+
+Desktop evidence files: outputs/e2e-integracion.md, e2e-error-red.jpg,
+e2e-recuperacion.jpg in its workspace. Receiver records the supplied observations;
+it has not executed browser automation or copied full screenshots into git.
+Minor contradictory error copy sentJaime298 (claims parcel data exist when fast
+parcel request also fails). Team notified byDesktop297.
+
+Next QA targets an agreed combined candidate containing worker fix, the no-recinto
+metadata correction62746d4, and Enrique's approved open-price figures. No duplicate
+producer suite, no claim of three UI parcels or final demo, and no deployment of
+the currently blocked candidate. Servers preserved for Desktop as requested.
