@@ -5,6 +5,7 @@ lechuga,coste_circulante,6786,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,coste_inmovilizado,4187,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
 lechuga,coste_total,10973,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"lechuga Iceberg (Little Gem: 3.300 m3, 28.000 kg/ha); Tablas 3, 22, 28; € de ~2018 (encuestas 2017-19)"
 lechuga,coste_unitario,0.41,EUR/kg,IMIDA-HORT2020,A,sourced,
+lechuga,coste_unitario_ud,0.2,EUR/ud,IMIDA-HORT2020,A,sourced,"Tabla 28: coste unitario iceberg 0,20 €/ud"
 lechuga,ece_slope,13.0,%/(dS/m),F29-T4,A,derived,100/(9.0-1.3)
 lechuga,ece_threshold,1.3,dS/m,F29-T4,A,sourced,ECe at 100 % yield potential
 lechuga,ece_zero_yield,9.0,dS/m,F29-T4,A,sourced,ECe at 0 % yield
@@ -26,6 +27,7 @@ lechuga,legume,,,,P,placeholder,No verified value in source snapshot
 lechuga,n_credit,,,,P,placeholder,No verified value in source snapshot
 lechuga,n_need,,,,P,placeholder,No verified value in source snapshot
 lechuga,p_depletion,0.30,-,F56-T22,A,sourced,Lettuce row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+lechuga,plantas_ha,66000,plantas/ha,IMIDA-HORT2020,A,sourced,iceberg 66.000 plantas/ha (cap. 1.3.4)
 lechuga,preparacion_plantacion,3664,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,produccion_media,30000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 lechuga,recoleccion,3060,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -45,6 +47,7 @@ brocoli,coste_circulante,4603,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,coste_inmovilizado,3271,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
 brocoli,coste_total,7874,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"bróculi aire libre, acolchado; Tablas 3, 22, 27; € de ~2018 (encuestas 2017-19)"
 brocoli,coste_unitario,0.45,EUR/kg,IMIDA-HORT2020,A,sourced,
+brocoli,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 brocoli,ece_slope,8.9,%/(dS/m),F29-T4,A,derived,100/(14-2.8)
 brocoli,ece_threshold,2.8,dS/m,F29-T4,A,sourced,
 brocoli,ece_zero_yield,14,dS/m,F29-T4,A,sourced,
@@ -66,6 +69,7 @@ brocoli,legume,,,,P,placeholder,No verified value in source snapshot
 brocoli,n_credit,,,,P,placeholder,No verified value in source snapshot
 brocoli,n_need,,,,P,placeholder,No verified value in source snapshot
 brocoli,p_depletion,0.45,-,F56-T22,A,sourced,Broccoli row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+brocoli,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 brocoli,preparacion_plantacion,2825,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,produccion_media,18500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 brocoli,recoleccion,1355,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -85,6 +89,7 @@ melon,coste_circulante,5393,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,coste_inmovilizado,3846,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
 melon,coste_total,9240,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"melón piel de sapo; Tablas 3, 22, 30; € de ~2018 (encuestas 2017-19)"
 melon,coste_unitario,0.23,EUR/kg,IMIDA-HORT2020,A,sourced,
+melon,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 melon,ece_slope,8.4,%/(dS/m),RES-F29,B,secondary,same as above
 melon,ece_threshold,1.0,dS/m,RES-F29,B,secondary,not in FAO-29 Table 4 (only classed moderately sensitive); value from research notes (Maas & Hoffman via secondary source)
 melon,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
@@ -106,6 +111,7 @@ melon,legume,,,,P,placeholder,No verified value in source snapshot
 melon,n_credit,,,,P,placeholder,No verified value in source snapshot
 melon,n_need,,,,P,placeholder,No verified value in source snapshot
 melon,p_depletion,0.40,-,F56-T22,A,sourced,Sweet Melons row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+melon,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 melon,preparacion_plantacion,3487,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,produccion_media,42000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 melon,recoleccion,1507,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -125,6 +131,7 @@ alcachofa,coste_circulante,6907,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,coste_inmovilizado,2656,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
 alcachofa,coste_total,9563,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"alcachofa (sistema mayoritario); Tablas 3, 22, 25; € de ~2018 (encuestas 2017-19)"
 alcachofa,coste_unitario,0.56,EUR/kg,IMIDA-HORT2020,A,sourced,
+alcachofa,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 alcachofa,ece_slope,,,,P,placeholder,No verified value in source snapshot
 alcachofa,ece_threshold,,dS/m,,P,placeholder,SUPUESTO: FAO-29 'Artichoke' rows are Helianthus tuberosus (Jerusalem artichoke) not Cynara scolymus; no sourced value
 alcachofa,ece_zero_yield,,,,P,placeholder,No verified value in source snapshot
@@ -146,6 +153,7 @@ alcachofa,legume,,,,P,placeholder,No verified value in source snapshot
 alcachofa,n_credit,,,,P,placeholder,No verified value in source snapshot
 alcachofa,n_need,,,,P,placeholder,No verified value in source snapshot
 alcachofa,p_depletion,0.45,-,F56-T22,A,sourced,"Artichokes row (f. Perennial Vegetables, same row family as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
+alcachofa,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 alcachofa,preparacion_plantacion,1881,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,produccion_media,18000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
 alcachofa,recoleccion,2314,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
@@ -165,6 +173,7 @@ haba,coste_circulante,,,,P,placeholder,No verified value in source snapshot
 haba,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
 haba,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
 haba,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+haba,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 haba,ece_slope,9.5,%/(dS/m),F29-T4,A,derived,100/(12-1.5)
 haba,ece_threshold,1.5,dS/m,F29-T4,A,sourced,Broadbean (Vicia faba)
 haba,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
@@ -186,6 +195,7 @@ haba,legume,yes,-,F56-T12,A,sourced,fixes N (credit from research notes 90-130 k
 haba,n_credit,,,,P,placeholder,No verified value in source snapshot
 haba,n_need,,,,P,placeholder,No verified value in source snapshot
 haba,p_depletion,0.45,-,F56-T22,A,sourced,Fababean (broad bean) Dry/Seed row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+haba,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 haba,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 haba,produccion_media,,,,P,placeholder,No verified value in source snapshot
 haba,recoleccion,,,,P,placeholder,No verified value in source snapshot
@@ -205,6 +215,7 @@ cebada,coste_circulante,,,,P,placeholder,No verified value in source snapshot
 cebada,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
 cebada,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
 cebada,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+cebada,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 cebada,ece_slope,5.0,%/(dS/m),F29-T4,A,derived,100/(28-8.0)
 cebada,ece_threshold,8.0,dS/m,F29-T4,A,sourced,
 cebada,ece_zero_yield,28,dS/m,F29-T4,A,sourced,
@@ -226,6 +237,7 @@ cebada,legume,,,,P,placeholder,No verified value in source snapshot
 cebada,n_credit,,,,P,placeholder,No verified value in source snapshot
 cebada,n_need,,,,P,placeholder,No verified value in source snapshot
 cebada,p_depletion,0.55,-,F56-T22,A,sourced,Barley row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+cebada,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 cebada,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 cebada,produccion_media,,,,P,placeholder,No verified value in source snapshot
 cebada,recoleccion,,,,P,placeholder,No verified value in source snapshot
@@ -245,6 +257,7 @@ veza,coste_circulante,,,,P,placeholder,No verified value in source snapshot
 veza,coste_inmovilizado,,,,P,placeholder,No verified value in source snapshot
 veza,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
 veza,coste_unitario,,,,P,placeholder,No verified value in source snapshot
+veza,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 veza,ece_slope,11.1,%/(dS/m),F29-T4,A,derived,100/(12-3.0)
 veza,ece_threshold,3.0,dS/m,F29-T4,A,sourced,Vetch common (Vicia angustifolia)
 veza,ece_zero_yield,12,dS/m,F29-T4,A,sourced,
@@ -266,6 +279,7 @@ veza,legume,yes,-,F29-T6,A,sourced,Vicia; N credit 100-120 kg N/ha in research n
 veza,n_credit,,,,P,placeholder,No verified value in source snapshot
 veza,n_need,,,,P,placeholder,No verified value in source snapshot
 veza,p_depletion,0.45,-,F56-T22,B,derived,"no vetch row: e. Legumes 'Beans, dry and Pulses' row; for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)"
+veza,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 veza,preparacion_plantacion,,,,P,placeholder,No verified value in source snapshot
 veza,produccion_media,,,,P,placeholder,No verified value in source snapshot
 veza,recoleccion,,,,P,placeholder,No verified value in source snapshot
@@ -285,6 +299,7 @@ limon,coste_circulante,6736,EUR/ha·año,IMIDA-CIT2018,A,sourced,
 limon,coste_inmovilizado,600,EUR/ha·año,IMIDA-CIT2018,A,sourced,amortizaciones + preparación y plantación
 limon,coste_total,7336,EUR/ha·año,IMIDA-CIT2018,A,sourced,"limonero Fino 7x5 m, plena producción; recolección a cargo del comprador (con recolección 11.447 €/ha, 0,09 €/kg); Tablas 4, 10, 15, 27; € de ~2018 (encuestas 2017-19)"
 limon,coste_unitario,0.18,EUR/kg,IMIDA-CIT2018,A,sourced,
+limon,coste_unitario_ud,,,,P,placeholder,No verified value in source snapshot
 limon,ece_slope,15.9,%/(dS/m),F29-T4,M,derived,100/(8.0-1.7)
 limon,ece_threshold,1.7,dS/m,F29-T4,M,proxy,lemon not in FAO-29 Table 4: Orange (Citrus sinensis) row used
 limon,ece_zero_yield,8.0,dS/m,F29-T4,M,proxy,Orange row
@@ -306,6 +321,7 @@ limon,legume,,,,P,placeholder,No verified value in source snapshot
 limon,n_credit,,,,P,placeholder,No verified value in source snapshot
 limon,n_need,,,,P,placeholder,No verified value in source snapshot
 limon,p_depletion,0.50,-,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); for ETc ~5 mm/d; adjust p = p + 0.04 (5 - ETc)
+limon,plantas_ha,,,,P,placeholder,No verified value in source snapshot
 limon,preparacion_plantacion,89,EUR/ha·año,IMIDA-CIT2018,A,sourced,
 limon,produccion_media,45000,kg/ha·año,IMIDA-CIT2018,A,sourced,
 limon,recoleccion,0,EUR/ha·año,IMIDA-CIT2018,A,sourced,
@@ -319,3 +335,17 @@ limon,stages_days_murcia,,,,P,placeholder,No verified value in source snapshot
 limon,stages_days_spring,,,,P,placeholder,No verified value in source snapshot
 limon,zr_max,1.5,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); larger value: modelling water stress / rainfed
 limon,zr_min,1.2,m,F56-T22,A,sourced,Citrus 70 % canopy row (same canopy as Kc); smaller value: irrigation scheduling
+lechuga_little_gem,coste_total,15243,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 29 Little Gem; € de ~2018
+lechuga_little_gem,coste_unitario,0.6,EUR/kg,IMIDA-HORT2020,A,sourced,Tabla 29
+lechuga_little_gem,coste_unitario_ud,0.13,EUR/ud,IMIDA-HORT2020,A,sourced,Tabla 29 / texto p. 89
+lechuga_little_gem,inversion_inicial,27971,EUR/ha,IMIDA-HORT2020,A,sourced,Tabla 8
+lechuga_little_gem,plantas_ha,132000,plantas/ha,IMIDA-HORT2020,A,sourced,Baby o Little Gem 132.000 plantas/ha
+lechuga_little_gem,produccion_media,28000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3 (bruto)
+lechuga_little_gem,recoleccion,4705,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 29
+lechuga_little_gem,riego_dosis,3300,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3
+melon_galia,coste_total,11152,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 31 Galia/Cantalupo; € de ~2018
+melon_galia,coste_unitario,0.23,EUR/kg,IMIDA-HORT2020,A,sourced,"Tabla 31 (neto, mismo que piel de sapo)"
+melon_galia,inversion_inicial,19352,EUR/ha,IMIDA-HORT2020,A,sourced,Tabla 10
+melon_galia,produccion_media,52500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3 (bruto)
+melon_galia,recoleccion,1819,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 31
+melon_galia,riego_dosis,3800,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3

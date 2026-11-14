@@ -93,6 +93,20 @@ class TablesTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'direction'):
                     tables.build(self.src, self.out, 'fixture')
 
+    def test_product_overrides_preserve_base_crop_and_missing_agronomy(self):
+        tables.write(self.src / 'products.csv',
+                     [dict(product_id='lechuga_little_gem', crop_id='lechuga', cost_product='')],
+                     ['product_id', 'crop_id', 'cost_product'])
+        row = dict(self.param, crop_id='lechuga_little_gem', param='coste_total', value='15243', unit='EUR/ha')
+        tables.write(self.src / 'imida_costs.csv', [row], list(row))
+        tables.build(self.src, self.out, 'fixture')
+        params = tables.read(self.out / 'crop_params.csv')
+        own = [r for r in params if r['crop_id'] == 'lechuga_little_gem']
+        self.assertEqual([(r['param'], r['value']) for r in own], [('coste_total', '15243')])
+        self.assertEqual(len(tables.read(self.out / 'crops.csv')), 8)
+        costs = [r for r in tables.read(self.out / 'costs.csv') if r['crop_id'] == 'lechuga_little_gem']
+        self.assertEqual(costs[0]['price_base_year'], '2018')
+
 
 if __name__ == '__main__':
     unittest.main()

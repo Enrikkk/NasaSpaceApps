@@ -35,13 +35,19 @@ def build(source, dest, revision, supplement=None):
     sources = {r['source_id']: r for r in source_rows}
     if len(sources) != len(source_rows):
         raise ValueError('Duplicate source ID')
+    products = read(source / 'products.csv') if (source / 'products.csv').exists() else []
+    product_ids = {r['product_id'] for r in products}
+    if len(product_ids) != len(products) or any(r['crop_id'] not in CROPS for r in products):
+        raise ValueError('Duplicate product or unknown base crop')
+    if any(r.get('cost_product') and r['cost_product'] not in product_ids | set(CROPS) for r in products):
+        raise ValueError('Unknown cost product')
     params = read(source / 'fao_crop_params.csv') + read(source / 'imida_costs.csv')
     if supplement:
         params += read(supplement / 'crop_params.csv')
     indexed = {}
     for row in params:
         key = row['crop_id'], row['param']
-        if key in indexed or key[0] not in CROPS:
+        if key in indexed or key[0] not in set(CROPS) | product_ids:
             raise ValueError(f'Duplicate/unknown crop parameter: {key}')
         placeholder = row['value'] == '' and row['conf'] == 'P' and row['status'] == 'placeholder'
         refs = row['source_id'].split('+')
@@ -78,6 +84,8 @@ def build(source, dest, revision, supplement=None):
             if indexed[crop, param]['value'] == '' and (param in REQUIRED or param == 'coste_total'):
                 missing.append({'crop_id': crop, 'param': param})
     long_rows = [indexed[crop, param] for crop in CROPS for param in sorted(required)]
+    # Product rows contain only sourced overrides; agronomy is inherited by the engine.
+    long_rows += [indexed[key] for key in sorted(indexed) if key[0] not in CROPS]
     write(dest / 'crop_params.csv', long_rows,
           ['crop_id', 'param', 'value', *META])
     wide = []
@@ -94,11 +102,13 @@ def build(source, dest, revision, supplement=None):
     write(dest / 'crops.csv', wide, wide_fields)
     costs = read(source / 'imida_costs.csv')
     cost_params = sorted({r['param'] for r in costs})
-    costs = [dict(indexed[crop, param], source_year='',
-                  price_base_year='2018' if indexed[crop, param]['value'] and 'EUR' in indexed[crop, param]['unit'] else '',
+    cost_rows = [indexed[crop, param] for crop in CROPS for param in cost_params]
+    cost_rows += [row for row in costs if row['crop_id'] not in CROPS]
+    costs = [dict(cell, source_year='',
+                  price_base_year='2018' if cell['value'] and 'EUR' in cell['unit'] else '',
                   monetary_basis='historical_nominal_unadjusted',
                   basis_note='IMIDA base 2018 per Enrique #54 (survey 2017-19); no inflation adjustment')
-             for crop in CROPS for param in cost_params]
+             for cell in cost_rows]
     write(dest / 'costs.csv', costs,
           ['crop_id', 'param', 'value', *META, 'source_year', 'price_base_year', 'monetary_basis', 'basis_note'])
     prices = []
@@ -130,6 +140,8 @@ def build(source, dest, revision, supplement=None):
             raise ValueError('HICP must be finite and positive')
         write(dest / 'eurostat_hicp_es.csv', hicp, list(hicp[0]))
     write(dest / 'sources.csv', source_rows, list(source_rows[0]))
+    if products:
+        write(dest / 'products.csv', products, list(products[0]))
     candidates = []
     if supplement and (supplement / 'cost_candidates.csv').exists():
         candidates = read(supplement / 'cost_candidates.csv')
@@ -152,6 +164,8 @@ def build(source, dest, revision, supplement=None):
                        for p in sorted(supplement.glob('*.csv'))})
     manifest = {'source_revision': revision, 'input_sha256': hashes,
                 'crops': list(CROPS), 'source_parameter_rows': len(params),
+                'products': len(products),
+                'excluded_inputs': {'carm_precios_mensuales.csv': 'Not imported: CARM legal notice restricts use to personal non-commercial and disallows modification; human clearance or applicable permission needed.'} if products else {},
                 'prices': len(prices), 'missing_required_values': missing,
                 'cost_candidates': len(candidates),
                 'cost_candidate_policy': 'Not loaded into canonical crop_params/costs: select matching water regime and convert from each native price_base_year before engine evaluation.',
