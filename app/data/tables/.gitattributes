@@ -1,0 +1,2 @@
+source_snapshot/*.csv -text whitespace=cr-at-eol
+supplement/*.csv -text whitespace=cr-at-eol

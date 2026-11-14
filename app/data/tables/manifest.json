@@ -1,0 +1,350 @@
+{
+  "source_revision": "27d51d9",
+  "input_sha256": {
+    "eurostat_area_es.csv": "8288d222c55edad533d29bcbbcc62f48e98d36af4a7118492396377176b6c894",
+    "eurostat_hicp_es.csv": "7eb8a5d0f2f5033d1ba48dbebf52ae853992f753287c851733ac85a6a2539ee3",
+    "eurostat_prices_es.csv": "d484a0c19cbdbcbc85c052307653348f4c247d729401124ee07452df8aab0f80",
+    "fao_crop_params.csv": "da4f1dc1ebc0e47684aa16c61d94bad9ae167b9404bcb0e8653e1d989ae89fa0",
+    "imida_costs.csv": "102d097563e78f342930328935ec36e2dd5e9c7dd94fcb57c80ffe6a737c97a6",
+    "products.csv": "f0e48c9452ba25591a36f4e098557380a7e101eb838692333fa5f92293b96383",
+    "sources.csv": "132590505b2a6bc1bbeeef41fcb984393466f6dde5e4a199f5624c2cf53c8fb5",
+    "supplement/cost_candidates.csv": "4a2f67c8d38e7473e6795ff54c1bba41826dca06866d4884343557c0655ede2b",
+    "supplement/crop_params.csv": "c972093aac7c0d8b8aaa2a9def9380392b8c08b94d481667229d5dff1d20dd6d",
+    "supplement/sources.csv": "1578d505945c4e2ace92ed0857370a037c3ba3617b66c84ed1433e3ec31be853"
+  },
+  "crops": [
+    "lechuga",
+    "brocoli",
+    "melon",
+    "alcachofa",
+    "haba",
+    "cebada",
+    "veza",
+    "limon"
+  ],
+  "source_parameter_rows": 192,
+  "products": 13,
+  "excluded_inputs": {
+    "carm_precios_mensuales.csv": "Not imported: CARM legal notice restricts use to personal non-commercial and disallows modification; human clearance or applicable permission needed."
+  },
+  "prices": 150,
+  "missing_required_values": [
+    {
+      "crop_id": "lechuga",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "legume"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "lechuga",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "legume"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "brocoli",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "melon",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "melon",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "melon",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "melon",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "melon",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "melon",
+      "param": "legume"
+    },
+    {
+      "crop_id": "melon",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "melon",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "ece_slope"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "ece_threshold"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "legume"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "alcachofa",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "haba",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "haba",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "haba",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "haba",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "haba",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "haba",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "haba",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "haba",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "haba",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "legume"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "cebada",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "veza",
+      "param": "coste_total"
+    },
+    {
+      "crop_id": "veza",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "veza",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "veza",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "veza",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "veza",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "veza",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "veza",
+      "param": "n_need"
+    },
+    {
+      "crop_id": "veza",
+      "param": "produccion_media"
+    },
+    {
+      "crop_id": "veza",
+      "param": "sowing_month"
+    },
+    {
+      "crop_id": "veza",
+      "param": "stages_days"
+    },
+    {
+      "crop_id": "limon",
+      "param": "frost_t0"
+    },
+    {
+      "crop_id": "limon",
+      "param": "frost_t100"
+    },
+    {
+      "crop_id": "limon",
+      "param": "heat_t0"
+    },
+    {
+      "crop_id": "limon",
+      "param": "heat_t100"
+    },
+    {
+      "crop_id": "limon",
+      "param": "legal_group"
+    },
+    {
+      "crop_id": "limon",
+      "param": "legume"
+    },
+    {
+      "crop_id": "limon",
+      "param": "n_credit"
+    },
+    {
+      "crop_id": "limon",
+      "param": "n_need"
+    }
+  ],
+  "cost_candidates": 3,
+  "cost_candidate_policy": "Not loaded into canonical crop_params/costs: select matching water regime and convert from each native price_base_year before engine evaluation.",
+  "optional_window_values": "Empty means undocumented; engine may apply its explicit all-cycle assumption. Values allowed: all or ini/dev/mid/late joined by +.",
+  "price_missing_crops": [
+    "alcachofa",
+    "veza"
+  ],
+  "limitations": [
+    "National annual prices are not local farm forecasts.",
+    "No inflation alignment: real2015 prices must not be mixed with historical nominal costs.",
+    "Cover vetch is not harvested forage: forage costs require an explicit proxy decision.",
+    "No missing value has been replaced by zero."
+  ],
+  "license_review": {
+    "F56-T11": "pending_review",
+    "F56-T12": "pending_review",
+    "F29-T4": "pending_review",
+    "F29-T6": "pending_review",
+    "RES-F29": "pending_review",
+    "IMIDA-HORT2020": "pending_review",
+    "IMIDA-CIT2018": "pending_review",
+    "SIAM-TP91": "pending_review",
+    "F56-T22": "pending_review",
+    "CARM-ALC": "pending_review",
+    "CARM-ANUARIO": "pending_review",
+    "UC-FAMILIES": "pending_review",
+    "ECO-VETCH": "pending_review",
+    "ECO-LEMON": "pending_review"
+  }
+}
