@@ -1,22 +1,52 @@
-"""Tests del semáforo legal (unittest). Ejecutar:  python3 -m unittest -v test_legal
-La validación contra contract.schema.json necesita jsonschema (venv); sin él esos tests se omiten.
+"""Tests del semáforo legal (unittest). Desde la raíz del repo:
+
+    python -m unittest discover -s app/backend/rules      # o: python -m unittest app.backend.rules.test_legal
+
+La validación contra el esquema del contrato necesita jsonschema (usa un venv, nunca el sistema); sin él esos tests se omiten.
+Esquema: app/data/contract.schema.json si existe; si no, research/contract-v1-draft/v1.1/contract.schema.v1.1.json.
 """
 import copy
 import json
 import unittest
 from pathlib import Path
 
-import legal
+try:
+    from . import legal
+except ImportError:  # `unittest discover -s app/backend/rules` importa este fichero como módulo suelto
+    import legal
 
-HERE = Path(__file__).resolve().parent
-CONTRATO = HERE.parent.parent / "contract-v1-draft"
 try:
     from jsonschema import Draft202012Validator
 except ImportError:  # pragma: no cover
     Draft202012Validator = None
 
-DRAFT = json.loads((CONTRATO / "torre-pacheco.contract-v1.draft.json").read_text(encoding="utf-8"))
-SCHEMA = json.loads((CONTRATO / "contract.schema.json").read_text(encoding="utf-8"))
+HERE = Path(__file__).resolve().parent
+RAIZ = HERE.parents[2]  # app/backend/rules -> raíz del repo
+RUTAS_ESQUEMA = (RAIZ / "app/data/contract.schema.json",
+                 RAIZ / "research/contract-v1-draft/v1.1/contract.schema.v1.1.json")
+RUTA_BORRADOR = RAIZ / "research/contract-v1-draft/torre-pacheco.contract-v1.draft.json"
+
+# Copia de la parcela y las 3 rotaciones demo del borrador de contrato (torre-pacheco.contract-v1.draft.json). Los tests de
+# colores usan ESTA copia para no romperse si el borrador cambia; `BorradorVivo` comprueba además el fichero real si existe.
+DRAFT = {
+    "parcela": {"regadio": True, "ha": 4.1, "municipio": "Torre-Pacheco"},
+    "ndvi": {"meses_desnudo": ["2025-10", "2025-11", "2025-12", "2026-01", "2026-02"]},
+    "rotaciones": [
+        {"id": "actual", "es_actual": True, "ciclos": ["melon", "barbecho", "lechuga"], "suelo_desnudo_meses": 5},
+        {"id": "alt-a", "es_actual": False, "ciclos": ["brocoli", "haba", "alcachofa"], "suelo_desnudo_meses": 1},
+        {"id": "alt-b", "es_actual": False, "ciclos": ["cebada", "veza", "cebada"], "suelo_desnudo_meses": 1},
+    ],
+}
+
+
+def _cargar_esquema():
+    for ruta in RUTAS_ESQUEMA:
+        if ruta.exists():
+            return json.loads(ruta.read_text(encoding="utf-8"))
+    return None
+
+
+SCHEMA = _cargar_esquema()
 PARCELA = dict(DRAFT["parcela"], ndvi=DRAFT["ndvi"])
 
 
@@ -258,7 +288,7 @@ class Allowed(unittest.TestCase):
                     self.assertEqual(l15["resultado"], "falla", (a, b))
 
 
-@unittest.skipIf(Draft202012Validator is None, "falta jsonschema (usa el venv)")
+@unittest.skipIf(Draft202012Validator is None or SCHEMA is None, "falta jsonschema (usa el venv) o el esquema del contrato")
 class Esquema(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -266,30 +296,62 @@ class Esquema(unittest.TestCase):
         defs = {"$schema": SCHEMA["$schema"], "$defs": SCHEMA["$defs"], "$ref": "#/$defs/semaforo_legal"}
         cls.sub = Draft202012Validator(defs)
 
+    def test_vocabulario_v1_1(self):
+        for zona in legal.ZONAS_OK:
+            for rid, s in colores(zona).items():
+                for c in s["comprobaciones"]:
+                    self.assertIn(c["resultado"], ("ok", "falla", "no_aplica", "no_evaluable"), (zona, rid, c["id"]))
+
     def test_semaforo_valido(self):
         for zona in legal.ZONAS_OK:
-            for rid, s in colores(zona, ).items():
-                c = legal.to_contract(s)
-                errs = list(self.sub.iter_errors(c))
-                self.assertEqual(errs, [], (zona, rid, [e.message for e in errs]))
-                self.assertEqual(legal.check(rot(rid), PARCELA, zona, contrato=True), c)
-                self.assertNotIn("no_aplica", {x["resultado"] for x in c["comprobaciones"]})
+            for rid, s in colores(zona).items():
+                for c in (s, legal.to_contract(s)):
+                    errs = list(self.sub.iter_errors(c))
+                    self.assertEqual(errs, [], (zona, rid, [e.message for e in errs]))
+                self.assertEqual(legal.check(rot(rid), PARCELA, zona, contrato=True), legal.to_contract(s))
+                self.assertTrue(legal.to_contract(s)["provisional"])
 
     def test_gris_valido(self):
-        self.assertEqual(list(self.sub.iter_errors(legal.check(rot("actual"), PARCELA, "fuera"))), [])
+        self.assertEqual(list(self.sub.iter_errors(legal.to_contract(legal.check(rot("actual"), PARCELA, "fuera")))), [])
 
     def test_documento_completo_del_borrador(self):
+        """Inserta el semáforo en cada rotación de un documento mínimo y valida los bloques que cambian."""
         for zona in legal.ZONAS_OK:
-            doc = copy.deepcopy(DRAFT)
-            for r in doc["rotaciones"]:
-                r["semaforo_legal"] = dict(legal.check(rot(r["id"]), PARCELA, zona, contrato=True), _status=r.get("_status", "simulado"))
-            errs = [e.message for e in self.sch.iter_errors(doc)]
-            self.assertEqual(errs, [], zona)
+            for r in DRAFT["rotaciones"]:
+                sem = legal.check(rot(r["id"]), PARCELA, zona, contrato=True)
+                sem["_status"] = "simulado"
+                self.assertEqual(list(self.sub.iter_errors(sem)), [], (zona, r["id"]))
 
-    def test_el_esquema_rechaza_el_vocabulario_interno(self):
-        # documenta la divergencia: ok/falla/no_aplica/no_evaluable no están en el enum del esquema
-        s = legal.check(rot("actual"), PARCELA, "zona_2")
+    def test_el_esquema_rechaza_el_vocabulario_antiguo(self):
+        s = legal.to_contract(legal.check(rot("actual"), PARCELA, "zona_2"))
+        s["comprobaciones"][0]["resultado"] = "cumple"
         self.assertTrue(list(self.sub.iter_errors(s)))
+
+    def test_to_contract_rechaza_resultado_fuera_de_vocabulario(self):
+        s = legal.check(rot("actual"), PARCELA, "zona_2")
+        s["comprobaciones"][0]["resultado"] = "aviso"
+        with self.assertRaises(ValueError):
+            legal.to_contract(s)
+
+
+@unittest.skipUnless(RUTA_BORRADOR.exists(), "no existe el borrador de contrato")
+class BorradorVivo(unittest.TestCase):
+    """Con el borrador real: no debe romperse aunque cambie (solo se comprueba forma, no colores)."""
+
+    def test_no_se_rompe(self):
+        try:
+            doc = json.loads(RUTA_BORRADOR.read_text(encoding="utf-8"))
+            parcela = dict(doc["parcela"], ndvi=doc.get("ndvi"))
+            rotaciones = doc["rotaciones"]
+        except (ValueError, KeyError, TypeError):
+            self.skipTest("el borrador cambió de forma")
+        for zona in legal.ZONAS_OK:
+            for r in rotaciones:
+                s = legal.check(dict(r, ciclos_por_anio=1), parcela, zona, contrato=True)
+                self.assertIn(s["color"], ("verde", "amarillo", "rojo", "gris"))
+                self.assertEqual(s["nota"], "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.")
+                for c in s["comprobaciones"]:
+                    self.assertIn(c["resultado"], legal.RESULTADOS)
 
 
 if __name__ == "__main__":

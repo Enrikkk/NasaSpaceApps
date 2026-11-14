@@ -1,4 +1,4 @@
-"""Semáforo legal determinista (Ley 3/2020 Mar Menor + PAC). PROTOTIPO de preparación de T-019.
+"""Semáforo legal determinista (Ley 3/2020 Mar Menor + PAC). T-019 (producto).
 
 Regla del proyecto: el motor calcula, el LLM no. Solo librería estándar.
 Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.
@@ -6,7 +6,7 @@ Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.
 API
     check(rotacion, parcela, zona, contrato=False) -> dict semaforo_legal
     allowed(prev, cur, zona, ciclo_dias=None, conservador=False) -> (bool, motivo, articulo)
-    to_contract(semaforo) -> dict compatible con contract.schema.json (vocabulario del esquema)
+    to_contract(semaforo) -> dict `semaforo_legal` del contrato v1.1 (ok|falla|no_aplica|no_evaluable)
 
 `zona`: "zona_1" | "zona_2" | "por_verificar" (los demás valores -> gris, sin cobertura legal del Mar Menor).
 
@@ -359,7 +359,10 @@ def _gris(motivo, zona):
 
 
 def check(rotacion, parcela, zona, contrato=False):
-    """Semáforo legal de una rotación. Con contrato=True devuelve el vocabulario de contract.schema.json."""
+    """Semáforo legal de una rotación (vocabulario del contrato v1.1).
+
+    contrato=True devuelve to_contract(): lo mismo + `provisional: true`.
+    """
     if zona not in ZONAS_OK:
         return _gris(f"Zona «{zona}»: sin reglas legales del Mar Menor evaluadas.", zona)
     if (parcela or {}).get("cobertura") == "basico" or not (rotacion.get("ciclos") or []):
@@ -421,15 +424,24 @@ def check(rotacion, parcela, zona, contrato=False):
     return to_contract(sem) if contrato else sem
 
 
-MAPA_RESULTADO = {"ok": "cumple", "falla": "no_cumple", "no_evaluable": "indeterminado"}
+RESULTADOS = ("ok", "falla", "no_aplica", "no_evaluable")  # vocabulario del contrato v1.1 (comprobacion.resultado)
 
 
-def to_contract(sem):
-    """Vocabulario de contract.schema.json: ok/falla/no_evaluable -> cumple/no_cumple/indeterminado.
-    `no_aplica` no existe en el esquema: se omite (propuesta: añadirlo al enum)."""
+def to_contract(sem, status=None):
+    """`semaforo_legal` del contrato v1.1 (app/data/contract.schema.json).
+
+    check() ya habla el vocabulario v1.1 (ok|falla|no_aplica|no_evaluable): aquí solo se copian las comprobaciones, se
+    valida el vocabulario y se marca `provisional: true` (todas las reglas siguen `por_verificar`; es el flag que el
+    esquema reserva a «tabla legal de T-019 aún no verificada»). `status` (p. ej. "simulado") rellena `_status` si se pasa.
+    """
     out = dict(sem)
-    out["comprobaciones"] = [dict(c, resultado=MAPA_RESULTADO[c["resultado"]])
-                             for c in sem["comprobaciones"] if c["resultado"] in MAPA_RESULTADO]
+    out["comprobaciones"] = [dict(c) for c in sem["comprobaciones"]]
+    for c in out["comprobaciones"]:
+        if c["resultado"] not in RESULTADOS:
+            raise ValueError(f"resultado fuera del contrato v1.1: {c['resultado']!r}")
+    out["provisional"] = True
+    if status:
+        out["_status"] = status
     return out
 
 

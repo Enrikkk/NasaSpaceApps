@@ -1,35 +1,45 @@
-# Semáforo legal determinista (prototipo de T-019, sin reclamar)
+# Semáforo legal determinista (T-019, `app/backend/rules/`)
 
-Preparado por el agente de gonzalo. **No está en `app/`**: si T-019 se reclama, se mueve a `app/backend/rules/`.
-**Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.** Regla del proyecto: el motor calcula, el LLM no.
-Todo sale de `rules.csv` y `grupos_cultivo.csv`, y **todas las reglas están `por_verificar`** hasta que gonzalo las contraste en el BOE.
+Paquete Python (solo stdlib; `jsonschema` solo para los tests de esquema). Viene del prototipo probado `research/prototypes/legal_rules/`
+(que se conserva como referencia). **Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico.** Regla del proyecto: el motor calcula, el LLM no.
+Todo sale de `rules.csv` y `grupos_cultivo.csv` (junto al código), y **todas las reglas están `por_verificar`** hasta que gonzalo las contraste en el BOE
+(la salida lo dice: `comprobaciones[].estado = por_verificar` y `provisional: true` en el contrato).
 Fuente única de las reglas: `research/ley-3-2020-reglas.md` (no se ha añadido ningún artículo ni umbral que no esté ahí).
+
+**Zona por defecto = `por_verificar`.** Mientras una persona no confirme la zona de la parcela en el Anexo I de la Ley 3/2020 (SITMurcia / WMS CARM),
+quien llame debe pasar `zona="por_verificar"`: las reglas exclusivas de Zona 1 (arts. 51.2, 51.3, 51.4, 51.6) salen `no_evaluable` con "si fuese Zona 1: ok/falla" y el color queda ámbar;
+solo las reglas de ambas zonas (39.2, 29, 40, BCAM 7) pueden dar rojo. Nunca se afirma Zona 1 ni Zona 2 por defecto.
 
 | Fichero | Qué es |
 |---|---|
+| `__init__.py` | Reexporta `check`, `allowed`, `to_contract`, `info_cultivo`, `REGLAS`, `NOTA`... |
 | `rules.csv` | 32 filas (L-01..L-22, P-01..P-10): id, nombre, descripción, norma, artículo, ámbito (`zona_1`/`ambas`/`PAC`), condición, tipo (`dura`→rojo, `aviso`→ámbar, `informativo`), fuente, URL, `estado`, `implementada` (si/parcial/no) y motivo si no |
 | `grupos_cultivo.csv` | `legal_group` por cultivo (art. 51.1) con confianza (`confirmado`/`inferido`/`no_confirmado`) y fundamento; alias en `alias` (separados por `|`) |
-| `legal.py` | Librería (solo stdlib): `check`, `allowed`, `to_contract`, `info_cultivo` |
-| `test_legal.py` | 31 tests `unittest` (4 de ellos validan contra `contract.schema.json` si hay `jsonschema`) |
+| `legal.py` | Librería: `check`, `allowed`, `to_contract`, `info_cultivo` |
+| `test_legal.py` | 34 tests `unittest` (6 validan contra el esquema; se omiten si falta `jsonschema`) |
 
 ## Cómo ejecutar
 
+Desde la raíz del repo:
+
 ```bash
-cd research/prototypes/legal_rules
-python3 -m unittest -v test_legal            # los tests de esquema se omiten si no hay jsonschema
+python3 -m unittest discover -s app/backend/rules -v     # o: python3 -m unittest app.backend.rules.test_legal
 # con jsonschema (venv, no en el sistema):
-python3 -m venv /tmp/v && /tmp/v/bin/pip install jsonschema && /tmp/v/bin/python -m unittest -v test_legal
+python3 -m venv /tmp/v && /tmp/v/bin/pip install jsonschema && /tmp/v/bin/python -m unittest discover -s app/backend/rules
 ```
 
+El esquema se busca en `app/data/contract.schema.json` y, si no existe, en `research/contract-v1-draft/v1.1/contract.schema.v1.1.json`.
+Los tests de colores usan una copia embebida de las 3 rotaciones del borrador (no se rompen si el borrador cambia); `BorradorVivo` solo comprueba que el borrador real no rompe `check()`.
+
 ```python
-import legal
-legal.check(rotacion, parcela, "zona_2")        # dict semaforo_legal (vocabulario interno)
-legal.check(rotacion, parcela, "zona_1", contrato=True)   # vocabulario del esquema (ver "Divergencias")
-legal.allowed("brocoli", "lechuga", "zona_1")   # (False, "dos ciclos consecutivos de Grupo 1 ...", "Ley 3/2020 art. 51.3")
+from app.backend.rules import check, allowed, to_contract
+check(rotacion, parcela, "por_verificar")          # semaforo_legal con el vocabulario del contrato v1.1
+check(rotacion, parcela, "zona_1", contrato=True)  # = to_contract(...): igual + provisional: true
+allowed("brocoli", "lechuga", "zona_1")            # (False, "dos ciclos consecutivos de Grupo 1 ...", "Ley 3/2020 art. 51.3")
 ```
 
 `zona`: `"zona_1"`, `"zona_2"`, `"por_verificar"` (cualquier otro valor, o `parcela.cobertura == "basico"`, o rotación sin ciclos → `gris`).
-Salida de `check`: `{color, motivo, articulo, comprobaciones:[{id, regla, resultado ok|falla|no_aplica|no_evaluable, articulo, estado, nota?}], zona, version_reglas, nota}`.
+Salida de `check` (ya en el vocabulario del contrato v1.1): `{color verde|amarillo|rojo|gris, motivo, articulo, comprobaciones:[{id, regla, resultado ok|falla|no_aplica|no_evaluable, articulo, estado, nota?}], zona, version_reglas, nota}`; `to_contract()` añade `provisional: true` (y `_status` si se le pasa `status=`).
 `nota` = "Herramienta de apoyo, no es asesoría legal. Consulta a tu técnico."
 
 ### Entradas que lee (todas opcionales salvo `ciclos`)
@@ -79,11 +89,11 @@ Si `prev` es barbecho, la DP debe pasar el último cultivo real.
 | Ciclo de cultivo de la cubierta (veza) | El texto no dice si una cobertera enterrada cuenta como "ciclo" para 39.2 y 51.2. Se trata la veza como grupo desconocido |
 | "Año" de los ciclos (39.2) | No definido; se usa el agrupamiento que declara `ciclos_por_anio`/`anios` (INFERIDO año natural) |
 
-## Divergencias con el contrato borrador y el mock (propuestas, no editado nada)
+## Divergencias con el contrato borrador y el mock (propuestas, no se ha editado nada fuera de este paquete)
 
 1. **El mock de la app contradice el informe.** `app/data/torre-pacheco.mock.json`, rotación `actual`: `"Hoja repetida en zona 2 y suelo desnudo > 2 meses en invierno"`, `amarillo`. Con la parcela en Zona 2 (WMS CARM, muy probable) los arts. 50-54 no obligan: ni la hoja repetida (51.3: solo Zona 1; y melón/barbecho/lechuga no repite hoja) ni el suelo desnudo (51.6: solo Zona 1) son infracción. **Propuesta**: con zona 2 → `verde`, `articulo: "Ley 3/2020 art. 39.2"`, motivo "Sin incumplimientos evaluables en Zona 2; 5 meses de suelo desnudo no es obligación legal en Zona 2, una cubierta sería mejora agronómica"; con zona sin confirmar → `amarillo`, art. 51.6 "por verificar". Además `articulo: "Ley 3/2020 (comprobar articulo exacto)"` debe pasar a un artículo concreto.
 2. **El borrador `torre-pacheco.contract-v1.draft.json` ya no dice "hoja repetida", pero:** (a) `actual` afirma `art. 51.6 resultado: no_cumple` con la zona `por_verificar`: debería ser `indeterminado` (o `no_evaluable`) y el color ámbar solo por la zona; (b) `alt-a` y `alt-b` salen `verde` con la zona sin verificar, cuando con `por_verificar` las reglas de Zona 1 deberían dejar ámbar; (c) `alt-b` queda verde por "bajo consumo de agua", que no es criterio legal, y cebada/veza no tienen grupo legal confirmado; (d) `art. 39 cumple` se afirma sin que el contrato lleve ciclos por año.
-3. **Vocabulario de `resultado`**: el esquema admite `cumple|no_cumple|aviso|indeterminado`; la tarea pide `ok|falla|no_aplica|no_evaluable`. `check()` devuelve el segundo; `to_contract()` (o `contrato=True`) traduce (`ok→cumple`, `falla→no_cumple`, `no_evaluable→indeterminado`) y **omite** `no_aplica`. **Propuesta**: añadir `no_aplica` al enum del esquema (la UI puede decir "no aplica en Zona 2") o fijar un solo vocabulario antes de congelar el contrato.
+3. **Vocabulario de `resultado`**: resuelto en el contrato v1.1 (`ok|falla|no_aplica|no_evaluable`); `check()` lo emite directamente y `to_contract()` ya no traduce ni omite `no_aplica`.
 4. **Campos que el motor necesita y el contrato no tiene**: `rotaciones[].ciclos_por_anio` (o `anios`), `ciclo_dias` por cultivo, y opcionales `abonado`, `n_kg_ha_anio`, `cobertera_invierno`, `parcela.distancia_orilla_m`, `parcela.explotacion_ha`, `parcela.invernadero`. Los extra del semáforo (`id`, `nota`, `zona`, `version_reglas`) caben porque el esquema no cierra `additionalProperties`.
 
 ## Dudas que gonzalo debe cerrar en el BOE (en este orden)
