@@ -7,7 +7,8 @@ Years without a price are LEFT OUT of the success count (never counted as good) 
 Success = 1 - k/n with a Wilson 95 % interval. Money in euros of `base_year` (Spain HICP); each cost row is
 deflated from its own base year (`price_base_year` column, default 2018 = IMIDA).
 
-Run:  python3 -m app.backend.engine.core.evaluate [base_year]     prints every demo product
+Run:  python3 -m app.backend.engine.core.evaluate [base_year] [--interno]   (--interno: use licence-restricted CARM
+      prices, internal runs only; default = open data only, as any published output must be)
 """
 import datetime as dt
 import sys
@@ -40,7 +41,7 @@ def quantities(crop):
 
 
 def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025, ecw=None, stage_key="stages_days",
-             meta=None, carm=None):
+             meta=None, carm=None, allow_restricted=False):
     meta = {**DEFAULT_META, **(meta or {})}
     gaps, evidence = [], []
     if stage_key == "stages_days" and sm.stages(crop, "stages_days_murcia"):
@@ -69,7 +70,7 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
 
     # --- market -----------------------------------------------------------------------------------------------------
     unit = meta["price_unit"] or "eur_kg"
-    m = mk.Market(carm or {}, prices, hicp, base_year)
+    m = mk.Market(carm or {}, prices, hicp, base_year, allow_restricted)
     base_crop = meta.get("crop_id") or crop.crop_id
     tier, tier_label, series, keys, dropped = m.series_for(base_crop, meta["variety"], meta["quality"], unit)
     euro, euro_info = (m.eurostat_series(base_crop) if unit == "eur_kg" else (None, None))
@@ -167,24 +168,29 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
                    "opciones_usuario": mk.USER_PRICE_OPTIONS,
                    "recalculo": "margen_anio = cantidad_ha x precio_elegido - coste_eur_ha; año malo si "
                                 "clima_malo o margen < 0"},
+        "licencia": {"solo_uso_interno": m.restricted_used,
+                     "fuentes_restringidas": mk.RESTRICTED_SOURCES if m.restricted_used else {}},
         "huecos": gaps, "evidencia": evidence,
         "supuestos": {k2: v[1] for k2, v in sm.ASSUMPTIONS.items()},
         "anios": years,
     }
 
 
-def demo(base_year=2025):
+def demo(base_year=2025, allow_restricted=False):
     crops = data.load_crops()
     products = data.load_products(crops)
     climate, meta = data.load_climate()
     prices, hicp, area, carm = data.load_prices(), data.load_hicp(), data.load_area(), data.load_carm_monthly()
     print(f"clima: {meta}")
+    print("precios CARM (licencia restringida, SOLO USO INTERNO)" if allow_restricted else
+          "solo datos abiertos (Eurostat); añade --interno para usar precios CARM")
     print(f"{'producto':20} {'precio':6} {'n':>3} {'malos':>5} {'éxito':>6} {'horquilla':>10}  "
           f"{'margen P10/P50/P90 €/ha':>24}  {'P50 precio / mínimo':>21}  agua P50")
     for pid, (crop, pm) in products.items():
         if pid == "veza":
             continue
-        r = evaluate(crop, climate, prices, hicp, area, base_year=base_year, meta=pm, carm=carm)
+        r = evaluate(crop, climate, prices, hicp, area, base_year=base_year, meta=pm, carm=carm,
+                     allow_restricted=allow_restricted)
         if "exito_pct" not in r:
             print(f"{pid:20} no evaluable: {r['motivos']}")
             continue
@@ -204,4 +210,5 @@ def demo(base_year=2025):
 
 
 if __name__ == "__main__":
-    demo(int(sys.argv[1]) if len(sys.argv) > 1 else 2025)
+    args = [a for a in sys.argv[1:] if a != "--interno"]
+    demo(int(args[0]) if args else 2025, allow_restricted="--interno" in sys.argv)

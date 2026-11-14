@@ -129,3 +129,14 @@ def test_harvest_cost_exported_separately():
     r = evaluate(c, _climate(800), {"test": {2010: 1.0}}, {y: 100.0 for y in (2010, 2011, 2012, 2015, 2018, 2025)})
     y = r["anios"][0]
     assert abs(y["coste_recoleccion_eur_ha"] - 200.0) < 1e-9 and abs(y["coste_eur_ha"] - 1000.0) < 1e-9
+
+
+def test_restricted_carm_prices_off_by_default():
+    # licence gate: CARM quotes (personal non-commercial use only) never reach an output unless asked for
+    c = _priced_crop()
+    carm = {("test", "", ""): {2010: {1: (9.0, "eur_kg"), 2: (9.0, "eur_kg")}}}
+    hicp = {y: 100.0 for y in (2010, 2011, 2012, 2015, 2018, 2025)}
+    open_ = evaluate(c, _climate(800), {}, hicp, carm=carm)
+    internal = evaluate(c, _climate(800), {}, hicp, carm=carm, allow_restricted=True)
+    assert open_["precio"]["nivel"] is None and not open_["licencia"]["solo_uso_interno"]
+    assert internal["precio"]["nivel"] == 1 and internal["licencia"]["solo_uso_interno"]

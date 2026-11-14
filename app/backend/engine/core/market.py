@@ -17,6 +17,11 @@ import statistics
 from . import price as pr
 
 OUTLIER_X = 5.0
+# Licence gate (decision Enrique 2026-11-14). esam.carm.es/legal: reproduction with citation allowed, but "sólo está
+# autorizado el uso personal no-comercial" and "no está permitida la modificación" -> NOT an open licence. Until CARM
+# grants written permission (request to agri-estadistica@carm.es), anything PUBLISHED uses open data only
+# (Eurostat CC BY 4.0); CARM quotes are used for internal runs only (allow_restricted=True).
+RESTRICTED_SOURCES = {"CARM-ANUARIO": "esam.carm.es/legal: uso personal no comercial, sin modificación; permiso solicitado"}
 
 
 def harvest_months(start, lengths, window):
@@ -49,8 +54,10 @@ def _clean(series):
 
 
 class Market:
-    def __init__(self, carm, eurostat, hicp, base_year):
-        self.carm, self.eurostat, self.hicp, self.base = carm, eurostat, hicp, base_year
+    def __init__(self, carm, eurostat, hicp, base_year, allow_restricted=False):
+        self.carm = carm if allow_restricted else {}  # CARM quotes only for internal runs until permission arrives
+        self.eurostat, self.hicp, self.base = eurostat, hicp, base_year
+        self.restricted_used = bool(allow_restricted and carm)
 
     def _real(self, v, year):
         return v * self.hicp[self.base] / self.hicp[year] if year in self.hicp else None
