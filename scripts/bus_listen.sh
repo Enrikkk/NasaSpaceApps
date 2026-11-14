@@ -14,9 +14,23 @@ SEAT="${SEAT:?export SEAT=<your seat> first}"
 POLL="${BUS_POLL:-5}"
 LOCK="${TMPDIR:-/tmp}/bus_listen.${SEAT}.lock"
 
-exec 9>"$LOCK"
-if ! flock -n 9 2>/dev/null; then
-  command -v flock >/dev/null && { echo "bus_listen: another listener for seat '$SEAT' is already running"; exit 1; }
+if [ -n "${TEAM_BUS_ROLE:-}" ]; then   # set by paseo_team.sh for the orchestrator and dispatched T-NNN agents
+  echo "bus_listen: not needed here (role '$TEAM_BUS_ROLE' gets messages pushed by the hub)"; exit 0
+fi
+if command -v flock >/dev/null 2>&1; then
+  exec 9>"$LOCK"
+  flock -n 9 || { echo "bus_listen: another listener for seat '$SEAT' is already running"; exit 1; }
+else                                   # macOS has no flock: pid-checked lock directory
+  LD="$LOCK.d"
+  if ! mkdir "$LD" 2>/dev/null; then
+    old="$(cat "$LD/pid" 2>/dev/null || true)"
+    if [ -n "$old" ] && kill -0 "$old" 2>/dev/null; then
+      echo "bus_listen: another listener for seat '$SEAT' is already running (pid $old)"; exit 1
+    fi
+    rm -rf "$LD"; mkdir "$LD"
+  fi
+  echo $$ > "$LD/pid"
+  trap 'rm -rf "$LD"' EXIT
 fi
 
 rpc() {  # rpc <id> <method> <params-json>

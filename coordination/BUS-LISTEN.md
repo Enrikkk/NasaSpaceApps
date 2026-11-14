@@ -22,6 +22,9 @@ monitor whose output interrupts the agent, so messages land in its context as so
 
 ## Rules
 
+- **Not for the hub's `orchestrator` or `T-NNN <seat>` agents**: they get messages pushed, and the script exits by
+  itself when `TEAM_BUS_ROLE` is set (paseo_team.sh sets it).
+- Restarting the listener is quiet: re-registration no longer sends a "joined" message to the orchestrator.
 - **One listener per seat.** The script takes a lock and `read_messages` marks messages read, so a second
   listener would steal messages. Hub-dispatched `T-NNN <seat>` agents already get pushes: they don't run it.
 - Messages are consumed by the listener. To re-read old ones, look at the hub's store or ask the sender.

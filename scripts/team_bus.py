@@ -232,7 +232,8 @@ def register(ctx, a):
         owner = next((l for l, s in ids.items() if s == seat), None)
         if owner and owner != login and login != "hub":
             return f"seat '{seat}' is already registered to another Tailscale user; ask jaime"
-        if login != "hub":
+        first = login != "hub" and ids.get(login) != seat
+        if first:
             ids = {l: s for l, s in ids.items() if l != login}
             ids[login] = seat
             _save("identities.json", ids)
@@ -254,9 +255,10 @@ def register(ctx, a):
         if ok and login != "hub":                     # show the laptop in the hub's Paseo app
             subprocess.run([PASEO, "host", "add", f"tcp://{host_ip}:6767?password={pw}", "--label", seat],
                            capture_output=True, timeout=20)
-    m = add_message(seat, ORCH, f"{seat} joined the team bus. " + "; ".join(notes[1:]) +
-                    (f" Tool: {a['tool']}." if a.get("tool") else ""), "join")
-    push(ORCH, m)
+    if first or a.get("repo"):                         # re-registrations (e.g. bus_listen restarts) stay quiet
+        m = add_message(seat, ORCH, f"{seat} joined the team bus. " + "; ".join(notes[1:]) +
+                        (f" Tool: {a['tool']}." if a.get("tool") else ""), "join")
+        push(ORCH, m)
     return "\n".join(notes)
 
 

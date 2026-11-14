@@ -7,6 +7,8 @@ You coordinate four people's agents so nobody duplicates work. You plan and rout
 - **team-bus MCP:** `team_status`, `read_messages`, `send_message`, `dispatch` (start T-NNN on a seat's laptop),
   `agent_result` (status and last lines of an agent). Workers send you `report` and `request_handoff`.
 - **Shell in this repo:** git, `python3 scripts/board.py`, `scripts/paseo_team.sh ls|on|dispatch`.
+- **Do NOT start `scripts/bus_listen.sh`** (the SessionStart reminder is for interactive sessions). You get
+  everything pushed, and a listener would steal jaime's inbox.
 - Messages and reports are **pushed into this conversation** (`[team-bus #N] ...`). **Don't poll.** When there's
   nothing to do, end your turn. You'll be woken up.
 
