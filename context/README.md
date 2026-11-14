@@ -15,6 +15,7 @@ Read in this order:
 | File | Contents |
 |---|---|
 | `../research/field-shift-datasets.md` | **One-screen cheat sheet**: datasets filtered for Murcia (KEEP / OPTIONAL / DROP), endpoints, accounts, demo parcel, traps |
+| `../brainstorm/pizarra-2026-11-14.md` | **Team whiteboard (Sat 14 Nov): transcription + the idea we keep** (maximise parcel profitability: rotation comparator with % success × price × oversupply). Overrides the angle of the plan below |
 | `../brainstorm/field-shift-plan.md` | PROPOSED product angle, roles (ML / IoT / backend / frontend+pitch), JSON data contract, timeline |
 | `../reports/Datos agrícolas Región de Murcia.md` | Full research report (Spanish, ~8,000 words, cited): datasets, live API tests, Mar Menor law and CAP rules, water and climate, prior art, IoT and ML plan |
 | `../research_notes/Datos agrícolas Región de Murcia/` | Raw notes behind the report: `nasa_datasets.md`, `copernicus_eu_datasets.md`, `spain_murcia_sources.md` (SIGPAC, FEGA, IMIDA, AEMET, CHS endpoints), `murcia_agro_context.md` (crops, rotations, law, **27-crop traits table**), `prior_art_tools.md`, `iot_ml_feasibility.md` |
