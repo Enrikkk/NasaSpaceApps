@@ -60,7 +60,7 @@ def test_shared_draws_deterministic():
 def test_open_build_is_publishable():
     out = bd.build("torre-pacheco", allow_restricted=False)
     text = json.dumps(out, ensure_ascii=False).lower()
-    assert "carm" not in text and out["licencia"]["incluye_precios_carm"] is False
+    assert "carm-anuario" not in text and "anuarios" not in text and out["licencia"]["incluye_precios_carm"] is False
     rots = out["rotaciones"]
     assert len(rots) >= 3 and rots[0]["es_actual"]
     for r in rots:
