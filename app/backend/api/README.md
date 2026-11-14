@@ -227,3 +227,4 @@ Antes de cualquier despliegue nuevo: mantener `--max-instances 2 --min-instances
 - Probado sin red (`--network none`): /analyze 0,6-0,7 s por parcela, motor "en vivo por parcela", 4 rotaciones; el contenedor arranca con 170 265 recintos.
 - Datos incluidos: serie SIAM TP91 diaria y POWER diaria de la parcela (el motor las lee). SIAM sin licencia abierta explicita (fila "verify" de data-citations.md): atribucion "Fuente: SIAM-IMIDA, Region de Murcia".
 - NO desplegada todavia: pendiente de que enrique confirme las cifras del modo abierto (ver LOG).
+- Verificado (2026-11-14, hallazgo de arturo #267): construido con un arbol que SI contiene `carm_precios_mensuales.csv`, la imagen queda con 0 ficheros `*carm_precios*` y sin carpetas `tests`: `Dockerfile.engine.dockerignore` los excluye tras la lista blanca y `Dockerfile.engine` lleva un RUN que borra y FALLA el build si aparece alguno.

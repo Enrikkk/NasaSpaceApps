@@ -39,6 +39,10 @@ COPY app/backend/rules ./app/backend/rules
 # Datos: contrato de ejemplo (bloques simulados), adaptador del JSON de enrique y semilla de la cache de clima/suelo (parcela demo)
 COPY app/data/torre-pacheco.contract.example.json ./app/data/
 COPY app/backend/engine ./app/backend/engine
+# Defensa D-010: el CSV restringido de CARM y los tests NO deben quedar en la imagen publica (si alguien los copia, el build falla).
+RUN find /app/app/backend/engine -type d -name tests -prune -exec rm -rf {} + ; \
+    rm -f /app/app/backend/engine/data/official/carm_precios_mensuales.csv ; \
+    test -z "$(find /app -iname '*carm_precios*' -print -quit)"
 COPY app/data/tables/mapa_prices.csv ./app/data/tables/
 COPY app/data/torre-pacheco.mock.json ./app/data/
 COPY app/data/contract/adapt_enrique.py ./app/data/contract/
