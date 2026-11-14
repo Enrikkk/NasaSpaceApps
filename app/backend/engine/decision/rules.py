@@ -70,6 +70,7 @@ def semaforo(plan_years, zone_confirmed=False):
              "incumple_si_zona_1": "falla", "incumple": "falla"}
     for c in checks:   # team vocabulary (gonzalo, contract v1.1); the original severity stays in `severidad`
         c["severidad"] = c["resultado"]
+        c["estado"] = "por_verificar"      # whole table is provisional until T-019 (gonzalo) verifies each rule
         c["resultado"] = VOCAB[c["resultado"]]
     rank = {"ok": 0, "no_evaluado": 0, "por_verificar": 1, "aviso": 1, "incumple_si_zona_1": 2, "incumple": 2}
     worst = max(checks, key=lambda c: rank[c["severidad"]])
@@ -79,4 +80,5 @@ def semaforo(plan_years, zone_confirmed=False):
     if color == "verde":
         worst = next(c for c in checks if c["severidad"] == "ok")
     return {"color": color, "motivo": reason, "articulo": worst["articulo"], "comprobaciones": checks,
-            "_status": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"}
+            "_status": "simulado", "provisional": True,
+            "_nota": "provisional: tabla de T-019 pendiente; zona 1/2 de la parcela sin confirmar"}

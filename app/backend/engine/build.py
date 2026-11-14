@@ -121,6 +121,7 @@ def price_notes(keys_used, static):
 
 def rotation(rid, name, path, static, runs, shared, crops, actual=False, strategies=()):
     sim = st.simulate(path, runs, shared)
+    water_draws = sim["agua"] if sim else st.simulate_water(path, runs, shared)
     raw = st.raw_criteria(path, static, runs, sim, None)
     sts = [rt.option_static(o, static) for o in path]
     keys_used = sorted({k for o in path for k in o.keys})
@@ -154,16 +155,20 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                                                "primera_cosecha_dias": static[k]["first_harvest_day"]} for k in o.keys],
                            "siembras": {static[k]["label"]: k[1] for k in o.keys}} for i, (o, s) in enumerate(zip(path, sts))],
            "horizonte_anios": len(path),
+           "anios": [[c["crop"] for c in sorted(s["cycles"], key=lambda c: c["start_doy"])] for s in sts],
+           "ciclos_por_anio": max(len(s["cycles"]) for s in sts),
+           "ciclo_dias": {c["crop"]: c["days"] for s in sts for c in s["cycles"]},
            "semaforo_legal": legal,
            "riesgo_etapas": stage_summary(path, static),
            "inversion": {"pico_caja_negativa_eur_ha": r0(max(caja)) if caja else None,
                          "meses_hasta_primer_ingreso": round(first["first_harvest_day"] / 30.4, 1)},
-           "agua_m3_ha": r0(statistics.median(sim["agua"])) if sim else r0(statistics.mean(waters)),
-           "agua_detalle": {"bruto_m3_ha": {"p10": r0(stats.quantile(sim["agua"], .1)), "p50": r0(stats.quantile(sim["agua"], .5)),
-                                            "p90": r0(stats.quantile(sim["agua"], .9))} if sim else
+           "agua_m3_ha": r0(statistics.median(water_draws)) if water_draws else r0(statistics.mean(waters)),
+           "agua_detalle": {"bruto_m3_ha": {"p10": r0(stats.quantile(water_draws, .1)), "p50": r0(stats.quantile(water_draws, .5)),
+                                            "p90": r0(stats.quantile(water_draws, .9))} if water_draws else
                             {"media_anual": r0(statistics.mean(waters))},
                             "coste_eur_ha": None, "perdida_sal_pct": None},
-           "sobreoferta": None, "sobreoferta_detalle": {"efecto_precio_pct": None, "semaforo": None, "_status": "pendiente"},
+           "sobreoferta": None, "sobreoferta_detalle": {"semaforo": "gris", "_status": "cargando",
+                                   "nota": "sobreoferta (efecto de la superficie plantada en el precio) pendiente de diseñar"},
            "_raw": raw, "_sim": sim, "huecos": gaps, "riesgos": risks,
            "evidencia": evidence_for(keys_used, static, [
                {"dato": "Clima diario 2005-2024 de la estación más cercana (Torre Pacheco)", "dataset": SOURCES["SIAM-TP91"]["dataset"],
@@ -172,7 +177,7 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                 "fuente_id": "IMIDA-HORT2020", "url": SOURCES["IMIDA-HORT2020"]["url"], "escala": "Región de Murcia"}])}
     if sim:
         q = lambda p: stats.quantile(sim["margen"], p)
-        out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()}, "peores_anios": sim["peores_anios"],
+        out["exito_pct"] = {**{k: v for k, v in stats.success(sim["k_malos"], sim["n"]).items()}, "peores_anios": [{"anio": y, "margen_eur_ha": r0(m)} for y, m in sim["peores_anios_margen"]],
                             "definicion": f"n = años del plan x años del histórico con dato ({sim['n']}); un año cuenta como bueno si no "
                                           "hay pérdida de clima >= 20 % y el margen es >= 0. Los años del histórico se reutilizan en cada "
                                           "año del plan: no son observaciones independientes y el intervalo es optimista"}
@@ -182,6 +187,11 @@ def rotation(rid, name, path, static, runs, shared, crops, actual=False, strateg
                                 "p90": r0(q(.9)), "media": r0(sim["margen_medio"]), "cvar80": r0(stats.cvar(sim["margen"], .8)),
                                 "unidad": "€ de 2025 por hectárea y año (media del plan)"}
         out["escenarios"] = [r0(x) for x in sim["margen"]]
+        out["escenarios_margen_eur_ha"] = out["escenarios"]     # same list under the name gonzalo's UI reads
+        out["escenarios_meta"] = {"n": len(out["escenarios"]), "semilla": sim["semilla"], "anio_clima": sim["anio_clima"],
+                                  "factor_coste": sim["factor_coste"],
+                                  "nota": "misma semilla y mismos números aleatorios en todas las rotaciones; anio_clima = año histórico "
+                                          "(clima y precio emparejados) sorteado para cada año del plan"}
     else:
         out["exito_pct"] = {"valor": None, "horquilla": None, "k_malos": None, "n": 0, "metodo": None,
                             "definicion": "NO EVALUABLE: falta el precio de algún cultivo con datos abiertos"}
@@ -196,7 +206,10 @@ def climate_block(climate):
     rain = [sum(v.rain for d, v in climate.items() if d.year == y) for y in full]
     hot = [sum(1 for d, v in climate.items() if d.year == y and v.tmax > 38) for y in full]
     frost = [sum(1 for d, v in climate.items() if d.year == y and v.tmin < 0) for y in full]
-    return {"lluvia_anual_mm": {"valor": r0(statistics.median(rain)), "horquilla": [r0(stats.quantile(rain, .1)), r0(stats.quantile(rain, .9))],
+    serie = [{"anio": y, "lluvia_mm": r0(rain[i]), "tmax_abs_c": round(max(v.tmax for d, v in climate.items() if d.year == y), 1),
+              "tmin_abs_c": round(min(v.tmin for d, v in climate.items() if d.year == y), 1), "dias_calor_gt_38": hot[i],
+              "dias_helada": frost[i]} for i, y in enumerate(full)]
+    return {"serie_anual": serie, "lluvia_anual_mm": {"valor": r0(statistics.median(rain)), "horquilla": [r0(stats.quantile(rain, .1)), r0(stats.quantile(rain, .9))],
                                 "fuentes": ["SIAM TP91"], "anios": f"{full[0]}-{full[-1]} ({len(full)} años completos)"},
             "dias_calor_gt_38": {"valor": r0(statistics.median(hot)), "media": round(statistics.mean(hot), 1)},
             "dias_helada": {"valor": r0(statistics.median(frost)), "media": round(statistics.mean(frost), 1),
@@ -297,8 +310,9 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
                                  "siembra": "fecha base y +15 días (no se adelanta mientras no haya umbrales de helada validados)",
                                  "cubierta_coste_eur_ha": rt.COVER_COST_EUR_HA, "et0_por_grado": rt.ET0_PER_DEGC}
     out["generado"] = dt.date.today().isoformat()
-    out["schema_version"] = "1.0"
-    out["_meta"] = {"version": "1.0", "generado": out["generado"], "semilla_escenarios": 2026, "muestras": st.N_SAMPLES,
+    out["schema_version"] = "1.0.0"
+    out["_meta"] = {"version": "1.0.0", "aviso": "Bloques parcela, historia, ndvi y suelo son MOCK (simulado) hasta T-011/T-013; "
+                    "rotaciones y clima los calcula el motor con datos reales (SIAM, CARM/Eurostat, IMIDA, FAO)", "generado": out["generado"], "semilla_escenarios": 2026, "muestras": st.N_SAMPLES,
                     "euros_de": base_year, "motor": "app/backend/engine (T-012/T-018/T-020)"}
     used = sorted({e["fuente_id"] for r in rots for e in r["evidencia"]} | {"SIAM-TP91", "EUR-HICP"})
     out["fuentes"] = [{"id": i, "nombre": SOURCES[i]["dataset"], "url": SOURCES[i]["url"], "licencia": SOURCES[i]["licence"]}

@@ -93,24 +93,38 @@ def simulate(path, runs, shared):
     pools = [sorted(y for y, v in d.items() if v["money"]) for d in yv]
     if any(not p for p in pools):
         return None
-    margins, waters = [], []
+    margins, waters, years_drawn = [], [], []
     for us, mult in shared:
         tot_m = tot_w = 0.0
+        ys = []
         for t, u in enumerate(us):
             y = pools[t][int(u * len(pools[t]))]
             v = yv[t][y]
             tot_m += v["rev"] - v["cost"] * mult
             tot_w += v["agua"]
+            ys.append(y)
         margins.append(tot_m / len(path))
         waters.append(tot_w / len(path))
+        years_drawn.append(ys)
     k = n = 0
     for t, d in enumerate(yv):
         for y in pools[t]:
             n += 1
             k += bool(d[y]["clima_malo"] or d[y]["margen"] < 0)
     first = sorted(pools[0], key=lambda y: yv[0][y]["margen"])[:3]
-    return {"margen": margins, "agua": waters, "k_malos": k, "n": n, "peores_anios": first,
+    first_m = [(y, yv[0][y]["margen"]) for y in first]
+    return {"margen": margins, "agua": waters, "anio_clima": years_drawn, "factor_coste": [round(m, 3) for _, m in shared],
+            "semilla": 2026, "k_malos": k, "n": n, "peores_anios": first, "peores_anios_margen": first_m,
             "margen_medio": sum(sum(d[y]["margen"] for y in pools[t]) / len(pools[t]) for t, d in enumerate(yv)) / len(path)}
+
+
+def simulate_water(path, runs, shared):
+    """Water per draw (m3/ha/year) over ALL historical years with data, with or without prices (same random numbers)."""
+    yv = [rt.year_values(o, runs) for o in path]
+    pools = [sorted(d) for d in yv]
+    if any(not p for p in pools):
+        return None
+    return [sum(yv[t][pools[t][int(u * len(pools[t]))]]["agua"] for t, u in enumerate(us)) / len(path) for us, _ in shared]
 
 
 def raw_criteria(path, static, runs, sim, scores):
