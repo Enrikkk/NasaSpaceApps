@@ -1,0 +1,5 @@
+# Minimo para build_recintos.py + lookup.py (probado con Python 3.11)
+pyogrio==0.13.0
+shapely==2.2.0
+numpy==2.4.6
+# opcionales: jsonschema==4.26.0 (valida el bloque contra el esquema en los tests), pmtiles==3.8.1 (solo para inspeccionar .pmtiles)

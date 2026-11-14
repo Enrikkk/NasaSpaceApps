@@ -1,0 +1,1421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrockham.local/contract-v1-draft.schema.json",
+  "title": "Agrockham contrato v1 (BORRADOR)",
+  "description": "Un documento por parcela. Obligatorio = P0 (sin esto no hay demo). Todo lo demas es opcional. Regla: tras congelar solo se ANADEN campos; por eso additionalProperties queda abierto en todas partes. Un bloque con _status 'cargando' puede ir vacio (el backend vivo, D-009, lo rellena por partes): los campos obligatorios de cada bloque solo se exigen cuando _status es real, precalculado o simulado. Las comprobaciones que un esquema no puede expresar (horquilla == [p10,p90], k_malos <= n, mismo numero de escenarios...) estan en validate.py.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "_meta",
+    "parcela",
+    "historia",
+    "ndvi",
+    "clima",
+    "suelo",
+    "prioridades_defecto",
+    "rotaciones",
+    "fuentes",
+    "no_sustituye"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-draft)?$"
+    },
+    "_meta": {
+      "type": "object",
+      "required": [
+        "aviso"
+      ],
+      "properties": {
+        "aviso": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Aviso de mock o de procedencia. Obligatorio mientras haya bloques simulados."
+        },
+        "borrador_fecha": {
+          "type": "string"
+        },
+        "generador": {
+          "type": "string"
+        },
+        "semilla": {
+          "type": "integer"
+        },
+        "congelado": {
+          "type": "boolean"
+        },
+        "bloques_pendientes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Nombres de bloques aun en 'cargando' (una lista vacia no se puede marcar con _status)."
+        },
+        "cobertura": {
+          "type": "object",
+          "properties": {
+            "nivel": {
+              "enum": [
+                "completo",
+                "basico"
+              ]
+            },
+            "ambito": {
+              "type": "string"
+            }
+          }
+        },
+        "normalizacion_criterios": {
+          "type": "string"
+        },
+        "unidades": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parcela": {
+      "$ref": "#/$defs/bloque_parcela"
+    },
+    "historia": {
+      "$ref": "#/$defs/bloque_historia"
+    },
+    "ndvi": {
+      "$ref": "#/$defs/bloque_ndvi"
+    },
+    "clima": {
+      "$ref": "#/$defs/bloque_clima"
+    },
+    "suelo": {
+      "$ref": "#/$defs/bloque_suelo"
+    },
+    "prioridades_defecto": {
+      "type": "object",
+      "required": [
+        "rentabilidad",
+        "agua",
+        "suelo",
+        "riesgo"
+      ],
+      "properties": {
+        "rentabilidad": {
+          "$ref": "#/$defs/peso"
+        },
+        "agua": {
+          "$ref": "#/$defs/peso"
+        },
+        "suelo": {
+          "$ref": "#/$defs/peso"
+        },
+        "riesgo": {
+          "$ref": "#/$defs/peso"
+        }
+      },
+      "description": "Pesos que suman 1 (lo comprueba validate.py). Correspondencia con criterios: rentabilidad->margen, agua->agua, suelo->suelo_n, riesgo->riesgo."
+    },
+    "escenarios_meta": {
+      "type": "object",
+      "required": [
+        "n"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "semilla": {
+          "type": "integer"
+        },
+        "unidad": {
+          "type": "string"
+        },
+        "metodo": {
+          "type": "string"
+        },
+        "rotaciones_orden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "anio_clima": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Anio historico usado por la muestra i (longitud n)."
+        },
+        "beta_sobreoferta": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "Beta muestreada para la muestra i (longitud n)."
+        },
+        "factor_coste": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "Factor de coste de la muestra i (longitud n)."
+        }
+      }
+    },
+    "rotaciones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rotacion"
+      },
+      "description": "Actual + al menos 2 alternativas cuando el bloque esta cargado (lo comprueba validate.py; durante la carga puede ir vacia y _meta.bloques_pendientes lo dice)."
+    },
+    "variantes": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "definiciones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "delta"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "descripcion": {
+                "type": "string"
+              },
+              "delta": {
+                "type": "object",
+                "properties": {
+                  "lluvia_pct": {
+                    "type": "number"
+                  },
+                  "temp_c": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resultados": {
+          "type": "object",
+          "description": "Clave = id de la definicion. Cada valor lleva, por id de rotacion, los mismos bloques que rotaciones[] (exito_pct, margen_eur_ha, agua_m3_ha, criterios).",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "rotaciones": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "exito_pct": {
+                      "$ref": "#/$defs/exito_pct"
+                    },
+                    "margen_eur_ha": {
+                      "$ref": "#/$defs/margen_eur_ha"
+                    },
+                    "agua_m3_ha": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "criterios": {
+                      "$ref": "#/$defs/criterios"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      }
+    },
+    "sensores": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "estacion": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "red": {
+              "type": "string"
+            },
+            "distancia_parcela_km": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "resolucion": {
+          "enum": [
+            "horaria",
+            "diaria"
+          ]
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "periodo": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "desde",
+                "hasta"
+              ],
+              "properties": {
+                "desde": {
+                  "type": "string"
+                },
+                "hasta": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        "lecturas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "t"
+            ],
+            "properties": {
+              "t": {
+                "type": "string",
+                "description": "ISO 8601 UTC"
+              },
+              "tmin_c": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "tmax_c": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "hr_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "lluvia_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "et0_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      }
+    },
+    "fuentes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "nombre",
+          "url",
+          "licencia"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string"
+          },
+          "licencia": {
+            "type": "string",
+            "minLength": 1
+          },
+          "licencia_estado": {
+            "enum": [
+              "ok",
+              "verify"
+            ],
+            "description": "ok = confirmada en la pagina oficial; verify = solo por busqueda web (AGENTS.md seccion 6)."
+          },
+          "atribucion": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "no_sustituye": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": [
+        "cargando",
+        "real",
+        "precalculado",
+        "simulado"
+      ]
+    },
+    "peso": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "unit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "pct": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "horquilla2": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "semaforo_color": {
+      "enum": [
+        "verde",
+        "amarillo",
+        "rojo",
+        "gris"
+      ]
+    },
+    "bloque_parcela": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "ha": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "pendiente_pct": {
+          "type": "number",
+          "minimum": 0
+        },
+        "regadio": {
+          "type": "boolean"
+        },
+        "municipio": {
+          "type": "string"
+        },
+        "comarca": {
+          "type": "string"
+        },
+        "sigpac": {
+          "type": "object",
+          "properties": {
+            "poligono": {
+              "type": "integer"
+            },
+            "parcela": {
+              "type": "integer"
+            },
+            "recinto": {
+              "type": "integer"
+            }
+          }
+        },
+        "zonas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Etiquetas de zona. No afirmar mar_menor_zona_1/2 sin verificar el Anexo I: usar mar_menor_zona_por_verificar."
+        },
+        "fuente_id": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "id",
+          "lat",
+          "lon",
+          "ha",
+          "regadio",
+          "zonas"
+        ]
+      }
+    },
+    "bloque_historia": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "cultivos_declarados": {
+          "type": "array",
+          "description": "Lista 0..N. Una misma campana puede aparecer varias veces (doble cultivo) o ninguna (sin declaracion).",
+          "items": {
+            "type": "object",
+            "required": [
+              "campana",
+              "cultivo",
+              "fuente"
+            ],
+            "properties": {
+              "campana": {
+                "type": "string",
+                "pattern": "^[0-9]{4}(-[0-9]{2})?$",
+                "description": "Campana explicita: 'YYYY' (anio de la declaracion PAC) o 'YYYY-YY' si cruza anio."
+              },
+              "anio": {
+                "type": "integer",
+                "description": "Alias del anio de inicio de la campana (compatibilidad con el mock antiguo)."
+              },
+              "cultivo": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fuente": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "cultivos_declarados"
+        ]
+      }
+    },
+    "bloque_ndvi": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "fuente": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        },
+        "meses_desnudo": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+          }
+        },
+        "meses_vulnerable": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+          }
+        },
+        "serie_mensual": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mes",
+              "ndvi"
+            ],
+            "properties": {
+              "mes": {
+                "type": "string"
+              },
+              "ndvi": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": -1,
+                "maximum": 1
+              }
+            }
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "meses_desnudo",
+          "meses_vulnerable"
+        ]
+      }
+    },
+    "bloque_clima": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "lluvia_anual_mm": {
+          "type": "object",
+          "required": [
+            "valor",
+            "horquilla"
+          ],
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "horquilla": {
+              "$ref": "#/$defs/horquilla2"
+            },
+            "fuentes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "ids de fuentes[]"
+            }
+          }
+        },
+        "dias_calor_gt_38": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "tendencia": {
+              "type": "string"
+            }
+          }
+        },
+        "dias_helada": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "number",
+              "minimum": 0
+            },
+            "estacion": {
+              "type": "string"
+            }
+          }
+        },
+        "escenario_2050": {
+          "type": "object",
+          "properties": {
+            "lluvia_pct": {
+              "type": "number"
+            },
+            "temp_c": {
+              "type": "number"
+            },
+            "metodo": {
+              "type": "string"
+            }
+          }
+        },
+        "serie_anual": {
+          "type": "array",
+          "description": "Un elemento por anio historico (P1; alimenta los graficos y las muestras).",
+          "items": {
+            "type": "object",
+            "required": [
+              "anio",
+              "lluvia_mm"
+            ],
+            "properties": {
+              "anio": {
+                "type": "integer"
+              },
+              "lluvia_mm": {
+                "type": "number",
+                "minimum": 0
+              },
+              "tmin_min_c": {
+                "type": "number"
+              },
+              "tmax_max_c": {
+                "type": "number"
+              },
+              "dias_calor_gt_38": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "dias_helada": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "lluvia_anual_mm",
+          "dias_calor_gt_38",
+          "dias_helada"
+        ]
+      }
+    },
+    "bloque_suelo": {
+      "type": "object",
+      "required": [
+        "_status"
+      ],
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "textura": {
+          "type": "string"
+        },
+        "materia_organica_pct": {
+          "type": "number",
+          "minimum": 0
+        },
+        "agua_disponible_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fuente": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "textura",
+          "materia_organica_pct",
+          "agua_disponible_mm",
+          "fuente"
+        ]
+      }
+    },
+    "criterios": {
+      "type": "object",
+      "required": [
+        "margen",
+        "agua",
+        "suelo_n",
+        "riesgo"
+      ],
+      "description": "0-1, 1 = mejor para el agricultor. La UI aplica prioridades_defecto o los sliders sobre estos cuatro valores.",
+      "properties": {
+        "margen": {
+          "$ref": "#/$defs/unit"
+        },
+        "agua": {
+          "$ref": "#/$defs/unit"
+        },
+        "suelo_n": {
+          "$ref": "#/$defs/unit"
+        },
+        "riesgo": {
+          "$ref": "#/$defs/unit"
+        }
+      }
+    },
+    "exito_pct": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "valor": {
+          "$ref": "#/$defs/pct"
+        },
+        "horquilla": {
+          "$ref": "#/$defs/horquilla2"
+        },
+        "k_malos": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metodo": {
+          "type": "string"
+        },
+        "desglose": {
+          "type": "object",
+          "properties": {
+            "clima": {
+              "$ref": "#/$defs/desglose_item"
+            },
+            "economico": {
+              "$ref": "#/$defs/desglose_item"
+            },
+            "conjunto": {
+              "$ref": "#/$defs/desglose_item"
+            }
+          }
+        },
+        "peores_anios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "anio"
+            ],
+            "properties": {
+              "anio": {
+                "type": "integer"
+              },
+              "perdida_clima_pct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "margen_eur_ha": {
+                "type": "number"
+              },
+              "motivo": {
+                "enum": [
+                  "clima",
+                  "economico",
+                  "clima+economico"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "valor",
+          "horquilla"
+        ]
+      }
+    },
+    "desglose_item": {
+      "type": "object",
+      "required": [
+        "k_malos",
+        "n"
+      ],
+      "properties": {
+        "k_malos": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "umbral_perdida_pct": {
+          "type": "number"
+        },
+        "umbral": {
+          "type": "string"
+        }
+      }
+    },
+    "margen_eur_ha": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "valor": {
+          "type": "number"
+        },
+        "horquilla": {
+          "$ref": "#/$defs/horquilla2",
+          "description": "Siempre [p10, p90] (lo comprueba validate.py)."
+        },
+        "p10": {
+          "type": "number"
+        },
+        "p50": {
+          "type": "number"
+        },
+        "p90": {
+          "type": "number"
+        },
+        "cvar80": {
+          "type": "number"
+        },
+        "breakeven_precio_eur_kg": {
+          "type": "object",
+          "description": "Precio de equilibrio por cultivo de la rotacion (EUR/kg). Los cultivos sin ingreso (barbecho, cubierta) no aparecen.",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "nota": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "valor",
+          "horquilla"
+        ]
+      }
+    },
+    "agua_detalle": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "etc_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "precipitacion_efectiva_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "eficiencia_riego": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "bruto_m3_ha": {
+          "type": "number",
+          "minimum": 0
+        },
+        "tarifa_eur_m3": {
+          "type": "number",
+          "minimum": 0
+        },
+        "coste_eur_ha": {
+          "type": "number",
+          "minimum": 0
+        },
+        "ecw_dSm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "ece_dSm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "perdida_sal_pct": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "nota": {
+          "type": "string"
+        }
+      }
+    },
+    "sobreoferta_detalle": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "indice_SI": {
+          "$ref": "#/$defs/unit"
+        },
+        "beta": {
+          "type": "number"
+        },
+        "efecto_precio_pct": {
+          "type": "object",
+          "required": [
+            "valor"
+          ],
+          "properties": {
+            "valor": {
+              "type": "number"
+            },
+            "horquilla": {
+              "$ref": "#/$defs/horquilla2"
+            }
+          }
+        },
+        "semaforo": {
+          "$ref": "#/$defs/semaforo_color"
+        },
+        "escala": {
+          "type": "string"
+        }
+      }
+    },
+    "inversion": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "pico_caja_negativa_eur_ha": {
+          "type": "number",
+          "minimum": 0
+        },
+        "meses_hasta_primer_ingreso": {
+          "type": "number",
+          "minimum": 0
+        },
+        "payback_anios": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "van_eur_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tir": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "anualidad_equivalente_eur_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "semaforo_legal": {
+      "type": "object",
+      "properties": {
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "color": {
+          "$ref": "#/$defs/semaforo_color"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "articulo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comprobaciones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "regla",
+              "resultado",
+              "articulo",
+              "estado"
+            ],
+            "properties": {
+              "regla": {
+                "type": "string",
+                "minLength": 1
+              },
+              "resultado": {
+                "enum": [
+                  "cumple",
+                  "no_cumple",
+                  "aviso",
+                  "indeterminado"
+                ]
+              },
+              "articulo": {
+                "type": "string",
+                "minLength": 1
+              },
+              "estado": {
+                "enum": [
+                  "verificado",
+                  "por_verificar"
+                ],
+                "description": "verificado = articulo leido en el BOE por una persona."
+              }
+            }
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "color",
+          "motivo",
+          "articulo"
+        ]
+      }
+    },
+    "evidencia_item": {
+      "type": "object",
+      "required": [
+        "dato",
+        "dataset",
+        "url"
+      ],
+      "properties": {
+        "dato": {
+          "type": "string"
+        },
+        "dataset": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "fuente_id": {
+          "type": "string"
+        }
+      }
+    },
+    "rotacion": {
+      "type": "object",
+      "required": [
+        "id",
+        "nombre",
+        "ciclos",
+        "_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1
+        },
+        "es_actual": {
+          "type": "boolean"
+        },
+        "ciclos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "_status": {
+          "$ref": "#/$defs/status"
+        },
+        "exito_pct": {
+          "$ref": "#/$defs/exito_pct"
+        },
+        "margen_eur_ha": {
+          "$ref": "#/$defs/margen_eur_ha"
+        },
+        "agua_m3_ha": {
+          "type": "number",
+          "minimum": 0
+        },
+        "agua_detalle": {
+          "$ref": "#/$defs/agua_detalle"
+        },
+        "sobreoferta": {
+          "$ref": "#/$defs/unit"
+        },
+        "sobreoferta_detalle": {
+          "$ref": "#/$defs/sobreoferta_detalle"
+        },
+        "criterios": {
+          "$ref": "#/$defs/criterios"
+        },
+        "suelo_desnudo_meses": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "inversion": {
+          "$ref": "#/$defs/inversion"
+        },
+        "semaforo_legal": {
+          "$ref": "#/$defs/semaforo_legal"
+        },
+        "escenarios_margen_eur_ha": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "Muestras de margen; el indice i es el mismo escenario en todas las rotaciones (ver escenarios_meta)."
+        },
+        "filtros": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cultivo": {
+                "type": "string"
+              },
+              "factor_limitante": {
+                "type": "string"
+              },
+              "valor": {},
+              "umbral": {},
+              "motivo_exclusion": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rendimiento_t_ha": {
+          "type": "object",
+          "properties": {
+            "ref": {
+              "type": "number"
+            },
+            "p10": {
+              "type": "number"
+            },
+            "p90": {
+              "type": "number"
+            },
+            "fuente": {
+              "type": "string"
+            },
+            "confianza": {
+              "type": "string"
+            }
+          }
+        },
+        "por_que": {
+          "type": "string"
+        },
+        "beneficios": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidencia": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidencia_item"
+          }
+        },
+        "huecos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "riesgos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "if": {
+        "required": [
+          "_status"
+        ],
+        "properties": {
+          "_status": {
+            "const": "cargando"
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "exito_pct",
+          "margen_eur_ha",
+          "agua_m3_ha",
+          "semaforo_legal",
+          "por_que",
+          "evidencia",
+          "huecos",
+          "riesgos"
+        ]
+      }
+    }
+  }
+}
