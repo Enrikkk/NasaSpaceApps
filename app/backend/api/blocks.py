@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timezone
 from typing import Iterable, Optional
 
+from app.backend.pipeline.fega import declarados as FEGA
 from . import engine_adapter as EA
 from . import legal_blocks, live, settings, store
 
@@ -116,6 +117,11 @@ class Servicio:
         doc: dict = {"schema_version": base["schema_version"], "_meta": base["_meta"]}
         doc["parcela"] = parcela if "parcela" in pedidos else {"_status": "cargando"}
         doc["historia"] = base["historia"] if "historia" in pedidos else []
+        historia_real = False
+        if "historia" in pedidos and tiene_parcela:
+            h = self._historia_real(lat, lon, parcela)
+            if h is not None:
+                doc["historia"], historia_real = h, True
         doc["ndvi"] = base["ndvi"] if "ndvi" in pedidos else {"_status": "cargando"}
         reales: dict[str, Optional[dict]] = {"clima": None, "suelo": None}
         for n, fut in futs.items():
@@ -135,7 +141,8 @@ class Servicio:
         doc["rotaciones"] = []
         if "rotaciones" in pedidos:
             t = time.perf_counter()
-            out = self.engine.run(EA.EngineInput(lat, lon, parcela if tiene_parcela else {}, reales["clima"], reales["suelo"]))
+            out = self.engine.run(EA.EngineInput(lat, lon, parcela if tiene_parcela else {}, reales["clima"], reales["suelo"],
+                                                    zona=zona, historia=doc["historia"] or None))
             nivel_legal = "completo" if tiene_parcela else "basico"  # sin recinto no se evalua la ley (semaforo gris)
             ndvi = base["ndvi"]
             doc["rotaciones"] = legal_blocks.aplicar(out.rotaciones, parcela if tiene_parcela else {}, ndvi, nivel_legal, zona)
@@ -164,6 +171,8 @@ class Servicio:
         meta["generador"] = "app/backend/api (API en vivo: ATOM + pipeline clima/suelo + reglas legales + motor)"
         meta["cobertura"] = self._cobertura(tiene_parcela)
         estados = {b: _estado(doc, b, base) for b in BLOQUES}
+        if historia_real:
+            estados["historia"] = "real"
         meta["estado_bloques"] = estados
         if motor_aviso:
             self._motor_aviso = motor_aviso
@@ -186,6 +195,24 @@ class Servicio:
             meta["avisos"] = avisos
         _marcar_pendientes(doc)
         return doc
+
+    def _historia_real(self, lat: float, lon: float, parcela: dict) -> Optional[list]:
+        """Cultivos declarados FEGA (campana en uso) del recinto como bloque `historia` v1.1; None si no hay cache ni red."""
+        sg = parcela.get("sigpac") or {}
+        try:
+            clave = [int(sg[k]) for k in FEGA.CLAVES]
+        except (KeyError, TypeError, ValueError):
+            return None
+        d = FEGA.buscar(lat, lon, clave, self.cfg.pipeline_cache_dir, timeout=self.cfg.live_http_timeout_s)
+        if d is None:
+            return None
+        decl = [{"campana": "2026", "anio": 2026, "cultivo": (r["producto"] or "sin producto").lower(), "fuente": "FEGA",
+                 "producto_codigo": r["producto_codigo"], "sistema_explotacion": r["sistema_explotacion"],
+                 "superficie_cultivada_ha": r["superficie_cultivada_ha"], "cultivo_secundario": r["cultivo_secundario"]}
+                for r in d["registros"]]
+        principal = FEGA.cultivo_principal(d["registros"])
+        return [{"anio": 2026, "cultivo": principal.lower() if principal else None, "fuente": "FEGA", "fuente_id": "sigpac",
+                 "campania": "en uso (cultivo_declarado)", "declaraciones": decl}]
 
     def aviso(self, estados: dict) -> str:
         """`_meta.aviso`: lleva MOCK mientras haya bloques simulados (el validador lo exige) y nombra cuales."""

@@ -10,7 +10,7 @@ from app.backend.pipeline.clima_suelo import pipeline as P
 
 def test_la_cache_se_siembra_con_la_parcela_demo(client_mini, tmp_path):
     nombres = {f.name for f in (tmp_path / "cache").glob("*.json")}
-    assert "soilgrids_15095_-396.json" in nombres and len(nombres) == 4
+    assert "soilgrids_15095_-396.json" in nombres and len(nombres) >= 4   # demo + parcelas precalentadas (T-011)
 
 
 def test_los_valores_reales_coinciden_con_el_prototipo(client_mini):

@@ -26,11 +26,12 @@ RUN pip install -r requirements.txt
 
 # Codigo de la API y el del producto que importa (app/, app/backend/ y app/data/ son paquetes de espacio de nombres: sin __init__)
 COPY app/backend/api/__init__.py app/backend/api/main.py app/backend/api/blocks.py app/backend/api/engine_adapter.py \
-     app/backend/api/legal_blocks.py app/backend/api/live.py app/backend/api/settings.py app/backend/api/store.py \
+     app/backend/api/legal_blocks.py app/backend/api/parcel_input.py app/backend/api/live.py app/backend/api/settings.py app/backend/api/store.py \
      ./app/backend/api/
 COPY app/backend/pipeline/__init__.py ./app/backend/pipeline/
 COPY app/backend/pipeline/atom/__init__.py app/backend/pipeline/atom/lookup.py ./app/backend/pipeline/atom/
 COPY app/backend/pipeline/clima_suelo/__init__.py app/backend/pipeline/clima_suelo/pipeline.py ./app/backend/pipeline/clima_suelo/
+COPY app/backend/pipeline/fega/__init__.py app/backend/pipeline/fega/declarados.py app/backend/pipeline/fega/cod_producto.csv ./app/backend/pipeline/fega/
 COPY app/backend/rules ./app/backend/rules
 # Datos: contrato de ejemplo (bloques simulados), adaptador del JSON de enrique y semilla de la cache de clima/suelo (parcela demo)
 COPY app/data/torre-pacheco.contract.example.json ./app/data/

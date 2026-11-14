@@ -45,6 +45,8 @@ class EngineInput:
     parcela: dict
     clima: Optional[dict] = None   # bloque real o None si no esta disponible
     suelo: Optional[dict] = None
+    zona: str = "por_verificar"            # zona legal (Ley 3/2020) que pasa el cliente; nunca se afirma sin verificar
+    historia: Optional[list] = None        # bloque historia (cultivos declarados FEGA, 0..N) si es real
 
 
 @dataclass

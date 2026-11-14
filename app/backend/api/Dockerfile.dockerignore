@@ -22,3 +22,7 @@
 **/__pycache__
 **/*.pyc
 !app/backend/api/engine_data
+!app/backend/pipeline/fega/__init__.py
+!app/backend/pipeline/fega/declarados.py
+!app/backend/pipeline/fega/cod_producto.csv
+!app/backend/api/parcel_input.py
