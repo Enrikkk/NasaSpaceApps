@@ -168,6 +168,13 @@ def adapt_rotacion(r, estado_rotaciones, estado_semaforo, ctx):
 
 def construir_fuentes(d, ctx):
     fuentes, ids = [], {}
+    for f in d.get("fuentes") or []:  # el motor de enrique ya emite fuentes[] (desde 473f2c2): se respetan y solo se completan
+        if isinstance(f, dict) and f.get("id") and f["id"] not in ids:
+            f = dict(f)
+            if "licencia_estado" not in f:
+                f["licencia_estado"] = "verify"
+            ids[f["id"]] = f
+            fuentes.append(f)
     restringidas = (d.get("licencia") or {}).get("fuentes_restringidas") or {}
 
     def anadir(fid, nombre, url=None, nota=None):
@@ -226,6 +233,11 @@ def adapt_enrique(src, origen="app/data/torre-pacheco.json (enrique, t012-motor-
 
     # aviso: el _status (texto) de primer nivel pasa a _meta.aviso
     aviso = d.pop("_status", None)
+    meta_origen = d.pop("_meta", None)  # enrique emite su propio _meta {version, aviso, semilla_escenarios, muestras, ...}
+    version_origen = d.pop("schema_version", None)
+    if isinstance(meta_origen, dict) and isinstance(meta_origen.get("aviso"), str):
+        aviso = meta_origen["aviso"]
+        ctx.ad("_meta.aviso del origen conservado; su _meta completo queda en _meta.origen_meta")
     if isinstance(aviso, str):
         ctx.ad("_status (texto) de primer nivel -> _meta.aviso")
     else:
@@ -323,6 +335,11 @@ def adapt_enrique(src, origen="app/data/torre-pacheco.json (enrique, t012-motor-
         "adaptaciones": ctx.adaptaciones,
         "avisos": ctx.avisos,
     }
+    if isinstance(meta_origen, dict):
+        meta["origen_meta"] = meta_origen
+    if version_origen is not None:
+        meta["schema_version_origen"] = version_origen
+        ctx.ad(f"schema_version del origen ({version_origen}) -> _meta.schema_version_origen; el contrato lo fija el adaptador")
     meta = {k: v for k, v in meta.items() if v is not None}
 
     # orden de claves estable: primero las del contrato, luego los campos propios de enrique
