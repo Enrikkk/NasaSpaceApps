@@ -62,3 +62,19 @@ limon,caja_antes_de_venta,,EUR/ha,IMIDA-CIT2018,M,derived,perenne: usar inversi�
 haba,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
 cebada,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
 veza,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+lechuga,coste_unitario_ud,0.2,EUR/ud,IMIDA-HORT2020,A,sourced,"Tabla 28: coste unitario iceberg 0,20 €/ud"
+lechuga,plantas_ha,66000,plantas/ha,IMIDA-HORT2020,A,sourced,iceberg 66.000 plantas/ha (cap. 1.3.4)
+lechuga_little_gem,coste_total,15243,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 29 Little Gem; € de ~2018
+lechuga_little_gem,recoleccion,4705,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 29
+lechuga_little_gem,coste_unitario,0.6,EUR/kg,IMIDA-HORT2020,A,sourced,Tabla 29
+lechuga_little_gem,coste_unitario_ud,0.13,EUR/ud,IMIDA-HORT2020,A,sourced,Tabla 29 / texto p. 89
+lechuga_little_gem,produccion_media,28000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3 (bruto)
+lechuga_little_gem,riego_dosis,3300,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3
+lechuga_little_gem,inversion_inicial,27971,EUR/ha,IMIDA-HORT2020,A,sourced,Tabla 8
+lechuga_little_gem,plantas_ha,132000,plantas/ha,IMIDA-HORT2020,A,sourced,Baby o Little Gem 132.000 plantas/ha
+melon_galia,coste_total,11152,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 31 Galia/Cantalupo; € de ~2018
+melon_galia,recoleccion,1819,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 31
+melon_galia,coste_unitario,0.23,EUR/kg,IMIDA-HORT2020,A,sourced,"Tabla 31 (neto, mismo que piel de sapo)"
+melon_galia,produccion_media,52500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3 (bruto)
+melon_galia,riego_dosis,3800,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,Tabla 3
+melon_galia,inversion_inicial,19352,EUR/ha,IMIDA-HORT2020,A,sourced,Tabla 10

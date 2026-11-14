@@ -24,6 +24,7 @@ class Param:
     conf: str
     status: str
     nota: str
+    base_year: int = 2018  # money base of a EUR value (IMIDA surveys 2017-19); a price_base_year column overrides it
 
 
 @dataclass
@@ -67,9 +68,46 @@ def load_crops(paths=None):
                 c.params.pop(r["param"], None)
                 c.gaps[r["param"]] = r.get("nota", "")
             else:
-                c.params[r["param"]] = Param(v, r["unit"], r["source_id"], r["conf"], r["status"], r.get("nota", ""))
+                by = r.get("price_base_year") or r.get("base_year") or ""
+                c.params[r["param"]] = Param(v, r["unit"], r["source_id"], r["conf"], r["status"], r.get("nota", ""),
+                                             int(float(by)) if by.strip() else 2018)
                 c.gaps.pop(r["param"], None)
     return crops
+
+
+def load_products(crops):
+    """Products = sellable crop types (e.g. lechuga_iceberg). Each one is the base crop's agronomy (Kc, stages, salt,
+    thresholds) overlaid with the product's own economic rows (crop_id = product_id in the cost table).
+    Returns {product_id: (Crop, meta)} with meta = products.csv row plus 'cost_from' (whose costs it uses)."""
+    out = {}
+    for r in csv.DictReader(open(OFFICIAL / "products.csv", encoding="utf-8")):
+        base = crops.get(r["crop_id"])
+        if base is None:
+            continue
+        c = Crop(r["product_id"], dict(base.params), dict(base.gaps))
+        own = crops.get(r["product_id"]) or crops.get(r.get("cost_product") or "")
+        if own and own.crop_id != r["crop_id"]:
+            c.params.update(own.params)
+            for g in own.gaps:
+                c.params.pop(g, None)
+            c.gaps.update(own.gaps)
+        meta = dict(r, cost_from=own.crop_id if own and own.crop_id != r["crop_id"] and own.has("coste_total")
+                    else r["crop_id"])
+        out[r["product_id"]] = (c, meta)
+    return out
+
+
+def load_carm_monthly():
+    """{(crop_id, variety, quality): {year: {month: (value, unit)}}} of CARM yearbook quotes (nominal EUR,
+    orientative). Duplicates printed in two yearbooks are identical (checked) and collapse."""
+    out = {}
+    path = OFFICIAL / "carm_precios_mensuales.csv"
+    if not path.exists():
+        return out
+    for r in csv.DictReader(open(path, encoding="utf-8")):
+        k = (r["crop_id"], r["variety"], r["quality"])
+        out.setdefault(k, {}).setdefault(int(r["year"]), {})[int(r["month"])] = (float(r["value"]), r["unit"])
+    return out
 
 
 def load_hicp():

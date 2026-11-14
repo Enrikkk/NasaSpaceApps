@@ -90,3 +90,42 @@ def test_price_trend_only_when_backtest_wins():
     assert not price.backtest(flat)["usa_tendencia"]
     adj, info = price.scenarios(trend, 2025)
     assert info["usa_tendencia"] and abs(adj[2000] - (2.0 - 0.05 * 25 - 0.01)) < 0.02
+
+
+def _priced_crop(**extra):
+    return _crop(stages_days="10/10/10/10", kc_ini=0.5, kc_mid=1.0, kc_end=0.8, sowing_month=1.0,
+                 coste_total=1000.0, coste_unitario=0.5, recoleccion=200.0, **extra)
+
+
+def test_year_without_price_is_left_out_not_counted_good():
+    # Arturo review #88 (1): a harvest year with no price must not enter the success count as a good year
+    c = _priced_crop(frost_t0=0.0, frost_t100=-2.0)
+    clim = _climate(800)
+    prices = {"test": {2010: 1.0}}  # 2011 and 2012 have no price
+    r = evaluate(c, clim, prices, {2010: 100.0, 2011: 100.0, 2012: 100.0, 2015: 100.0, 2018: 100.0, 2025: 100.0})
+    assert r["exito_pct"]["n"] == 1 and r["exito_pct"]["anios_totales"] == 3
+    assert any("sin precio" in g for g in r["huecos"])
+
+
+def test_money_only_label_when_no_climate_thresholds():
+    # Arturo review #88 (2): price/cost present but no thresholds -> must say SOLO ECONÓMICO
+    c = _priced_crop()
+    r = evaluate(c, _climate(800), {"test": {2010: 1.0, 2011: 1.0, 2012: 1.0}},
+                 {y: 100.0 for y in (2010, 2011, 2012, 2015, 2018, 2025)})
+    assert r["exito_pct"]["definicion"].startswith("SOLO ECONÓMICO")
+
+
+def test_cost_uses_its_own_base_year():
+    # Arturo #86: an ECREA 2021 cost must be deflated from 2021, not 2018
+    c = _priced_crop()
+    c.params["coste_total"].base_year = 2021
+    hicp = {2010: 100.0, 2011: 100.0, 2012: 100.0, 2015: 100.0, 2018: 50.0, 2021: 100.0, 2025: 100.0}
+    r = evaluate(c, _climate(800), {"test": {2010: 1.0}}, hicp)
+    assert abs(r["anios"][0]["coste_eur_ha"] - 1000.0) < 1e-6  # 2021 -> 2025 factor 1, not 2018's factor 2
+
+
+def test_harvest_cost_exported_separately():
+    c = _priced_crop()
+    r = evaluate(c, _climate(800), {"test": {2010: 1.0}}, {y: 100.0 for y in (2010, 2011, 2012, 2015, 2018, 2025)})
+    y = r["anios"][0]
+    assert abs(y["coste_recoleccion_eur_ha"] - 200.0) < 1e-9 and abs(y["coste_eur_ha"] - 1000.0) < 1e-9
