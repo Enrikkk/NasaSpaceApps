@@ -34,3 +34,19 @@ trend beats the median by >= 20 % (today: lettuce only, national real price 0.59
 - Farmer's own price: every year exports `cantidad_ha`, `coste_eur_ha`, `coste_recoleccion_eur_ha`, `clima_malo`,
   `canales{}`; the UI recomputes margin = cantidad x price - coste with the options in `precio.opciones_usuario`
   (oficial, canal, fijo, ajuste %, recolección, mis_anios). Years without a price are excluded from the success count.
+
+## Decision layer (T-020, `app/backend/engine/decision/` + `build.py`)
+
+```
+python3 -m app.backend.engine.build torre-pacheco             # app/data/torre-pacheco.json (OPEN data only, publishable)
+python3 -m app.backend.engine.build torre-pacheco --interno   # app/data/torre-pacheco.interno.json (CARM prices, git-ignored, never publish)
+python3 -m pytest -q app/backend/engine
+```
+- Cycle = product at a sowing date (base date or +15 days; never earlier until frost thresholds are validated).
+  Year option = non-overlapping cycles (14 days between), optional winter veza cover. Rotation = 3 year options (DP).
+- DP: V_t(o) = score(o) + max V_{t+1}(o') with `rules.allowed(last(o), first(o'))` (different family, never two group-1 crops in a row).
+  Strategies S1 max expected margin, S2 soil+water, S3 low risk (S2/S3 require margin >= 0); S0 = melon, fallow, lettuce.
+- Criteria 0-1 across the exported rotations (1 = best in all four). 200 shared scenario draws (paired climate+price year per
+  plan-year, cost x U(0.85,1.15)). Variants: lluvia -30/-15/+10, temp +1/+2, 2050 (deltas of the mock, simulated).
+- `rules.py` is PROVISIONAL (T-019 will own the table). Open-data run: lettuce has no open price -> the current rotation is
+  "no evaluable" in money (by design, see the lettuce note in `evaluate.py` `kg_fallback`).

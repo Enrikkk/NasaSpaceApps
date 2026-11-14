@@ -41,7 +41,7 @@ def quantities(crop):
 
 
 def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025, ecw=None, stage_key="stages_days",
-             meta=None, carm=None, allow_restricted=False):
+             meta=None, carm=None, allow_restricted=False, kg_fallback=False):
     meta = {**DEFAULT_META, **(meta or {})}
     gaps, evidence = [], []
     if stage_key == "stages_days" and sm.stages(crop, "stages_days_murcia"):
@@ -74,6 +74,13 @@ def evaluate(crop, climate, prices, hicp, area=None, sowing=None, base_year=2025
     base_crop = meta.get("crop_id") or crop.crop_id
     tier, tier_label, series, keys, dropped = m.series_for(base_crop, meta["variety"], meta["quality"], unit)
     euro, euro_info = (m.eurostat_series(base_crop) if unit == "eur_kg" else (None, None))
+    if kg_fallback and unit == "eur_ud" and tier == 3 and kg_ref is not None:
+        # OFF by default: national lettuce EUR/kg (0.27) mixes all types and sits far below the Murcia iceberg price
+        # (~0.43 EUR/kg), so it would print 0 % success for the current rotation. Opt-in only.
+        euro, euro_info = m.eurostat_series(base_crop)
+        if euro:
+            unit = "eur_kg"
+            gaps.append("sin cotización por pieza: se valoran los kilos netos al precio nacional Eurostat (EUR/kg)")
     if tier == 3 and not euro:
         tier, tier_label = None, "sin precio"
     qty_ref = ud_ref if unit == "eur_ud" else kg_ref
