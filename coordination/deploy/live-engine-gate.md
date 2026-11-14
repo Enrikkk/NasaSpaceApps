@@ -146,3 +146,27 @@ prevents treating it as a calculation for an identified parcel.
 Human review of proxy figures remains distinct from agent integration/build/test
 results. Do not treat #309 as approval of economic accuracy or fonts. Next gate
 and browser delta need an agreed corrected candidate, not another unchanged build.
+
+## Final source c00f735 — corrected asset gate
+
+Jaime317 supplied ffdf168 from3c45f63: explicit Vite worker URL/setWorkerUrl,
+m²-to-ha conversion, conditional error copy and no Brunson font-face loading.
+Enrique319 fixed final source c00f735, including these changes plus LLM prompt.
+Frontend diff ffdf168..c00f735 is empty; no rebuilt identical candidate or producer
+node/backend tests. New ffdf168 build71modulesexit0 reused for finalfrontend.
+VITE_API_BASE set to the confirmed public API URL. Dist contains no TTF files.
+
+Gate063acde local and HTTP both exit0: worker
+assets/maplibre-gl-worker-Boc9pDRP.mjs exists; GET200 text/javascript from isolated
+preview127.0.0.1:14173. Worker SHA256
+c8998a2616612ebc7afc3a6f83e31ad1c5f6187550a018b4fd0561779c33015b.
+Reports outsidegit /tmp/agrockham-frontend-c00f735-gate.json and
+/tmp/agrockham-frontend-c00f735-http-gate.json. Public API/CORS unchanged not
+rechecked in this asset gate; preview14173 is not a confirmed API CORS origin.
+Existing7403Desktop servers remain unchanged. These checks establish emitted
+resources/MIME, not browser execution, final offline fallback or demo_ready.
+
+Gonzalo325 informed to package only dist into frontend_dist, excluding source
+fonts. Waiting for reviewed combined image/digest/revision/public URL before
+final published browserQA. Main merge remains a human decision. Source candidate
+is c00f735, not an automatically advancing integration HEAD.
