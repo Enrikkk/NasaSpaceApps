@@ -46,7 +46,7 @@ export function riskInfo(rot) {
   const level = riskLevel(e)
   if (!level) {
     return {
-      level: null, label: 'Riesgo: sin evaluar', tone: 'none',
+      level: null, label: 'Riesgo: sin evaluar', short: 'sin dato', tone: 'none',
       text: 'No podemos estimar el riesgo: a esta opción le falta el precio de algún cultivo, y sin precio no sabemos en cuántos años saldría bien.',
     }
   }
@@ -56,7 +56,7 @@ export function riskInfo(rot) {
   const worstText = worst && isNum(worst.margen_eur_ha)
     ? ` El peor año simulado${isNum(worst.anio) ? ` (${worst.anio})` : ''} dejó ${money(worst.margen_eur_ha)}.` : ''
   return {
-    level, label: `Riesgo: ${level}`, tone: level === 'bajo' ? 'good' : level === 'medio' ? 'mid' : 'bad',
+    level, label: `Riesgo: ${level}`, short: level, tone: level === 'bajo' ? 'good' : level === 'medio' ? 'mid' : 'bad',
     text: `En ${fmtInt(e.valor)} de cada 100 años simulados del histórico, esta opción sale bien${range}.${worstText} `
       + `Los límites de la etiqueta (${RISK_CUTS.bajo} y ${RISK_CUTS.medio}) son supuestos nuestros. `
       + 'Solo cuenta clima y precios de años pasados: no es una garantía.',
@@ -70,7 +70,7 @@ export function ecoInfo(rot) {
   const a = rot?.ambiente
   const hit = ECO[a?.nivel]
   if (!hit) {
-    return { level: null, label: 'Eco: sin evaluar', tone: 'none', text: 'No tenemos datos para valorar el trato al medio ambiente de esta opción.' }
+    return { level: null, label: 'Eco: sin evaluar', short: 'sin dato', tone: 'none', text: 'No tenemos datos para valorar el trato al medio ambiente de esta opción.' }
   }
   const m = a.metricas ?? {}
   const facts = []
@@ -79,5 +79,5 @@ export function ecoInfo(rot) {
   const base = typeof a.frase === 'string' && a.frase.trim()
     ? a.frase.trim()
     : `Trato al medio ambiente: ${hit[1]}. Es una etiqueta orientativa nuestra, no una certificación.`
-  return { level: a.nivel, label: `Eco: ${hit[1]}`, tone: hit[0], text: facts.length ? `${base} (${facts.join('; ')}).` : base }
+  return { level: a.nivel, label: `Eco: ${hit[1]}`, short: hit[1], tone: hit[0], text: facts.length ? `${base} (${facts.join('; ')}).` : base }
 }

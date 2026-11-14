@@ -112,6 +112,11 @@ function buildStyle() {
       // The farmer's own parcels ("Tus parcelas"): red outline over a thin white halo so it reads on any base map.
       // The filter is set from the saved list (see the effect below); until then it matches nothing.
       {
+        id: 'mis-parcelas-fill', type: 'fill', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none' },
+        paint: { 'fill-color': token('--own-parcel'), 'fill-opacity': 0.28 },
+      },
+      {
         id: 'mis-parcelas-halo', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
         layout: { visibility: 'none', 'line-join': 'round' },
         paint: { 'line-color': token('--cream'), 'line-opacity': 0.95, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.2, 17, 7.5] },
@@ -146,6 +151,7 @@ function applyView(map, view, parcels) {
   show('ign-base', !sat)
   show('recintos-fill', parcels)
   show('recintos-line', parcels)
+  show('mis-parcelas-fill', parcels)
   show('mis-parcelas-halo', parcels)
   show('mis-parcelas-line', parcels)
   // Satellite in the map (not the home globe): IGN towns, roads and names on top.
@@ -336,7 +342,7 @@ export default function MapView() {
     const map = mapRef.current
     if (!map || !ready) return
     const f = mapFilter(savedParcels)
-    for (const id of ['mis-parcelas-halo', 'mis-parcelas-line']) if (map.getLayer(id)) map.setFilter(id, f)
+    for (const id of ['mis-parcelas-fill', 'mis-parcelas-halo', 'mis-parcelas-line']) if (map.getLayer(id)) map.setFilter(id, f)
   }, [savedParcels, ready, overlay])
 
   // "Ver" in Tus parcelas: fly to that parcel, leaving room for the parcel sheet (left on desktop, bottom on phones).

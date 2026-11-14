@@ -186,57 +186,49 @@ export default function RotationCard({ rot, rank, score, best, open, onToggle, n
 
   return (
     <Panel as="article" className={`${styles.card} ${open ? styles.open : ''} ${rot.es_actual ? styles.ref : ''}`}>
-      <div className={styles.row}>
-        <div className={styles.lead}>
-          {isNum(rank) && <span className={styles.rank} aria-label={`Puesto ${rank}`}>{rank}</span>}
-          <div className={styles.names}>
-            <h3 className={styles.title}>{crops.length ? crops.join(' · ') : label}</h3>
-            <p className={styles.sub}>{rot.es_actual ? label : subtitleOf(rot)}</p>
-            {(rot.es_actual || best) && (
-              <span className={styles.badges}>
-                {rot.es_actual && <span className={`${styles.badge} ${styles.badgeRef}`}>Referencia para comparar</span>}
-                {best && (
-                  <span className={`${styles.badge} ${styles.badgeBest}`}>
-                    <GlyphIcon name="star" size={16} />La que mejor encaja con tus prioridades
-                  </span>
-                )}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className={styles.side}>
-          {isNum(score) ? (
-            <div className={styles.score} role="img" aria-label={`Puntuación ${score} sobre 100`}>
-              <span className={styles.scoreNum}>{score}</span><small>/100</small>
-              <span className={styles.bar} aria-hidden="true"><i style={{ width: `${score}%` }} /></span>
-            </div>
-          ) : <span className={styles.noScore}>Sin puntuación</span>}
-          <div className={styles.flags}>
-            {[['eco', eco, 'leaf'], ['riesgo', risk, 'warn']].map(([k, info, icon]) => (
-              <button
-                key={k}
-                type="button"
-                className={`${styles.flag} ${styles[`tone_${info.tone}`]} ${tip === k ? styles.flagOn : ''}`}
-                aria-expanded={tip === k}
-                aria-controls={tipId}
-                onClick={() => flip(k)}
-              >
-                <GlyphIcon name={icon} size={16} /><span>{info.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className={styles.line}>
+        <button type="button" className={styles.main} aria-expanded={open} aria-controls={bodyId} onClick={onToggle}>
+          <span className={`${styles.rank} ${best ? styles.rankBest : ''}`} aria-label={isNum(rank) ? `Puesto ${rank}` : 'Referencia'}>
+            {isNum(rank) ? rank : '·'}
+          </span>
+          <span className={styles.title} title={crops.join(' · ')}>{crops.length ? crops.join(' · ') : label}</span>
+          {isNum(score)
+            ? <span className={styles.score} aria-label={`Puntuación ${score} sobre 100`}>{score}</span>
+            : <span className={styles.noScore}>ref.</span>}
+        </button>
+        <span className={styles.flags}>
+          {[['eco', eco, 'leaf'], ['riesgo', risk, 'warn']].map(([k, info, icon]) => (
+            <button
+              key={k}
+              type="button"
+              className={`${styles.flag} ${styles[`tone_${info.tone}`]} ${tip === k ? styles.flagOn : ''}`}
+              aria-expanded={tip === k}
+              aria-controls={tipId}
+              aria-label={info.label}
+              title={info.label}
+              onClick={() => flip(k)}
+            >
+              <GlyphIcon name={icon} size={14} /><span>{info.short}</span>
+            </button>
+          ))}
+        </span>
       </div>
 
-      {tip && <p id={tipId} className={styles.tip} role="note">{tips[tip].text}</p>}
-
-      <button type="button" className={styles.more} aria-expanded={open} aria-controls={bodyId} onClick={onToggle}>
-        {open ? 'Ocultar detalle' : 'Ver detalle'}
-        <span className={styles.chevron} aria-hidden="true"><GlyphIcon name="chevron" /></span>
-      </button>
+      {tip && <p id={tipId} className={styles.tip} role="note"><b>{tips[tip].label}.</b> {tips[tip].text}</p>}
 
       {open && (
         <div id={bodyId} className={styles.details}>
+          <p className={styles.sub}>{rot.es_actual ? label : subtitleOf(rot)}</p>
+          {(rot.es_actual || best) && (
+            <span className={styles.badges}>
+              {rot.es_actual && <span className={`${styles.badge} ${styles.badgeRef}`}>Referencia para comparar</span>}
+              {best && (
+                <span className={`${styles.badge} ${styles.badgeBest}`}>
+                  <GlyphIcon name="star" size={16} />La que mejor encaja con tus prioridades
+                </span>
+              )}
+            </span>
+          )}
           <dl className={styles.metrics}>
             <Money margen={rot.margen_eur_ha} />
             <GoodYears exito={rot.exito_pct} />

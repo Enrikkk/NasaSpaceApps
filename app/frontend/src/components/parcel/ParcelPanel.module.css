@@ -22,7 +22,7 @@
   top: 88px;
   left: var(--space-4);
   max-height: calc(100vh - 88px - 176px);
-  width: clamp(340px, 30vw, 440px);
+  width: clamp(360px, 33vw, 460px);
   display: flex;
   flex-direction: column;
   background: var(--bg);
