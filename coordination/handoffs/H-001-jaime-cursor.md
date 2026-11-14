@@ -81,3 +81,30 @@ Decisión de Enrique: la rotación actual debe ser evaluable en el build abierto
 - Etiquetado visible en el JSON: `precio.tipo = "proxy"`, la nota de Arturo (nacional genérico, no Murcia, recolección sin verificar), `conf B`, y las `MAPA-PER-*` en `fuentes[]` con su aviso legal («reutilización citando la fuente, Ley 37/2007; no es CC»). Todo texto de tarjeta que use ese precio debe decir que es un proxy nacional.
 - Reporta antes/después de la rotación actual y de S1/S3 en el build abierto (hoy S1 y S3 salen 100 % de éxito por el melón Eurostat 0,42 €/kg, optimista frente al de Murcia 0,29). Si MAPA cambia mucho esos números, no lo escondas: descríbelo.
 - Tests: carga del CSV (60 claves, sin red), el build abierto no contiene precios CARM, el build con CARM no cambia.
+
+## REPARTO EN 3 SUBTRABAJOS PARALELOS (decisión de Enrique, 14 nov ~17:30; sustituye al orden A→E de arriba)
+
+Haz tres subtrabajos independientes, **cada uno en su rama y su `git worktree`** (si tu Cursor puede lanzar agentes en paralelo, uno por subtrabajo; si no, en este orden: J1, J2, J3). Todos parten de `origin/t020-jaime` @ 91ba395 (A+B hechos).
+**Regla común:** no pongas los JSON de `app/data/` en conflicto a mano. Si al integrar chocan, **regénéralos** con `python3 -m app.backend.engine.build torre-pacheco` y `--abierto`. `pytest` con código de salida real. Nada se une a `main`: lo hace Enrique.
+
+**J1 — «AB listo para main»** (rama `t020-ab`, la más urgente)
+1. Bug que ha visto Gonzalo (#186): en `exito_pct.definicion` queda un texto sin formatear, `n_muestras = {sim['n_muestras']} conserva...` (f-string sin evaluar). Arréglalo y añade un test que impida cualquier `{` o `}` en los textos exportados.
+2. `alineados` hoy solo está por rotación (`rotaciones[i].escenarios_meta.alineados`). Exporta además `escenarios_meta.alineados` en la **raíz**: `true` solo si es `true` en todas las rotaciones con escenarios; test.
+3. Rebase sobre `origin/main` (hoy fe60c82 o más nuevo), pytest exit 0, JSON regenerados. Avísame con el hash. Sin push a `main`.
+
+**J2 — «C y luego E»** (rama `t020-c`): paso C (legal.py de Gonzalo) y a continuación paso E (MAPA como proxy en el build abierto), en este orden y en la misma rama porque ambos tocan `build.py`. Un commit por paso y aviso a Enrique por paso.
+
+**J3 — «D reescritor LLM»** (rama `t020-d`): paso D tal como está escrito, con `FakeBackend` y todos los tests. **No elijas modelo todavía**: Enrique te mandará cómo conectarlo. Los JSON solo se tocan al final, regenerando.
+
+## J3 CONCRETO — pipeline de reescritura con Ollama (14 nov ~18:20; sustituye lo genérico del paso D)
+
+Modelo decidido por Enrique: **gpt-oss-20b, cuantización Q4_K_M, servido por Ollama** en el portátil de Jaime (se está instalando). No lo descargues tú ni cambies de modelo: el nombre se lee de `OLLAMA_MODEL` (puede ser `gpt-oss:20b` o el de la importación GGUF; Jaime lo sabe) y la URL de `OLLAMA_URL` (por defecto `http://127.0.0.1:11434`).
+
+1. **System prompt**: ya escrito en `app/backend/engine/decision/prompts/rewrite_system_es.md` (rama `t012-motor-nucleo`). Léelo y cárgalo desde ese fichero; no lo copies al código. Si ves que falta una regla, propónla por el bus, no la cambies sin avisar.
+2. **`OllamaBackend`** (stdlib, `urllib`, sin dependencias): `POST {OLLAMA_URL}/api/chat` con `stream:false`, `messages:[system, user]`, `think:"low"` (gpt-oss es un modelo que razona: usa solo `message.content` y descarta `message.thinking`), `options:{temperature:0.2, seed:2026, num_ctx:4096}`, timeout 300 s. Si Ollama no responde: error claro, **no** reintentes en bucle.
+3. **Entrada por llamada** (un campo de `texto` de una rotación cada vez): `Texto de plantilla: …` + `Cifras permitidas: …` (de `texts.numbers_in`) + el nombre del campo (`por_que`, `evidencia_resumen`, `no_sabemos`, `riesgos_texto`, `consulta`).
+4. **Bucle de verificación** (decisión de Enrique): comprobador determinista tras cada respuesta → si falla, se le devuelve al modelo qué falló y dónde («la cifra 55 no está permitida», «falta la cifra 73 %», «aparece la palabra prohibida “seguro que”») y reescribe; **hasta 3 intentos**; tras el tercer fallo se queda la plantilla (`valido:false`). Comprobaciones: cifras ⊆ permitidas (también cantidades en letra), todas las cifras de la plantilla presentes, palabras prohibidas, longitud ≤ plantilla, y que conserve cada salvedad (palabras clave «provisional», «supuesto», «proxy», «orientativ», «no sabemos» si estaban en la plantilla). Frases de más de 25 palabras → aviso en el log, no fallo.
+5. **Salida**: `texto_llm{campo:{texto, modelo, intentos, valido}}` junto a `texto` (que no se toca), `_meta.uso_ia{modelo, cuantizacion:"Q4_K_M", runtime:"ollama", fecha, finalidad:"reformular textos de tarjetas; no calcula"}`, y logs de prompts/respuestas en `app/data/cache/llm_log/` (sin claves; no hay claves). La tarjeta muestra `texto_llm` si `valido`, si no `texto`.
+6. **CLI**: `python3 -m app.backend.engine.decision.llm_rewrite app/data/torre-pacheco.abierto.json [--dry-run]`; `--dry-run` usa `FakeBackend` y no necesita Ollama. Antes de llamar al modelo comprueba `GET /api/tags` y que `OLLAMA_MODEL` exista; si no, para y avisa (no hace `pull`).
+7. **Pruebas** con `FakeBackend` (sin red): acepta una reescritura válida; reintenta con el mensaje de error ante cifra inventada, cifra en letra, salvedad perdida y palabra prohibida; tras 3 fallos deja la plantilla; el resto del JSON queda idéntico fuera de `texto_llm` y `_meta.uso_ia`.
+8. **Prueba real** cuando Ollama esté listo: ejecútalo sobre el JSON abierto y mándame a `enrique`: cuántos campos pasaron a la 1.ª, 2.ª, 3.ª o fallaron, y 3 ejemplos antes/después **tal cual salieron**. No retoques a mano ninguna salida.
