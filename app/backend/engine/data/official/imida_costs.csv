@@ -1,0 +1,64 @@
+crop_id,param,value,unit,source_id,conf,status,nota
+alcachofa,coste_total,9563,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"alcachofa (sistema mayoritario); Tablas 3, 22, 25; € de ~2018 (encuestas 2017-19)"
+alcachofa,coste_inmovilizado,2656,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+alcachofa,coste_circulante,6907,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,preparacion_plantacion,1881,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,agua_riego_eur,1279,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,energia_electrica,169,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,recoleccion,2314,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,coste_unitario,0.56,EUR/kg,IMIDA-HORT2020,A,sourced,
+alcachofa,inversion_inicial,18308,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+alcachofa,riego_dosis,5250,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+alcachofa,produccion_media,18000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+alcachofa,caja_antes_de_venta,6474,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+brocoli,coste_total,7874,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"bróculi aire libre, acolchado; Tablas 3, 22, 27; € de ~2018 (encuestas 2017-19)"
+brocoli,coste_inmovilizado,3271,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+brocoli,coste_circulante,4603,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,preparacion_plantacion,2825,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,agua_riego_eur,780,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,energia_electrica,103,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,recoleccion,1355,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,coste_unitario,0.45,EUR/kg,IMIDA-HORT2020,A,sourced,
+brocoli,inversion_inicial,20259,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+brocoli,riego_dosis,3200,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+brocoli,produccion_media,18500,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+brocoli,caja_antes_de_venta,6073,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+lechuga,coste_total,10973,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"lechuga Iceberg (Little Gem: 3.300 m3, 28.000 kg/ha); Tablas 3, 22, 28; € de ~2018 (encuestas 2017-19)"
+lechuga,coste_inmovilizado,4187,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+lechuga,coste_circulante,6786,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,preparacion_plantacion,3664,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,agua_riego_eur,853,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,energia_electrica,135,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,recoleccion,3060,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,coste_unitario,0.41,EUR/kg,IMIDA-HORT2020,A,sourced,
+lechuga,inversion_inicial,22460,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+lechuga,riego_dosis,3500,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+lechuga,produccion_media,30000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+lechuga,caja_antes_de_venta,7390,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+melon,coste_total,9240,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,"melón piel de sapo; Tablas 3, 22, 30; € de ~2018 (encuestas 2017-19)"
+melon,coste_inmovilizado,3846,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,amortizaciones + preparación y plantación
+melon,coste_circulante,5393,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,preparacion_plantacion,3487,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,agua_riego_eur,877,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,energia_electrica,118,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,recoleccion,1507,EUR/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,coste_unitario,0.23,EUR/kg,IMIDA-HORT2020,A,sourced,
+melon,inversion_inicial,18124,EUR/ha,IMIDA-HORT2020,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+melon,riego_dosis,3600,m3/ha·ciclo,IMIDA-HORT2020,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+melon,produccion_media,42000,kg/ha·ciclo,IMIDA-HORT2020,A,sourced,
+melon,caja_antes_de_venta,7373,EUR/ha,IMIDA-HORT2020,M,derived,anuales: circulante sin recolección + preparación y plantación = dinero a adelantar por ciclo
+limon,coste_total,7336,EUR/ha·año,IMIDA-CIT2018,A,sourced,"limonero Fino 7x5 m, plena producción; recolección a cargo del comprador (con recolección 11.447 €/ha, 0,09 €/kg); Tablas 4, 10, 15, 27; € de ~2018 (encuestas 2017-19)"
+limon,coste_inmovilizado,600,EUR/ha·año,IMIDA-CIT2018,A,sourced,amortizaciones + preparación y plantación
+limon,coste_circulante,6736,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,preparacion_plantacion,89,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,agua_riego_eur,1424,EUR/ha·año,IMIDA-CIT2018,A,sourced,tabla 27 lo llama 'Riego'; energía eléctrica va aparte (167)
+limon,energia_electrica,167,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,recoleccion,0,EUR/ha·año,IMIDA-CIT2018,A,sourced,
+limon,coste_unitario,0.18,EUR/kg,IMIDA-CIT2018,A,sourced,
+limon,inversion_inicial,12145,EUR/ha,IMIDA-CIT2018,A,sourced,"incluye nave, cabezal, red de riego, embalse y plantación: un agricultor con finca ya equipada adelanta mucho menos"
+limon,riego_dosis,6378,m3/ha·año,IMIDA-CIT2018,A,sourced,dosis real de encuesta (contrastar con FAO-56 Kc x ET0)
+limon,produccion_media,45000,kg/ha·año,IMIDA-CIT2018,A,sourced,
+limon,caja_antes_de_venta,,EUR/ha,IMIDA-CIT2018,M,derived,perenne: usar inversión + años sin cosecha (año 1.º venta pendiente de fuente)
+haba,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+cebada,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
+veza,coste_total,,EUR/ha,,P,placeholder,no está en los estudios IMIDA de horticultura (2020) ni cítricos (2018); falta fuente
