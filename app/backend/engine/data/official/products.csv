@@ -1,0 +1,14 @@
+product_id,crop_id,variety,quality,price_unit,harvest_window,label,nota,cost_product
+lechuga_iceberg,lechuga,iceberg,,eur_ud,late,Lechuga iceberg,IMIDA Tabla 28; 85 % of Murcia lettuce (IMIDA 2020),
+lechuga_little_gem,lechuga,baby,,eur_ud,late,Lechuga baby / little gem,IMIDA Tabla 29 (Baby o Little Gem); CARM price row 'Lechuga Baby',
+lechuga_romana,lechuga,romana,,eur_ud,late,Lechuga romana,no IMIDA cost for romana: costs fall back to the iceberg system (flagged),lechuga
+melon_piel_de_sapo,melon,piel_de_sapo,,eur_kg,late,Melón piel de sapo,IMIDA Tabla 30,
+melon_galia,melon,galia,,eur_kg,late,Melón galia,IMIDA Tabla 31 (Galia/Cantalupo),
+melon_cantaloup,melon,cantaloup,,eur_kg,late,Melón cantaloup,IMIDA Tabla 31 (Galia/Cantalupo) costs; CARM cantaloup prices from 2008,melon_galia
+brocoli,brocoli,,,eur_kg,late,Brócoli,IMIDA broccoli system; CARM plain 'Bróculi' row; exportación/industria are sale channels,
+alcachofa,alcachofa,gorda|blanca_gorda,,eur_kg,mid+late,Alcachofa (gorda),IMIDA artichoke system; CARM 'gorda' (blanca gorda before 2014); pequeña/industria are sale channels,
+limon_fino,limon,fino,todo_limon,eur_kg,all,Limón fino,IMIDA lemon Fino 7x5 (Fino); CARM 'Fino todo limón'; un corte / industria are sale channels,
+limon_verna,limon,verna,todo_limon,eur_kg,all,Limón verna,no IMIDA cost for Verna: costs fall back to Fino (flagged),limon
+haba,haba,,,eur_kg,late,Haba seca,CARM has only green/tender broad bean prices (haba tierna): dry broad bean keeps the Eurostat national price,
+cebada,cebada,caballar,,eur_kg,late,Cebada (pienso),CARM 'cebada caballar'; cervecera 2004-12 is a sale channel,
+veza,veza,,,,,Veza (cubierta),cover crop: not sold,
