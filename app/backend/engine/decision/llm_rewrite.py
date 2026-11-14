@@ -65,6 +65,21 @@ def _figures_raw(text):
     return out
 
 
+_BROKEN = [(re.compile(r"\bsale\s+probar\b", re.I),
+            "«Sale probar» está mal escrito en castellano: di «Probamos…», «Se prueban…» o «Sale de probar…»")]
+_WORD = re.compile(r"\w+", re.U)
+
+
+def _only_deletions(template, answer):
+    """True when the answer is the template with 1-3 words removed and nothing else: not a rewrite, and it breaks grammar."""
+    t = [w.lower() for w in _WORD.findall(template)]
+    a = [w.lower() for w in _WORD.findall(answer)]
+    if not 1 <= len(t) - len(a) <= 3:
+        return False
+    it = iter(t)
+    return all(w in it for w in a)       # a is a subsequence of t
+
+
 def check(template, answer):
     """Deterministic checker. Returns a list of plain-Spanish error messages (empty = the answer may be shown)."""
     errs = []
@@ -99,6 +114,12 @@ def check(template, answer):
             errs.append(f"falta una salvedad de la plantilla (la palabra que empieza por «{c}»): el texto nuevo debe conservarla")
     if len(a) > len(template) * MAX_LEN_RATIO:
         errs.append(f"el texto tiene {len(a)} caracteres y la plantilla {len(template)}: debe tener un largo parecido (como mucho un 15 % más)")
+    for rx, msg in _BROKEN:
+        if rx.search(a):
+            errs.append(msg)
+    if _only_deletions(template, a):
+        errs.append("solo has borrado palabras de la plantilla y eso deja frases rotas: reescribe las frases enteras "
+                    "(por ejemplo «Probamos las combinaciones… y elegimos la que…»), con las mismas cifras y salvedades")
     if _MARKUP.search(a):
         errs.append("hay listas, títulos o formato (asteriscos, guiones, almohadillas): devuelve solo frases seguidas")
     if texts._BAD_WORD.search(a):

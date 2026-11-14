@@ -92,3 +92,23 @@ def test_ollama_backend_reports_a_dead_server_without_looping():
     b = lr.OllamaBackend(url="http://127.0.0.1:9", model="x", timeout=1)
     ok, why = b.available()
     assert not ok and "no responde" in why
+
+
+# Casos reales de la prueba de Jaime con gpt-oss-20b (14-nov-2026): el modelo a veces solo borra una palabra y rompe la frase.
+T_SALE = ("Sale de probar las combinaciones de cultivos permitidas durante 3 años y quedarse con la que mejor cuida el suelo "
+          "y menos agua gasta. En un año típico dejaría unos 2.487 € por hectárea y año.")
+
+
+def test_checker_rejects_sale_probar_and_answers_that_only_delete_words():
+    roto = T_SALE.replace("Sale de probar", "Sale probar")
+    errs = lr.check(T_SALE, roto)
+    assert any("«Sale probar» está mal escrito" in e for e in errs)
+    assert any("solo has borrado palabras" in e for e in errs)
+    solo_borra = T.replace("En un año típico dejaría", "Un año típico dejaría")
+    assert any("solo has borrado palabras" in e for e in lr.check(T, solo_borra))
+
+
+def test_checker_accepts_a_real_rewrite_with_the_same_figures():
+    bueno = ("Probamos las combinaciones de cultivos permitidas a 3 años y elegimos la que mejor cuida el suelo y gasta menos "
+             "agua. En un año normal te quedarían unos 2.487 € por hectárea y año.")
+    assert lr.check(T_SALE, bueno) == []
