@@ -1,7 +1,7 @@
 .app { position: relative; height: 100vh; overflow: hidden; }
 
 /* Chrome floats over the map; only its boxes catch the pointer. */
-.brand, .side, .views { position: absolute; z-index: 2; }
+.brand, .side { position: absolute; z-index: 2; }
 
 /* The logo glides from its home spot to the corner while it scales down (Logo.module.css). */
 .brand { top: 6vh; left: 2.5vw; transition: top 900ms var(--ease), left 900ms var(--ease); }
@@ -37,7 +37,7 @@
 .side {
   top: var(--space-4);
   right: var(--space-4);
-  bottom: 140px;
+  bottom: 96px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -49,11 +49,6 @@
 .side > nav { max-width: 45vw; }
 .side > aside { width: max(280px, 23.8vw); flex: 0 1 auto; min-height: 0; }
 
-.views {
-  right: var(--space-4);
-  bottom: var(--space-4);
-  animation: rise 600ms var(--ease) 2000ms both;
-}
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -63,9 +58,8 @@
   .homeActions { left: var(--space-4); right: var(--space-4); bottom: 40px; }
   .seeMap, .myParcels { flex: 1; padding: var(--space-3) var(--space-4); font-size: var(--fs-md); }
 
-  .side { top: 64px; left: var(--space-3); right: var(--space-3); bottom: 84px; align-items: stretch; gap: var(--space-2); }
+  .side { top: 64px; left: var(--space-3); right: var(--space-3); bottom: 72px; align-items: stretch; gap: var(--space-2); }
   .side > nav { max-width: none; }
   .side > aside { width: auto; align-self: flex-end; min-width: 180px; max-width: 100%; }
 
-  .views { left: var(--space-3); right: var(--space-3); bottom: var(--space-3); }
 }

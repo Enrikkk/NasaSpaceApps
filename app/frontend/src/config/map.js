@@ -73,7 +73,7 @@ export const DEMO_PARCEL = { label: 'Parcela demo · Torre-Pacheco', lon: -0.988
 // (IGN Base with all its detail, recoloured white/cream). SIGPAC parcels are a toggle on top of either.
 export const VIEWS = [
   { id: 'satelite', label: 'Satélite', icon: 'satellite' },
-  { id: 'mono', label: 'Monocromática', icon: 'mono' },
+  // 'mono' (IGN Base in white/cream) still works in MapView but has no button: satellite only for now.
 ]
 
 // Home view: close, tilted, rotated look at the planet; the horizon stays below the logo (logo over space). Spain
