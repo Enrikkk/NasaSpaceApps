@@ -1,7 +1,12 @@
 """Build the per-parcel JSON (T-020): rotations with criteria, scenario samples, legal light, evidence, slider variants.
 
-  python3 -m app.backend.engine.build torre-pacheco            -> app/data/torre-pacheco.json         (OPEN DATA ONLY: publishable)
-  python3 -m app.backend.engine.build torre-pacheco --interno  -> app/data/torre-pacheco.interno.json (uses CARM prices: NEVER publish)
+  python3 -m app.backend.engine.build torre-pacheco            -> app/data/torre-pacheco.json         (WITH CARM Murcia prices)
+  python3 -m app.backend.engine.build torre-pacheco --abierto  -> app/data/torre-pacheco.abierto.json (no CARM prices: fallback)
+
+DECISION Enrique 2026-11-14 (chat, overrides the earlier "nothing published with CARM until permission"): the published JSON
+uses the CARM yearbook prices although written permission is still pending (email to agri-estadistica@carm.es not yet
+answered). Risk: esam.carm.es/legal allows personal non-commercial use and no modification. The JSON states this in
+`licencia` and cites the source; keep the open-data twin file so we can switch back at once if CARM refuses.
 
 Blocks the engine does not produce yet (parcel, ndvi, soil: T-011/T-013) are copied from the contract mock and keep
 their MOCK label in `_estado_bloques`. The block `clima` is computed here from the SIAM station series.
@@ -13,13 +18,14 @@ import pathlib
 import statistics
 import sys
 
-from .core import data, stats
+from .core import data, market as mk_mod, stats
 from .decision import rotations as rt, rules, strategies as st
 
 DATA = pathlib.Path(__file__).resolve().parents[2] / "data"
 VARIANTS = {"lluvia_-30": (-30, 0.0), "lluvia_-15": (-15, 0.0), "lluvia_+10": (10, 0.0), "temp_+1": (0, 1.0),
             "temp_+2": (0, 2.0), "2050": (-12, 1.8)}   # 2050 = deltas of the contract mock, SIMULATED (no NEX-GDDP yet)
 ACTUAL = (("melon_piel_de_sapo", "05-01"), ("lechuga_iceberg", "11-01"))   # melon, fallow, lettuce (the parcel's habit)
+mk_restricted = mk_mod.RESTRICTED_SOURCES
 SOURCES = {r["source_id"]: r for r in csv.DictReader(open(data.OFFICIAL / "sources.csv", encoding="utf-8"))}
 
 
@@ -64,6 +70,11 @@ def evidence_for(keys_used, static, extra):
             out.append({"dato": f"{static[k]['label']}: {e['param']} = {e['valor']} {e.get('unidad', '')}".strip(),
                         "dataset": s.get("dataset", e["fuente"]), "fuente_id": e["fuente"], "url": s.get("url", ""),
                         "escala": "cultivo en Murcia (no de la parcela)", "confianza": e.get("conf")})
+    if any(static[k]["report"]["precio"]["nivel"] in (1, 2) for k in keys_used):
+        c = SOURCES["CARM-ANUARIO"]
+        out.append({"dato": "Precios mensuales percibidos por el agricultor, por variedad (orientativos)", "dataset": c["dataset"],
+                    "fuente_id": "CARM-ANUARIO", "url": c["url"], "escala": "Región de Murcia, 2002-2023",
+                    "confianza": "M", "aviso": "uso bajo permiso pendiente de la CARM; cotización orientativa, no precio pactado"})
     return extra + out
 
 
@@ -222,12 +233,18 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
     mock = json.load(open(DATA / "torre-pacheco.mock.json", encoding="utf-8"))
     out = {k: v for k, v in mock.items() if k != "rotaciones"}
     out["clima"] = climate_block(climate)
-    out["_status"] = ("Bloque `rotaciones` y `clima`: calculados por el motor con datos "
-                      + ("INTERNOS (precios CARM): NO PUBLICAR" if allow_restricted else "ABIERTOS (SIAM, Eurostat, FAO, IMIDA)")
-                      + ". Bloques parcela, historia, ndvi, suelo: MOCK hasta T-011/T-013.")
+    out["_status"] = ("Bloque `rotaciones` y `clima`: calculados por el motor. Precios: "
+                      + ("CARM (anuarios) con Eurostat de respaldo; permiso de la CARM pendiente" if allow_restricted else
+                         "sin precios CARM; solo Eurostat")
+                      + ". Derechos del resto de fuentes (IMIDA, SIAM, FAO) según el registro de fuentes, sin verificar. "
+                        "Bloques parcela, historia, ndvi, suelo: MOCK hasta T-011/T-013.")
     out["_estado_bloques"] = {"rotaciones": "real", "clima": "real", "escenario_2050": "simulado", "variantes": "simulado",
                               "parcela": "mock", "historia": "mock", "ndvi": "mock", "suelo": "mock", "semaforo_legal": "provisional"}
-    out["licencia"] = {"solo_uso_interno": allow_restricted}
+    out["licencia"] = {"incluye_precios_carm": allow_restricted,
+                       "estado": ("permiso solicitado a la CARM, pendiente; su aviso legal permite uso personal no comercial y sin "
+                                  "modificación; el equipo decidió usarlos igualmente (Enrique, 2026-11-14): citar la fuente"
+                                  if allow_restricted else "sin precios CARM"),
+                       "fuentes_restringidas": mk_restricted if allow_restricted else {}}
     out["rotaciones"] = rots
     out["criterios_sentido"] = "1 = mejor en los cuatro (más margen, MENOS agua, más suelo/N, MENOS riesgo), relativo a las rotaciones mostradas"
     out["supuestos_decision"] = {"horizonte_anios": rt.HORIZON, "muestras": st.N_SAMPLES,
@@ -240,9 +257,9 @@ def build(parcel="torre-pacheco", allow_restricted=False, base_year=2025):
 
 def main(argv):
     parcel = argv[0] if argv and not argv[0].startswith("--") else "torre-pacheco"
-    internal = "--interno" in argv
-    out = build(parcel, allow_restricted=internal)
-    path = DATA / f"{parcel}{'.interno' if internal else ''}.json"
+    open_only = "--abierto" in argv
+    out = build(parcel, allow_restricted=not open_only)
+    path = DATA / f"{parcel}{'.abierto' if open_only else ''}.json"
     json.dump(out, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"escrito {path} ({path.stat().st_size // 1024} KB)")
     for r in out["rotaciones"]:

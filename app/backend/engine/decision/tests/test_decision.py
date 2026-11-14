@@ -60,7 +60,7 @@ def test_shared_draws_deterministic():
 def test_open_build_is_publishable():
     out = bd.build("torre-pacheco", allow_restricted=False)
     text = json.dumps(out, ensure_ascii=False).lower()
-    assert "carm" not in text and out["licencia"]["solo_uso_interno"] is False
+    assert "carm" not in text and out["licencia"]["incluye_precios_carm"] is False
     rots = out["rotaciones"]
     assert len(rots) >= 3 and rots[0]["es_actual"]
     for r in rots:
@@ -80,3 +80,12 @@ def test_unpriced_rotation_is_not_evaluable_not_optimistic():
     actual = out["rotaciones"][0]
     assert actual["exito_pct"]["valor"] is None and actual["margen_eur_ha"] is None
     assert any("NO evaluables" in h for h in actual["huecos"])
+
+
+def test_default_build_cites_carm_and_states_permission_pending():
+    out = bd.build("torre-pacheco", allow_restricted=True)
+    assert out["licencia"]["incluye_precios_carm"] is True and "pendiente" in out["licencia"]["estado"]
+    actual = out["rotaciones"][0]
+    assert actual["exito_pct"]["valor"] is not None                     # lettuce now has a Murcia price
+    assert any(e["fuente_id"] == "CARM-ANUARIO" for r in out["rotaciones"] for e in r["evidencia"])
+    assert "abiertos" not in out["_status"].lower()                       # no claim that every source is open
