@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agrockham hook</title>
+<!--
+  Agrockham promo, opening hook (0.0-9.6 s), 1920x1080.
+  Deterministic: open index.html?t=<seconds> to see the exact frame for that time,
+  or call window.renderAt(t) from a renderer. No timers, no Math.random, no Date.
+  Every visual is drawn here in SVG/CSS (self-made). Fonts: Inter, fallback DejaVu Sans (system).
+-->
+<style>
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+           font-family: Inter, "DejaVu Sans", sans-serif; }
+  #scene { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+  #scrim { position: absolute; inset: 0; pointer-events: none;
+           background: radial-gradient(1300px 560px at 0 0, rgba(0,0,0,.62), rgba(0,0,0,0) 72%); }
+  #headline { position: absolute; left: 96px; top: 88px; color: #fff; font-weight: 800;
+              letter-spacing: -0.01em; line-height: 1.02;
+              text-shadow: 0 4px 28px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.7); }
+  #headline .w { display: inline-block; white-space: pre; }
+  #headline .accent { color: #ffb21f; }
+  #subtitle { position: absolute; left: 0; right: 0; bottom: 78px; text-align: center; }
+  #subtitle span { display: inline-block; max-width: 1500px; color: #fff; font-weight: 600; font-size: 40px;
+                   line-height: 1.25; padding: 10px 24px; border-radius: 8px; background: rgba(0,0,0,.66); }
+  #tag { position: absolute; right: 56px; top: 48px; color: rgba(255,255,255,.88); font-weight: 600;
+         font-size: 17px; letter-spacing: .16em; padding: 7px 12px; border: 1.5px solid rgba(255,255,255,.7);
+         border-radius: 4px; background: rgba(0,0,0,.35); }
+  #caption { position: absolute; left: 96px; bottom: 26px; color: rgba(255,255,255,.92); font-weight: 500;
+             font-size: 24px; padding: 6px 14px; border-radius: 6px; background: rgba(0,0,0,.55); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080"></svg>
+  <div id="scrim"></div>
+  <div id="headline"></div>
+  <div id="subtitle"><span></span></div>
+  <div id="tag"></div>
+  <div id="caption"></div>
+</div>
+<script>
+(() => {
+'use strict';
+const W = 1920, H = 1080, DUR = 9.6;
+
+// ---------- helpers ----------
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const easeOutBack = p => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+const f = n => (Math.round(n * 10) / 10).toString();
+const mod = (a, n) => ((a % n) + n) % n;
+const pts2 = pts => pts.map(p => f(p[0]) + ',' + f(p[1])).join(' ');
+
+function smoothClosed(pts) {
+  const n = pts.length; let d = `M${f(pts[0][0])},${f(pts[0][1])}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)},${f(p1[1] + (p2[1] - p0[1]) / 6)} ` +
+         `${f(p2[0] - (p3[0] - p1[0]) / 6)},${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])},${f(p2[1])}`;
+  }
+  return d + 'Z';
+}
+function smoothOpen(pts) {
+  const n = pts.length; let d = '';
+  for (let i = 0; i < n - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(n - 1, i + 2)];
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)},${f(p1[1] + (p2[1] - p0[1]) / 6)} ` +
+         `${f(p2[0] - (p3[0] - p1[0]) / 6)},${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])},${f(p2[1])}`;
+  }
+  return d;
+}
+function pip(pt, poly) {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if (((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi)) c = !c;
+  }
+  return c;
+}
+
+// =====================================================================
+// SHOT 1: tomato cracking under the sun (0.0-1.6 s)
+// =====================================================================
+const S1 = (() => {
+  const R = mulberry32(11);
+  const C = { x: 1240, y: 640 }, RX = 365, RY = 330;
+  const body = [];
+  for (let i = 0; i < 72; i++) {
+    const a = i / 72 * Math.PI * 2;
+    const r = 1 + 0.028 * Math.sin(5 * a + 0.6) + 0.012 * Math.sin(9 * a);
+    body.push([C.x + RX * r * Math.cos(a), C.y + RY * r * Math.sin(a) * (a > Math.PI ? 0.97 : 1)]);
+  }
+  const tomatoD = smoothClosed(body);
+  const stem = { x: C.x + 14, y: C.y - RY + 66 };
+
+  // cracks: jagged polylines radiating from the stem, plus one concentric arc
+  const cracks = [];
+  const angles = [168, 138, 108, 72, 40, 12];
+  angles.forEach((deg, i) => {
+    let a = deg * Math.PI / 180; const L = 170 + R() * 150; const pts = []; let off = 0;
+    const startR = 34;
+    for (let k = 0; k <= 14; k++) {
+      const s = startR + L * k / 14; off += (R() - .5) * 16; a += (R() - .5) * 0.05;
+      const dx = Math.cos(a), dy = Math.sin(a) * 0.78;
+      pts.push([stem.x + dx * s - dy * off * 0.6, stem.y + dy * s + dx * off * 0.6]);
+    }
+    cracks.push({ pts, maxW: 13 + R() * 9, delay: 0.32 + i * 0.045 });
+  });
+  { // concentric ring crack around the shoulder
+    const pts = []; let off = 0;
+    for (let k = 0; k <= 22; k++) {
+      const a = (195 - k * 170 / 22) * Math.PI / 180; off += (R() - .5) * 8;
+      pts.push([stem.x + Math.cos(a) * (128 + off), stem.y + Math.sin(a) * (128 + off) * 0.62 + 18]);
+    }
+    cracks.push({ pts, maxW: 9, delay: 0.62 });
+  }
+
+  const leaves = [];
+  for (let i = 0; i < 9; i++) leaves.push({ x: R() * 640 - 80, y: 180 + R() * 980, rx: 150 + R() * 170,
+    ry: 55 + R() * 70, rot: R() * 180, c: R() < .5 ? '#1c300e' : '#2a4716' });
+
+  const sepals = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + 0.3, L = 120 + R() * 40;
+    const tip = [stem.x + Math.cos(a) * L, stem.y + Math.sin(a) * L * 0.42];
+    const n = [-Math.sin(a) * 18, Math.cos(a) * 18 * 0.42];
+    const mid = [stem.x + Math.cos(a) * L * .45, stem.y + Math.sin(a) * L * .45 * .42];
+    sepals.push(`M${f(stem.x + n[0] * .5)},${f(stem.y + n[1] * .5)} Q${f(mid[0] + n[0])},${f(mid[1] + n[1])} ${f(tip[0])},${f(tip[1])} ` +
+      `Q${f(mid[0] - n[0])},${f(mid[1] - n[1])} ${f(stem.x - n[0] * .5)},${f(stem.y - n[1] * .5)} Z`);
+  }
+
+  function crackPoly(c, grow) {
+    const n = c.pts.length, m = grow * (n - 1);
+    if (m < 0.05) return '';
+    const vis = [];
+    for (let k = 0; k <= Math.floor(m); k++) vis.push(c.pts[k]);
+    const kf = Math.floor(m);
+    if (kf < n - 1 && m > kf) { const a = c.pts[kf], b = c.pts[kf + 1], u = m - kf; vis.push([lerp(a[0], b[0], u), lerp(a[1], b[1], u)]); }
+    const left = [], right = [];
+    for (let k = 0; k < vis.length; k++) {
+      const a = vis[Math.max(0, k - 1)], b = vis[Math.min(vis.length - 1, k + 1)];
+      let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const l = Math.hypot(nx, ny) || 1; nx /= l; ny /= l;
+      const u = k / Math.max(1, vis.length - 1);
+      const w = c.maxW * Math.pow(grow, 0.8) * Math.pow(1 - u, 0.65) * (0.75 + 0.25 * Math.sin(k * 2.3));
+      left.push([vis[k][0] + nx * w / 2, vis[k][1] + ny * w / 2]);
+      right.push([vis[k][0] - nx * w / 2, vis[k][1] - ny * w / 2]);
+    }
+    const poly = left.concat(right.reverse());
+    const centre = vis.map(p => f(p[0]) + ',' + f(p[1])).join(' ');
+    return `<polygon points="${pts2(poly)}" fill="#f6bb8f" stroke="#560505" stroke-width="2.6" stroke-linejoin="round"/>` +
+      `<polyline points="${centre}" fill="none" stroke="#ffe0c2" stroke-width="${f(c.maxW * 0.22 * grow)}" stroke-linecap="round" opacity=".8"/>`;
+  }
+
+  function defs(t) {
+    return `
+    <linearGradient id="s1sky" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/><stop offset=".25" stop-color="#ffd885"/>
+      <stop offset=".52" stop-color="#e08830"/><stop offset=".78" stop-color="#5a3812"/><stop offset="1" stop-color="#1a240b"/>
+    </linearGradient>
+    <radialGradient id="s1sun"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#fff6d8" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="s1tom" cx=".4" cy=".28" r=".85">
+      <stop offset="0" stop-color="#ff8a5c"/><stop offset=".22" stop-color="#f53a1f"/>
+      <stop offset=".68" stop-color="#b8120b"/><stop offset="1" stop-color="#4f0303"/></radialGradient>
+    <radialGradient id="s1shade" cx=".55" cy=".95" r=".7"><stop offset="0" stop-color="#200000" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#200000" stop-opacity="0"/></radialGradient>
+    <clipPath id="s1clip"><path d="${tomatoD}"/></clipPath>
+    <filter id="blur16" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+    <filter id="blur9" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="blur3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="shim" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0045 0.03" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+  }
+
+  function world(t) {
+    const push = 1 + 0.11 * easeInOut(clamp(t / 1.6));
+    const shimmerY = t * 110;   // noise field drifts upward: rising heat haze
+    const flick = 0.85 + 0.15 * Math.sin(t * 9.0) * Math.sin(t * 3.7);
+    const S = { x: 1600, y: -60 };
+    let flare = '';
+    [0.32, 0.55, 0.78, 1.02].forEach((k, i) => {
+      const gx = S.x + k * (960 - S.x) * 1.9, gy = S.y + k * (540 - S.y) * 1.9, r = [34, 70, 26, 110][i];
+      const hex = []; for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3 + 0.3; hex.push([gx + r * Math.cos(a), gy + r * Math.sin(a)]); }
+      flare += `<polygon points="${pts2(hex)}" fill="#ffe9c0" opacity="${f(0.10 + 0.05 * i % 2)}"/>`;
+    });
+    let s = `<g filter="url(#shim)" transform="translate(0,${f(-shimmerY)})"><g transform="translate(0,${f(shimmerY)})">`;
+    s += `<g transform="translate(${C.x},${C.y}) scale(${push.toFixed(4)}) translate(${-C.x},${-C.y})">`;
+    s += `<rect x="-80" y="-80" width="${W + 160}" height="${H + 160}" fill="url(#s1sky)"/>`;
+    s += `<circle cx="${S.x}" cy="${S.y}" r="900" fill="url(#s1sun)" opacity="${f(flick)}"/>`;
+    s += `<g filter="url(#blur16)">` + leaves.map(l => `<ellipse cx="${f(l.x)}" cy="${f(l.y)}" rx="${f(l.rx)}" ry="${f(l.ry)}" fill="${l.c}" transform="rotate(${f(l.rot)} ${f(l.x)} ${f(l.y)})"/>`).join('') +
+         `<circle cx="210" cy="900" r="210" fill="#8e1208"/><circle cx="150" cy="845" r="70" fill="#d8573a" opacity=".5"/></g>`;
+    // vine and stem
+    s += `<path d="M-60,150 C420,90 900,300 1260,250 S1800,120 2000,160" fill="none" stroke="#2f5419" stroke-width="40" stroke-linecap="round"/>`;
+    s += `<path d="M-60,140 C420,80 900,290 1260,240 S1800,110 2000,150" fill="none" stroke="#5f8f33" stroke-width="10" stroke-linecap="round" opacity=".7"/>`;
+    s += `<path d="M1262,250 C1270,300 ${f(stem.x - 6)},${f(stem.y - 60)} ${f(stem.x)},${f(stem.y)}" fill="none" stroke="#3a6a20" stroke-width="26" stroke-linecap="round"/>`;
+    // tomato
+    s += `<ellipse cx="${C.x + 30}" cy="${C.y + RY + 10}" rx="${RX * .8}" ry="40" fill="#1a0c02" opacity=".45" filter="url(#blur16)"/>`;
+    s += `<path d="${tomatoD}" fill="url(#s1tom)"/>`;
+    s += `<path d="${tomatoD}" fill="url(#s1shade)"/>`;
+    s += `<g clip-path="url(#s1clip)">`;
+    s += `<ellipse cx="${C.x - 40}" cy="${C.y - RY + 30}" rx="${RX * .8}" ry="70" fill="#ffd2a8" opacity=".35" filter="url(#blur16)"/>`;
+    cracks.forEach(c => { s += crackPoly(c, easeOut(clamp((t - c.delay) / 0.95))); });
+    s += `</g>`;
+    s += `<ellipse cx="${C.x - 120}" cy="${C.y - 205}" rx="115" ry="38" fill="#fff" opacity=".85" filter="url(#blur9)" transform="rotate(-16 ${C.x - 120} ${C.y - 205})"/>`;
+    s += `<ellipse cx="${C.x - 160}" cy="${C.y - 196}" rx="34" ry="11" fill="#fff" transform="rotate(-16 ${C.x - 160} ${C.y - 196})"/>`;
+    s += `<g>` + sepals.map(d => `<path d="${d}" fill="#3c7424" stroke="#23480f" stroke-width="3"/>`).join('') + `</g>`;
+    s += `<ellipse cx="${f(stem.x)}" cy="${f(stem.y)}" rx="22" ry="14" fill="#2c5a17"/>`;
+    s += `</g></g></g>`;
+    // lens flare (not affected by the heat haze or the push-in)
+    s += `<ellipse cx="${S.x}" cy="${S.y + 40}" rx="1300" ry="7" fill="#fff" opacity="${f(.55 * flick)}" filter="url(#blur3)"/>`;
+    s += flare;
+    return s;
+  }
+  return { defs, world };
+})();
+
+// =====================================================================
+// SHOT 2: water-level view of a flooded lettuce field (1.6-3.2 s)
+// =====================================================================
+const S2 = (() => {
+  const R = mulberry32(22);
+  const VPY = 470, FL = 1100, CAM_H = 0.55;
+  const proj = (X, Z) => [960 + FL * X / Z, VPY + FL * CAM_H / Z];
+  const plants = [];
+  for (let X = -6.6; X <= 6.61; X += 1.2) for (let Z = 2.3; Z < 42; Z += 0.95) {
+    plants.push({ X: X + (R() - .5) * 0.15, Z: Z + (R() - .5) * 0.3, size: 0.85 + R() * 0.3, ph: R() * 6, c: R() < .5 ? '#6f9a35' : '#86ad40' });
+  }
+  plants.sort((a, b) => b.Z - a.Z);
+  const streaks = []; for (let i = 0; i < 190; i++) streaks.push({ X: (R() - .5) * 18, Z0: 1.2 + R() * 28.8, len: 0.3 + R() * 0.5 });
+  const drops = []; for (let i = 0; i < 300; i++) drops.push({ x: R() * 2400 - 200, y: R() * 1300, len: 40 + R() * 70, w: R() < .12 ? 3.2 : 1.6, sp: 2000 + R() * 900 });
+  const rings = []; for (let i = 0; i < 70; i++) rings.push({ X: (R() - .5) * 12, Z: 1.6 + R() * 16, ph: R() });
+  const bands = []; for (let i = 0; i < 46; i++) { const z = R(); bands.push({ x: R() * 2400, y: VPY + 6 + z * z * 330, rx: 60 + R() * 260 * (1 - z * .5), ry: 1.5 + z * 5, o: .12 + R() * .2, v: 60 + z * 260 }); }
+  const clouds = []; for (let i = 0; i < 10; i++) clouds.push({ x: R() * 2100 - 100, y: R() * 330, rx: 220 + R() * 260, ry: 60 + R() * 80, c: R() < .5 ? '#262c33' : '#3b434b' });
+  const lens = []; for (let i = 0; i < 7; i++) lens.push({ x: 120 + R() * 1680, y: 120 + R() * 760, r: 16 + R() * 40 });
+  const treeline = []; for (let x = -100; x <= 2020; x += 40) treeline.push([x, VPY - 8 - R() * 22 - (Math.sin(x * 0.01) + 1) * 8]);
+
+  function defs(t) {
+    return `
+    <linearGradient id="s2sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3138"/><stop offset="1" stop-color="#7a7f80"/></linearGradient>
+    <linearGradient id="s2water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b39a74"/><stop offset=".12" stop-color="#8c6c47"/><stop offset=".45" stop-color="#6a4c2e"/><stop offset="1" stop-color="#3a2817"/></linearGradient>
+    <linearGradient id="s2wave" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4128"/><stop offset="1" stop-color="#1f150b"/></linearGradient>
+    <radialGradient id="s2tom" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#e2553a"/><stop offset=".5" stop-color="#a8160d"/><stop offset="1" stop-color="#4a0505"/></radialGradient>
+    <radialGradient id="s2drop" cx=".45" cy=".4" r=".55"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".75" stop-color="#fff" stop-opacity=".06"/><stop offset=".95" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <filter id="blur30" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
+    <filter id="blur2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>`;
+  }
+
+  function world(t) {
+    const u = t - 1.6;
+    const dx = 15 * Math.sin(u * 13.1) + 8 * Math.sin(u * 29.7 + 1), dy = 11 * Math.sin(u * 11.3 + 2) + 6 * Math.sin(u * 23.9);
+    const rot = 0.9 * Math.sin(u * 7.7);
+    let s = `<g transform="translate(${f(960 + dx)},${f(540 + dy)}) rotate(${rot.toFixed(3)}) scale(1.09) translate(-960,-540)">`;
+    s += `<rect x="-120" y="-120" width="${W + 240}" height="${VPY + 120}" fill="url(#s2sky)"/>`;
+    s += `<g filter="url(#blur30)">` + clouds.map(c => `<ellipse cx="${f(c.x + u * 40)}" cy="${f(c.y)}" rx="${f(c.rx)}" ry="${f(c.ry)}" fill="${c.c}"/>`).join('') + `</g>`;
+    s += `<polygon points="-120,${VPY + 2} ${pts2(treeline)} 2040,${VPY + 2}" fill="#252c22"/>`;
+    s += `<rect x="-120" y="${VPY}" width="${W + 240}" height="${H - VPY + 140}" fill="url(#s2water)"/>`;
+    bands.forEach(b => { s += `<ellipse cx="${f(mod(b.x + u * b.v, 2400) - 240)}" cy="${f(b.y)}" rx="${f(b.rx)}" ry="${f(b.ry)}" fill="#d9cdb6" opacity="${f(b.o)}"/>`; });
+    // flow streaks on the water surface, moving toward camera
+    streaks.forEach(st => {
+      const Z = 1.2 + mod(st.Z0 - 4.2 * u - 1.2, 28.8), X = st.X + 1.4 * u;
+      const a = proj(X - st.len * .3, Z + st.len), b = proj(X + st.len * .3, Z - st.len * .4);
+      if (Z < 1.5) return;
+      s += `<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="#dcc196" stroke-opacity="${f(clamp(0.8 - Z / 40))}" stroke-width="${f(Math.max(1, 26 / Z))}" stroke-linecap="round"/>`;
+    });
+    // splash rings
+    rings.forEach(r => {
+      const p = mod(u * 2.6 + r.ph, 1), c = proj(r.X, r.Z), rx = (0.04 + p * 0.22) * FL / r.Z;
+      s += `<ellipse cx="${f(c[0])}" cy="${f(c[1])}" rx="${f(rx)}" ry="${f(rx * 0.22)}" fill="none" stroke="#e8d6b4" stroke-opacity="${f((1 - p) * .55)}" stroke-width="${f(Math.max(1, 6 / r.Z))}"/>`;
+    });
+    // half-submerged lettuce rows
+    plants.forEach(pl => {
+      const [x, y0] = proj(pl.X, pl.Z); if (x < -200 || x > 2120) return;
+      const r = 0.3 * pl.size * FL / pl.Z, hd = 0.15 * pl.size * FL / pl.Z, y = y0 + Math.sin(u * 3 + pl.ph) * hd * .06;
+      const dome = (cx, rx, ry, col) => `<path d="M${f(cx - rx)},${f(y)} A${f(rx)},${f(ry)} 0 0 1 ${f(cx + rx)},${f(y)} Z" fill="${col}"/>`;
+      s += `<ellipse cx="${f(x)}" cy="${f(y + hd * .28)}" rx="${f(r * 1.05)}" ry="${f(hd * .3)}" fill="#3d5a22" opacity=".28"/>`;
+      s += dome(x - r * .42, r * .58, hd * .72, '#5d8a2c') + dome(x + r * .4, r * .6, hd * .8, '#6c9a33') + dome(x, r * .62, hd, pl.c);
+      if (r > 8) s += `<path d="M${f(x - r * .45)},${f(y)} Q${f(x - r * .2)},${f(y - hd * .8)} ${f(x + r * .05)},${f(y - hd * .2)}" fill="none" stroke="#b4d468" stroke-width="${f(Math.max(1, r * .05))}"/>` +
+                      `<path d="M${f(x + r * .1)},${f(y)} Q${f(x + r * .35)},${f(y - hd * .9)} ${f(x + r * .7)},${f(y - hd * .1)}" fill="none" stroke="#9cc455" stroke-width="${f(Math.max(1, r * .04))}"/>`;
+      s += `<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(r * 1.08)}" ry="${f(Math.max(1, hd * .12))}" fill="none" stroke="#efe2c4" stroke-opacity=".55" stroke-width="${f(Math.max(1, r * .03))}"/>`;
+    });
+    // floating tomato passing the lens
+    const tp = (u - 0.2) / 1.25;
+    if (tp > -0.1 && tp < 1.1) {
+      const tx = lerp(-260, 2180, tp), ty = 820 + 14 * Math.sin(u * 7), tr = 14 * Math.sin(u * 3);
+      s += `<g transform="rotate(${f(tr)} ${f(tx)} ${f(ty)})"><ellipse cx="${f(tx)}" cy="${f(ty)}" rx="155" ry="138" fill="url(#s2tom)"/>` +
+           `<ellipse cx="${f(tx - 50)}" cy="${f(ty - 70)}" rx="40" ry="14" fill="#fff" opacity=".55"/>` +
+           `<path d="M${f(tx - 10)},${f(ty - 132)} l-30,-10 l26,-4 l-6,-24 l20,20 l18,-18 l-4,26 l30,4 l-30,12 Z" fill="#3c6a22"/></g>`;
+    }
+    // foreground wave band at lens level
+    const wave = []; for (let x = -160; x <= 2080; x += 40) wave.push([x, 860 + 34 * Math.sin(x * 0.007 + u * 6.2) + 14 * Math.sin(x * 0.021 - u * 9.1)]);
+    s += `<path d="M-160,1240 L${pts2(wave).replace(/ /g, ' L')} L2080,1240 Z" fill="url(#s2wave)"/>`;
+    s += `<polyline points="${pts2(wave)}" fill="none" stroke="#efdcb4" stroke-opacity=".7" stroke-width="5"/>`;
+    s += `<polyline points="${pts2(wave.map(p => [p[0] + 30, p[1] + 26]))}" fill="none" stroke="#c9a978" stroke-opacity=".3" stroke-width="3"/>`;
+    s += `</g>`;
+    // rain (in front of everything, not shaken)
+    s += `<g stroke="#dfe5ea" stroke-linecap="round">` + drops.map(d => {
+      const y = mod(d.y + d.sp * u, 1400) - 150, x = d.x + 0.26 * (y + 150);
+      return `<line x1="${f(x)}" y1="${f(y)}" x2="${f(x + d.len * .26)}" y2="${f(y + d.len)}" stroke-width="${d.w}" stroke-opacity="${d.w > 2 ? .6 : .38}"/>`;
+    }).join('') + `</g>`;
+    s += `<g filter="url(#blur2)">` + lens.map(l => `<circle cx="${f(l.x)}" cy="${f(l.y)}" r="${f(l.r)}" fill="url(#s2drop)"/>`).join('') + `</g>`;
+    s += `<rect width="${W}" height="${H}" fill="#14202a" opacity=".22"/>`;
+    return s;
+  }
+  return { defs, world };
+})();
+
+// =====================================================================
+// SHOT 3: top-down salty cracked earth with a wilted lettuce (3.2-4.8 s)
+// SHOT 4 reuses its last frame, frozen, as the background.
+// =====================================================================
+const S3 = (() => {
+  const R = mulberry32(33);
+  const CELL = 150, X0 = -330, Y0 = -330, NX = 18, NY = 13;
+  const V = [];
+  for (let i = 0; i <= NX; i++) { V.push([]); for (let j = 0; j <= NY; j++) V[i].push([X0 + i * CELL + (R() - .5) * 95, Y0 + j * CELL + (R() - .5) * 95]); }
+  const tiles = [];
+  for (let i = 0; i < NX; i++) for (let j = 0; j < NY; j++) {
+    const q = [V[i][j], V[i + 1][j], V[i + 1][j + 1], V[i][j + 1]];
+    const r = R();
+    if (r < .22) { tiles.push([q[0], q[1], q[2]]); tiles.push([q[0], q[2], q[3]]); }
+    else if (r < .4) { tiles.push([q[0], q[1], q[3]]); tiles.push([q[1], q[2], q[3]]); }
+    else tiles.push(q);
+  }
+  const shrink = (poly, g) => { const cx = poly.reduce((a, p) => a + p[0], 0) / poly.length, cy = poly.reduce((a, p) => a + p[1], 0) / poly.length;
+    return poly.map(p => { const d = Math.hypot(p[0] - cx, p[1] - cy) || 1; const k = Math.max(0.5, 1 - g / d); return [cx + (p[0] - cx) * k, cy + (p[1] - cy) * k]; }); };
+  let ground = '', salt = '', hair = '';
+  tiles.forEach(tp => {
+    const p = shrink(tp, 12 + R() * 8), shade = Math.floor(132 + R() * 34);
+    const fill = `rgb(${shade + 40},${shade + 14},${shade - 34})`;
+    ground += `<polygon points="${pts2(p)}" fill="${fill}" stroke="${fill}" stroke-width="8" stroke-linejoin="round"/>` +
+      `<polygon points="${pts2(shrink(p, 10))}" fill="rgb(${shade + 52},${shade + 28},${shade - 18})" opacity=".55"/>`;
+    if (R() < .62) salt += `<polygon points="${pts2(p)}" fill="none" stroke="#fbfaf4" stroke-width="${f(10 + R() * 14)}" stroke-opacity="${f(.5 + R() * .4)}" stroke-linejoin="round"/>`;
+    if (R() < .5) { const a = p[0], b = p[Math.floor(p.length / 2)]; const m = [lerp(a[0], b[0], .5) + (R() - .5) * 30, lerp(a[1], b[1], .5) + (R() - .5) * 30];
+      hair += `<polyline points="${pts2([[lerp(a[0], m[0], .2), lerp(a[1], m[1], .2)], m, [lerp(b[0], m[0], .3), lerp(b[1], m[1], .3)]])}" fill="none" stroke="#3a2c1e" stroke-width="2.4" stroke-linecap="round"/>`; }
+  });
+  let blotches = '';
+  for (let i = 0; i < 46; i++) blotches += `<ellipse cx="${f(R() * 2100 - 90)}" cy="${f(R() * 1260 - 90)}" rx="${f(30 + R() * 110)}" ry="${f(14 + R() * 50)}" fill="#fffdf6" opacity="${f(.25 + R() * .35)}" transform="rotate(${f(R() * 180)})"/>`;
+  let specks = '';
+  for (let i = 0; i < 420; i++) specks += `<circle cx="${f(R() * 2100 - 90)}" cy="${f(R() * 1260 - 90)}" r="${f(1 + R() * 3.2)}" fill="#ffffff" opacity="${f(.5 + R() * .5)}"/>`;
+
+  const L = { x: 1190, y: 585 };
+  const leafD = (len, wid, ph) => {
+    const top = [], bot = [];
+    for (let k = 0; k <= 22; k++) { const q = k / 22, w = wid * Math.pow(Math.sin(Math.PI * Math.min(.98, q * .92 + .04)), .75) * (1 + .14 * Math.sin(q * 27 + ph));
+      top.push([len * q, -w * .55]); bot.unshift([len * q, w * .5 * (1 + .1 * Math.sin(q * 19 + ph * 2))]); }
+    return smoothClosed(top.concat(bot));
+  };
+  let lettuce = '', shadow = '';
+  const layers = [{ n: 9, len: 270, wid: 150, g: 'lfO', rot: 0 }, { n: 7, len: 170, wid: 105, g: 'lfM', rot: 22 },
+                  { n: 5, len: 92, wid: 66, g: 'lfI', rot: 44 }];
+  layers.forEach(ly => { for (let i = 0; i < ly.n; i++) {
+    const a = ly.rot + i * 360 / ly.n + (R() - .5) * 18, len = ly.len * (0.82 + R() * .36), wid = ly.wid * (0.85 + R() * .3);
+    const d = leafD(len, wid, R() * 6);
+    shadow += `<path d="${d}" transform="translate(${L.x + 16},${L.y + 20}) rotate(${f(a)})" fill="#120c06"/>`;
+    lettuce += `<g transform="translate(${L.x},${L.y}) rotate(${f(a)})"><path d="${d}" fill="url(#${ly.g})" stroke="#4e381d" stroke-width="3" stroke-opacity=".7"/>` +
+      `<path d="M4,0 Q${f(len * .45)},${f((R() - .5) * wid * .25)} ${f(len * .8)},${f((R() - .5) * wid * .2)}" fill="none" stroke="#e9e3bd" stroke-width="5" stroke-opacity=".6" stroke-linecap="round"/>` +
+      `<path d="M${f(len * .3)},0 l${f(len * .14)},${f(-wid * .22)} M${f(len * .5)},0 l${f(len * .12)},${f(wid * .2)}" fill="none" stroke="#e9e3bd" stroke-width="3" stroke-opacity=".4" stroke-linecap="round"/></g>`;
+  } });
+  lettuce += `<circle cx="${L.x}" cy="${L.y}" r="24" fill="#cfc47e"/>`;
+
+  const staticWorld = `<rect x="-200" y="-200" width="${W + 400}" height="${H + 400}" fill="#1f160d"/>` +
+    `<g>${ground}</g><g filter="url(#s3blur)">${salt}${blotches}</g><g>${hair}${specks}</g>` +
+    `<g opacity=".5" filter="url(#s3blur)">${shadow}</g>${lettuce}` +
+    `<rect x="-200" y="-200" width="${W + 400}" height="${H + 400}" filter="url(#s3grain)" opacity=".2"/>`;
+
+  function defs() {
+    return `
+    <linearGradient id="lfO"><stop offset="0" stop-color="#bfc06e"/><stop offset=".55" stop-color="#9ea04c"/><stop offset=".82" stop-color="#7a6534"/><stop offset="1" stop-color="#4f3a1d"/></linearGradient>
+    <linearGradient id="lfM"><stop offset="0" stop-color="#cbc27c"/><stop offset=".65" stop-color="#ab9f55"/><stop offset="1" stop-color="#6e5a2e"/></linearGradient>
+    <linearGradient id="lfI"><stop offset="0" stop-color="#d8d08e"/><stop offset="1" stop-color="#a99d58"/></linearGradient>
+    <filter id="s3blur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="s3grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 .1  0 0 0 0 .08  0 0 0 0 .05  0 0 0 1.1 -.2"/></filter>
+    <filter id="s3fade" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values=".72"/></filter>
+    <filter id="s4fade" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values=".25"/><feGaussianBlur stdDeviation="1.5"/></filter>`;
+  }
+  // u = time inside shot 3 (0..1.6); frozen=true gives the shot-4 look
+  function world(u, frozen) {
+    const sc = 1 + 0.05 * easeInOut(clamp(u / 1.6));
+    return `<g filter="url(#${frozen ? 's4fade' : 's3fade'})"><g transform="translate(${L.x},${L.y}) scale(${sc.toFixed(4)}) translate(${-L.x},${-L.y})">${staticWorld}</g>` +
+      `<rect width="${W}" height="${H}" fill="#e6dccb" opacity=".1"/></g>`;
+  }
+  return { defs, world, L };
+})();
+
+// =====================================================================
+// SHOT 4: frozen field + three rain columns (4.8-7.6 s)
+// Heights use the ratio of the three sources' annual rain on the demo parcel
+// (lowest is ~70% of highest, i.e. ~40% apart). No mm values are shown.
+// =====================================================================
+const S4 = (() => {
+  const R = mulberry32(44);
+  const BASE = 800, HMAX = 420;
+  const cols = [
+    { name: 'ERA5', x: 640, h: HMAX * 185 / 263, t0: 5.05 },
+    { name: 'NASA POWER', x: 960, h: HMAX * 211 / 263, t0: 5.45 },
+    { name: 'IMERG', x: 1280, h: HMAX, t0: 5.85 }];
+  const CW = 180;
+  const rain = cols.map(() => { const a = []; for (let i = 0; i < 16; i++) a.push({ x: (R() - .5) * (CW - 30), y: R() * 500, len: 18 + R() * 26, sp: 520 + R() * 260 }); return a; });
+  function defs() {
+    return `<linearGradient id="s4col" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#5fb8ff" stop-opacity=".12"/><stop offset="1" stop-color="#9fd8ff" stop-opacity=".55"/></linearGradient>` +
+      cols.map((c, i) => `<clipPath id="s4clip${i}"><rect x="${c.x - CW / 2}" y="${f(BASE - curH(c, curT))}" width="${CW}" height="${f(curH(c, curT))}"/></clipPath>`).join('');
+  }
+  let curT = 0;
+  const curH = (c, t) => c.h * easeOutBack(clamp((t - c.t0) / 0.55));
+  function overlay(t, fadeOut) {
+    curT = t;
+    const u = t - 4.8;
+    let s = '';
+    const flash = clamp(1 - u / 0.16) * .35;
+    s += `<rect width="${W}" height="${H}" fill="#0b1118" opacity="${f(.62 * clamp(u / .25) * fadeOut)}"/>`;
+    if (flash > 0) s += `<rect width="${W}" height="${H}" fill="#fff" opacity="${f(flash)}"/>`;
+    let g = '';
+    const baseP = easeOut(clamp((t - 4.92) / 0.3));
+    g += `<line x1="${f(960 - 470 * baseP)}" y1="${BASE}" x2="${f(960 + 470 * baseP)}" y2="${BASE}" stroke="#fff" stroke-opacity=".75" stroke-width="2.5"/>`;
+    cols.forEach((c, i) => {
+      const h = curH(c, t); if (h <= 0.5) return;
+      const top = BASE - h;
+      g += `<rect x="${c.x - CW / 2}" y="${f(top)}" width="${CW}" height="${f(h)}" fill="url(#s4col)" stroke="#bfe6ff" stroke-opacity=".85" stroke-width="2"/>`;
+      g += `<line x1="${c.x - CW / 2}" y1="${f(top)}" x2="${c.x + CW / 2}" y2="${f(top)}" stroke="#e6f6ff" stroke-width="5"/>`;
+      g += `<g clip-path="url(#s4clip${i})" stroke="#e6f6ff" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round">` +
+        rain[i].map(d => { const y = BASE - 500 + mod(d.y + d.sp * u, 500); return `<line x1="${f(c.x + d.x)}" y1="${f(y)}" x2="${f(c.x + d.x)}" y2="${f(y + d.len)}"/>`; }).join('') + `</g>`;
+      const lp = clamp((t - c.t0 - .1) / .3);
+      g += `<text x="${c.x}" y="${BASE + 46}" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="700" font-size="30" letter-spacing="1" fill="#fff" opacity="${f(lp)}">${c.name}</text>`;
+    });
+    // bracket spanning the gap between the lowest and the highest column
+    const bp = easeInOut(clamp((t - 6.45) / 0.5));
+    if (bp > 0) {
+      const yLo = BASE - cols[0].h, yHi = BASE - cols[2].h, bx = 1430;
+      g += `<g stroke="#ffb21f" stroke-width="3" fill="none" stroke-linecap="round">` +
+        `<line x1="${cols[0].x + CW / 2}" y1="${f(yLo)}" x2="${bx - 14}" y2="${f(yLo)}" stroke-dasharray="10 10" pathLength="1000" stroke-dashoffset="0" opacity="${f(bp)}"/>` +
+        `<line x1="${cols[2].x + CW / 2}" y1="${f(yHi)}" x2="${bx - 14}" y2="${f(yHi)}" stroke-dasharray="10 10" opacity="${f(bp)}"/>` +
+        `<path d="M${bx - 14},${f(yHi)} H${bx} V${f(yLo)} H${bx - 14} M${bx},${f((yHi + yLo) / 2)} H${bx + 16}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="${f(1 - bp)}" stroke-width="4"/></g>`;
+      g += `<text x="${bx + 30}" y="${f((yHi + yLo) / 2 + 20)}" font-family="Inter, DejaVu Sans, sans-serif" font-weight="800" font-size="58" fill="#ffb21f" opacity="${f(clamp((t - 6.7) / .25))}">~40%</text>`;
+    }
+    s += `<g opacity="${f(fadeOut)}">${g}</g>`;
+    return s;
+  }
+  return { defs, overlay };
+})();
+
+// =====================================================================
+// SHOT 5: rise to a placeholder aerial map, Campo de Cartagena + Mar Menor (7.6-9.6 s)
+// Schematic, self-drawn shapes. Not a real map: labelled PLACEHOLDER MAP.
+// =====================================================================
+const S5 = (() => {
+  const R = mulberry32(55);
+  const coast = [[1560, -80], [1660, 90], [1745, 300], [1768, 520], [1735, 760], [1650, 930], [1605, 1010], [1690, 1160]];
+  const lagoon = [[1450, 110], [1595, 190], [1685, 420], [1668, 700], [1565, 880], [1390, 875], [1255, 715], [1232, 430], [1318, 225]];
+  const landPoly = [[-80, -80]].concat(coast).concat([[-80, 1160]]);
+  const LC = [1450, 520];
+  const lagoonBuf = lagoon.map(p => [LC[0] + (p[0] - LC[0]) * 1.13, LC[1] + (p[1] - LC[1]) * 1.1]);
+  const ROT = -14 * Math.PI / 180, PC = [800, 540];
+  const tr = (x, y) => [PC[0] + x * Math.cos(ROT) - y * Math.sin(ROT), PC[1] + x * Math.sin(ROT) + y * Math.cos(ROT)];
+  const palette = ['#6f8f3a', '#86a548', '#56702d', '#a4865c', '#8d6f48', '#c9b48a', '#dfe1dc', '#d4d8d4', '#4d6b33', '#9db45a'];
+  let parcels = '', focus = null, best = 1e9;
+  const okPt = p => pip(p, landPoly) && !pip(p, lagoonBuf) && p[0] > -60 && p[1] > -60;
+  for (let gi = -22; gi <= 22; gi++) for (let gj = -18; gj <= 18; gj++) {
+    const cw = 66, ch = 46, x = gi * (cw + 5), y = gj * (ch + 5);
+    const parts = R() < .3 ? [[x, y, cw / 2 - 2, ch], [x + cw / 2 + 2, y, cw / 2 - 2, ch]] : [[x, y, cw, ch]];
+    parts.forEach(([px, py, pw, ph]) => {
+      const q = [tr(px, py), tr(px + pw, py), tr(px + pw, py + ph), tr(px, py + ph)];
+      if (!q.every(okPt)) return;
+      const col = palette[Math.floor(R() * palette.length)];
+      parcels += `<polygon points="${pts2(q)}" fill="${col}"/>`;
+      if (col === '#4d6b33') { const c = tr(px + pw / 2, py + ph / 2); parcels += `<circle cx="${f(c[0])}" cy="${f(c[1])}" r="5" fill="#33491f"/>`; }
+      const c = tr(px + pw / 2, py + ph / 2), d = Math.hypot(c[0] - 700, c[1] - 650);
+      if (d < best && pw === cw) { best = d; focus = { q, c }; }
+    });
+  }
+  let towns = '';
+  [[930, 1010, 110], [1150, 330, 60], [760, 470, 70], [1560, 960, 40]].forEach(([tx, ty, rr]) => {
+    for (let i = 0; i < 46; i++) { const a = R() * 6.283, d = Math.sqrt(R()) * rr, x = tx + Math.cos(a) * d, y = ty + Math.sin(a) * d;
+      if (!okPt([x, y])) continue; towns += `<rect x="${f(x)}" y="${f(y)}" width="${f(7 + R() * 9)}" height="${f(6 + R() * 8)}" fill="${R() < .5 ? '#9a958c' : '#c6c1b8'}"/>`; }
+  });
+  const roads = `<g stroke="#e8dcc0" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85">
+      <path d="M-60,640 C300,560 800,520 1210,390"/><path d="M260,1160 C500,760 800,420 1130,140"/><path d="M-60,930 C400,900 900,880 1290,850"/></g>`;
+  const islands = `<ellipse cx="1395" cy="660" rx="22" ry="14" fill="#b39d72"/><ellipse cx="1510" cy="395" rx="14" ry="9" fill="#b39d72"/><ellipse cx="1340" cy="770" rx="11" ry="7" fill="#b39d72"/>`;
+  const landD = `M-80,-80 L1560,-80 ${smoothOpen(coast)} L-80,1160 Z`;
+  const lagoonD = smoothClosed(lagoon);
+  const map = `<rect x="-400" y="-400" width="${W + 800}" height="${H + 800}" fill="url(#s5sea)"/>` +
+    `<path d="${landD}" fill="#bba77f"/><path d="M1560,-80 ${smoothOpen(coast)}" fill="none" stroke="#efe3c0" stroke-width="12"/>` +
+    parcels + roads + towns +
+    `<path d="${lagoonD}" fill="#e9dcb8" stroke="#e9dcb8" stroke-width="22"/>` +
+    `<path d="${lagoonD}" fill="url(#s5lag)" stroke="#7fd0ea" stroke-width="6"/>` + islands;
+  const labels = `<text x="1450" y="545" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-style="italic" font-weight="600" font-size="40" fill="#fff" fill-opacity=".92" stroke="#0d3550" stroke-opacity=".5" stroke-width="5" paint-order="stroke">Mar Menor</text>` +
+    `<text x="470" y="800" text-anchor="middle" font-family="Inter, DejaVu Sans, sans-serif" font-weight="700" font-size="30" letter-spacing="6" fill="#fff" fill-opacity=".9" stroke="#2a2010" stroke-opacity=".55" stroke-width="6" paint-order="stroke">CAMPO DE CARTAGENA</text>`;
+
+  function defs(t) {
+    const p = easeOut(clamp((t - 7.6) / 0.8));
+    return `<linearGradient id="s5sea" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#245d8c"/><stop offset="1" stop-color="#143e66"/></linearGradient>
+      <radialGradient id="s5lag" cx=".45" cy=".5" r=".6"><stop offset="0" stop-color="#2a8fca"/><stop offset=".8" stop-color="#3aa5d6"/><stop offset="1" stop-color="#6cc6e4"/></radialGradient>
+      <radialGradient id="s5mg" cx=".5" cy=".5" r=".5"><stop offset=".45" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient>
+      <mask id="s5mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="url(#s5mg)"/></mask>
+      <filter id="s5blur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="${f(7 * (1 - p))}"/></filter>`;
+  }
+  function world(t) {
+    const u = t - 7.6, p = easeOut(clamp(u / 0.8));
+    const Z0 = 9, s = Math.pow(Z0, 1 - p) * (1 - 0.03 * clamp(u / 2)), F = focus.c;
+    const ax = lerp(960, F[0], p), ay = lerp(540, F[1], p);
+    let o = `<g filter="url(#s5blur)" transform="translate(${f(ax)},${f(ay)}) scale(${s.toFixed(4)}) translate(${f(-F[0])},${f(-F[1])})">${map}`;
+    const pulse = clamp((u - 0.85) / 0.25) * (0.65 + 0.35 * Math.sin((u - 0.85) * 9));
+    if (pulse > 0) o += `<polygon points="${pts2(focus.q)}" fill="#ffb21f" fill-opacity="${f(pulse * .35)}" stroke="#ffb21f" stroke-width="${f(4 / s)}" stroke-opacity="${f(pulse)}"/>`;
+    o += `<g opacity="${f(clamp((u - 0.7) / 0.3))}">${labels}</g></g>`;
+    // the frozen field from shot 3/4 shrinks into the focus parcel as the camera rises
+    const fa = 1 - clamp(u / 0.22);
+    if (fa > 0) {
+      const k = s / Z0;
+      o += `<g opacity="${f(fa)}" transform="translate(${f(ax)},${f(ay)}) scale(${k.toFixed(4)}) translate(-960,-540)"><g mask="url(#s5mask)">${S3.world(1.6, true)}</g></g>`;
+    }
+    return o;
+  }
+  return { defs, world };
+})();
+
+// ---------- copy and text timing ----------
+const SHOTS = [
+  { t0: 0.0, t1: 1.6, tag: 'ILLUSTRATIVE', sub: 'Heat cracks the fruit.', size: 92, maxw: 780,
+    words: [['HEAT', .05], ['CRACKS', .3], ['THE', .55], ['FRUIT.', .72]] },
+  { t0: 1.6, t1: 3.2, tag: 'ILLUSTRATIVE', sub: 'Storms drown the field.', size: 92, maxw: 800,
+    words: [['STORMS', 1.65], ['DROWN', 1.9], ['THE', 2.12], ['FIELD.', 2.3]] },
+  { t0: 3.2, t1: 4.8, tag: 'ILLUSTRATIVE', sub: 'Salt poisons the soil.', size: 92, maxw: 780,
+    words: [['SALT', 3.25], ['POISONS', 3.5], ['THE', 3.74], ['SOIL.', 3.9]] },
+  { t0: 4.8, t1: 7.6, tag: 'ILLUSTRATIVE DATA', sub: 'Three rain sources. Same field. Forty percent apart.', size: 56, maxw: 1740,
+    words: [['3 RAIN SOURCES', 4.9], [' · SAME FIELD', 5.7], [' · ', 6.5], ['~40% APART', 6.5, 'accent']] },
+  { t0: 7.6, t1: 9.61, tag: 'PLACEHOLDER MAP', sub: 'What do you plant next?', size: 96, maxw: 800, caption: 'Mar Menor protection law (Ley 3/2020)',
+    words: [['WHAT', 7.85], ['DO', 8.0], ['YOU', 8.14], ['PLANT', 8.3], ['NEXT?', 8.5]] },
+];
+
+const svg = document.getElementById('scene');
+const elHead = document.getElementById('headline'), elSub = document.querySelector('#subtitle span');
+const elTag = document.getElementById('tag'), elCap = document.getElementById('caption'), elScrim = document.getElementById('scrim');
+
+function renderAt(tIn) {
+  const t = clamp(+tIn || 0, 0, DUR - 1e-6);
+  const shot = SHOTS.find(s => t >= s.t0 && t < s.t1) || SHOTS[SHOTS.length - 1];
+  const idx = SHOTS.indexOf(shot);
+  let defs = '', body = '';
+  if (idx === 0) { defs = S1.defs(t); body = S1.world(t); }
+  else if (idx === 1) { defs = S2.defs(t); body = S2.world(t); }
+  else if (idx === 2) { defs = S3.defs(); body = S3.world(t - 3.2, false); }
+  else if (idx === 3) { const ov = S4.overlay(t, 1); defs = S3.defs() + S4.defs(); body = S3.world(1.6, true) + ov; }
+  else { const fade = 1 - clamp((t - 7.6) / 0.15); const ov = fade > 0 ? S4.overlay(Math.min(t, 7.599), fade) : '';
+         defs = S3.defs() + S4.defs() + S5.defs(t); body = S5.world(t) + ov; }
+  defs += `<radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>`;
+  svg.innerHTML = `<defs>${defs}</defs>${body}<rect width="${W}" height="${H}" fill="url(#vig)"/>`;
+
+  // headline: each word slides up and fades in at its cue
+  elHead.style.fontSize = shot.size + 'px';
+  elHead.style.maxWidth = shot.maxw + 'px';
+  elHead.innerHTML = shot.words.map(([w, cue, cls]) => {
+    const p = easeOut(clamp((t - cue) / 0.2));
+    const text = (idx === 3 ? w : w + ' ');
+    return `<span class="w${cls ? ' ' + cls : ''}" style="opacity:${p.toFixed(3)};transform:translateY(${((1 - p) * 34).toFixed(1)}px)">${text}</span>`;
+  }).join(idx === 3 ? '' : '');
+  elSub.textContent = shot.sub;
+  elTag.textContent = shot.tag;
+  elCap.textContent = shot.caption || '';
+  elCap.style.display = shot.caption ? 'block' : 'none';
+  elCap.style.opacity = shot.caption ? clamp((t - 8.0) / 0.3).toFixed(3) : '0';
+  elScrim.style.opacity = idx === 1 ? '.5' : '1';
+}
+
+window.renderAt = renderAt;
+const q = new URLSearchParams(location.search);
+renderAt(parseFloat(q.get('t') || '0'));
+document.fonts.ready.then(() => { renderAt(parseFloat(q.get('t') || '0')); window.__ready = true; });
+})();
+</script>
+</body>
+</html>
