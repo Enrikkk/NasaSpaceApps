@@ -55,3 +55,10 @@ Why: el flujo "busco mi parcela, hago clic, se calcula" no cabe en un JSON preca
 Rejected alternatives: demo solo estatica (no permite clic libre); cuentas reales en SQLite (gonzalo: no hace falta); modo offline (gonzalo: se requiere internet).
 Open risk: licencia SIGPAC, el FEGA podria no permitir acceso desde codigo a su API; alternativa: descarga oficial ATOM por municipio.
 ACCEPTED D-009 | 2026-11-14 | jaime (in chat with his agent): live backend (FastAPI on Cloud Run) + SIGPAC globe; amends D-007. Verify FEGA terms for programmatic SIGPAC access before depending on it; demo parcel stays preloaded as fallback.
+
+## D-010 | 2026-11-14 | ACCEPTED (enrique decided; gonzalo acknowledged in chat; jaime and arturo have not confirmed yet): the published `app/data/torre-pacheco.json` USES CARM/ESAM prices although written permission is still pending. The licence risk is assumed knowingly | decided by: enrique, acknowledged by: gonzalo
+What the source allows: esam.carm.es/legal permits reproduction citing the origin, but only personal non-commercial use and no modification, so it is NOT an open licence.
+Why: without CARM prices the current rotation (melon, barbecho, lechuga) is not evaluable with open data, so the comparator has no baseline ("B wins X %" needs it).
+Conditions agreed: cite "CARM-ANUARIO" in the card and in submission/data-citations.md and state "permiso pendiente"; keep the open twin `torre-pacheco.abierto.json` so the team can switch back; research/precios-abiertos.md searches for open price sources.
+Known conflict: AGENTS.md section 6 (the submission form attests that every external resource is listed and no copyrighted material is used without permission); this is a team-wide attestation, not only enrique's risk.
+Open, NOT decided: before filing the submission (Sun 21:00) the team must re-review this. A fallback is available at any time (switch to the open twin or to an open price source). No permission request by email will be sent (decided by gonzalo: nobody answers on Saturday).
