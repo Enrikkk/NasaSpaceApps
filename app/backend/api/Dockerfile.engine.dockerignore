@@ -30,3 +30,6 @@
 !app/data/tables/mapa_prices.csv
 !app/data/torre-pacheco.mock.json
 !app/backend/api/narrativa.py
+# exclusiones DESPUES de la lista blanca (D-010: CSV restringido de CARM; los tests no hacen falta)
+app/backend/engine/data/official/carm_precios_mensuales.csv
+app/backend/engine/**/tests
