@@ -314,13 +314,19 @@ def adapt_enrique(src, origen="app/data/torre-pacheco.json (enrique, t012-motor-
         n = next(iter(longs.values()))
         escenarios_meta = {"_status": estado_bloques["rotaciones"], "n": n,
                            "alineados": _alineados(d, rots),
-                           "nota": "n deducido de len(escenarios). Alineacion del indice i entre rotaciones (mismo anio/precio/coste): pendiente de confirmar por enrique."}
+                           "nota": ("n deducido de len(escenarios). " + (
+                               "Alineacion del indice i entre rotaciones (mismo anio/precio/coste) DECLARADA por el origen (enrique)."
+                               if _alineados(d, rots) else
+                               "Alineacion del indice i entre rotaciones (mismo anio/precio/coste): NO declarada por el origen; la UI no debe presentar 'B gana X %' como firme."))}
         um = next((r["margen_eur_ha"].get("unidad") for r in rots if isinstance(r.get("margen_eur_ha"), dict) and r["margen_eur_ha"].get("unidad")), None)
         if um:
             escenarios_meta["unidad"] = um
         if not escenarios_meta["alineados"]:
             ctx.av("escenarios_meta.alineados = false: enrique confirmo (#138) que el indice i NO es hoy la misma muestra en todas las rotaciones; la UI no debe presentar 'B gana X %' como firme")
-        ctx.ad("escenarios_meta {n, unidad} deducido de las muestras (sin semilla ni anio_clima: no existen en el origen)")
+        _con = [r for r in rots if isinstance(r.get("escenarios_meta"), dict)]
+        ctx.ad("escenarios_meta {n, unidad} deducido de las muestras; semilla/anio_clima " +
+               ("viven por rotacion en el origen (rotaciones[i].escenarios_meta) y no se copian a la raiz" if _con
+                else "no existen en el origen"))
     elif longs:
         ctx.av(f"nº de escenarios distinto entre rotaciones {longs}: no se genera escenarios_meta")
 
