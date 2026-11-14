@@ -2,7 +2,17 @@
 
 Revisado el 14-11-2026 por Arturo y su agente. Fuente señalada por Arturo: https://sigpac.mapa.gob.es/fega/visor/
 
-**Conclusión: viable y relevante para el MVP.** La investigación del repo ya incluía esta familia de servicios; ahora se han vuelto a probar los accesos oficiales sobre la parcela de demo. Se recomienda reutilizar el pipeline de Gonzalo, no crear otro. Esta evaluación no modifica el contrato ni implica que la integración esté terminada.
+**Conclusión técnica: viable y relevante para el MVP.** La investigación del repo ya incluía esta familia de servicios; ahora se han vuelto a probar los accesos oficiales sobre la parcela de demo. Se recomienda reutilizar el pipeline de Gonzalo, no crear otro. Esta evaluación no modifica el contrato ni implica que la integración esté terminada. **Actualización tras el aviso de Gonzalo: la licencia de datos está identificada, pero las condiciones de acceso programado en vivo requieren aclaración; véase el apartado siguiente.**
+
+## Actualización: condiciones de acceso programado
+
+La ficha antigua del catálogo contiene una respuesta de MAPA del **26-06-2023** que rechaza el acceso desde código de terceros a la base de datos y dirige a descargas municipales ATOM y WMS. Se ha comprobado el texto y su fecha, no solo un resumen de buscador:
+
+https://datos.gob.es/es/catalogo/e05024401-sistema-de-informacion-geografica-de-parcelas-agricolas-sigpac
+
+Por otra parte, las fichas nacionales HVD y la documentación hubcloud enlazan públicamente servicios OGC y describen consultas REST/MVT para aplicaciones. **No se ha obtenido una aclaración oficial que delimite si la respuesta de 2023 afecta a esos servicios actuales.** La licencia de reutilización del dataset y la disponibilidad técnica de un endpoint no resuelven por sí solas sus condiciones de acceso.
+
+Propuesta al equipo: mantener el diseño por contrato y caché; usar la descarga municipal ATOM expresamente ofrecida como ruta de respaldo, y confirmar las condiciones actuales antes de convertir las llamadas en vivo en una dependencia de producción. No hace falta descartar SIGPAC ni volver a descargar masivamente nada. Esta nota no decide la arquitectura (D-009 sigue siendo propuesta).
 
 ## Qué aporta
 
