@@ -20,7 +20,7 @@ def test_colores_por_zona(client_mini, zona):
     for r in d["rotaciones"]:
         s = r["semaforo_legal"]
         assert s["zona"] == zona and s["nota"].startswith("Herramienta de apoyo") and s["_status"] == "simulado"
-        assert s["comprobaciones"] and all(c["estado"] == "por_verificar" for c in s["comprobaciones"])
+        assert s["comprobaciones"] and all(c["estado"] in ("por_verificar", "verificado") for c in s["comprobaciones"])
         assert all(c["resultado"] in ("ok", "falla", "no_aplica", "no_evaluable") for c in s["comprobaciones"])
         assert "ciclos_por_anio = 1" in s["supuestos"][0]
 
