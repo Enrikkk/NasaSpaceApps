@@ -100,3 +100,16 @@ def test_historia_real_desde_cache_fega(client, tmp_path, monkeypatch):
         assert h["cultivo"] == "barbecho tradicional" and len(h["declaraciones"]) == 2
     finally:
         cf.unlink(missing_ok=True)
+
+
+def test_sirve_la_app_estatica_sin_tapar_la_api(tmp_path, monkeypatch):
+    """Con FRONTEND_DIR/index.html la API sirve la app en / y las rutas de la API siguen mandando."""
+    from fastapi.testclient import TestClient
+    from app.backend.api.main import create_app
+    from app.backend.api import settings as st
+    (tmp_path / "index.html").write_text("<html><body>APP-AGROCKHAM</body></html>")
+    monkeypatch.setenv("FRONTEND_DIR", str(tmp_path))
+    with TestClient(create_app(st.Settings())) as c:       # `with` arranca el lifespan (servicio, recintos)
+        assert "APP-AGROCKHAM" in c.get("/").text
+        assert c.get("/health").json()["status"] == "ok"      # la API no queda tapada
+        assert c.get("/openapi.json").status_code == 200

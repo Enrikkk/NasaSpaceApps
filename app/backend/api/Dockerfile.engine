@@ -51,6 +51,8 @@ COPY app/data/cache/pipeline/clima_suelo ./app/data/cache/pipeline/clima_suelo
 COPY app/backend/api/atom_build /data/atom
 # JSON del motor (opcional): ver app/backend/api/engine_data/README.md
 COPY app/backend/api/engine_data ./app/backend/api/engine_data
+# app estatica (opcional): ver app/backend/api/frontend_dist/README.md
+COPY app/backend/api/frontend_dist ./app/backend/api/frontend_dist
 
 ARG GIT_SHA=dev
 ENV GIT_SHA=${GIT_SHA} \

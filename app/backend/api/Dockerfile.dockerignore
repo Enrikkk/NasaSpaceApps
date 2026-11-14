@@ -26,3 +26,4 @@
 !app/backend/pipeline/fega/declarados.py
 !app/backend/pipeline/fega/cod_producto.csv
 !app/backend/api/parcel_input.py
+!app/backend/api/frontend_dist

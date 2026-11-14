@@ -71,6 +71,8 @@ class Settings:
     live_retries: int = field(default_factory=lambda: _int("LIVE_RETRIES", 1))
     live_deadline_s: float = field(default_factory=lambda: _float("LIVE_DEADLINE_S", 60.0))
     # motor de rotaciones: vacio = borrador simulado; ENGINE_JSON = ruta al JSON de enrique (ver engine_adapter.py)
+    # app estatica (build de Vite) servida en / por esta misma API: un solo origen, sin CORS (ver frontend_dist/README.md)
+    frontend_dir: Path = field(default_factory=lambda: Path(os.getenv("FRONTEND_DIR") or Path(__file__).resolve().parent / "frontend_dist"))
     engine_json: str = field(default_factory=lambda: os.getenv("ENGINE_JSON") or (str(ENGINE_DATA_JSON) if ENGINE_DATA_JSON.is_file() else ""))
 
 
