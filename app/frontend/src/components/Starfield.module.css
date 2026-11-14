@@ -1,0 +1,17 @@
+.sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--space);
+  opacity: 0;
+  transition: opacity 900ms var(--ease);
+  pointer-events: none;
+}
+.visible { opacity: 1; }
+
+.sky span { position: absolute; top: 0; left: 0; border-radius: 50%; }
+.s0 { width: 1px; height: 1px; }
+.s1 { width: 1.5px; height: 1.5px; }
+.s2 { width: 2px; height: 2px; animation: twinkle 4s ease-in-out infinite alternate; }
+
+@keyframes twinkle { from { opacity: 1; } to { opacity: 0.45; } }

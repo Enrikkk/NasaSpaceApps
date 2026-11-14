@@ -1,0 +1,40 @@
+.panel {
+  display: grid;
+  align-content: start;
+  padding: var(--space-3) var(--space-6);
+  border-radius: 24px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+.heading { font: inherit; }
+/* The title is the toggle: folded by default, a chevron shows the state. */
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  font-size: clamp(26px, 2.4vw, 40px);
+  color: var(--green-light);
+}
+.chevron { display: flex; color: var(--text-muted); transition: transform 300ms var(--ease); }
+.open .chevron { transform: rotate(180deg); }
+.title:hover .chevron { color: var(--text); }
+
+.body {
+  display: grid;
+  gap: var(--space-6);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 400ms var(--ease), opacity 250ms, padding 400ms var(--ease);
+}
+.open .body { max-height: 600px; opacity: 1; padding: var(--space-4) 0 var(--space-3); }
+
+.group { border: none; display: grid; gap: var(--space-4); }
+.legend { margin-bottom: var(--space-3); font-size: var(--fs-sm); color: var(--text-muted); }
+
+@media (max-width: 760px) {
+  .panel { padding: var(--space-2) var(--space-4); border-radius: var(--radius-card); max-height: 55vh; }
+  .title { font-size: 24px; }
+}

@@ -1,0 +1,42 @@
+.wrap { position: absolute; inset: 0; background: var(--space); }
+
+.map { position: absolute; inset: 0; }
+
+/* Home: plain globe, no zoom/scale controls (attribution stays: licence requirement). */
+.home :global(.maplibregl-ctrl-group),
+.home :global(.maplibregl-ctrl-scale) { display: none; }
+.home :global(.maplibregl-canvas) { cursor: pointer; }
+
+.notice {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-8);
+  transform: translateX(-50%);
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+
+.popup :global(.maplibregl-popup-content) {
+  background: var(--surface-1);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--fs-sm);
+}
+.popup :global(.maplibregl-popup-tip) { border-top-color: var(--surface-1); border-bottom-color: var(--surface-1); }
+.popup :global(.maplibregl-popup-close-button) { color: var(--text-muted); font-size: 18px; padding: 0 6px; }
+.popup dl { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--space-3); margin-top: var(--space-2); }
+.popup dt { color: var(--text-muted); }
+.popup dd { font-variant-numeric: tabular-nums; }
+
+/* Phones, home: attribution at the very bottom, under the "Mundo" box. */
+@media (max-width: 760px) {
+  .home :global(.maplibregl-ctrl-bottom-left) { bottom: 0; }
+}

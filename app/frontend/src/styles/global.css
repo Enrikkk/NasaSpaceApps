@@ -1,0 +1,50 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+
+:focus-visible { outline: 2px solid var(--green-light); outline-offset: 2px; }
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* MapLibre controls in the dark theme */
+.maplibregl-ctrl-group { background: var(--surface-1); border: 1px solid var(--border); box-shadow: none !important; }
+.maplibregl-ctrl-group button + button { border-top: 1px solid var(--border); }
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(0.92); }
+.maplibregl-ctrl-attrib { background: rgb(43 47 43 / 0.85) !important; color: var(--text-muted); font-size: var(--fs-xs); }
+.maplibregl-ctrl-attrib a { color: var(--text-muted); }
+.maplibregl-ctrl-attrib-button { filter: invert(0.92); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Phones: pinch to zoom, so no +/- buttons; lift attribution + scale above the view switcher. */
+@media (max-width: 760px) {
+  .maplibregl-ctrl-group { display: none; }
+  .maplibregl-ctrl-bottom-left { bottom: 76px; }
+  .maplibregl-ctrl-attrib { font-size: 10px; }
+}

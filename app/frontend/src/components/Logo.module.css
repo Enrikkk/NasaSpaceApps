@@ -1,0 +1,22 @@
+/* No box: the word sits straight on the map, with a soft shadow so it reads over any imagery.
+   One font size; the map version is the same word scaled down from its top-left corner (smooth, no jump). */
+.logo {
+  font-size: clamp(40px, 7.6vw, 150px);
+  text-align: left;
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0.55), 0 1px 3px rgb(0 0 0 / 0.6);
+  transform-origin: 0 0;
+  transition: transform 900ms var(--ease);
+}
+.small { transform: scale(var(--logo-k)); }
+
+.logo, .logo * { user-select: none; -webkit-user-select: none; }
+.button { display: block; font-size: inherit; text-align: inherit; }
+.word { white-space: nowrap; line-height: 0.9; }
+.agro { font-family: var(--font-display-rough); color: var(--green); }
+.ckham { color: var(--cream); transition: color 300ms; }
+.onLight { text-shadow: 0 1px 8px rgb(240 237 228 / 0.8); }
+.onLight .ckham { color: var(--brand-dark); }
+
+@media (max-width: 760px) {
+  .logo { font-size: clamp(36px, 12vw, 64px); }
+}

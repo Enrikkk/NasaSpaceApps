@@ -1,0 +1,8 @@
+.panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.card { border-radius: var(--radius-card); }
+.bar { border-radius: 0; }
+.pill { border-radius: 999px; background: var(--brand-dark); }

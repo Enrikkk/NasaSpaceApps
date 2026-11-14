@@ -21,6 +21,14 @@
   --brand-dark: #1E3626;  /* tertiary: header, brand bands */
   --bg: #2B2F2B;          /* page background */
 
+  /* Monochrome map: white/cream (IGN detail greyed on top) */
+  --water: #E3E3DC;       /* light grey */
+  --land: #F0EDE4;        /* = --cream */
+  --ocean: #1F4A86;       /* satellite view: open sea while Blue Marble tiles load */
+  --ocean-deep: #201A26;  /* satellite view: sea colour of PNOA tiles, shown around Spain at high zoom */
+  --space: #05070A;       /* behind the home globe */
+  --atmosphere: #8EC5FF;  /* globe halo */
+
   /* Derived */
   --surface-1: #373C36;
   --surface-2: #3D423C;
@@ -44,4 +52,6 @@
 
   --radius-control: 6px;
   --radius-card: 12px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
