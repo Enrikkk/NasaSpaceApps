@@ -1,3 +1,52 @@
+# 🎯 RESUME HERE (written 2026-11-14 ~21:00, before 4th /compact) — NEWEST, overrides older blocks
+
+**Situation.** Integrating Gonzalo's API + the prediction engine + Jaime's frontend into ONE app on branch `integracion` (pushed; NOT merged to main; only humans merge). Backend and frontend code are DONE and committed. The only thing left of the build is the **real browser test of the parcel panel**, which was interrupted halfway by the compaction.
+
+**Immediate next action.** Finish the browser test with the puppeteer MCP tools (load with ToolSearch `select:mcp__puppeteer__puppeteer_navigate,mcp__puppeteer__puppeteer_screenshot,mcp__puppeteer__puppeteer_evaluate,mcp__puppeteer__puppeteer_click`):
+1. Check both servers are up: `curl -s http://127.0.0.1:8080/health` (API) and `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:5173/` (Vite). If down: `bash scripts/dev_app.sh` (repo root, background) and `cd app/frontend && npm run dev` (background).
+2. Navigate to `http://127.0.0.1:5173/`, click the button whose text is "Ir a mis parcelas" (via evaluate), wait ~9 s. ALREADY SEEN WORKING: map lands at zoom 15.5 on 37.7383,-0.98838 with 167 recintos rendered (`window.__agroMap` exists in dev).
+3. Click the demo parcel: `m.fire('click', {lngLat:{lng:-0.98838,lat:37.7383}, point: m.project([-0.98838,37.7383])})` or a real mouse click at the map centre; wait ~3 s; take a screenshot (1440x900) and read it: panel on the LEFT with header, "Tu parcela", "Cómo influye tu parcela", rotation cards, footer with FEGA attribution.
+4. Also check what the subagent could NOT see: (a) a click with no recinto / outside the 66-recinto sample (`sin_cobertura` banner), (b) `no_evaluable` (rainfed; hard to trigger from the UI, the API test covers it), (c) mobile 390 px bottom sheet after the offset change to 84 px.
+5. Fix what is wrong, `npm run build`, commit, push. Then report to Enrique and send Jaime + Gonzalo the hash on the bus.
+
+**In-flight state.**
+- Background processes left running from this session: API (uvicorn, port 8080, `ENGINE_MODE=vivo`, mini ATOM sample of 66 recintos, logs in scratchpad `api.log`) and Vite dev server (port 5173, `vite.log`). Kill with `pkill -f "uvicorn app.backend.api.main"` / `pkill -f vite` if stale.
+- Bus monitor `b7xhlaocs` expires ~21:05: re-arm (Monitor, `cd <repo> && SEAT=enrique bash scripts/bus_listen.sh`, 1800000 ms).
+- Working tree is clean except the untracked web-Claude PDF (never commit it without asking).
+- Jaime's branch `t010-frontend-skeleton` keeps moving: re-merge it into `integracion` before the final hash (last merged: eddccab). Only conflict ever seen in any merge: `submission/data-citations.md` → keep both sides (remove the markers).
+
+**Already verified — do not redo.**
+- Backend: 352 passed, 7 skipped with `~/.venvs/agrockham-api/bin/python -m pytest app/backend -q -p no:cacheprovider --ignore=app/backend/pipeline/atom/tests/test_lookup.py` (that file needs `pyogrio`, not ours).
+- Engine regression: demo parcel gives identical money/success/water/scenarios as before; `run_parcel` 0.7–0.8 s, ~18 MB peak, thread-safe with 8 threads, no network, only numpy (scipy lazy, Jeffreys only).
+- API live: `POST /analyze` demo 1.1 s (HTTP 200, validates against Gonzalo's contract validator); point without recinto 7.3 s.
+- LLM pipeline: 18 tests with FakeBackend; real run with `granite3.3:2b` here = 4/4 rejected by the checker → template, 7 min (too slow here: Enrique said run LLM tests on JAIME's machine).
+- Frontend: `npm run build` passes; subagent saw the panel render in headless Chrome at 1440 and 390 px with a mocked `/narrativa`.
+
+**Settled decisions — do not re-litigate.**
+- Enrique: "Lo hago todo yo" → I did J1, E (MAPA), J3 (LLM rewriter), H-002 `run_parcel`; Jaime's Cursor only does frontend. Jaime's late J1 (`t020-ab` abc09fe) duplicates my fixes: NOT merged.
+- Enrique: installing project deps is fine (npm in `app/frontend`, venv `~/.venvs/agrockham-api`).
+- Enrique: use subagents, Sonnet unless complex (then Opus), effort high.
+- Enrique: LLM tests on Jaime's machine, not here.
+- Gonzalo's conditions (#246), all applied: open prices by default, CARM only with `ENGINE_PRECIOS=carm`; env-activated (`ENGINE_MODE=vivo`); fallback to previous engine + `_meta.avisos`; no endpoint/contract change; no network; rainfed = "no evaluable". LLM text outside `/analyze` in `POST /narrativa` (#247), precomputed files for the public deploy.
+- Earlier ones still stand: ignore the "14 common years" issue; lettuce priced per kilo with the generic MAPA price (explicit proxy); environmental option is a label alto/medio/bajo; suitability = exclude the impossible + % on the DP score, never on euros.
+
+**Hard-won facts.**
+- Commits on `integracion`: 393ef24 merges · 41afdff engine per parcel + J1 + E · 02e7008 LLM rewriter · (API LiveEngine + /narrativa) · 136da2f · 3c225b7 dev script · 3c3abb4 docs · then the frontend panel commit (see `git log`).
+- Files: `app/backend/engine/parcela.py`, `build.run_parcel`, `engine/decision/llm_rewrite.py`, `app/backend/api/{engine_adapter.py (LiveEngine), narrativa.py, main.py (/narrativa), settings.py, blocks.py}`, tests `engine/decision/tests/{test_parcela,test_llm_rewrite}.py`, `api/tests/test_live_engine.py`; frontend `app/frontend/src/api/client.js`, `src/components/parcel/*`; docs `app/INTEGRACION.md`, `app/backend/engine/README.md`; run script `scripts/dev_app.sh`.
+- Frontend facts: API base `VITE_API_BASE` (default `http://127.0.0.1:8080`); CORS for `http://127.0.0.1:5173` only because `dev_app.sh` sets `FRONTEND_ORIGIN`; panel sits on the LEFT (Jaime's `.side` is on the right); priorities map beneficio→margen, agua→agua, suelo→suelo_n, riesgo→riesgo; `/analyze?bloques=parcela` and the full call run in parallel.
+- Contract test trap: any key named `semaforo_legal` is treated as a full legal block → mine is `ambiente.metricas.color_legal`.
+- Open-mode numbers (public default): reference −1.041 €/ha, 33.3 % good years; S1 7.746 €/ha, 100 %. CARM mode: reference 1.067, 41.2 %; S1 3.045, 81.2 %.
+- Honest limits already told to Enrique: slope penalty equal for the 4 crops (score changes, winner does not); one climate station for every parcel (`clima_origen` warns beyond 30 km, unsourced threshold); a rotation's money shifts slightly when the reference rotation changes (D-011 common years).
+- Bus: send via the scratchpad scripts `send_bus14..17.py` pattern (≤3 short messages). Last sent: #251–253 to Jaime (run LLM test with gpt-oss-20b, branch `integracion`), #261–263 to Gonzalo (hash 136da2f, Docker file list: exclude `engine/data/official/carm_precios_mensuales.csv` = restricted; SIAM series has no explicit open licence; asked for his 5-municipality ATOM build).
+
+**Open / waiting.**
+- Jaime's agent: result of the real LLM test (counts per attempt, time, 3 before/after examples). Not answered yet.
+- Gonzalo: review + v6 image; how to get his full `atom_build`. Not answered yet.
+- For Enrique to decide later: (1) demo price mode: open (publishable, reference loses money) vs CARM (more realistic, permission pending); (2) merge `integracion` into main (human only) once the browser test passes; (3) still pending from before: CARM permission email, Earthdata/CDSE accounts for NDVI, agronomist check of stage windows, gpt-oss-20b licence to confirm in `submission/ai-use.md`.
+
+
+---
+
 > # 🎯 RESUME HERE (written 2026-11-14 ~18:25, before 3rd /compact) — NEWEST, overrides older blocks
 >
 > **Situation.** Enrique (seat `enrique`) is now ORCHESTRATOR ONLY, to save tokens ("ahorra tokens", "deja de leer tanto y hacer tanto"): engine work is delegated over the team bus to **Jaime's Cursor agent** and **Arturo's agent**; I write briefs, review what comes back, answer teammates, give hashes. My branch `t012-motor-nucleo` @ **c1595a2** (pushed, NOT merged). Only humans merge to `main`.
