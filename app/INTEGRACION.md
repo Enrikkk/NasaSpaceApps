@@ -181,3 +181,14 @@ en `app/data/cache/narrativa/` los textos que pasan el comprobador. Sin Ollama, 
 Requisitos una sola vez: entorno de Python (`requirements-dev.txt` de la API), `npm install` (lo hace el script) y, para el
 texto del modelo, `ollama pull gpt-oss:20b` (~13 GB). Con la muestra de 66 recintos solo se encuentran parcelas alrededor de
 la demo de Torre-Pacheco; con `ATOM_BUILD_DIR` apuntando a los recintos completos se encuentran todas.
+
+## Frontend nuevo (2026-11-14 noche, `integracion` @b9033df)
+
+Hecho por Enrique a petición del usuario (aunque `app/frontend/` es de Jaime; avisado por el bus). Todo en `app/frontend/src` y `design/tokens.css`; la API no cambia.
+
+- **Ficha de parcela** (`components/parcel/`): una línea por opción (puesto, cultivos, puntuación 1-100, flags Eco y Riesgo); clic en la línea abre cuatro cifras y una explicación de 3 líneas; supuestos y notas plegados. La unidad es la **rotación de 3 años** (el motor no puntúa cultivos sueltos). La puntuación es `priorityScore(criterios, sliders de Filtros)`, **relativa** entre las opciones calculadas, no una probabilidad. La referencia va última y sin puntuación. Riesgo = % de años buenos (≥90 bajo, 75-89 medio, <75 alto: umbrales **supuestos**, la frase lo dice). Lógica pura y tests en `ranking.js` / `ranking.test.js`.
+- **Tus parcelas** (`state/myParcels.js`, `useMyParcels.js`, `components/MyParcelsPanel.jsx`): solo en el navegador (`localStorage`, clave `agrockham.misParcelas.v1`), sin cuentas ni servidor. Alta con el botón Guardar de la ficha; nombre por defecto «Parcela N», editable; contorno rojo y relleno translúcido en el mapa (capas `mis-parcelas-*`, filtro por propiedades de la tesela SIGPAC). Ojo: el filtro vacío debe ser `NO_MATCH` (`['==',['literal',1],0]`); un `['==',1,0]` tumba todo el mapa.
+- **Portada**: animación inicial del globo (`homeSpin.js`, `config/map.js` → `HOME_SPIN`): 2 s de giro, 5 s casi quieta, 2 s de cierre, reposo en la posición de siempre; cualquier toque la cancela; respeta `prefers-reduced-motion`. Móvil: el globo no se arrastra, cualquier toque abre el mapa; `100dvh`; tipografía Brunson (solo si instalada) → Impact.
+- **Sin cobertura**: el cuadro grande «no hemos encontrado un recinto» pasó a una línea pequeña, con un reintento automático a los 4 s (el servidor puede estar cargando los recintos).
+- **Tests**: `cd app/frontend && node --test src/state/*.test.js src/components/*.test.js src/components/parcel/*.test.js` (26) y `npm run build`.
+- **Sin comprobar**: móvil real (táctil, Android), fluidez de la animación en GPU real.
