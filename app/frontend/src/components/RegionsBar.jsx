@@ -1,4 +1,5 @@
 import Panel from './ui/Panel.jsx'
+import DisplayText from './DisplayText.jsx'
 import { REGIONS } from '../config/map.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './RegionsBar.module.css'
@@ -14,7 +15,7 @@ export default function RegionsBar() {
 
   return (
     <Panel as="nav" variant="bar" className={styles.bar} aria-label="Regiones" tabIndex={0}>
-      <h2 className={`display ${styles.title}`}>Regiones</h2>
+      <h2 className={`display ${styles.title}`}><DisplayText name="regiones" alt="Regiones" /></h2>
       <ul className={styles.list}>
         {REGIONS.map((r) => {
           const active = screen === 'map' && r.id === regionId

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import ScoreRing from './ui/ScoreRing.jsx'
+import DisplayText from './DisplayText.jsx'
 import { useAppState } from '../state/AppState.jsx'
 import { useMyParcels } from '../state/useMyParcels.js'
 import { useParcelAnalyses, analyses } from '../state/useParcelAnalyses.js'
@@ -38,7 +39,7 @@ export default function MyParcelsReport({ onClose }) {
       <section className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby="informe-title">
         <header className={styles.top}>
           <div>
-            <h2 id="informe-title" className={`display ${styles.title}`}>Informe de tus parcelas</h2>
+            <h2 id="informe-title" className={`display ${styles.title}`}><DisplayText name="informe" alt="Informe de tus parcelas" /></h2>
             <p className={styles.sub}>
               {r.total} {r.total === 1 ? 'parcela' : 'parcelas'}
               {isNum(r.haGuardadas) ? ` · ${fmtHa(r.haGuardadas)} ha` : ''}

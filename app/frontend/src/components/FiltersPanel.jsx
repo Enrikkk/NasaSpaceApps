@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import Panel from './ui/Panel.jsx'
+import DisplayText from './DisplayText.jsx'
 import Select from './ui/Select.jsx'
 import Slider from './ui/Slider.jsx'
 import { CROPS, PRIORITIES } from '../config/filters.js'
@@ -24,7 +25,7 @@ export default function FiltersPanel() {
           aria-controls={bodyId}
           onClick={() => setOpen((o) => !o)}
         >
-          <span>Filtros</span>
+          <span><DisplayText name="filtros" alt="Filtros" /></span>
           <span className={styles.chevron} aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round"><path d="M5 8l5 5 5-5" /></svg>

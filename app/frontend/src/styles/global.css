@@ -25,6 +25,20 @@ button { cursor: pointer; background: none; border: none; }
   letter-spacing: 0.01em;
 }
 
+/* Brunson words rendered as PNG (components/DisplayText.jsx). Height and baseline come from
+   scripts/render_display.py: the image is 0.8938em tall with the baseline at 91.96 %, so it sits like the text did. */
+.display-img {
+  display: inline-block;
+  height: 0.8938em;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+  vertical-align: -0.0718em;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .sr-only {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;

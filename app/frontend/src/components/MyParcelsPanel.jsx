@@ -1,5 +1,6 @@
 import { useCallback, useId, useState } from 'react'
 import Panel from './ui/Panel.jsx'
+import DisplayText from './DisplayText.jsx'
 import EditableName from './ui/EditableName.jsx'
 import ScoreRing from './ui/ScoreRing.jsx'
 import MyParcelsReport from './MyParcelsReport.jsx'
@@ -53,7 +54,7 @@ export default function MyParcelsPanel() {
           aria-controls={bodyId}
           onClick={() => setMyParcelsOpen(!myParcelsOpen)}
         >
-          <span>Tus parcelas{list.length > 0 && <span className={styles.count}>{list.length}</span>}</span>
+          <span><DisplayText name="tus-parcelas" alt="Tus parcelas" />{list.length > 0 && <span className={styles.count}>{list.length}</span>}</span>
           <span className={styles.chevron} aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round"><path d="M5 8l5 5 5-5" /></svg>

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import styles from './Logo.module.css'
+import DisplayText from './DisplayText.jsx'
 
 // Height the small (map) logo should have, in px. The word keeps one font size and is scaled with a CSS transform,
 // so going big <-> small is one smooth animation instead of a jump.
@@ -32,7 +33,8 @@ export default function Logo({ size = 'lg', onClick, onLight = false }) {
     >
       <button type="button" onClick={onClick} className={styles.button} aria-label="Agrockham, volver al inicio">
         <span className={`display ${styles.word}`}>
-          <span className={styles.agro}>AGRO</span><span className={styles.ckham}>CKHAM</span>
+          <DisplayText name="logo-agro" alt="" />
+          <DisplayText name={onLight ? 'logo-ckham-dark' : 'logo-ckham-cream'} alt="" />
         </span>
       </button>
     </div>
