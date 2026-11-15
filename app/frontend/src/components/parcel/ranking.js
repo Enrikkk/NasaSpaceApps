@@ -1,6 +1,7 @@
 // Pure logic of the parcel panel's ranked list: crops, 1-100 score and the two flags (Eco, Riesgo).
 // Everything tolerates missing or null fields: no data means "sin evaluar", never an invented number.
 import { isNum, fmtInt, fmtPlain, splitName } from './helpers.js'
+import { CROPS } from '../../config/filters.js'
 
 /** 0-1 weighted score -> whole number 1-100 (never 0: the list always says "worst of the options", not "nothing"). */
 export const score100 = (s) => (isNum(s) ? Math.min(100, Math.max(1, Math.round(s * 100))) : null)
@@ -19,6 +20,26 @@ const unique = (list) => list.filter((x, i) => list.indexOf(x) === i)
 
 /** Crops of the rotation, in order of appearance, without fallow or cover crops. */
 export const cropsOf = (rot) => unique(cycleNames(rot).filter((c) => !NOT_A_CROP.test(c)))
+/**
+ * Engine crop ids in the rotation ('melon', 'brocoli'…), from `plan_anios[].ciclos_detalle[].cultivo`.
+ * If an option has no detail, the crop names are matched against the filter catalogue instead.
+ */
+export function cropIdsOf(rot) {
+  const ids = []
+  for (const y of Array.isArray(rot?.plan_anios) ? rot.plan_anios : []) {
+    for (const d of Array.isArray(y?.ciclos_detalle) ? y.ciclos_detalle : []) {
+      if (typeof d?.cultivo === 'string' && d.cultivo && !NOT_A_CROP.test(d.producto ?? '')) ids.push(d.cultivo)
+    }
+  }
+  if (!ids.length) {
+    for (const name of cropsOf(rot)) for (const c of CROPS) if (c.match?.test(name)) ids.push(c.id)
+  }
+  return unique(ids)
+}
+
+/** Does the option grow this crop? 'todos' (or no crop) lets everything through. */
+export const hasCrop = (rot, crop) => !crop || crop === 'todos' || cropIdsOf(rot).includes(crop)
+
 /** Cover crops ("cubierta de veza"): they help the soil, so the list says it. */
 export const coversOf = (rot) => unique(cycleNames(rot).filter((c) => COVER.test(c)))
 

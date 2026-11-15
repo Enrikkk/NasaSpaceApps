@@ -62,7 +62,7 @@ function SaveButton({ parcel, saved, ha }) {
 }
 
 function Body({ parcel, onClose }) {
-  const { priorities } = useAppState()
+  const { priorities, crop, setCrop } = useAppState()
   const { list, rename } = useMyParcels()
   const { quick, full, error, loading, retry } = useAnalysis(parcel)
   const scrollRef = useRef(null)
@@ -116,7 +116,10 @@ function Body({ parcel, onClose }) {
 
         {data && (
           <>
-            <Rotations key={data._meta?.consulta_id ?? 'x'} data={data} priorities={priorities} orientativo={orientativo} />
+            <Rotations
+              key={data._meta?.consulta_id ?? 'x'} data={data} priorities={priorities}
+              crop={crop} onClearCrop={() => setCrop('todos')} orientativo={orientativo}
+            />
             <MoreAboutParcel data={data} />
           </>
         )}

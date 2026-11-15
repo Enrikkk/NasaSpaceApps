@@ -3,10 +3,11 @@ import Panel from '../ui/Panel.jsx'
 import { sigpacUseLabel } from '../../config/sigpacUses.js'
 import RotationCard from './RotationCard.jsx'
 import { useNarrativas } from './hooks.js'
-import { score100 } from './ranking.js'
+import { hasCrop, score100 } from './ranking.js'
 import {
   isNum, fmtHa, fmtOne, fmtInt, capitalize, rankRotations, BLOCK_LABELS,
 } from './helpers.js'
+import { CROPS } from '../../config/filters.js'
 import styles from './sections.module.css'
 
 /**
@@ -113,10 +114,15 @@ export function MoreAboutParcel({ data }) {
 }
 
 /** The options as a ranked list (best first, score 1-100, Eco and Riesgo flags); the reference to compare goes last. */
-export function Rotations({ data, priorities, orientativo = false }) {
+export function Rotations({ data, priorities, crop = 'todos', onClearCrop, orientativo = false }) {
   const rotaciones = data.rotaciones ?? []
   const noEval = data.idoneidad?.no_evaluable?.motivo
-  const ranked = rankRotations(rotaciones, priorities)
+  // Crop filter: only options that grow the crop; the reference stays (it is there to compare, whatever it grows).
+  const options = rotaciones.filter((r) => r && !r.es_actual)
+  const shown = options.filter((r) => hasCrop(r, crop))
+  const filtering = crop && crop !== 'todos'
+  const cropLabel = (CROPS.find((c) => c.id === crop)?.label ?? crop).toLowerCase()
+  const ranked = rankRotations(rotaciones.filter((r) => r && (r.es_actual || hasCrop(r, crop))), priorities)
   const consultaId = data._meta?.consulta_id
   const { items, request } = useNarrativas(consultaId)
   const [openId, setOpenId] = useState(null)       // the detail of a card opens only when asked for
@@ -134,6 +140,16 @@ export function Rotations({ data, priorities, orientativo = false }) {
       <h3 id="sec-rot" className={styles.h}>
         Recomendado{orientativo && <span className={styles.chip} title="Cálculo con datos de la zona, no de esta parcela">orientativo</span>}
       </h3>
+      {filtering && (
+        <p className={styles.filterLine} role="status">
+          <span>
+            {shown.length
+              ? `Con ${cropLabel}: ${shown.length} de ${options.length} ${options.length === 1 ? 'opción' : 'opciones'}.`
+              : `Ninguna de las ${options.length} opciones calculadas para esta parcela lleva ${cropLabel}.`}
+          </span>
+          {onClearCrop && <button type="button" className={styles.filterClear} onClick={onClearCrop}>Ver todas</button>}
+        </p>
+      )}
       {ranked.map(({ rot, best, rank, score }) => (
         <RotationCard
           key={rot.id}

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { score100, cropsOf, coversOf, subtitleOf, riskLevel, riskInfo, ecoInfo } from './ranking.js'
+import { score100, cropsOf, coversOf, subtitleOf, riskLevel, riskInfo, ecoInfo, cropIdsOf, hasCrop } from './ranking.js'
 import { priorityScore, rankRotations } from './helpers.js'
 
 const rot = (extra = {}) => ({
@@ -86,4 +86,35 @@ test('ranking: best score first, the reference rotation always last and without 
   assert.equal(ranked[3].score, null)
   assert.equal(ranked[0].best, true)
   assert.equal(priorityScore(list[0].criterios, p) !== null, true)
+})
+
+// Crop filter: same shape as the API (plan_anios[].ciclos + ciclos_detalle[].cultivo).
+const withDetail = {
+  id: 's3',
+  plan_anios: [{
+    ciclos: ['Melón piel de sapo', 'Brócoli', 'cubierta de veza'],
+    ciclos_detalle: [
+      { producto: 'Melón piel de sapo', cultivo: 'melon' },
+      { producto: 'Brócoli', cultivo: 'brocoli' },
+      { producto: 'cubierta de veza', cultivo: 'veza' },
+    ],
+  }],
+}
+const namesOnly = { id: 'x', plan_anios: [{ ciclos: ['Lechuga iceberg', 'barbecho', 'Alcachofa'] }] }
+
+test('cropIdsOf reads the engine crop ids and leaves cover crops out', () => {
+  assert.deepEqual(cropIdsOf(withDetail), ['melon', 'brocoli'])
+})
+
+test('cropIdsOf falls back to the names when there is no ciclos_detalle', () => {
+  assert.deepEqual(cropIdsOf(namesOnly), ['lechuga', 'alcachofa'])
+  assert.deepEqual(cropIdsOf({}), [])
+})
+
+test('hasCrop: todos lets everything through; a crop only the options that grow it', () => {
+  assert.equal(hasCrop(withDetail, 'todos'), true)
+  assert.equal(hasCrop(withDetail, undefined), true)
+  assert.equal(hasCrop(withDetail, 'melon'), true)
+  assert.equal(hasCrop(withDetail, 'lechuga'), false)
+  assert.equal(hasCrop(withDetail, 'veza'), false)
 })
