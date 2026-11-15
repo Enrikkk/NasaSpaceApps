@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { analyze, narrativa, isAbort } from '../../api/client.js'
+import { analyses } from '../../state/useParcelAnalyses.js'
+import { isRegistrable, refOf } from '../../state/myParcels.js'
 
 /**
  * Loads a parcel in two steps, in parallel: the instant parcel block (header) and the full analysis.
@@ -14,6 +16,12 @@ export function useAnalysis(parcel) {
     const ac = new AbortController()
     let retryTimer = null
     const mine = (patch) => { if (!ac.signal.aborted) setRes((r) => ({ ...r, ...patch })) }
+    // A saved parcel already preloaded in the background (Tus parcelas): show it at once, no request.
+    const cached = attempt === 0 && isRegistrable(parcel.recinto) ? analyses.getSnapshot()[refOf(parcel.recinto)] : null
+    if (cached?.status === 'done') {
+      setRes({ parcel, attempt, quick: null, full: cached.data, error: null })
+      return undefined
+    }
     setRes({ parcel, attempt, quick: null, full: null, error: null })
     analyze(parcel, { bloques: 'parcela', signal: ac.signal })
       .then((d) => {

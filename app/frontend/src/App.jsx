@@ -5,6 +5,7 @@ import MyParcelsPanel from './components/MyParcelsPanel.jsx'
 import MapView from './components/MapView.jsx'
 import ParcelPanel from './components/parcel/ParcelPanel.jsx'
 import { useAppState } from './state/AppState.jsx'
+import { usePreloadMyParcels } from './state/useParcelAnalyses.js'
 import styles from './App.module.css'
 
 /**
@@ -14,6 +15,7 @@ import styles from './App.module.css'
  */
 export default function App() {
   const { screen, setScreen, setEntry, setMyParcelsOpen } = useAppState()
+  usePreloadMyParcels() // the saved parcels are analysed in the background from the first screen on
   const onMap = screen === 'map'
   // Both zoom in from the globe: onto the farmer's saved parcels (list open), or into Campo de Cartagena.
   const goToMyParcels = () => { setEntry('parcel'); setMyParcelsOpen(true); setScreen('map') }

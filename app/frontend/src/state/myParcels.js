@@ -13,6 +13,9 @@ const isCoord = (v) => typeof v === 'number' && Number.isFinite(v)
 /** "30/37/0/0/18/426/1" from a recinto object (only the keys that exist, in SIGPAC order). */
 export const refOf = (recinto) => RECINTO_KEYS.map((k) => recinto?.[k]).filter(isInt).join('/')
 
+/** The recinto object of a saved parcel ({provincia, municipio, …}), as the API expects it. */
+export const recintoOfParcel = (p) => Object.fromEntries(RECINTO_KEYS.filter((k) => isInt(p?.[k])).map((k) => [k, p[k]]))
+
 /** Only recintos that SIGPAC identifies can be saved (a click outside any recinto has no reference). */
 export const isRegistrable = (recinto) => REQUIRED.every((k) => isInt(recinto?.[k]))
 

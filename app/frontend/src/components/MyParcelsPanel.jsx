@@ -1,24 +1,46 @@
-import { useId } from 'react'
+import { useCallback, useId, useState } from 'react'
 import Panel from './ui/Panel.jsx'
 import EditableName from './ui/EditableName.jsx'
+import ScoreRing from './ui/ScoreRing.jsx'
+import MyParcelsReport from './MyParcelsReport.jsx'
 import { useAppState } from '../state/AppState.jsx'
 import { useMyParcels } from '../state/useMyParcels.js'
-import { RECINTO_KEYS } from '../state/myParcels.js'
-import { fmtHa } from './parcel/helpers.js'
+import { useParcelAnalyses } from '../state/useParcelAnalyses.js'
+import { recintoOfParcel } from '../state/myParcels.js'
+import { successOf } from '../state/report.js'
+import { riskLevel } from './parcel/ranking.js'
+import { fmtHa, fmtInt } from './parcel/helpers.js'
 import styles from './MyParcelsPanel.module.css'
 
-const recintoOf = (p) => Object.fromEntries(RECINTO_KEYS.filter((k) => Number.isInteger(p[k])).map((k) => [k, p[k]]))
+const TONE = { bajo: 'good', medio: 'mid', alto: 'bad' }
+
+/** Ring of one saved parcel: spinning while its analysis is preloaded, then the success % of its recommended option. */
+function ParcelRing({ entry, priorities }) {
+  if (!entry || entry.status === 'pending' || entry.status === 'loading') {
+    return <ScoreRing status="loading" title="Calculando esta parcela…" />
+  }
+  if (entry.status === 'error') return <ScoreRing status="error" title="No se ha podido calcular esta parcela" />
+  const v = successOf(entry.data, priorities)
+  if (v === null) return <ScoreRing status="none" title="Sin recomendación con porcentaje para esta parcela" />
+  return (
+    <ScoreRing value={v} tone={TONE[riskLevel({ valor: v })] ?? 'good'}
+      title={`La opción recomendada sale bien en ${fmtInt(v)} de cada 100 años simulados`} />
+  )
+}
 
 /**
- * "Tus parcelas": the recintos the farmer saved (button in the parcel sheet). They are outlined in red on the map.
- * Everything lives in this browser only; the panel says so.
+ * "Tus parcelas": the recintos the farmer saved (button in the parcel sheet), outlined in red on the map. Each one is
+ * analysed in the background (preload), shows a ring with its result, and the report joins them all into one result.
  */
 export default function MyParcelsPanel() {
-  const { myParcelsOpen, setMyParcelsOpen, setSelectedParcel, setFlyTarget } = useAppState()
+  const { myParcelsOpen, setMyParcelsOpen, setSelectedParcel, setFlyTarget, priorities } = useAppState()
   const { list, guarda, remove, rename } = useMyParcels()
+  const all = useParcelAnalyses()
+  const [report, setReport] = useState(false)
+  const closeReport = useCallback(() => setReport(false), [])
   const bodyId = useId()
   const go = (p) => {
-    setSelectedParcel({ lat: p.lat, lon: p.lon, recinto: recintoOf(p) })
+    setSelectedParcel({ lat: p.lat, lon: p.lon, recinto: recintoOfParcel(p) })
     setFlyTarget({ lat: p.lat, lon: p.lon, n: Date.now() })
   }
   return (
@@ -46,7 +68,7 @@ export default function MyParcelsPanel() {
             {list.map((p) => (
               <li key={p.ref} className={styles.item}>
                 <div className={styles.who}>
-                  <span className={styles.swatch} aria-hidden="true" />
+                  <ParcelRing entry={all[p.ref]} priorities={priorities} />
                   <div className={styles.names}>
                     <EditableName value={p.nombre} onSave={(n) => rename(p.ref, n)} className={styles.pname} />
                     <p className={styles.fine}>{[p.ref, p.ha ? `${fmtHa(p.ha)} ha` : null].filter(Boolean).join(' · ')}</p>
@@ -60,12 +82,14 @@ export default function MyParcelsPanel() {
             ))}
           </ul>
         )}
-        <p className={styles.fine}>
-          {guarda
-            ? 'Se guardan solo en este navegador.'
-            : 'Tu navegador no deja guardar: se perderán al recargar.'}
-        </p>
+        {list.length > 0 && (
+          <button type="button" className={styles.report} onClick={() => setReport(true)}>
+            Informe de todas tus parcelas
+          </button>
+        )}
+        {!guarda && <p className={styles.fine}>Tu navegador no deja guardar: se perderán al recargar.</p>}
       </div>
+      {report && <MyParcelsReport onClose={closeReport} />}
     </Panel>
   )
 }

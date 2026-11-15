@@ -90,10 +90,6 @@ export const HOME_VIEW = {
   targetNarrow: [0.5, 0.64],
 }
 
-// Intro spin of the home globe (once per page load; see components/homeSpin.js): it starts `fromDeg` degrees west of
-// the resting position and turns east in 3 beats: turn (turnMs) - near-still pause (pauseMs, drifting `driftDeg`) - turn (turnMs).
-export const HOME_SPIN = { fromDeg: 75, driftDeg: 3, turnMs: 2000, pauseMs: 5000 }
-
 // Where the zoom from the globe lands: deep inside Campo de Cartagena, close enough to see the parcels (zoom >= 13).
 export const ENTRY_VIEW = { center: [-0.98, 37.74], zoom: 13.2 }
 

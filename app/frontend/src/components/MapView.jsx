@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import {
   SOURCES, SPAIN_BOUNDS, REGIONS, FIRST_SCROLL_REGION, ENTRY_VIEW, DEMO_PARCEL, NARROW_MAX,
 } from '../config/map.js'
-import { homeCamera, refineHome, playHomeIntro } from './homeGlobe.js'
+import { homeCamera, refineHome } from './homeGlobe.js'
 import { COARSE_LAND, loadWorldFine } from '../config/worldData.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './MapView.module.css'
@@ -109,12 +109,12 @@ function buildStyle() {
         layout: { visibility: 'none' },
         paint: { 'line-color': token('--cream'), 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 0.4, 17, 1.6], 'line-opacity': 0.8 },
       },
-      // The farmer's own parcels ("Tus parcelas"): red outline over a thin white halo so it reads on any base map.
+      // The farmer's own parcels ("Tus parcelas"): 10 % red fill, red outline over a thin white halo (reads on any base map).
       // The filter is set from the saved list (see the effect below); until then it matches nothing.
       {
         id: 'mis-parcelas-fill', type: 'fill', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
         layout: { visibility: 'none' },
-        paint: { 'fill-color': token('--own-parcel'), 'fill-opacity': 0.28 },
+        paint: { 'fill-color': token('--own-parcel'), 'fill-opacity': 0.1 },
       },
       {
         id: 'mis-parcelas-halo', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
@@ -271,11 +271,8 @@ export default function MapView() {
     })
     mapRef.current = map
     freshHome.current = true
-    // Intro spin (once per page load; skipped with reduced motion). It ends or is cancelled by any user input.
-    const stopIntro = playHomeIntro(map, () => savedHome.center, () => screenRef.current === 'home')
     if (import.meta.env.DEV) window.__agroMap = map // debugging from the browser console
     return () => {
-      stopIntro()
       map.getCanvasContainer().removeEventListener('wheel', onWheel)
       map.remove()
       mapRef.current = null
@@ -286,7 +283,7 @@ export default function MapView() {
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
-    // First run: the map was just placed on the home globe (the intro spin may be running): leave it alone.
+    // First run: the map was just placed on the home globe: leave it alone.
     if (screen === 'home' && freshHome.current) { freshHome.current = false; return }
     freshHome.current = false
     map.stop()

@@ -6,6 +6,7 @@ import { useAnalysis } from './hooks.js'
 import { refFromRecinto, isNum, factsLine } from './helpers.js'
 import { useAppState } from '../../state/AppState.jsx'
 import { useMyParcels } from '../../state/useMyParcels.js'
+import { analyses } from '../../state/useParcelAnalyses.js'
 import { isRegistrable, refOf, MAX_PARCELS } from '../../state/myParcels.js'
 import styles from './ParcelPanel.module.css'
 
@@ -78,6 +79,8 @@ function Body({ parcel, onClose }) {
   const facts = factsLine(parcela, parcel)
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: 0 }) }, [parcel])
+  // Saved (or just saved) and already analysed here: hand the result to the preload, so it is not asked again.
+  useEffect(() => { if (saved && data) analyses.seed(saved.ref, data) }, [saved, data])
 
   return (
     <aside
