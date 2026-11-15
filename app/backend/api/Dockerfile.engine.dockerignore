@@ -1,0 +1,36 @@
+# Lista blanca del contexto (raiz del repo): BuildKit usa <Dockerfile>.dockerignore. Solo entra lo que el Dockerfile copia.
+*
+!app/backend/api/__init__.py
+!app/backend/api/main.py
+!app/backend/api/blocks.py
+!app/backend/api/engine_adapter.py
+!app/backend/api/legal_blocks.py
+!app/backend/api/live.py
+!app/backend/api/settings.py
+!app/backend/api/store.py
+!app/backend/api/requirements.txt
+!app/backend/api/atom_build
+!app/backend/pipeline/__init__.py
+!app/backend/pipeline/atom/__init__.py
+!app/backend/pipeline/atom/lookup.py
+!app/backend/pipeline/clima_suelo/__init__.py
+!app/backend/pipeline/clima_suelo/pipeline.py
+!app/backend/rules
+!app/data/torre-pacheco.contract.example.json
+!app/data/contract/adapt_enrique.py
+!app/data/cache/pipeline/clima_suelo
+**/__pycache__
+**/*.pyc
+!app/backend/api/engine_data
+!app/backend/pipeline/fega/__init__.py
+!app/backend/pipeline/fega/declarados.py
+!app/backend/pipeline/fega/cod_producto.csv
+!app/backend/api/parcel_input.py
+!app/backend/engine
+!app/data/tables/mapa_prices.csv
+!app/data/torre-pacheco.mock.json
+!app/backend/api/narrativa.py
+# exclusiones DESPUES de la lista blanca (D-010: CSV restringido de CARM; los tests no hacen falta)
+app/backend/engine/data/official/carm_precios_mensuales.csv
+app/backend/engine/**/tests
+!app/backend/api/frontend_dist

@@ -18,3 +18,4 @@ data/raw/
 *.nc
 *.tif
 *.zarr/
+.claude/worktrees/

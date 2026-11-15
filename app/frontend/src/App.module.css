@@ -1,4 +1,5 @@
-.app { position: relative; height: 100vh; overflow: hidden; }
+/* 100dvh = the VISIBLE height on phones (100vh includes the browser bar on Android and pushed the buttons off-screen). */
+.app { position: relative; height: 100vh; height: 100dvh; overflow: hidden; }
 
 /* Chrome floats over the map; only its boxes catch the pointer. */
 .brand, .side { position: absolute; z-index: 2; }
@@ -12,7 +13,7 @@
   position: absolute;
   z-index: 2;
   left: 2.5vw;
-  bottom: 56px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 56px);
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
@@ -46,7 +47,8 @@
   animation: rise 600ms var(--ease) 1800ms both;
 }
 .side > * { pointer-events: auto; }
-.side > nav { max-width: 45vw; }
+/* Regions and Filters: the same compact box (the title is the same small size in both). */
+.side > nav { width: max(280px, 23.8vw); max-width: 45vw; }
 .side > aside { width: max(280px, 23.8vw); flex: 0 1 auto; min-height: 0; }
 
 
@@ -55,7 +57,7 @@
 
 @media (max-width: 760px) {
   .brand { top: var(--space-6); left: var(--space-4); }
-  .homeActions { left: var(--space-4); right: var(--space-4); bottom: 40px; }
+  .homeActions { left: var(--space-4); right: var(--space-4); bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); }
   .seeMap, .myParcels { flex: 1; padding: var(--space-3) var(--space-4); font-size: var(--fs-md); }
 
   .side { top: 64px; left: var(--space-3); right: var(--space-3); bottom: 72px; align-items: stretch; gap: var(--space-2); }

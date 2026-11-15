@@ -1,0 +1,3 @@
+# estado en tiempo de ejecucion (hora de la ultima llamada a SoilGrids); no se versiona
+.state/
+**/.state/

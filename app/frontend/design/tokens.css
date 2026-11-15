@@ -1,18 +1,6 @@
 /* Agrockham design tokens. See app/frontend/DESIGN.md for usage and contrast rules. */
 
-/* Brunson (c) The Branded Quotes 2025, "All Rights Reserved". Licence check pending: see DESIGN.md. */
-@font-face {
-  font-family: "Brunson";
-  src: url("./fonts/Brunson.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Brunson Rough";
-  src: url("./fonts/Brunson-Rough.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
+/* Brunson is All Rights Reserved and is not loaded. Display type uses the system stack. */
 
 :root {
   /* Brand palette (decided by jaime, 2026-11-14) */
@@ -38,10 +26,12 @@
   --green-light: #6BB383; /* green text/icons on dark */
   --warn: #E0B04A;
   --danger: #E07A5F;
+  --own-parcel: #D62828; /* outline of the farmer's own parcels on the map ("Tus parcelas"); with a cream halo */
 
-  /* Type. PENDING: Brunson licence ("All Rights Reserved"); Anton (OFL) is the fallback. */
-  --font-display: "Brunson", "Anton", "Arial Narrow", sans-serif;
-  --font-display-rough: "Brunson Rough", "Anton", "Arial Narrow", sans-serif;
+  /* Display type is a system stack. Brunson is NOT bundled (no licence yet): it is used only where it is installed.
+     Fallback Impact (all caps, on almost every device), then Anton / Arial Narrow. */
+  --font-display: "Brunson", Impact, "Anton", "Arial Narrow", sans-serif;
+  --font-display-rough: "Brunson", Impact, "Anton", "Arial Narrow", sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px;

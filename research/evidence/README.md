@@ -1,0 +1,3 @@
+# Evidencia de pruebas (gonzalo)
+
+- `analyze-docker-abierto-02e4b89.json`: respuesta de `POST /analyze` (parcela demo, zona_2) de la imagen Docker de la API (commit 02e4b89) ejecutada con `--network none` y `AGROCKHAM_OFFLINE=1`, con el JSON ABIERTO del motor (enrique, 473f2c2, sin precios CARM) en `engine_data/engine.json`. `_meta.motor` = "JSON de enrique"; 4 rotaciones; `actual` sin margen; `alineados` = false. Validado con `app/data/contract/validate_contract.py`: 0 errores de esquema, 0 invariantes fallidas, 3 avisos. sha256: 6a6f934bc1b2cbbdfa5356bd93ee800184c5651e057dbf5bc6b92a772ed540d5. Fecha: 2026-11-14.

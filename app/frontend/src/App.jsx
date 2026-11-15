@@ -1,7 +1,9 @@
 import Logo from './components/Logo.jsx'
 import RegionsBar from './components/RegionsBar.jsx'
 import FiltersPanel from './components/FiltersPanel.jsx'
+import MyParcelsPanel from './components/MyParcelsPanel.jsx'
 import MapView from './components/MapView.jsx'
+import ParcelPanel from './components/parcel/ParcelPanel.jsx'
 import { useAppState } from './state/AppState.jsx'
 import styles from './App.module.css'
 
@@ -11,10 +13,10 @@ import styles from './App.module.css'
  *  - map:  zoomed into Spain; regions, filters and the view switcher appear.
  */
 export default function App() {
-  const { screen, setScreen, setEntry } = useAppState()
+  const { screen, setScreen, setEntry, setMyParcelsOpen } = useAppState()
   const onMap = screen === 'map'
-  // Both zoom in from the globe: onto the farmer's parcel, or into Campo de Cartagena.
-  const goToMyParcels = () => { setEntry('parcel'); setScreen('map') }
+  // Both zoom in from the globe: onto the farmer's saved parcels (list open), or into Campo de Cartagena.
+  const goToMyParcels = () => { setEntry('parcel'); setMyParcelsOpen(true); setScreen('map') }
   const seeMap = () => { setEntry('cartagena'); setScreen('map') }
 
   return (
@@ -38,7 +40,9 @@ export default function App() {
           <div className={styles.side}>
             <RegionsBar />
             <FiltersPanel />
+            <MyParcelsPanel />
           </div>
+          <ParcelPanel />
         </>
       )}
     </div>

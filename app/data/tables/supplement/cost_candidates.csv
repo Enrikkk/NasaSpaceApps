@@ -1,0 +1,4 @@
+crop_id,param,value,unit,source_id,conf,status,source_year,price_base_year,water_regime,use,source_page,nota
+haba,coste_total,1095.8,EUR/ha,ECREA-PROT2020,B,proxy_candidate,2020,2020,regadio,harvested_grain,13,"Guisantes y habas national group; proxy for dry broadbean, not Murcia-specific; complete production cost includes harvest and opportunity costs; not cover-crop establishment"
+cebada,coste_total,631.5,EUR/ha,ECREA-CER2021,B,proxy_candidate,2021,2021,secano,harvested_grain,1,National harvested barley dryland; do not use for irrigated parcel; complete production cost includes harvest and opportunity costs; not cover-crop establishment
+cebada,coste_total,1165.2,EUR/ha,ECREA-CER2021,B,proxy_candidate,2021,2021,regadio,harvested_grain,2,National harvested barley irrigated; explicit regional proxy; complete production cost includes harvest and opportunity costs; not cover-crop establishment

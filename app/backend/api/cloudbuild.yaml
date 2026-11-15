@@ -1,0 +1,11 @@
+# Solo documentado (T-024), NO se ha ejecutado: construye la imagen con el contexto = raiz del repo (el Dockerfile esta en
+# app/backend/api/). Requiere app/backend/api/atom_build con los GeoJSON de ATOM (ver README.md).
+#   gcloud builds submit --config app/backend/api/cloudbuild.yaml --project agrockham-nasa-2026 \
+#       --substitutions _IMAGE=europe-west1-docker.pkg.dev/agrockham-nasa-2026/<repo>/agrockham-api:<tag> .
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "app/backend/api/Dockerfile", "--build-arg", "GIT_SHA=${_GIT_SHA}", "-t", "${_IMAGE}", "."]
+images: ["${_IMAGE}"]
+substitutions:
+  _GIT_SHA: "dev"   # pasar --substitutions _GIT_SHA=$(git rev-parse --short HEAD),_IMAGE=...
+  _IMAGE: "europe-west1-docker.pkg.dev/agrockham-nasa-2026/agrockham/agrockham-api:latest"

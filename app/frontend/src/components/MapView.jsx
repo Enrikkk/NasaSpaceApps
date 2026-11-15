@@ -3,13 +3,17 @@ import * as maplibregl from 'maplibre-gl'
 import {
   SOURCES, SPAIN_BOUNDS, REGIONS, FIRST_SCROLL_REGION, ENTRY_VIEW, DEMO_PARCEL, NARROW_MAX,
 } from '../config/map.js'
-import { homeCamera, refineHome } from './homeGlobe.js'
+import { homeCamera, refineHome, playHomeIntro } from './homeGlobe.js'
 import { COARSE_LAND, loadWorldFine } from '../config/worldData.js'
 import { useAppState } from '../state/AppState.jsx'
 import styles from './MapView.module.css'
 import Starfield from './Starfield.jsx'
 import { sigpacUseLabel } from '../config/sigpacUses.js'
+import { haFromSquareMetres } from './parcel/helpers.js'
 import { addIgnOverlay, IGN_OVERLAY_IDS } from './ignOverlay.js'
+import { recintoFromProps } from '../api/client.js'
+import { useMyParcels, myParcels } from '../state/useMyParcels.js'
+import { mapFilter, boundsOf, NO_MATCH } from '../state/myParcels.js'
 
 // Map colours come from the design tokens so DESIGN.md stays the single source.
 const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
@@ -39,9 +43,16 @@ function regionCamera(map, r) {
   return { center: [(w + e) / 2, (s + n) / 2], zoom, padding: pad, bearing: 0, pitch: 0, roll: 0 }
 }
 
-const parcelCamera = () => ({
-  center: [DEMO_PARCEL.lon, DEMO_PARCEL.lat], zoom: 15.5, padding: panelPadding(), bearing: 0, pitch: 0, roll: 0,
-})
+// "Ir a mis parcelas": onto the farmer's saved parcels (all of them in view), or the demo parcel when none is saved yet.
+function parcelCamera() {
+  const saved = myParcels.getSnapshot().list
+  const flat = { padding: panelPadding(), bearing: 0, pitch: 0, roll: 0 }
+  if (!saved.length) return { center: [DEMO_PARCEL.lon, DEMO_PARCEL.lat], zoom: 15.5, ...flat }
+  const b = boundsOf(saved)
+  const cam = regionCamera(null, { bounds: b })
+  const zoom = Number.isFinite(cam.zoom) ? Math.min(16, cam.zoom) : 16
+  return { ...cam, zoom: saved.length === 1 ? 16 : zoom }
+}
 
 // Last refined home camera, so flying back home lands exactly (no correction jump).
 let savedHome = null
@@ -98,6 +109,23 @@ function buildStyle() {
         layout: { visibility: 'none' },
         paint: { 'line-color': token('--cream'), 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 0.4, 17, 1.6], 'line-opacity': 0.8 },
       },
+      // The farmer's own parcels ("Tus parcelas"): red outline over a thin white halo so it reads on any base map.
+      // The filter is set from the saved list (see the effect below); until then it matches nothing.
+      {
+        id: 'mis-parcelas-fill', type: 'fill', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none' },
+        paint: { 'fill-color': token('--own-parcel'), 'fill-opacity': 0.28 },
+      },
+      {
+        id: 'mis-parcelas-halo', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none', 'line-join': 'round' },
+        paint: { 'line-color': token('--cream'), 'line-opacity': 0.95, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.2, 17, 7.5] },
+      },
+      {
+        id: 'mis-parcelas-line', type: 'line', source: 'sigpac', 'source-layer': 'recinto', filter: NO_MATCH,
+        layout: { visibility: 'none', 'line-join': 'round' },
+        paint: { 'line-color': token('--own-parcel'), 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 1.8, 17, 4.5] },
+      },
     ],
   }
 }
@@ -123,6 +151,9 @@ function applyView(map, view, parcels) {
   show('ign-base', !sat)
   show('recintos-fill', parcels)
   show('recintos-line', parcels)
+  show('mis-parcelas-fill', parcels)
+  show('mis-parcelas-halo', parcels)
+  show('mis-parcelas-line', parcels)
   // Satellite in the map (not the home globe): IGN towns, roads and names on top.
   for (const id of IGN_OVERLAY_IDS) show(id, sat && parcels)
   map.setPaintProperty('water', 'background-color', sat
@@ -144,17 +175,20 @@ function applyView(map, view, parcels) {
  * map:  Spain-only. First scroll flies to Región de Murcia, then the wheel zooms normally.
  */
 export default function MapView() {
-  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry } = useAppState()
+  const { screen, setScreen, view, regionId, setRegionId, entry, setEntry, setSelectedParcel, flyTarget } = useAppState()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const screenRef = useRef(screen)
+  const selectParcelRef = useRef(setSelectedParcel)
   const firstScrollDone = useRef(false)
   const enteredAt = useRef(0)
+  const freshHome = useRef(false) // the map was just created at the home camera: nothing to fly to yet
   const [zoom, setZoom] = useState(0)
   const [ready, setReady] = useState(false)
   const [overlay, setOverlay] = useState(0)
 
   screenRef.current = screen
+  selectParcelRef.current = setSelectedParcel
 
   // Create the map once, as the home globe.
   useEffect(() => {
@@ -164,6 +198,8 @@ export default function MapView() {
       ...homeCamera(),
       maxZoom: 18,
       scrollZoom: false, // home: wheel enters the map; map: enabled after the first-scroll jump
+      dragPan: false, // home: the globe does not move; any touch or press opens the map (enabled on the map screen)
+      touchZoomRotate: false, // idem (pinch)
       attributionControl: false,
       dragRotate: false,
       pitchWithRotate: false,
@@ -192,6 +228,10 @@ export default function MapView() {
     map.getCanvasContainer().addEventListener('wheel', onWheel, { passive: false })
 
     map.on('click', () => { if (screenRef.current === 'home') setScreen('map') })
+    // On the home globe ANY interaction (tap, press, swipe, pinch) opens the map; the globe itself never pans or scrolls.
+    const openFromHome = () => { if (screenRef.current === 'home') setScreen('map') }
+    map.getCanvasContainer().addEventListener('touchstart', openFromHome, { passive: true })
+    map.getCanvasContainer().addEventListener('mousedown', openFromHome)
 
     // Hover highlight + card on SIGPAC parcels.
     let hoveredId = null
@@ -206,10 +246,8 @@ export default function MapView() {
     })
     map.on('mouseleave', 'recintos-fill', () => { map.getCanvas().style.cursor = ''; setHover(null) })
     map.on('click', 'recintos-fill', (e) => {
-      new maplibregl.Popup({ className: styles.popup, maxWidth: '260px' })
-        .setLngLat(e.lngLat)
-        .setDOMContent(parcelCard(e.features?.[0]?.properties ?? {}))
-        .addTo(map)
+      const tile = e.features?.[0]?.properties ?? {}
+      selectParcelRef.current({ lat: e.lngLat.lat, lon: e.lngLat.lng, recinto: recintoFromProps(tile), tile })
     })
 
     // After MapLibre has resized its canvas (not on window 'resize', which comes first).
@@ -232,8 +270,12 @@ export default function MapView() {
       map.getSource('borders').setData(fine.borders)
     })
     mapRef.current = map
+    freshHome.current = true
+    // Intro spin (once per page load; skipped with reduced motion). It ends or is cancelled by any user input.
+    const stopIntro = playHomeIntro(map, () => savedHome.center, () => screenRef.current === 'home')
     if (import.meta.env.DEV) window.__agroMap = map // debugging from the browser console
     return () => {
+      stopIntro()
       map.getCanvasContainer().removeEventListener('wheel', onWheel)
       map.remove()
       mapRef.current = null
@@ -244,8 +286,13 @@ export default function MapView() {
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
+    // First run: the map was just placed on the home globe (the intro spin may be running): leave it alone.
+    if (screen === 'home' && freshHome.current) { freshHome.current = false; return }
+    freshHome.current = false
     map.stop()
     if (screen === 'map') {
+      map.dragPan.enable()
+      map.touchZoomRotate.enable()
       enteredAt.current = performance.now()
       map.getCanvas().style.cursor = ''
       // Deep zoom from the globe: onto the farmer's parcel, or into Campo de Cartagena. Either way the wheel then
@@ -264,6 +311,8 @@ export default function MapView() {
       setRegionId('espana')
       setEntry('cartagena')
       map.scrollZoom.disable()
+      map.dragPan.disable()
+      map.touchZoomRotate.disable()
       map.setMaxBounds(null)
       map.setMinZoom(0)
       const same = savedHome?.size === `${window.innerWidth}x${window.innerHeight}`
@@ -295,6 +344,24 @@ export default function MapView() {
     applyView(map, home ? 'satelite' : view, !home)
   }, [view, ready, screen, overlay])
 
+  // The saved parcels drive the red outline (filter on the SIGPAC tile properties).
+  const { list: savedParcels } = useMyParcels()
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !ready) return
+    const f = mapFilter(savedParcels)
+    for (const id of ['mis-parcelas-fill', 'mis-parcelas-halo', 'mis-parcelas-line']) if (map.getLayer(id)) map.setFilter(id, f)
+  }, [savedParcels, ready, overlay])
+
+  // "Ver" in Tus parcelas: fly to that parcel, leaving room for the parcel sheet (left on desktop, bottom on phones).
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !flyTarget || screenRef.current !== 'map') return
+    const phone = window.innerWidth <= NARROW_MAX
+    const padding = phone ? { ...NO_PADDING, bottom: Math.round(window.innerHeight * 0.45) } : { ...NO_PADDING, left: 460 }
+    map.flyTo({ center: [flyTarget.lon, flyTarget.lat], zoom: Math.max(map.getZoom(), 16.5), padding, duration: 1800, essential: true })
+  }, [flyTarget])
+
   return (
     <div className={`${styles.wrap} ${screen === 'home' ? styles.home : ''}`}>
       <Starfield visible />
@@ -310,7 +377,7 @@ export default function MapView() {
 function parcelCard(p) {
   const ref = ['provincia', 'municipio', 'agregado', 'zona', 'poligono', 'parcela', 'recinto']
     .map((k) => p[k]).filter((v) => v !== undefined && v !== null).join(':')
-  const ha = p.superficie !== undefined ? `${(Number(p.superficie) / (p.superficie > 1000 ? 10000 : 1)).toFixed(2)} ha` : null
+  const ha = haFromSquareMetres(p.superficie)
   const div = document.createElement('div')
   const rows = [
     ['Referencia SIGPAC', ref || '—'],
