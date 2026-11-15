@@ -230,3 +230,34 @@ class TestRedYCache(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CacheAtomica(unittest.TestCase):
+    """La API lee la cache sin candado en los aciertos: la escritura debe ser atomica y la lectura tolerante (jaime 2f1d07a)."""
+
+    def test_escritura_atomica_sin_temporales_y_lectura_correcta(self):
+        import tempfile
+        from pathlib import Path
+        from app.backend.pipeline.clima_suelo import pipeline as P
+        with tempfile.TemporaryDirectory() as td:
+            anterior = P.CACHE_DIR
+            P.CACHE_DIR = Path(td)
+            try:
+                P._cache_write("x.json", {"a": 1, "b": [1, 2, 3]})
+                self.assertEqual(P._cache_read("x.json"), {"a": 1, "b": [1, 2, 3]})
+                self.assertEqual([f.name for f in Path(td).iterdir()], ["x.json"], "no deben quedar ficheros temporales")
+            finally:
+                P.CACHE_DIR = anterior
+
+    def test_fichero_a_medias_se_trata_como_fallo_de_cache(self):
+        import tempfile
+        from pathlib import Path
+        from app.backend.pipeline.clima_suelo import pipeline as P
+        with tempfile.TemporaryDirectory() as td:
+            anterior = P.CACHE_DIR
+            P.CACHE_DIR = Path(td)
+            try:
+                (Path(td) / "roto.json").write_text('{"a": [1, 2')
+                self.assertIsNone(P._cache_read("roto.json"))
+            finally:
+                P.CACHE_DIR = anterior

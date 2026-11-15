@@ -14,6 +14,7 @@ Se consulta SIEMPRE en el centro de la celda, asi el valor cacheado no depende d
 """
 import datetime as dt
 import json
+import threading
 import math
 import os
 import time
@@ -100,13 +101,25 @@ def _soilgrids_marca():
 def _cache_read(name):
     p = CACHE_DIR / name
     if p.exists():
-        return json.loads(p.read_text())
+        try:
+            return json.loads(p.read_text())
+        except (json.JSONDecodeError, OSError):
+            return None   # fichero a medio escribir o corrupto: se trata como fallo de cache (se vuelve a descargar)
     return None
 
 
 def _cache_write(name, obj):
+    """Escritura ATOMICA: fichero temporal en la misma carpeta + os.replace. Un lector concurrente (la API lee la cache sin candado
+    para los aciertos) nunca ve un JSON a medias."""
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    (CACHE_DIR / name).write_text(json.dumps(obj, separators=(",", ":"), ensure_ascii=False))
+    destino = CACHE_DIR / name
+    tmp = CACHE_DIR / f".{name}.{os.getpid()}.{threading.get_ident()}.tmp"
+    try:
+        tmp.write_text(json.dumps(obj, separators=(",", ":"), ensure_ascii=False))
+        os.replace(tmp, destino)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
 
 
 def _hoy():
