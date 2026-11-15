@@ -114,3 +114,12 @@ Open items for the team: (1) FEGA access-from-code question; (2) exact GIBS word
 | Vite 8 + @vitejs/plugin-react, https://vite.dev | Build tooling | MIT | ok |
 | Brunson / Brunson Rough fonts, The Branded Quotes, https://thebrandedquotes.sellfy.store | Logo and display titles | **"All Rights Reserved", no licence file** | **PENDING: licence check by jaime; swap to Anton (OFL) before public deploy if not open** |
 | Icons in `app/frontend/src/components/ui/Icon.jsx` | UI icons | Original work (team) | ok |
+
+## Brand assets (jaime's agent, 2026-11-14) — `brand/`
+
+| Item | Where used | License | Status |
+|---|---|---|---|
+| Agrockham logo, icon and palette (`brand/logo/`, `brand/color/`) | Slides, video, project page, app | Original team work | ok |
+| Brunson / Brunson Rough fonts (copied in `brand/fonts/`), The Branded Quotes | Logo and display titles | "All Rights Reserved", no licence file | **PENDING** (same as the frontend row above) |
+| opentype.js 2.0.0, https://opentype.js.org/ | Tool: converted the logo text to SVG outlines (not shipped) | MIT | ok |
+| librsvg `rsvg-convert`, https://gitlab.gnome.org/GNOME/librsvg | Tool: SVG to PNG export (not shipped) | LGPL-2.1+ | ok |

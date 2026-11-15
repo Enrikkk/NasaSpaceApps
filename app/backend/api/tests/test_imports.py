@@ -113,3 +113,13 @@ def test_sirve_la_app_estatica_sin_tapar_la_api(tmp_path, monkeypatch):
         assert "APP-AGROCKHAM" in c.get("/").text
         assert c.get("/health").json()["status"] == "ok"      # la API no queda tapada
         assert c.get("/openapi.json").status_code == 200
+
+
+def test_alias_api_con_las_mismas_rutas(client):
+    """/api/* repite las rutas de la API (la app estatica vive en /); las rutas sin prefijo siguen funcionando."""
+    assert client.get("/api/health").json()["status"] == "ok"
+    assert client.get("/health").json()["status"] == "ok"
+    a = client.post("/api/analyze", json={"lat": 37.7383, "lon": -0.98838}).json()
+    b = client.post("/analyze", json={"lat": 37.7383, "lon": -0.98838}).json()
+    assert a["parcela"]["id"] == b["parcela"]["id"] == "30-37-0-0-18-426-1"
+    assert client.get("/api/recintos", params={"bbox": "-0.995,37.733,-0.980,37.743"}).status_code == 200

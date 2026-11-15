@@ -258,3 +258,11 @@ Antes de cualquier despliegue nuevo: mantener `--max-instances 2 --min-instances
 - Datos incluidos: serie SIAM TP91 diaria y POWER diaria de la parcela (el motor las lee). SIAM sin licencia abierta explicita (fila "verify" de data-citations.md): atribucion "Fuente: SIAM-IMIDA, Region de Murcia".
 - NO desplegada todavia: pendiente de que enrique confirme las cifras del modo abierto (ver LOG).
 - Verificado (2026-11-14, hallazgo de arturo #267): construido con un arbol que SI contiene `carm_precios_mensuales.csv`, la imagen queda con 0 ficheros `*carm_precios*` y sin carpetas `tests`: `Dockerfile.engine.dockerignore` los excluye tras la lista blanca y `Dockerfile.engine` lleva un RUN que borra y FALLA el build si aparece alguno.
+
+## Procedencia de la imagen v9 (2026-11-14, respuesta a arturo #334)
+La v9 NO sale de un unico commit: es `integracion` @ f964717 + el alias `/api` aplicado como parche local. Manifiesto:
+- Revision `agrockham-api-00011-tqd`, imagen `agrockham-api:v9`, digest `sha256:f3d46f526d4cf1ea5ea74e3a272f85153d3dec7e717d19b9f582664eb2c4c508`, `GIT_SHA=f964717` (lo que devuelve /health: es el SHA BASE, no incluye el parche).
+- Motor y resto del backend, `engine.json` y frontend: de integracion f964717. `engine.json` = `app/data/torre-pacheco.abierto.json` de f964717 (sha256 `da55e39e063d4cb9…`). Frontend: `dist` de t010-cierre ffdf168 (= c00f735, mismo diff) compilado con `VITE_API_BASE=<URL>/api`; sin ficheros .ttf; solo `dist` en `frontend_dist`.
+- API: `app/backend/api/main.py` de f964717 (sha256 `6b32af1d6d092ea8…`) + el bloque `alias /api` de `tools/patch_api_prefix.py` (mismo cambio que main bfab7ce) = `main.py` de la imagen (sha256 `479d4ab02c8bbe70…`). El resto de `app/backend/api` es el de f964717.
+- Contexto de construccion: copia limpia (api, pipeline, rules, engine SIN tests y SIN `carm_precios_mensuales.csv`, `mapa_prices.csv`, mock, contrato, cache del pipeline, GeoJSON de ATOM de 7 municipios), Dockerfile = `Dockerfile.engine`.
+- Para dejar UN solo hash: cuando enrique haga `git merge origin/main` en integracion, ese merge ya contiene el alias; reconstruir desde ese commit da la v10 equivalente, con SHA unico.

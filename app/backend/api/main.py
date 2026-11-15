@@ -171,6 +171,13 @@ def create_app(cfg: Optional[settings.Settings] = None) -> FastAPI:
         cuerpo, total, n = atom.index.bbox_geojson((minx, miny, maxx, maxy), cfg.recintos_max)
         return Response(cuerpo, media_type="application/geo+json", headers={**cab, "X-Recintos-Total": str(total)})
 
+    # alias /api: las mismas rutas tambien bajo /api/* (la app estatica vive en /; el cliente puede usar VITE_API_BASE=<url>/api).
+    # Se mantienen las rutas sin prefijo por compatibilidad (QA, gates, /docs).
+    from fastapi.routing import APIRoute
+    for _r in list(app.routes):
+        if isinstance(_r, APIRoute) and not _r.path.startswith("/api"):
+            app.add_api_route("/api" + _r.path, _r.endpoint, methods=sorted(_r.methods or []), response_model=_r.response_model,
+                              include_in_schema=False, response_class=_r.response_class)
     # La app estatica va AL FINAL: las rutas de la API (/health, /analyze, /parcel, /recintos, /docs) tienen prioridad.
     if (cfg.frontend_dir / "index.html").is_file():
         app.mount("/", StaticFiles(directory=str(cfg.frontend_dir), html=True), name="frontend")
