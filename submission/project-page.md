@@ -56,4 +56,4 @@ Annual subscription by managed hectares; partner plan with a discount in exchang
 optional soil-sensor kit.
 
 ## Links
-Live API: https://agrockham-api-530791362085.europe-west1.run.app (docs at /docs). Public repo: **[add URL and licence before submission]**.
+Live demo: https://agro.ockhamcloud.com (app at /, API under /api, interactive docs at /docs; checked 2026-11-15: valid HTTPS certificate, analysis in about 2 s for the demo plot). Public repo: **[add URL and licence before submission]**.
