@@ -42,8 +42,22 @@ def _vacio(motivo: str, **extra) -> dict:
     return {"_status": "cargando", "aviso": motivo, **extra}
 
 
+def _en_cache(nombre: str, lat: float, lon: float) -> bool:
+    """True si todos los ficheros de cache que necesita el bloque ya existen (lectura pura, sin red)."""
+    if nombre == "clima":
+        ficheros = [f"power-merra2_{P.celda_power(lat, lon)[0]}.json", f"power-imerg_{P.celda_01(lat, lon)[0]}.json",
+                    f"openmeteo-era5_{P.celda_01(lat, lon)[0]}.json"]
+    else:
+        ficheros = [f"soilgrids_{P.celda_suelo(lat, lon)[0]}.json"]
+    return all((P.CACHE_DIR / f).exists() for f in ficheros)
+
+
 def _construir(nombre: str, lat: float, lon: float) -> dict:
     fn = P.build_clima if nombre == "clima" else P.build_suelo
+    # Acierto de cache: sin candado. Si no, una descarga lenta (p. ej. SoilGrids caido) bloqueaba tambien las
+    # parcelas ya cacheadas (la demo tardaba ~60 s detras de otra parcela nueva).
+    if _en_cache(nombre, lat, lon):
+        return fn(lat, lon)
     with _LOCKS[nombre]:
         return fn(lat, lon)
 
