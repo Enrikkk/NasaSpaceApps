@@ -1,0 +1,40 @@
+AGROCKHAM PROMO: OPENING HOOK (0.0-9.6 s): SOUND CUES
+For whoever adds the audio. The picture is locked: hook.mp4, 30 fps, 288 frames, no audio track.
+Timecodes are seconds (frame = seconds x 30). Every sound must be original or CC0/CC-BY (list it in submission/).
+
+VOICEOVER (fast but clear, about 2.8-3 words per second; 25 words in total)
+  0.05-1.40   "Heat cracks the fruit."
+  1.65-3.00   "Storms drown the field."
+  3.25-4.60   "Salt poisons the soil."
+  4.90-7.30   "Three rain sources. Same field. Forty percent apart."
+  7.80-9.20   "What do you plant next?"
+  9.30-9.60   silence (no VO, no music, no effects) before the hard cut to the demo
+
+SHOT 1 · 0.0-1.6 · HEAT
+  0.00        cicadas, dry and hot, under everything (fade in within the first 3 frames: no silent start)
+  0.32-0.80   dry CRACK as the tomato skin splits (cracks start at 0.32; peak around 0.45)
+  0.62        smaller second crack (the ring crack around the stem)
+  1.60        hard cut: cicadas stop on the cut
+
+SHOT 2 · 1.6-3.2 · FLOOD
+  1.60        SPLASH on the cut, then a roar of heavy rain on water
+  1.80-2.95   the floating tomato crosses the frame left to right: a soft bob/slosh as it passes the centre (about 2.4)
+  3.20        rain CUT OFF HARD on the cut (no tail)
+
+SHOT 3 · 3.2-4.8 · SALT
+  3.20        thin dry wind
+  3.60        soft heartbeat-like TICK starts, slow (about 1 per 0.5 s: 3.6, 4.1, 4.6)
+
+SHOT 4 · 4.8-7.6 · DATA
+  4.80        short freeze "whoosh-stop" on the white flash (the field freezes)
+  4.80-7.60   the tick speeds up (about 1 per 0.33 s, then 1 per 0.25 s from 6.5)
+  5.05        off-key BEEP 1: ERA5 column rises
+  5.45        off-key BEEP 2: NASA POWER column rises (different pitch, clashing with beep 1)
+  5.85        off-key BEEP 3: IMERG column rises (highest pitch, most dissonant)
+  6.45-6.95   the bracket draws on; "~40%" lands at 6.70 (optional soft hit)
+
+SHOT 5 · 7.6-9.6 · RISE TO THE MAP
+  7.60-8.40   fast rising whoosh (camera climbs from the field to the aerial view)
+  7.60-9.30   tick continues
+  9.30        tick STOPS
+  9.30-9.60   0.3 s of total silence, then hard cut to the first demo frame
