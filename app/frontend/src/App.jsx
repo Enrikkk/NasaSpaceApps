@@ -5,6 +5,7 @@ import MyParcelsPanel from './components/MyParcelsPanel.jsx'
 import MapView from './components/MapView.jsx'
 import ParcelPanel from './components/parcel/ParcelPanel.jsx'
 import { useAppState } from './state/AppState.jsx'
+import { NARROW_MAX } from './config/map.js'
 import { usePreloadMyParcels } from './state/useParcelAnalyses.js'
 import styles from './App.module.css'
 
@@ -17,8 +18,9 @@ export default function App() {
   const { screen, setScreen, setEntry, setMyParcelsOpen } = useAppState()
   usePreloadMyParcels() // the saved parcels are analysed in the background from the first screen on
   const onMap = screen === 'map'
-  // Both zoom in from the globe: onto the farmer's saved parcels (list open), or into Campo de Cartagena.
-  const goToMyParcels = () => { setEntry('parcel'); setMyParcelsOpen(true); setScreen('map') }
+  // Both zoom in from the globe onto the farmer's saved parcels (MapView: Campo de Cartagena when none is saved).
+  // "Ir a mis parcelas" also opens the list, but only on desktop: on a phone the list would cover the map it flew to.
+  const goToMyParcels = () => { setEntry('parcel'); setMyParcelsOpen(window.innerWidth > NARROW_MAX); setScreen('map') }
   const seeMap = () => { setEntry('cartagena'); setScreen('map') }
 
   return (

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import * as maplibregl from 'maplibre-gl'
 import {
   SOURCES, SPAIN_BOUNDS, REGIONS, FIRST_SCROLL_REGION, ENTRY_VIEW, DEMO_PARCEL, NARROW_MAX,
@@ -52,6 +53,15 @@ function parcelCamera() {
   const cam = regionCamera(null, { bounds: b })
   const zoom = Number.isFinite(cam.zoom) ? Math.min(16, cam.zoom) : 16
   return { ...cam, zoom: saved.length === 1 ? 16 : zoom }
+}
+
+// Map gestures. Off on the home globe (any touch opens the map instead) and during every camera flight, so the finger
+// that started an animation cannot cut it off halfway; on the map screen they come back when the flight ends.
+function setInteractive(map, on) {
+  for (const h of [map.dragPan, map.touchZoomRotate, map.scrollZoom, map.doubleClickZoom, map.boxZoom]) {
+    if (on) h.enable()
+    else h.disable()
+  }
 }
 
 // Last refined home camera, so flying back home lands exactly (no correction jump).
@@ -186,6 +196,30 @@ export default function MapView() {
   const [zoom, setZoom] = useState(0)
   const [ready, setReady] = useState(false)
   const [overlay, setOverlay] = useState(0)
+  const [locked, setLocked] = useState(false) // a camera flight is running: the whole screen ignores touches and clicks
+  const flightRef = useRef(0)
+
+  /** flyTo with the screen locked until it ends (or a newer flight replaces it). onEnd runs only if it was not replaced. */
+  const fly = (map, opts, onEnd) => {
+    const id = ++flightRef.current
+    let finished = false
+    let timer = null
+    const finish = () => {
+      if (finished) return
+      finished = true
+      clearTimeout(timer)
+      if (flightRef.current !== id) return
+      onEnd?.()
+      setInteractive(map, screenRef.current === 'map')
+      setLocked(false)
+    }
+    setLocked(true)
+    setInteractive(map, false)
+    map.flyTo({ ...opts, essential: true })
+    map.once('moveend', finish)
+    // Safety net: never leave the screen locked (e.g. the tab was hidden and the animation frames stopped).
+    timer = setTimeout(finish, (opts.duration ?? 2000) + 1200)
+  }
 
   screenRef.current = screen
   selectParcelRef.current = setSelectedParcel
@@ -288,34 +322,30 @@ export default function MapView() {
     freshHome.current = false
     map.stop()
     if (screen === 'map') {
-      map.dragPan.enable()
-      map.touchZoomRotate.enable()
       enteredAt.current = performance.now()
       map.getCanvas().style.cursor = ''
-      // Deep zoom from the globe: onto the farmer's parcel, or into Campo de Cartagena. Either way the wheel then
-      // zooms normally (no first-scroll jump).
+      // Deep zoom from the globe. Any way in (tap, swipe, wheel, "Ver el mapa", "Ir a mis parcelas") lands on the
+      // farmer's saved parcels, which are already analysed in the background; with none saved, "Ir a mis parcelas"
+      // goes to the demo parcel and the rest into Campo de Cartagena. The wheel then zooms normally (no first-scroll jump).
       firstScrollDone.current = true
-      const cam = entry === 'parcel' ? parcelCamera() : { ...ENTRY_VIEW, padding: panelPadding(), bearing: 0, pitch: 0, roll: 0 }
-      map.flyTo({ ...cam, duration: 4200, curve: 1.4, essential: true })
-      map.once('moveend', () => {
+      const hasSaved = myParcels.getSnapshot().list.length > 0
+      const cam = entry === 'parcel' || hasSaved
+        ? parcelCamera()
+        : { ...ENTRY_VIEW, padding: panelPadding(), bearing: 0, pitch: 0, roll: 0 }
+      fly(map, { ...cam, duration: 4200, curve: 1.4 }, () => {
         if (screenRef.current !== 'map') return
         map.setMinZoom(Math.min(4.6, regionCamera(map, regionById('espana')).zoom - 0.4))
         map.setMaxBounds(SPAIN_BOUNDS)
-        map.scrollZoom.enable()
       })
     } else {
       firstScrollDone.current = false
       setRegionId('espana')
       setEntry('cartagena')
-      map.scrollZoom.disable()
-      map.dragPan.disable()
-      map.touchZoomRotate.disable()
       map.setMaxBounds(null)
       map.setMinZoom(0)
       const same = savedHome?.size === `${window.innerWidth}x${window.innerHeight}`
       const { size: _size, ...cam } = same ? savedHome : homeCamera()
-      map.flyTo({ ...cam, duration: 2400, essential: true })
-      map.once('moveend', () => { if (screenRef.current === 'home') refineHome(map) })
+      fly(map, { ...cam, duration: 2400 }, () => { if (screenRef.current === 'home') refineHome(map) })
     }
     // regionId is read once on entry; later region changes are handled below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -326,11 +356,8 @@ export default function MapView() {
     const map = mapRef.current
     const r = regionById(regionId)
     if (!map || !r || screenRef.current !== 'map' || performance.now() - enteredAt.current < 50) return
-    if (regionId !== 'espana' && !firstScrollDone.current) {
-      firstScrollDone.current = true
-      map.once('moveend', () => map.scrollZoom.enable())
-    }
-    map.flyTo({ ...regionCamera(map, r), duration: 2200, essential: true })
+    if (regionId !== 'espana' && !firstScrollDone.current) firstScrollDone.current = true
+    fly(map, { ...regionCamera(map, r), duration: 2200 })
   }, [regionId])
 
   // View / parcels changes -> restyle. Home always shows the plain satellite globe.
@@ -356,13 +383,14 @@ export default function MapView() {
     if (!map || !flyTarget || screenRef.current !== 'map') return
     const phone = window.innerWidth <= NARROW_MAX
     const padding = phone ? { ...NO_PADDING, bottom: Math.round(window.innerHeight * 0.45) } : { ...NO_PADDING, left: 460 }
-    map.flyTo({ center: [flyTarget.lon, flyTarget.lat], zoom: Math.max(map.getZoom(), 16.5), padding, duration: 1800, essential: true })
+    fly(map, { center: [flyTarget.lon, flyTarget.lat], zoom: Math.max(map.getZoom(), 16.5), padding, duration: 1800 })
   }, [flyTarget])
 
   return (
     <div className={`${styles.wrap} ${screen === 'home' ? styles.home : ''}`}>
       <Starfield visible />
       <div ref={containerRef} className={styles.map} aria-label="Mapa" role="region" />
+      {locked && createPortal(<div className={styles.lock} aria-hidden="true" />, document.body)}
       {screen === 'map' && zoom < PARCEL_MIN_ZOOM && (
         <p className={styles.notice}>Acércate para ver los recintos SIGPAC</p>
       )}

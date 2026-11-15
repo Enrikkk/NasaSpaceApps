@@ -2,6 +2,9 @@
 
 .map { position: absolute; inset: 0; }
 
+/* Over everything (portal to <body>) while the camera flies: taps, clicks, drags and pinches are swallowed. */
+.lock { position: fixed; inset: 0; z-index: 9999; touch-action: none; background: transparent; }
+
 /* Home: plain globe, no zoom/scale controls (attribution stays: licence requirement). */
 .home :global(.maplibregl-ctrl-group),
 .home :global(.maplibregl-ctrl-scale) { display: none; }
