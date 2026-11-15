@@ -8,7 +8,7 @@
 .title { font-size: clamp(26px, 2.4vw, 40px); color: var(--green-light); }
 
 .list {
-  list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2);
+  list-style: none; display: flex; flex-wrap: nowrap; justify-content: center; gap: var(--space-1);
   max-height: 0; opacity: 0; overflow: hidden;
   transition: max-height 400ms var(--ease), opacity 250ms, margin 400ms var(--ease);
 }
@@ -18,10 +18,11 @@
 .bar:focus-visible { box-shadow: 0 0 0 2px var(--green-light); }
 
 .chip {
-  padding: var(--space-1) var(--space-3);
+  padding: 3px var(--space-2);
   border: 1px solid var(--border);
   border-radius: 999px;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
   color: var(--text-muted);
   transition: background 150ms, color 150ms, border-color 150ms;
 }

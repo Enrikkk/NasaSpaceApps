@@ -41,15 +41,15 @@
   bottom: 96px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  /* Both panels share one width: the column is as wide as the one-row region chips, and each panel stretches to it. */
+  align-items: stretch;
+  max-width: calc(100vw - 2 * var(--space-4));
   gap: var(--space-4);
   pointer-events: none;
   animation: rise 600ms var(--ease) 1800ms both;
 }
 .side > * { pointer-events: auto; }
-/* Regions and Filters: the same compact box (the title is the same small size in both). */
-.side > nav { width: max(280px, 23.8vw); max-width: 45vw; }
-.side > aside { width: max(280px, 23.8vw); flex: 0 1 auto; min-height: 0; }
+.side > aside { flex: 0 1 auto; min-height: 0; }
 
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
